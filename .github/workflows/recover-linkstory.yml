@@ -1,21 +1,24 @@
 name: Recover and finalize LinkStory V4
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
   recover:
-    if: ${{ !contains(github.event.head_commit.message, '[skip recover]') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Restore clean source and apply final patch
         run: |
           set -e
-          git show 3218b0fb4ad193141474ca8fc7c00cade23bd495:app.js > app.js
-          git show 3218b0fb4ad193141474ca8fc7c00cade23bd495:index.html > index.html
-          git show 3218b0fb4ad193141474ca8fc7c00cade23bd495:style.css > style.css
+          BASE=3218b0fb4ad193141474ca8fc7c00cade23bd495
+          APP=$(git ls-tree -r --name-only "$BASE" | grep -E '(^|/)app\.js$' | head -1)
+          INDEX=$(git ls-tree -r --name-only "$BASE" | grep -E '(^|/)index\.html$' | head -1)
+          STYLE=$(git ls-tree -r --name-only "$BASE" | grep -E '(^|/)style\.css$' | head -1)
+          test -n "$APP" && test -n "$INDEX" && test -n "$STYLE"
+          git show "$BASE:$APP" > app.js
+          git show "$BASE:$INDEX" > index.html
+          git show "$BASE:$STYLE" > style.css
           python - <<'PY'
           from pathlib import Path
           p=Path('app.js'); s=p.read_text()
@@ -36,15 +39,12 @@ jobs:
           css=Path('style.css'); css.write_text(css.read_text()+"\n.role-choice{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0 14px}.role-option{min-height:88px;border:1px solid #303038;background:#0b0b0e;border-radius:14px;padding:12px;text-align:left}.role-option.selected{border-color:#eee;box-shadow:inset 0 0 0 1px #eee;background:#19191d}.role-option b,.role-option span{display:block}.role-option span{margin-top:5px;color:#777;font-size:10px;line-height:1.4}.post{border-radius:14px}.tabs{background:rgba(7,7,8,.92);backdrop-filter:blur(16px)}.create-card,.mascot-guide,.creator-panel{border-radius:15px}.bottom-nav{backdrop-filter:blur(20px);background:rgba(7,7,8,.94)}@media(max-width:460px){.role-choice{grid-template-columns:1fr}}\n")
           PY
           rm -f .github/workflows/extract-project.yml .github/workflows/inspect-source.yml .github/workflows/apply-v4-fixes.yml .github/workflows/force-v4.yml
-      - name: Commit and push with retry
+      - name: Commit and push
         run: |
           git config user.name 'linkstory-bot'
           git config user.email 'actions@github.com'
           git add -A
           git diff --cached --quiet && exit 0
-          git commit -m 'Finalize LinkStory V4 roles stories and UI [skip recover]'
-          for i in 1 2 3; do
-            git pull --rebase origin main && git push && exit 0
-            sleep 2
-          done
-          exit 1
+          git commit -m 'Finalize LinkStory V4 roles stories and UI'
+          git pull --rebase origin main
+          git push
