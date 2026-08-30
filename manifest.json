@@ -1,0 +1,10 @@
+{
+  "name":"LinkStory",
+  "short_name":"LinkStory",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#070707",
+  "theme_color":"#070707",
+  "lang":"pt-BR",
+  "icons":[]
+}
