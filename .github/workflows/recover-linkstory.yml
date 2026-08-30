@@ -14,6 +14,7 @@ jobs:
         run: |
           set -e
           BASE=3218b0fb4ad193141474ca8fc7c00cade23bd495
+          git fetch origin "$BASE" --depth=1
           APP=$(git ls-tree -r --name-only "$BASE" | grep -E '(^|/)app\.js$' | head -1)
           INDEX=$(git ls-tree -r --name-only "$BASE" | grep -E '(^|/)index\.html$' | head -1)
           STYLE=$(git ls-tree -r --name-only "$BASE" | grep -E '(^|/)style\.css$' | head -1)
