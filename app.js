@@ -69,3 +69,51 @@ function updateCropPreview(){const img=$('#cropImage');if(!img)return;img.style.
 $('#avatarCropOpen').onclick=openAvatarCrop;$('#editAvatarFile').onchange=()=>{if($('#editAvatarFile').files[0])openAvatarCrop()};['cropZoom','cropX','cropY'].forEach(id=>$('#'+id).oninput=updateCropPreview);
 async function cropAvatarToBlob(file,zoom,x,y){return new Promise((resolve,reject)=>{const img=new Image();const url=URL.createObjectURL(file);img.onload=()=>{const size=640,canvas=document.createElement('canvas');canvas.width=size;canvas.height=size;const ctx=canvas.getContext('2d');const scale=Math.max(size/img.width,size/img.height)*zoom;const dw=img.width*scale,dh=img.height*scale;const maxX=Math.max(0,dw-size),maxY=Math.max(0,dh-size);const dx=-(x/100)*maxX,dy=-(y/100)*maxY;ctx.fillStyle='#111';ctx.fillRect(0,0,size,size);ctx.drawImage(img,dx,dy,dw,dh);canvas.toBlob(blob=>{URL.revokeObjectURL(url);blob?resolve(blob):reject(new Error('Não foi possível recortar a foto.'))},'image/jpeg',.92)};img.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Não foi possível ler a foto.'))};img.src=url})}
 $('#cropConfirmBtn').onclick=async()=>{if(!cropSourceFile)return;try{const blob=await cropAvatarToBlob(cropSourceFile,Number($('#cropZoom').value),Number($('#cropX').value),Number($('#cropY').value));const cropped=new File([blob],'avatar.jpg',{type:'image/jpeg'});const dt=new DataTransfer();dt.items.add(cropped);$('#editAvatarFile').files=dt.files;$('#avatarCropThumb').innerHTML=`<img src="${URL.createObjectURL(blob)}" alt="Prévia">`;closeModals();$('#editProfileModal').classList.remove('hidden');toast('Enquadramento aplicado. Clique em Salvar perfil.')}catch(e){toast(e.message)}};
+
+/* LINKSTORY_PROFILE_FIX_V2 */
+(()=>{
+  const profilePostState={activeTab:'posts'};
+  function profilePostFromEl(el){
+    const host=el.closest('[data-profile-post],[data-post],.profile-post,.profile-grid-item,.profile-card');
+    if(!host)return null;
+    const id=host.dataset.profilePost||host.dataset.post||host.dataset.id||host.getAttribute('data-profile-post');
+    return {host,id};
+  }
+  function openOwnProfilePost(id,host){
+    if(!id)return;
+    if(typeof window.openPost==='function'){window.openPost(id);return;}
+    if(typeof window.openPostViewer==='function'){window.openPostViewer(id);return;}
+    if(typeof window.viewPost==='function'){window.viewPost(id);return;}
+    if(typeof window.openFeedPost==='function'){window.openFeedPost(id);return;}
+    const media=host?.querySelector('img,video');
+    if(media){
+      const src=media.currentSrc||media.src;
+      const viewer=document.createElement('div');
+      viewer.className='modal profile-media-viewer';
+      viewer.innerHTML=`<div class="modal-box wide profile-media-box"><button class="close" type="button">×</button>${media.tagName==='VIDEO'?`<video controls autoplay class="profile-media-full" src="${esc(src)}"></video>`:`<img class="profile-media-full" src="${esc(src)}" alt="Publicação do perfil">`}<div class="muted profile-media-note">Publicação do seu perfil</div></div>`;
+      document.body.appendChild(viewer);
+      viewer.querySelector('.close').onclick=()=>viewer.remove();
+      viewer.addEventListener('click',e=>{if(e.target===viewer)viewer.remove()});
+    }
+  }
+  document.addEventListener('click',e=>{
+    const profileGrid=document.querySelector('#profileGrid');
+    if(profileGrid && profileGrid.contains(e.target)){
+      const found=profilePostFromEl(e.target);
+      if(found){e.preventDefault();e.stopImmediatePropagation();openOwnProfilePost(found.id,found.host);return;}
+    }
+    const following=e.target.closest('#statFollowing, [data-profile-tab="following"], [data-profile-stat="following"], .stat-following');
+    if(following && document.querySelector('#profile')){
+      e.preventDefault();e.stopImmediatePropagation();
+      if(typeof window.openFollowing==='function'){window.openFollowing();return;}
+      if(typeof window.loadFollowing==='function'){window.loadFollowing();return;}
+      if(typeof window.showFollowing==='function'){window.showFollowing();return;}
+      const current=document.querySelector('#profileFollowingModal');
+      if(current){current.classList.remove('hidden');return;}
+      const box=document.createElement('div');box.className='modal profile-following-fallback';box.innerHTML='<div class="modal-box"><button class="close" type="button">×</button><span class="eyebrow">SUA REDE</span><h2>Seguindo</h2><p class="muted">Aqui aparecerão as pessoas que você segue. Ainda não há ninguém para mostrar.</p><button class="primary full" type="button">Explorar criadores</button></div>';document.body.appendChild(box);const close=()=>box.remove();box.querySelector('.close').onclick=close;box.querySelector('.primary').onclick=()=>{close();typeof window.nav==='function'&&window.nav('feed')};
+    }
+  },true);
+  const style=document.createElement('style');
+  style.textContent='.profile-media-viewer{z-index:9999}.profile-media-box{max-height:90vh;overflow:auto}.profile-media-full{display:block;width:100%;max-height:70vh;object-fit:contain;border-radius:14px}.profile-media-note{padding-top:10px}.profile-following-fallback{z-index:9998}.profile-following-fallback .modal-box{max-width:420px}';
+  document.head.appendChild(style);
+})();
