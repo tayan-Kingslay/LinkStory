@@ -1,0 +1,29 @@
+name: Extract LinkStory source
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    if: ${{ !contains(github.event.head_commit.message, '[skip extract]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract source archive
+        run: |
+          mkdir -p .tmp-linkstory
+          unzip -o LinkStory_V3_2_RoleFeedStoryPerfil.zip -d .tmp-linkstory
+          find .tmp-linkstory -type f ! -path '*/__MACOSX/*' -print
+          cp -R .tmp-linkstory/LinkStory_V2/. ./
+          rm -rf .tmp-linkstory
+      - name: Commit extracted source
+        run: |
+          git config user.name 'linkstory-bot'
+          git config user.email 'actions@github.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m 'Extract LinkStory source [skip extract]'
+          git push
