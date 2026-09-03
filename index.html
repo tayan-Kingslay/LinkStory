@@ -1,99 +1,29 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#070707">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>LinkStory</title>
-<link rel="manifest" href="manifest.json">
-<link rel="stylesheet" href="style.css">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#1687e8">
+  <title>LinkStory — Mangás para ler e publicar</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="topbar">
-  <button class="brand" id="homeBrand" aria-label="LinkStory — início">
-    <span class="brand-mark"><span class="brand-mascot"><svg viewBox="0 0 64 64" aria-label="Kiro"><path d="M13 27c0-11 8-18 19-18s19 7 19 18v17c0 8-7 12-19 12S13 52 13 44V27Z" fill="#d9d9d9" stroke="#111" stroke-width="4"/><circle cx="25" cy="31" r="3.5" fill="#111"/><circle cx="39" cy="31" r="3.5" fill="#111"/><path d="M25 42c5 4 9 4 14 0" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></svg></span></span>
-  </button>
-  <div class="topbar-actions"><button class="icon-btn" id="searchBtn" aria-label="Buscar">⌕</button></div>
-</header>
-
-<main id="app">
-<section id="home" class="screen active">
-  <div class="hero"><div class="hero-content"><span class="eyebrow">LINKSTORY</span><h1>Histórias que<br><em>ganham vida.</em></h1><p>Descubra mangás brasileiros, acompanhe criadores e encontre sua próxima história favorita.</p><button class="primary" id="readBtn">▶ Começar a ler</button></div></div>
-  <section class="shelf"><div class="section-head"><h2>Em alta</h2><button class="link-btn" data-browse="trending">Ver tudo</button></div><div class="cards" id="trending"></div></section>
-  <section class="shelf"><div class="section-head"><h2>Novos mangás</h2><button class="link-btn" data-browse="new">Ver tudo</button></div><div class="cards" id="newManga"></div></section>
-</section>
-
-<section id="feed" class="screen">
-  <div class="page-title"><div><h1>Feed</h1><span>O que está acontecendo no LinkStory</span></div><button class="outline small" id="feedRefresh">↻</button></div>
-  <div id="storyStrip" class="story-strip"></div>
-  <div class="tabs"><button class="tab active" data-feed="for_you">Para você</button><button class="tab" data-feed="following">Seguindo</button></div>
-  <button class="quick-post" id="quickPost">＋ Compartilhe algo com a comunidade</button>
-  <div id="feedList"></div>
-</section>
-
-<section id="create" class="screen">
-  <div class="page-title"><div><h1>Criar</h1><span>Ferramentas do criador</span></div></div>
-  <div class="mascot-guide"><div class="mascot"><div class="mascot-face"><span>•ᴗ•</span></div><div class="mascot-badge">K</div></div><div><strong>Sou o Kiro!</strong><p>Vou te guiar sem enrolação: obra → capítulos → páginas. Depois você pode voltar e lançar o próximo capítulo.</p></div></div>
-  <div class="create-grid">
-    <button class="create-card featured creator-only" id="mangaCreate"><b>▣</b><strong>Publicar mangá</strong><span>Crie a obra, organize capítulos e envie páginas em lote.</span><small>FLUXO COMPLETO →</small></button>
-    <button class="create-card" id="videoCreate"><b>▶</b><strong>Publicar vídeo</strong><span>Processo, trailer, desenho ou bastidores no Feed.</span></button>
-    <button class="create-card" id="ideaCreate"><b>✦</b><strong>Apresentar ideia</strong><span>Mostre seu conceito para outros criadores.</span></button>
-  </div>
-  <div class="creator-panel creator-only" id="creatorPanel"><div><span class="eyebrow">MEUS PROJETOS</span><h2>Seus mangás</h2><p class="muted">Abra uma obra para adicionar capítulos depois do primeiro lançamento.</p></div><button class="outline small" id="manageMangasBtn">Gerenciar</button></div>
-  <div id="creatorMangaList" class="creator-manga-list creator-only"></div>
-</section>
-
-<section id="notifications" class="screen"><div class="page-title"><div><h1>Avisos</h1><span>Suas novidades</span></div><button class="outline small" id="readNotices">Marcar lidos</button></div><div id="noticeList"></div></section>
-
-<section id="profile" class="screen">
-  <div class="profile-topline"><button class="profile-plus" id="profileStoryBtn">＋</button><strong id="profileTopHandle">@seuusuario</strong><div class="profile-top-actions"><button class="profile-icon" id="profileEditTop">✎</button><button class="profile-icon" id="profileMenuTop">☰</button></div></div>
-  <div class="profile-head instagram-head">
-    <button class="profile-avatar" id="profileAvatar">?</button>
-    <div class="profile-main"><div class="profile-name-row"><h1 id="profileName">Seu perfil</h1><span id="profileRoleBadge"></span></div><p class="muted" id="profileHandle">@seuusuario · Visitante</p><p class="profile-bio" id="profileBio">Crie sua conta para publicar e acompanhar criadores.</p></div>
-  </div>
-  <div class="stats"><div><b id="statPosts">0</b><span>Posts</span></div><div><b id="statFollowers">0</b><span>Seguidores</span></div><div><b id="statFollowing">0</b><span>Seguindo</span></div></div>
-  <div id="profileActions" class="profile-actions"><button class="primary full" id="registerBtn">Criar minha conta</button></div>
-  <div class="story-row" id="profileStories"></div>
-  <div class="profile-tabs"><button class="profile-tab active" data-profile-tab="posts">▦</button><button class="profile-tab" data-profile-tab="videos">▶</button><button class="profile-tab" data-profile-tab="mangas">▱</button></div>
-  <div id="profileGrid" class="profile-grid"></div>
-</section>
-</main>
-
-<nav class="bottom-nav"><button class="nav active" data-target="home"><span>⌂</span>Início</button><button class="nav" data-target="feed"><span>◉</span>Feed</button><button class="nav create-nav" data-target="create"><span>＋</span>Criar</button><button class="nav" data-target="notifications"><span>♢</span>Avisos</button><button class="nav" data-target="profile"><span>○</span>Perfil</button></nav>
-
-<!-- Perfil / conta -->
-<div class="modal hidden" id="editProfileModal"><div class="modal-box wide"><button class="close" data-close>×</button><h2>Editar perfil</h2><p class="muted">Foto, nome e bio ficam públicos no seu perfil.</p><div class="avatar-edit-launch"><button class="avatar-edit-preview" id="avatarCropOpen" type="button"><span id="avatarCropThumb">+</span></button><div><b>Ajustar foto de perfil</b><small>Escolha a foto e enquadre do seu jeito.</small></div></div><label>Foto de perfil<input id="editAvatarFile" type="file" accept="image/*"></label><label>Nome público<input id="editProfileName" maxlength="60"></label><label>Bio<input id="editProfileBio" maxlength="160" placeholder="Conte um pouco sobre você..."></label><button class="primary full" id="saveProfileBtn">Salvar perfil</button></div></div>
-<div class="modal hidden" id="avatarCropModal"><div class="modal-box wide"><button class="close" data-close>×</button><span class="eyebrow">FOTO DE PERFIL</span><h2>Ajustar enquadramento</h2><p class="muted">Arraste a imagem e use o zoom para deixar exatamente como você quer.</p><div class="crop-stage" id="cropStage"><img id="cropImage" alt="Ajuste da foto de perfil"></div><div class="crop-controls"><label>Zoom<input id="cropZoom" type="range" min="1" max="3" step="0.01" value="1"></label><label>Horizontal<input id="cropX" type="range" min="0" max="100" step="1" value="50"></label><label>Vertical<input id="cropY" type="range" min="0" max="100" step="1" value="50"></label></div><button class="primary full" id="cropConfirmBtn">Usar esta foto</button></div></div>
-<div class="modal hidden" id="settingsModal"><div class="modal-box"><button class="close" data-close>×</button><h2>⚙ Configurações</h2><p class="muted">Seu Kx ID é sua identidade principal. O Gmail continua opcional.</p><label>Nome público<input id="settingsName" maxlength="60"></label><label>Kx ID<input id="settingsUsername" maxlength="24" disabled></label><label>E-mail do Google / recuperação <span class="optional">opcional</span><input id="settingsRecovery" type="email" autocomplete="email" placeholder="voce@gmail.com"></label><div class="setting-card"><b>🧠 Recomendações</b><p>O LinkStory aprende com os mangás que você abre, curte e acompanha.</p><button class="outline small" id="clearTasteBtn">Limpar meu gosto</button></div><button class="primary full" id="saveSettingsBtn">Salvar configurações</button></div></div>
-<div class="modal hidden" id="authModal"><div class="modal-box"><button class="close" data-close>×</button><div id="authContent"></div></div></div>
-
-<!-- Publicação social -->
-<div class="modal hidden" id="postModal"><div class="modal-box wide"><button class="close" data-close>×</button><div class="modal-title-row"><div><span class="eyebrow">NOVA PUBLICAÇÃO</span><h2>Compartilhar</h2></div></div><textarea id="postText" maxlength="1000" placeholder="O que você quer mostrar hoje?"></textarea><label class="file-picker">🖼️ Foto<input id="postMediaFile" type="file" accept="image/*"></label><button class="primary full" id="publishBtn">Publicar</button></div></div>
-<div class="modal hidden" id="storyViewerModal"><div class="story-viewer-modal"><button class="close" data-close>×</button><div id="storyViewer"></div></div></div>
-<div class="modal hidden" id="storyModal"><div class="modal-box story-composer"><button class="close" data-close>×</button><span class="eyebrow">STORY • 24H</span><h2>Criar story</h2><p class="muted">Escolha uma foto ou abra a câmera. Depois você pode escrever uma legenda antes de publicar.</p><div id="storyStart" class="story-start"><button class="story-source" id="storyCameraBtn"><span>📷</span><b>Câmera</b><small>tirar uma foto agora</small></button><button class="story-source" id="storyGalleryBtn"><span>🖼️</span><b>Fotos</b><small>escolher da galeria</small></button><input id="storyCameraFile" type="file" accept="image/*" capture="environment" hidden><input id="storyGalleryFile" type="file" accept="image/*" hidden></div><div id="storyEditor" class="story-editor hidden"><div class="story-preview-wrap"><img id="storyPreview" alt="Pré-visualização do story"><button class="story-change" id="storyChangeBtn">Trocar foto</button></div><textarea id="storyText" maxlength="180" placeholder="Adicione uma legenda (opcional)"></textarea><div class="story-tools"><span>✏️ Texto</span><span>🖼️ Foto</span><span>🚫 Música não adicionada</span></div><button class="primary full" id="publishStoryBtn">Publicar story</button></div></div></div>
-<div class="modal hidden" id="ideaModal"><div class="modal-box"><button class="close" data-close>×</button><h2>💡 Apresentar ideia</h2><p class="muted">Seu conceito fica aberto para criadores encontrarem.</p><input id="ideaTitle" maxlength="80" placeholder="Título da ideia"><textarea id="ideaText" maxlength="1000" placeholder="Conte sua ideia..."></textarea><button class="primary full" id="publishIdeaBtn">Publicar ideia</button></div></div>
-
-<!-- Publicação de mangá: fluxo em etapas -->
-<div class="modal hidden" id="mangaModal"><div class="modal-box manga-wizard"><button class="close" data-close>×</button><div class="wizard-head"><span class="eyebrow">PUBLICAR MANGÁ</span><h2>Nova obra</h2><p class="muted">Organizado para você criar uma série e continuar lançando capítulos depois.</p></div><div class="wizard-steps"><button class="wizard-step active" data-step="1">01 <span>Obra</span></button><button class="wizard-step" data-step="2">02 <span>Capítulo</span></button><button class="wizard-step" data-step="3">03 <span>Revisar</span></button></div>
-  <div class="wizard-page active" data-page="1"><label>Título<input id="mangaTitle" maxlength="100" placeholder="Ex.: Tuketon"></label><label>Gêneros <span class="optional">separe por vírgula</span><input id="mangaGenres" maxlength="160" placeholder="Ação, Fantasia, Aventura"></label><label>Sinopse<textarea id="mangaDescription" maxlength="1200" placeholder="Apresente sua história em poucas linhas."></textarea></label><div class="form-grid-2"><label>Classificação<select id="mangaAge"><option value="L">Livre</option><option value="10">10</option><option value="12">12</option><option value="14">14</option><option value="16">16</option><option value="18">18</option></select></label><label>Formato<select id="mangaFormat"><option value="vertical">Vertical</option><option value="pages">Página a página</option><option value="webtoon">Webtoon</option></select></label></div><label>Capa <span class="optional">recomendada</span><input id="mangaCoverFile" type="file" accept="image/*"></label><button class="primary full wizard-next" data-next="2">Continuar →</button></div>
-  <div class="wizard-page" data-page="2"><div class="chapter-editor-head"><div><span class="eyebrow">CAPÍTULO 01</span><h3>Primeiro lançamento</h3></div><span class="count-pill" id="pageCount">0 páginas</span></div><div class="form-grid-2"><label>Número do capítulo<input id="mangaChapterNumber" type="number" min="1" step="1" value="1"><span class="chapter-help" id="chapterNumberHelp">Este é o primeiro capítulo da obra.</span></label><label>Título do capítulo<input id="mangaChapterTitle" maxlength="100" placeholder="O começo"></label></div><label class="dropzone">＋ Selecionar páginas<input id="mangaPages" type="file" accept="image/*" multiple></label><div id="pagePreview" class="page-preview"></div><div class="wizard-tip"><b>Kiro:</b> escolha todas as páginas de uma vez. Você pode reordenar antes de publicar.</div><div class="wizard-actions"><button class="outline wizard-back" data-back="1">← Voltar</button><button class="primary wizard-next" data-next="3">Revisar →</button></div></div>
-  <div class="wizard-page" data-page="3"><div id="mangaReview" class="manga-review"></div><div class="wizard-actions"><button class="outline wizard-back" data-back="2">← Editar</button><button class="primary" id="publishMangaBtn">Publicar obra</button></div></div>
-</div></div>
-
-<!-- Gerenciador de capítulos -->
-<div class="modal hidden" id="mangaManagerModal"><div class="modal-box wide"><button class="close" data-close>×</button><span class="eyebrow">PAINEL DO CRIADOR</span><h2>Meus mangás</h2><p class="muted">Abra uma obra para adicionar capítulo 2, 3, 4… sem recriar a série.</p><div id="mangaManagerList" class="manager-list"></div></div></div>
-<div class="modal hidden" id="chapterModal"><div class="modal-box wide"><button class="close" data-close>×</button><span class="eyebrow">NOVO CAPÍTULO</span><h2 id="chapterModalTitle">Adicionar capítulo</h2><input type="hidden" id="chapterMangaId"><div class="form-grid-2"><label>Número<input id="newChapterNumber" type="number" min="1" step="1"></label><label>Título<input id="newChapterTitle" maxlength="100" placeholder="Capítulo seguinte"></label></div><label class="dropzone">＋ Selecionar páginas<input id="newChapterPages" type="file" accept="image/*" multiple></label><div id="newChapterPreview" class="page-preview"></div><button class="primary full" id="publishChapterBtn">Publicar capítulo</button></div></div>
-
-<!-- Leitor / busca / comentários -->
-<div class="modal hidden" id="mangaDetailsModal"><div class="modal-box wide"><button class="close" data-close>×</button><div id="mangaDetails"></div></div></div>
-<div class="modal hidden" id="videoModal"><div class="modal-box"><button class="close" data-close>×</button><h2>🎬 Publicar vídeo</h2><p class="muted">Seu vídeo entra no Feed em formato vertical e personalizado.</p><label class="file-picker">🎬 Escolher vídeo<input id="videoFile" type="file" accept="video/*"></label><textarea id="videoText" maxlength="1000" placeholder="Fale sobre o vídeo ou processo..."></textarea><button class="primary full" id="publishVideoBtn">Publicar no Feed</button></div></div>
-<div class="modal hidden" id="commentsModal"><div class="modal-box"><button class="close" data-close>×</button><h2>Comentários</h2><div id="commentsList"></div><div class="comment-compose"><textarea id="commentText" maxlength="500" placeholder="Escreva um comentário..."></textarea><button class="primary full" id="commentBtn">Comentar</button></div></div></div>
-<div class="modal hidden" id="searchModal"><div class="modal-box"><button class="close" data-close>×</button><h2>Buscar no LinkStory</h2><input id="searchInput" placeholder="Mangá, criador ou título..."><div id="searchResults" class="search-results"></div></div></div>
-<div id="toast" class="toast"></div>
-<script src="app.js"></script>
-<script src="profile-feed-v5.js"></script>
+  <header class="header">
+    <a class="logo" href="#inicio" aria-label="LinkStory">Link<span>Story</span></a>
+    <nav class="desktop-nav" aria-label="Navegação principal">
+      <a class="active" href="#inicio">Início</a><a href="#explorar">Explorar</a><a href="#biblioteca">Biblioteca</a>
+    </nav>
+    <div class="header-actions"><button class="search-button" id="openSearch" aria-label="Buscar">⌕</button><button class="login-button" id="loginButton">Entrar</button></div>
+  </header>
+  <main id="inicio">
+    <section class="hero"><div class="hero-copy"><span class="eyebrow">BEM-VINDO AO LINKSTORY</span><h1>Seu próximo<br><span>mangá favorito</span><br>está aqui.</h1><p>Leia histórias, descubra novos criadores e acompanhe mangás feitos por quem ama contar histórias.</p><div class="hero-actions"><a class="primary" href="#explorar">Explorar mangás</a><button class="secondary" id="createButton">Publicar um mangá</button></div></div><div class="hero-art" aria-hidden="true"><div class="hero-card card-a"><span>TS</span></div><div class="hero-card card-b"><span>TK</span></div><div class="hero-card card-c"><span>LS</span></div><div class="hero-dot dot-one"></div><div class="hero-dot dot-two"></div></div></section>
+    <section class="section" id="explorar"><div class="section-heading"><div><span class="eyebrow">DESCUBRA</span><h2>Em alta</h2></div><a href="#todos">Ver tudo →</a></div><div class="manga-row" id="trending"></div></section>
+    <section class="feature-banner"><div><span class="eyebrow">PARA CRIADORES</span><h2>Tem uma história para contar?</h2><p>Crie seu espaço no LinkStory e publique seus capítulos quando quiser.</p></div><button class="primary" id="bannerCreate">Começar a publicar</button></section>
+    <section class="section" id="biblioteca"><div class="section-heading"><div><span class="eyebrow">RECÉM-CHEGADOS</span><h2>Novos mangás</h2></div></div><div class="manga-row" id="newManga"></div></section>
+  </main>
+  <footer class="footer"><div class="footer-logo">Link<span>Story</span></div><p>Um lugar simples para ler e publicar mangás.</p><small>LinkStory © 2026</small></footer>
+  <dialog id="searchDialog" class="dialog"><form method="dialog"><button class="dialog-close" aria-label="Fechar">×</button><span class="eyebrow">BUSCAR</span><h2>Encontre uma história</h2><input id="searchInput" type="search" placeholder="Digite o nome de um mangá..." autocomplete="off"><div id="searchResults" class="search-results"></div></form></dialog>
+  <dialog id="detailDialog" class="dialog detail-dialog"><form method="dialog"><button class="dialog-close" aria-label="Fechar">×</button><div id="detailContent"></div></form></dialog>
+  <div id="toast" class="toast" role="status"></div><script src="app.js"></script>
 </body>
 </html>
