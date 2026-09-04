@@ -7,5 +7,6 @@ function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show'
 function openSearch(){const d=$('#searchDialog');d.showModal();$('#searchInput').value='';$('#searchResults').innerHTML='';setTimeout(()=>$('#searchInput').focus(),50)}
 $('#openSearch').onclick=openSearch;
 $('#searchInput').oninput=e=>{const q=e.target.value.trim().toLowerCase();const r=mangas.filter(m=>(m.title+' '+m.author+' '+m.genre).toLowerCase().includes(q));$('#searchResults').innerHTML=q?(r.length?r.map(m=>`<button class="result" data-index="${mangas.indexOf(m)}"><b>${m.title}</b><br><small>${m.author} · ${m.genre}</small></button>`).join(''):'<p class="detail-meta">Nenhum mangá encontrado.</p>'):'';document.querySelectorAll('.result').forEach(b=>b.onclick=()=>{d.close();openDetail(Number(b.dataset.index))})};
-['#loginButton','#createButton','#bannerCreate'].forEach(id=>$(id).onclick=()=>toast(id==='#loginButton'?'Login entra na próxima etapa.':'Publicação entra na próxima etapa.'));
+['#createButton','#bannerCreate'].forEach(id=>$(id).onclick=()=>location.href='publish.html');
+$('#loginButton').onclick=()=>toast('Login entra na próxima etapa.');
 render();
