@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b72e7">
+  <meta name="description" content="LinkStory — publique seu mangá.">
+  <title>Publicar mangá — LinkStory</title>
+  <style>
+    :root{--blue:#0b72e7;--blue-dark:#075bb8;--ink:#142033;--muted:#687386;--line:#e5eaf0;--soft:#f5f8fc;--white:#fff;--radius:18px}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:#f7f9fc;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}
+    .header{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5vw;position:sticky;top:0;z-index:10}.logo{font-size:24px;text-decoration:none;color:var(--blue);letter-spacing:-1px}.logo b{color:var(--ink)}.back{color:var(--muted);text-decoration:none;font-size:14px}.back:hover{color:var(--blue)}
+    .wrap{width:min(1050px,92%);margin:0 auto;padding:44px 0 80px}.intro{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:30px}.eyebrow{font-size:11px;letter-spacing:.16em;font-weight:800;color:var(--blue)}h1{font-size:clamp(32px,5vw,48px);line-height:1.05;letter-spacing:-1.8px;margin:8px 0 12px}.intro p{color:var(--muted);max-width:640px;margin:0;line-height:1.6}.step-count{white-space:nowrap;color:var(--muted);font-size:13px}
+    .section{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:28px;margin-bottom:18px;box-shadow:0 8px 28px rgba(20,32,51,.035)}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:start;margin-bottom:22px}.section-head h2{margin:4px 0 5px;font-size:22px;letter-spacing:-.5px}.section-head p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}.badge{background:#edf6ff;color:var(--blue);font-weight:700;font-size:12px;padding:7px 10px;border-radius:999px;white-space:nowrap}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:13px;font-weight:750}.field small{color:var(--muted);font-size:12px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);background:#fff;border-radius:12px;padding:13px 14px;outline:none;color:var(--ink);transition:.18s}.field textarea{min-height:115px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#8dc4f8;box-shadow:0 0 0 4px #edf6ff}
+    .optional{border:1px dashed #cbd7e4;border-radius:15px;padding:18px;background:#fbfdff}.optional-top{display:flex;align-items:center;justify-content:space-between;gap:16px}.optional-title{font-weight:800}.optional-desc{color:var(--muted);font-size:12px;margin-top:4px}.switch{position:relative;width:46px;height:26px;flex:none}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#d9e0e8;border-radius:99px;transition:.2s}.slider:before{content:"";position:absolute;width:20px;height:20px;left:3px;top:3px;background:#fff;border-radius:50%;box-shadow:0 2px 6px #0002;transition:.2s}.switch input:checked+.slider{background:var(--blue)}.switch input:checked+.slider:before{transform:translateX(20px)}.optional-body{display:none;margin-top:16px}.optional.open .optional-body{display:block}
+    .upload{border:2px dashed #cbd7e4;border-radius:15px;min-height:180px;display:flex;align-items:center;justify-content:center;text-align:center;padding:25px;position:relative;background:#fbfdff;overflow:hidden}.upload:hover{border-color:#8dc4f8;background:#f8fcff}.upload input{position:absolute;inset:0;opacity:0;cursor:pointer}.upload-content strong{display:block;font-size:15px;margin-bottom:6px}.upload-content span{font-size:12px;color:var(--muted)}.preview{display:none;margin-top:12px;border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#f5f7fa}.preview img{display:block;max-height:310px;max-width:100%;margin:auto}
+    .chapter-card{border:1px solid var(--line);border-radius:15px;padding:18px;background:#fcfdff}.chapter-top{display:grid;grid-template-columns:130px 1fr 150px;gap:12px}.chapter-pages{margin-top:18px}.drop-pages{min-height:150px}.page-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:12px;margin-top:15px}.page-item{border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden;position:relative;cursor:grab}.page-item img{display:block;width:100%;aspect-ratio:3/4;object-fit:cover;background:#eef2f6}.page-num{position:absolute;top:7px;left:7px;background:#142033;color:#fff;border-radius:7px;padding:4px 7px;font-size:11px;font-weight:800}.page-remove{position:absolute;right:6px;top:6px;border:0;background:#fff;color:#c83d3d;border-radius:7px;width:25px;height:25px;font-weight:900}.page-hint{text-align:center;color:var(--muted);font-size:12px;margin:13px 0 0}.add-more{display:inline-flex;align-items:center;gap:8px;margin-top:14px;border:1px solid #cbd7e4;background:#fff;color:var(--ink);padding:10px 13px;border-radius:10px;font-weight:700}
+    .footer-actions{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:24px}.note{font-size:12px;color:var(--muted);line-height:1.5}.actions{display:flex;gap:10px}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:12px 17px;border-radius:11px;font-weight:800}.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff}.btn.primary:hover{background:var(--blue-dark)}.btn:disabled{opacity:.55;cursor:not-allowed}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:#142033;color:#fff;padding:12px 16px;border-radius:12px;opacity:0;pointer-events:none;transition:.2s;font-size:13px;z-index:30}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:720px){.header{padding:0 4%;height:64px}.wrap{padding-top:30px}.intro{display:block}.step-count{display:block;margin-top:15px}.section{padding:20px}.grid,.chapter-top{grid-template-columns:1fr}.field.full{grid-column:auto}.section-head{display:block}.badge{display:inline-block;margin-top:12px}.footer-actions{display:block}.actions{margin-top:14px}.actions .btn{flex:1}.actions{display:grid;grid-template-columns:1fr 1fr}}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="index.html" aria-label="LinkStory"><span>Link</span><b>Story</b></a>
+    <a class="back" href="index.html">← Voltar para o início</a>
+  </header>
+
+  <main class="wrap">
+    <div class="intro">
+      <div><span class="eyebrow">LINKSTORY · PUBLICAÇÃO</span><h1>Publique seu mangá.</h1><p>Monte a página do seu mangá e depois adicione os capítulos. A estrutura é simples e o conteúdo continua sendo decidido por você.</p></div>
+      <div class="step-count">Etapa visual · 01</div>
+    </div>
+
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">01 · MANGÁ</span><h2>Informações da obra</h2><p>Essas informações aparecem na página principal do seu mangá.</p></div><span class="badge">Obrigatório</span></div>
+      <div class="grid">
+        <div class="field"><label for="title">Título do mangá</label><input id="title" placeholder="Ex.: Tuketon" maxlength="80"></div>
+        <div class="field"><label for="author">Nome do autor</label><input id="author" placeholder="Como quer aparecer no LinkStory" maxlength="60"></div>
+        <div class="field"><label for="genre">Gênero</label><input id="genre" placeholder="Ex.: Ação · Fantasia"></div>
+        <div class="field"><label for="rating">Classificação indicativa</label><select id="rating"><option>Livre</option><option>10 anos</option><option>12 anos</option><option>14 anos</option><option>16 anos</option><option>18 anos</option></select></div>
+        <div class="field full"><label for="description">Descrição</label><textarea id="description" placeholder="Conte um pouco sobre a história..."></textarea></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">02 · IDENTIDADE</span><h2>Capa, arte e abertura</h2><p>Você decide quais elementos extras quer mostrar antes da leitura.</p></div><span class="badge">Opcional</span></div>
+      <div class="grid">
+        <div class="field"><label>Capa do mangá</label><div class="upload" data-preview="coverPreview"><input type="file" accept="image/*"><div class="upload-content"><strong>Adicionar capa</strong><span>JPG, PNG ou WEBP</span></div></div><div class="preview" id="coverPreview"><img alt="Prévia da capa"></div></div>
+        <div class="field"><label>Logo do mangá</label><div class="upload" data-preview="logoPreview"><input type="file" accept="image/*"><div class="upload-content"><strong>Adicionar logo</strong><span>Se sua obra tiver uma logo própria</span></div></div><div class="preview" id="logoPreview"><img alt="Prévia da logo"></div></div>
+        <div class="field full">
+          <div class="optional" id="openingOptional"><div class="optional-top"><div><div class="optional-title">Arte de abertura</div><div class="optional-desc">Uma ilustração colorida que pode aparecer antes das páginas do capítulo.</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div><div class="optional-body"><div class="upload" data-preview="openingPreview"><input type="file" accept="image/*"><div class="upload-content"><strong>Adicionar arte de abertura</strong><span>O autor escolhe se quer usar ou não</span></div></div><div class="preview" id="openingPreview"><img alt="Prévia da arte de abertura"></div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">03 · COMO LER</span><h2>Tutorial de leitura</h2><p>Opcional. Pode explicar a direção de leitura e qualquer instrução especial da sua obra.</p></div><span class="badge">Opcional</span></div>
+      <div class="optional open" id="tutorialOptional">
+        <div class="optional-top"><div><div class="optional-title">Mostrar instruções antes do capítulo</div><div class="optional-desc">O leitor verá essas instruções antes de começar a ler.</div></div><label class="switch"><input id="tutorialToggle" type="checkbox" checked><span class="slider"></span></label></div>
+        <div class="optional-body"><div class="field"><label for="tutorial">Texto do tutorial</label><textarea id="tutorial" placeholder="Ex.: Leia da direita para a esquerda. Deslize para passar as páginas.">Leia da direita para a esquerda. Deslize para passar as páginas.</textarea></div></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">04 · PRIMEIRO CAPÍTULO</span><h2>Adicionar capítulo</h2><p>As páginas entram na ordem em que você colocar. O LinkStory não reorganiza os painéis da sua página.</p></div><span class="badge">Obrigatório</span></div>
+      <div class="chapter-card">
+        <div class="chapter-top">
+          <div class="field"><label for="chapterNumber">Número</label><input id="chapterNumber" value="001" inputmode="numeric"></div>
+          <div class="field"><label for="chapterTitle">Título do capítulo</label><input id="chapterTitle" placeholder="Ex.: O começo"></div>
+          <div class="field"><label for="chapterVisibility">Visibilidade</label><select id="chapterVisibility"><option>Público</option><option>Rascunho</option></select></div>
+        </div>
+        <div class="chapter-pages">
+          <div class="field"><label>Páginas do capítulo</label><small>Selecione várias imagens de uma vez. Depois você pode arrastar para mudar a ordem.</small></div>
+          <div class="upload drop-pages" id="pagesUpload"><input id="pagesInput" type="file" accept="image/*" multiple><div class="upload-content"><strong>Adicionar páginas do capítulo</strong><span>Você escolhe quantas páginas o capítulo terá</span></div></div>
+          <div class="page-list" id="pageList"></div><p class="page-hint" id="pageHint">Nenhuma página adicionada ainda.</p>
+          <button class="add-more" id="addMore" type="button">＋ Adicionar mais páginas</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-head"><div><span class="eyebrow">05 · ENCERRAMENTO</span><h2>Arte final</h2><p>Uma arte opcional para aparecer depois da última página do capítulo.</p></div><span class="badge">Opcional</span></div>
+      <div class="optional open" id="endingOptional"><div class="optional-top"><div><div class="optional-title">Adicionar arte final</div><div class="optional-desc">Pode ser uma ilustração, mensagem ou imagem de encerramento.</div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div><div class="optional-body"><div class="upload" data-preview="endingPreview"><input type="file" accept="image/*"><div class="upload-content"><strong>Adicionar arte final</strong><span>Opcional</span></div></div><div class="preview" id="endingPreview"><img alt="Prévia da arte final"></div></div></div>
+    </section>
+
+    <div class="footer-actions"><div class="note">Esta é a primeira versão visual da publicação. Os dados ainda não são enviados para um servidor.</div><div class="actions"><button class="btn" id="previewButton" type="button">Pré-visualizar</button><button class="btn primary" id="publishButton" type="button">Continuar publicação →</button></div></div>
+  </main>
+
+  <div class="toast" id="toast" role="status"></div>
+  <script>
+    const $=s=>document.querySelector(s);
+    const toast=(msg)=>{const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(window.__toast);window.__toast=setTimeout(()=>t.classList.remove('show'),2400)};
+    document.querySelectorAll('.switch input').forEach(input=>input.addEventListener('change',()=>input.closest('.optional').classList.toggle('open',input.checked)));
+    document.querySelectorAll('.upload').forEach(box=>{const input=box.querySelector('input[type=file]');const previewId=box.dataset.preview;if(!input)return;input.addEventListener('change',()=>{const file=input.files?.[0];if(!file||!previewId)return;const p=$('#'+previewId);p.querySelector('img').src=URL.createObjectURL(file);p.style.display='block';box.querySelector('.upload-content strong').textContent='Imagem selecionada';});});
+    let pages=[];
+    function renderPages(){const list=$('#pageList');list.innerHTML='';pages.forEach((file,i)=>{const item=document.createElement('div');item.className='page-item';item.draggable=true;item.dataset.index=i;item.innerHTML='<span class="page-num">'+String(i+1).padStart(2,'0')+'</span><button class="page-remove" type="button" aria-label="Remover">×</button><img alt="Página '+(i+1)+'">';item.querySelector('img').src=URL.createObjectURL(file);item.querySelector('.page-remove').onclick=e=>{e.stopPropagation();pages.splice(i,1);renderPages()};item.addEventListener('dragstart',e=>e.dataTransfer.setData('text/plain',i));item.addEventListener('dragover',e=>e.preventDefault());item.addEventListener('drop',e=>{e.preventDefault();const from=Number(e.dataTransfer.getData('text/plain'));const to=i;if(from===to)return;const moved=pages.splice(from,1)[0];pages.splice(to,0,moved);renderPages()});list.appendChild(item)});$('#pageHint').textContent=pages.length?pages.length+' página(s) adicionada(s). Arraste para reorganizar.':'Nenhuma página adicionada ainda.'}
+    function addFiles(files){pages.push(...Array.from(files).filter(f=>f.type.startsWith('image/')));renderPages()}
+    $('#pagesInput').addEventListener('change',e=>{addFiles(e.target.files);e.target.value=''});$('#addMore').onclick=()=>$('#pagesInput').click();
+    $('#previewButton').onclick=()=>toast('Pré-visualização: a página está pronta para testar o visual.');
+    $('#publishButton').onclick=()=>toast('Próxima etapa: salvar a obra e publicar de verdade.');
+  </script>
+</body>
+</html>
