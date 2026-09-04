@@ -24,9 +24,11 @@
     .profile{display:flex;align-items:center;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--line)}.avatar{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);font-size:22px;font-weight:950}.profile strong{font-size:17px}.profile span{display:block;color:var(--muted);font-size:13px;margin-top:4px}.edit{margin-left:auto;border:1px solid #b9d4ee;background:#fff;color:var(--blue-dark);font-weight:850;border-radius:10px;padding:9px 13px}
     .row{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #edf2f7}.row:last-child{border-bottom:0}.row strong{font-size:14px}.row p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.45}.chevron{color:#9aaabd;font-size:21px}
     .switch{width:48px;height:28px;border:0;border-radius:99px;background:#d9e2ec;padding:3px;position:relative}.switch:after{content:"";display:block;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 2px 6px #10203322}.switch.on{background:var(--blue)}.switch.on:after{transform:translateX(20px)}
+    .appearance-options{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}.theme-option{border:1px solid var(--line);background:#fff;border-radius:14px;padding:14px;text-align:center;transition:.15s}.theme-option.selected{border:2px solid var(--blue);padding:13px;box-shadow:0 0 0 3px var(--blue-soft)}.theme-preview{height:180px;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 4px 14px #10203316}.theme-preview .mini-bar{height:30px;display:flex;align-items:center;padding:0 10px;font-size:8px;font-weight:900}.theme-preview .mini-body{flex:1;padding:14px 10px;display:grid;gap:7px}.theme-preview .mini-line{height:7px;border-radius:99px;width:70%}.theme-preview .mini-blocks{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-top:4px}.theme-preview .mini-block{height:42px;border-radius:5px}.theme-preview.light{background:#fff;border:1px solid #e4eaf0}.theme-preview.light .mini-bar{background:#fff;color:#182333;border-bottom:1px solid #e4eaf0}.theme-preview.light .mini-body{background:#f7faff}.theme-preview.light .mini-line{background:#dbe5ef}.theme-preview.light .mini-block{background:#dcecff}.theme-preview.dark{background:#151515;border:1px solid #2b2b2b}.theme-preview.dark .mini-bar{background:#000;color:#fff;border-bottom:1px solid #292929}.theme-preview.dark .mini-body{background:#1d1d1d}.theme-preview.dark .mini-line{background:#3b3b3b}.theme-preview.dark .mini-block{background:#303030}.theme-option strong{display:block;font-size:15px;margin-top:12px}.radio{width:18px;height:18px;border-radius:50%;border:3px solid #8c99a8;margin:10px auto 0}.theme-option.selected .radio{border-color:var(--blue);box-shadow:inset 0 0 0 3px #fff;background:var(--blue)}
+    .device-row{padding-top:2px}.device-copy{flex:1}.device-switch{width:48px;height:28px;border:0;border-radius:99px;background:#d9e2ec;padding:3px;position:relative}.device-switch:after{content:"";display:block;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 2px 6px #10203322}
     .danger{border-color:#f1d7d7}.danger h2{color:#9d3030}.danger button{border:1px solid #efcaca;background:#fff;color:#b02e2e;font-weight:850;border-radius:10px;padding:10px 14px}
     .footer-note{text-align:center;color:#91a0b0;font-size:11px;margin-top:25px}
-    @media(max-width:760px){.topbar{height:66px;padding:0 16px;gap:14px}.logo{font-size:23px}.top-title{font-size:12px}.back{width:40px;height:40px}main{width:min(100% - 24px,620px);padding:36px 0 50px}.layout{grid-template-columns:1fr}.menu{position:static;display:flex;overflow-x:auto;padding:5px;gap:4px}.menu button{min-width:max-content;text-align:center;padding:11px 13px}.intro{margin-bottom:22px}h1{font-size:45px;letter-spacing:-2.8px}.intro p{font-size:14px}.card{padding:18px}.card-head{align-items:flex-start}.profile{align-items:flex-start}.edit{padding:8px 11px}.row{min-height:64px}}
+    @media(max-width:760px){.topbar{height:66px;padding:0 16px;gap:14px}.logo{font-size:23px}.top-title{font-size:12px}.back{width:40px;height:40px}main{width:min(100% - 24px,620px);padding:36px 0 50px}.layout{grid-template-columns:1fr}.menu{position:static;display:flex;overflow-x:auto;padding:5px;gap:4px}.menu button{min-width:max-content;text-align:center;padding:11px 13px}.intro{margin-bottom:22px}h1{font-size:45px;letter-spacing:-2.8px}.intro p{font-size:14px}.card{padding:18px}.card-head{align-items:flex-start}.profile{align-items:flex-start}.edit{padding:8px 11px}.row{min-height:64px}.appearance-options{gap:10px}.theme-preview{height:145px}.theme-option{padding:10px}.theme-option.selected{padding:9px}}
   </style>
 </head>
 <body>
@@ -47,6 +49,7 @@
       <aside class="menu" aria-label="Categorias de configurações">
         <button class="active">Conta</button>
         <button>Perfil</button>
+        <button>Exibir</button>
         <button>Leitura</button>
         <button>Notificações</button>
         <button>Privacidade</button>
@@ -81,6 +84,21 @@
           <div class="card-head"><div><h2>Privacidade</h2><p>Defina o que outras pessoas podem ver.</p></div></div>
           <div class="row"><div><strong>Perfil público</strong><p>Seu perfil pode ser encontrado por outros leitores.</p></div><button class="switch on" aria-label="Ativado"></button></div>
           <div class="row"><div><strong>Mostrar mangás que acompanho</strong><p>Permitir que visitantes vejam sua biblioteca pública.</p></div><button class="switch" aria-label="Desativado"></button></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><div><h2>Exibir</h2><p>Escolha a aparência que o LinkStory deve usar.</p></div></div>
+          <div class="appearance-options">
+            <button class="theme-option" type="button">
+              <div class="theme-preview light"><div class="mini-bar">LinkStory</div><div class="mini-body"><span class="mini-line"></span><span class="mini-line" style="width:48%"></span><div class="mini-blocks"><span class="mini-block"></span><span class="mini-block"></span><span class="mini-block"></span></div></div></div>
+              <strong>Claro</strong><div class="radio"></div>
+            </button>
+            <button class="theme-option selected" type="button">
+              <div class="theme-preview dark"><div class="mini-bar">LinkStory</div><div class="mini-body"><span class="mini-line"></span><span class="mini-line" style="width:48%"></span><div class="mini-blocks"><span class="mini-block"></span><span class="mini-block"></span><span class="mini-block"></span></div></div></div>
+              <strong>Escuro</strong><div class="radio"></div>
+            </button>
+          </div>
+          <div class="row device-row"><div class="device-copy"><strong>Usar configurações do dispositivo</strong><p>Ajuste a aparência de acordo com as configurações de Tela e brilho do seu dispositivo.</p></div><button class="device-switch" aria-label="Desativado"></button></div>
         </article>
 
         <article class="card danger">
