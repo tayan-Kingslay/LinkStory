@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#0b72e7">
+  <title>Configurações — LinkStory</title>
+  <style>
+    :root{--blue:#0b72e7;--blue-dark:#0758b5;--blue-soft:#eaf4ff;--ink:#102033;--muted:#66788d;--line:#dbe5ef;--paper:#fff;--off:#f7faff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:var(--off)}
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#fff 0%,#f7faff 100%);min-height:100vh}
+    button,a,input{font:inherit}a{text-decoration:none;color:inherit}button{cursor:pointer}
+    .topbar{height:76px;display:flex;align-items:center;padding:0 max(20px,calc((100vw - 1120px)/2));gap:26px;background:#fffffff2;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
+    .back{width:42px;height:42px;border:1px solid var(--line);background:#fff;border-radius:50%;font-size:22px;color:var(--ink)}
+    .logo{font-size:27px;font-weight:950;letter-spacing:-1.8px}.logo b{color:var(--blue)}
+    .top-title{margin-left:auto;font-size:14px;font-weight:800;color:var(--muted)}
+    main{width:min(1080px,calc(100% - 32px));margin:0 auto;padding:52px 0 70px}
+    .intro{margin-bottom:30px}.eyebrow{font-size:11px;font-weight:900;letter-spacing:2.4px;color:var(--blue)}
+    h1{font-size:clamp(42px,7vw,64px);line-height:1;letter-spacing:-3.5px;margin:10px 0 12px}.intro p{margin:0;color:var(--muted);font-size:16px;line-height:1.65;max-width:650px}
+    .layout{display:grid;grid-template-columns:245px 1fr;gap:24px;align-items:start}
+    .menu{background:#fff;border:1px solid var(--line);border-radius:16px;padding:8px;position:sticky;top:96px;box-shadow:0 10px 30px #123a5c0b}
+    .menu button{display:block;width:100%;text-align:left;border:0;background:transparent;color:var(--muted);padding:13px 14px;border-radius:10px;font-size:14px;font-weight:800}.menu button.active{background:var(--blue-soft);color:var(--blue-dark)}
+    .panel{display:grid;gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:0 10px 30px #123a5c08}.card-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:18px}.card h2{font-size:20px;letter-spacing:-.6px;margin:0}.card-head p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+    .profile{display:flex;align-items:center;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--line)}.avatar{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);font-size:22px;font-weight:950}.profile strong{font-size:17px}.profile span{display:block;color:var(--muted);font-size:13px;margin-top:4px}.edit{margin-left:auto;border:1px solid #b9d4ee;background:#fff;color:var(--blue-dark);font-weight:850;border-radius:10px;padding:9px 13px}
+    .row{min-height:58px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #edf2f7}.row:last-child{border-bottom:0}.row strong{font-size:14px}.row p{margin:4px 0 0;color:var(--muted);font-size:12px;line-height:1.45}.chevron{color:#9aaabd;font-size:21px}
+    .switch{width:48px;height:28px;border:0;border-radius:99px;background:#d9e2ec;padding:3px;position:relative}.switch:after{content:"";display:block;width:22px;height:22px;background:#fff;border-radius:50%;box-shadow:0 2px 6px #10203322}.switch.on{background:var(--blue)}.switch.on:after{transform:translateX(20px)}
+    .danger{border-color:#f1d7d7}.danger h2{color:#9d3030}.danger button{border:1px solid #efcaca;background:#fff;color:#b02e2e;font-weight:850;border-radius:10px;padding:10px 14px}
+    .footer-note{text-align:center;color:#91a0b0;font-size:11px;margin-top:25px}
+    @media(max-width:760px){.topbar{height:66px;padding:0 16px;gap:14px}.logo{font-size:23px}.top-title{font-size:12px}.back{width:40px;height:40px}main{width:min(100% - 24px,620px);padding:36px 0 50px}.layout{grid-template-columns:1fr}.menu{position:static;display:flex;overflow-x:auto;padding:5px;gap:4px}.menu button{min-width:max-content;text-align:center;padding:11px 13px}.intro{margin-bottom:22px}h1{font-size:45px;letter-spacing:-2.8px}.intro p{font-size:14px}.card{padding:18px}.card-head{align-items:flex-start}.profile{align-items:flex-start}.edit{padding:8px 11px}.row{min-height:64px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="back" href="index.html" aria-label="Voltar">‹</a>
+    <a class="logo" href="index.html">Link<b>Story</b></a>
+    <span class="top-title">Configurações</span>
+  </header>
+
+  <main>
+    <section class="intro">
+      <span class="eyebrow">LINKSTORY · CONTA</span>
+      <h1>Configurações.</h1>
+      <p>Organize sua conta, preferências e segurança em um só lugar.</p>
+    </section>
+
+    <div class="layout">
+      <aside class="menu" aria-label="Categorias de configurações">
+        <button class="active">Conta</button>
+        <button>Perfil</button>
+        <button>Leitura</button>
+        <button>Notificações</button>
+        <button>Privacidade</button>
+        <button>Segurança</button>
+      </aside>
+
+      <section class="panel">
+        <article class="card">
+          <div class="card-head"><div><h2>Minha conta</h2><p>Informações básicas da sua conta.</p></div></div>
+          <div class="profile">
+            <div class="avatar">LS</div>
+            <div><strong>Seu nome</strong><span>@seuusuario</span></div>
+            <button class="edit">Editar</button>
+          </div>
+          <div class="row"><div><strong>E-mail</strong><p>seuemail@exemplo.com</p></div><span class="chevron">›</span></div>
+          <div class="row"><div><strong>Nome de usuário</strong><p>@seuusuario</p></div><span class="chevron">›</span></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><div><h2>Preferências de leitura</h2><p>Escolha como o LinkStory deve se comportar para você.</p></div></div>
+          <div class="row"><div><strong>Continuar de onde parei</strong><p>Salvar automaticamente seu progresso nos capítulos.</p></div><button class="switch on" aria-label="Ativado"></button></div>
+          <div class="row"><div><strong>Modo de leitura contínuo</strong><p>Manter as páginas em um único fluxo vertical.</p></div><button class="switch on" aria-label="Ativado"></button></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><div><h2>Notificações</h2><p>Controle os avisos que você recebe.</p></div></div>
+          <div class="row"><div><strong>Novos capítulos</strong><p>Receber avisos de mangás que você acompanha.</p></div><button class="switch on" aria-label="Ativado"></button></div>
+          <div class="row"><div><strong>Comentários e interações</strong><p>Receber avisos quando alguém interagir com você.</p></div><button class="switch" aria-label="Desativado"></button></div>
+        </article>
+
+        <article class="card">
+          <div class="card-head"><div><h2>Privacidade</h2><p>Defina o que outras pessoas podem ver.</p></div></div>
+          <div class="row"><div><strong>Perfil público</strong><p>Seu perfil pode ser encontrado por outros leitores.</p></div><button class="switch on" aria-label="Ativado"></button></div>
+          <div class="row"><div><strong>Mostrar mangás que acompanho</strong><p>Permitir que visitantes vejam sua biblioteca pública.</p></div><button class="switch" aria-label="Desativado"></button></div>
+        </article>
+
+        <article class="card danger">
+          <div class="card-head"><div><h2>Zona de conta</h2><p>Ações que podem afetar permanentemente sua conta.</p></div></div>
+          <div class="row"><div><strong>Sair da conta</strong><p>Encerrar a sessão neste dispositivo.</p></div><button>Sair</button></div>
+        </article>
+      </section>
+    </div>
+    <p class="footer-note">LinkStory © 2026</p>
+  </main>
+</body>
+</html>
