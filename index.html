@@ -18,8 +18,7 @@
     </nav>
     <div class="header-actions">
       <button class="search-button" id="openSearch" aria-label="Buscar">⌕</button>
-      <a class="publish-header" href="publish.html">Publicar</a>
-      <a class="settings-header" href="settings.html" aria-label="Configurações" title="Configurações">⚙</a>
+      <button class="menu-button" id="openMenu" aria-label="Abrir menu" title="Menu"><span></span><span></span><span></span></button>
       <button class="login-button" id="loginButton">Entrar</button>
     </div>
   </header>
@@ -75,6 +74,23 @@
     <small>LinkStory © 2026</small>
   </footer>
 
+  <dialog id="menuDialog" class="menu-dialog">
+    <div class="menu-panel">
+      <div class="menu-head">
+        <div><span class="eyebrow">LINKSTORY</span><h2>Menu</h2></div>
+        <button class="dialog-close" id="closeMenu" aria-label="Fechar">×</button>
+      </div>
+      <nav class="menu-links" aria-label="Menu do LinkStory">
+        <a href="#inicio"><span class="menu-icon">⌂</span><span><b>Início</b><small>Voltar para a página inicial</small></span><strong>›</strong></a>
+        <a href="#explorar"><span class="menu-icon">⌕</span><span><b>Explorar mangás</b><small>Descobrir novas histórias</small></span><strong>›</strong></a>
+        <a href="#biblioteca"><span class="menu-icon">▤</span><span><b>Biblioteca</b><small>Ver seus mangás e capítulos</small></span><strong>›</strong></a>
+        <a href="publish.html"><span class="menu-icon">＋</span><span><b>Publicar mangá</b><small>Começar uma nova publicação</small></span><strong>›</strong></a>
+        <a href="settings.html"><span class="menu-icon">⚙</span><span><b>Configurações</b><small>Aparência, conta e preferências</small></span><strong>›</strong></a>
+      </nav>
+      <div class="menu-footer"><span>LinkStory</span><small>Leia. Crie. Publique.</small></div>
+    </div>
+  </dialog>
+
   <dialog id="searchDialog" class="dialog">
     <form method="dialog">
       <button class="dialog-close" aria-label="Fechar">×</button>
@@ -94,5 +110,11 @@
 
   <div id="toast" class="toast" role="status"></div>
   <script src="app.js"></script>
+  <script>
+    const menuDialog = document.getElementById('menuDialog');
+    document.getElementById('openMenu').addEventListener('click', () => menuDialog.showModal());
+    document.getElementById('closeMenu').addEventListener('click', () => menuDialog.close());
+    menuDialog.querySelectorAll('a').forEach(link => link.addEventListener('click', () => menuDialog.close()));
+  </script>
 </body>
 </html>
