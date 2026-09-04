@@ -1,73 +1,58 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#111827">
-  <title>Leitor — LinkStory</title>
-  <style>
-    :root{--blue:#1976d2;--blue-soft:#dcebfb;--ink:#101827;--muted:#9aa6b5;--reader:#11151b;--reader-2:#191f28;--paper:#fff;--line:#dfe5ec;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--reader);color:#fff;overflow-x:hidden}button,a{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}
-    .reader-top{height:64px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:14px;padding:0 16px;background:#11151beF;border-bottom:1px solid #ffffff12;backdrop-filter:blur(16px)}
-    .back{width:38px;height:38px;border:1px solid #ffffff18;border-radius:50%;background:#ffffff08;color:#fff;font-size:22px;display:grid;place-items:center}.brand{font-weight:950;font-size:20px;letter-spacing:-1px}.brand b{color:#55a9ff}.chapter{margin-left:auto;display:flex;flex-direction:column;text-align:right}.chapter small{font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:850}.chapter strong{font-size:12px}
-    .reader-info{max-width:850px;margin:auto;padding:26px 16px 18px;display:flex;justify-content:space-between;align-items:end;gap:20px}.reader-info h1{font-size:28px;line-height:1;margin:6px 0 0;letter-spacing:-1.5px}.reader-info p{margin:0;color:var(--muted);font-size:12px}.progress-wrap{width:140px;text-align:right}.progress-wrap span{display:block;color:var(--muted);font-size:10px;margin-bottom:7px}.progress{height:4px;border-radius:99px;background:#ffffff16;overflow:hidden}.progress i{display:block;width:18%;height:100%;background:#55a9ff;border-radius:inherit}
-    .pages{width:min(760px,100%);margin:0 auto;padding:0 10px 90px}.manga-page{background:var(--paper);color:var(--ink);min-height:1040px;margin:0 auto 14px;padding:22px;box-shadow:0 18px 50px #00000045;position:relative;overflow:hidden}.page-number{position:absolute;right:18px;bottom:13px;color:#8c96a3;font-size:9px;letter-spacing:1px}.page-title{font-weight:950;font-size:12px;letter-spacing:2px;color:var(--blue);margin-bottom:18px}.mock-grid{display:grid;grid-template-columns:1.2fr .8fr;grid-template-rows:250px 190px 330px;gap:10px;height:790px}.panel{border:2px solid #182231;position:relative;overflow:hidden;background:#f7f8fa}.panel:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,#dce8f4 0 12%,transparent 13%),linear-gradient(135deg,#eef3f7,#fff 60%)}.panel:nth-child(2){grid-row:span 2}.panel:nth-child(3){grid-column:span 1}.panel:nth-child(4){grid-column:1 / -1}.panel:nth-child(5){grid-column:1 / -1;height:150px}.panel-label{position:absolute;left:12px;top:10px;background:#fff;padding:4px 7px;font-size:8px;font-weight:900;letter-spacing:1px;border:1px solid #d8dee6}.panel-copy{position:absolute;left:16px;bottom:15px;max-width:75%;font-weight:950;font-size:22px;line-height:1;letter-spacing:-1px}.panel-copy em{font-style:normal;color:var(--blue)}.speed-lines{position:absolute;right:-40px;bottom:35px;width:180px;height:90px;border-top:2px solid #182231;transform:rotate(-10deg);opacity:.25;box-shadow:0 -15px 0 -1px #182231,0 -30px 0 -1px #182231}
-    .reader-controls{position:fixed;z-index:25;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:5px;border:1px solid #ffffff16;background:#1a2028eF;border-radius:15px;box-shadow:0 15px 40px #0008;backdrop-filter:blur(16px)}.reader-controls button{height:42px;min-width:42px;border:0;background:transparent;color:#fff;border-radius:11px;font-size:17px}.reader-controls button:hover{background:#ffffff12}.reader-controls .counter{padding:0 12px;font-size:11px;color:#b8c2ce}.reader-controls .primary{background:#1976d2}.reader-controls .primary:hover{background:#2685e4}
-    .reader-end{max-width:760px;margin:-35px auto 0;padding:0 16px 100px;text-align:center}.reader-end p{color:var(--muted);font-size:12px}.next{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:12px;background:#fff;color:var(--ink);font-weight:850;border:0}.next:hover{background:#eaf3fc}
-    @media(max-width:600px){.reader-top{height:58px}.chapter{max-width:150px}.reader-info{padding:20px 15px 15px}.reader-info h1{font-size:24px}.progress-wrap{display:none}.pages{padding:0 0 90px}.manga-page{min-height:720px;padding:14px;margin-bottom:8px}.mock-grid{height:610px;grid-template-rows:190px 145px 240px;gap:7px}.panel-copy{font-size:17px;left:10px;bottom:10px}.panel-label{left:8px;top:8px;font-size:7px}.reader-end{margin-top:-15px}.brand{font-size:18px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<title>Leitor — LinkStory</title>
+<style>
+:root{--blue:#1976d2;--blue2:#55a9ff;--ink:#101827;--muted:#8e9aaa;--reader:#0b1220;--reader2:#121b2b;--paper:#fff;--line:#dfe5ec;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--reader);color:#fff;overflow-x:hidden}button,a{font:inherit;cursor:pointer}a{text-decoration:none;color:inherit}
+.reader-top{height:68px;position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:0 16px;background:#0b1220f2;border-bottom:1px solid #ffffff12;backdrop-filter:blur(18px)}
+.back{width:40px;height:40px;border:1px solid #ffffff1a;border-radius:50%;background:#ffffff08;color:#fff;font-size:23px;display:grid;place-items:center}.work-mark{width:38px;height:38px;border-radius:9px;background:#ffffff10;border:1px solid #ffffff18;display:grid;place-items:center;overflow:hidden;color:#9db2c9;font-size:9px;font-weight:900}.work-mark img{width:100%;height:100%;object-fit:contain}.work-meta{min-width:0}.work-meta strong{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.work-meta span{display:block;font-size:10px;color:var(--muted);margin-top:2px}.chapter{margin-left:auto;text-align:right}.chapter small{display:block;font-size:8px;color:var(--muted);letter-spacing:1.4px;font-weight:850}.chapter strong{font-size:11px}
+.reader-info{width:min(900px,100%);margin:auto;padding:24px 16px 18px;display:flex;justify-content:space-between;align-items:end;gap:20px}.reader-info p{margin:0;color:var(--muted);font-size:11px}.reader-info h1{font-size:27px;line-height:1;margin:5px 0 0;letter-spacing:-1.4px}.progress-wrap{width:160px;text-align:right}.progress-wrap span{display:block;color:var(--muted);font-size:10px;margin-bottom:7px}.progress{height:4px;border-radius:99px;background:#ffffff16;overflow:hidden}.progress i{display:block;width:18%;height:100%;background:var(--blue2);border-radius:inherit}
+.pages{width:min(900px,100%);margin:0 auto;padding:0 12px 45px}.manga-page{background:var(--paper);color:var(--ink);margin:0 auto 14px;box-shadow:0 18px 55px #00000055;position:relative;overflow:hidden}.page-image{display:block;width:100%;height:auto}.demo-page{min-height:1050px;padding:26px;background:linear-gradient(135deg,#f5f8fc,#fff 48%,#edf5ff)}.demo-kicker{font-size:11px;font-weight:900;letter-spacing:2px;color:var(--blue);margin-bottom:30px}.demo-title{font-size:clamp(40px,8vw,78px);font-weight:950;letter-spacing:-4px;line-height:.9;max-width:720px}.demo-copy{font-size:17px;line-height:1.55;max-width:620px;margin-top:30px;color:#4a5565}.demo-panel{margin-top:70px;height:430px;border:2px solid #172235;background:linear-gradient(145deg,#dcecff,#fff 55%,#d8e7f5);display:flex;align-items:end;padding:24px}.demo-panel strong{font-size:clamp(24px,5vw,48px);letter-spacing:-2px}.page-number{position:absolute;right:18px;bottom:13px;color:#8c96a3;font-size:9px;letter-spacing:1px}
+.chapter-end{width:min(900px,100%);margin:0 auto;padding:10px 16px 110px}.end-card{background:#121b2b;border:1px solid #ffffff10;border-radius:18px;padding:22px}.end-heading{display:flex;align-items:center;justify-content:space-between;gap:15px}.end-heading h2{font-size:18px;margin:0}.end-heading span{font-size:11px;color:var(--muted)}.actions{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}.action{border:1px solid #ffffff16;background:#ffffff08;color:#fff;border-radius:11px;padding:10px 13px;font-size:12px}.action.active{background:#1976d2;border-color:#1976d2}.rating{margin-top:20px;padding-top:18px;border-top:1px solid #ffffff10}.rating-label{font-size:11px;color:var(--muted);margin-bottom:10px}.stars{display:flex;gap:5px}.star{width:32px;height:32px;border:1px solid #ffffff16;background:#ffffff08;border-radius:8px;color:#ffd45a}.comment-box{display:flex;gap:8px;margin-top:18px}.comment-box input{min-width:0;flex:1;background:#0b1220;border:1px solid #ffffff14;border-radius:10px;padding:11px 12px;color:#fff;outline:none}.comment-box button{border:0;border-radius:10px;padding:0 15px;background:#1976d2;color:#fff;font-weight:800}.comments{margin-top:18px}.comment{padding:12px 0;border-top:1px solid #ffffff0d}.comment b{font-size:11px}.comment p{margin:5px 0 0;font-size:11px;color:#b7c0cc}
+.reader-controls{position:fixed;z-index:25;left:50%;bottom:16px;transform:translateX(-50%);display:flex;align-items:center;gap:4px;padding:5px;border:1px solid #ffffff16;background:#121b2bf0;border-radius:15px;box-shadow:0 15px 40px #0008;backdrop-filter:blur(16px)}.reader-controls button{height:42px;min-width:42px;border:0;background:transparent;color:#fff;border-radius:11px;font-size:17px}.reader-controls button:hover{background:#ffffff12}.reader-controls .counter{padding:0 12px;font-size:11px;color:#b8c2ce}.reader-controls .primary{background:#1976d2}
+@media(max-width:600px){.reader-top{height:60px;padding:0 11px}.back{width:36px;height:36px}.work-mark{width:34px;height:34px}.chapter{max-width:130px}.chapter strong{font-size:10px}.reader-info{padding:19px 14px 15px}.reader-info h1{font-size:23px}.progress-wrap{display:none}.pages{padding:0 0 30px}.demo-page{min-height:720px;padding:18px}.demo-title{letter-spacing:-2px}.demo-copy{font-size:14px}.demo-panel{height:300px;margin-top:45px;padding:15px}.manga-page{margin-bottom:8px}.chapter-end{padding:8px 12px 105px}.end-card{padding:17px}.reader-controls{bottom:10px}.reader-controls button{height:40px;min-width:40px}}
+</style>
 </head>
 <body>
-  <header class="reader-top">
-    <a class="back" href="index.html" aria-label="Voltar">‹</a>
-    <div class="brand">Link<b>Story</b></div>
-    <div class="chapter"><small>LENDO AGORA</small><strong id="chapterName">Tuketon · Capítulo 1</strong></div>
-  </header>
-
-  <section class="reader-info">
-    <div><p id="mangaAuthor">Kairox Studio</p><h1 id="mangaTitle">Tuketon</h1></div>
-    <div class="progress-wrap"><span>18% lido</span><div class="progress"><i></i></div></div>
-  </section>
-
-  <main class="pages">
-    <article class="manga-page">
-      <div class="page-title">LINKSTORY · CAPÍTULO 01</div>
-      <div class="mock-grid">
-        <div class="panel"><span class="panel-label">ABERTURA</span><div class="panel-copy">Toda história começa <em>em algum lugar.</em></div></div>
-        <div class="panel"><span class="panel-label">PÁGINA 02</span><div class="speed-lines"></div><div class="panel-copy">O mundo ainda não sabe o que está prestes a acontecer.</div></div>
-        <div class="panel"><span class="panel-label">PÁGINA 03</span><div class="panel-copy">Um novo capítulo.</div></div>
-        <div class="panel"><span class="panel-label">PÁGINA 04</span><div class="panel-copy">Algumas respostas só aparecem quando você continua <em>lendo.</em></div></div>
-        <div class="panel"><span class="panel-label">FIM DA PÁGINA</span></div>
-      </div>
-      <span class="page-number">01</span>
-    </article>
-    <article class="manga-page">
-      <div class="page-title">CONTINUA...</div>
-      <div class="mock-grid">
-        <div class="panel"><span class="panel-label">PÁGINA 05</span><div class="panel-copy">O próximo quadro pode mudar tudo.</div></div>
-        <div class="panel"><span class="panel-label">PÁGINA 06</span><div class="panel-copy"><em>Continue.</em></div></div>
-        <div class="panel"><span class="panel-label">PÁGINA 07</span></div>
-        <div class="panel"><span class="panel-label">PÁGINA 08</span><div class="panel-copy">Sua história ainda está sendo escrita.</div></div>
-        <div class="panel"><span class="panel-label">FIM DA PÁGINA</span></div>
-      </div>
-      <span class="page-number">02</span>
-    </article>
-  </main>
-
-  <section class="reader-end"><p>Você chegou ao fim da demonstração deste capítulo.</p><button class="next" onclick="alert('A navegação de capítulos entra na próxima etapa.')">Próximo capítulo →</button></section>
-
-  <nav class="reader-controls" aria-label="Controles do leitor">
-    <button onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Topo">↑</button>
-    <button class="counter" id="counter">1 / 2</button>
-    <button onclick="scrollBy({top:innerHeight*.85,behavior:'smooth'})" aria-label="Próxima página">↓</button>
-    <button class="primary" onclick="location.href='index.html'" aria-label="Voltar para LinkStory">⌂</button>
-  </nav>
-
-  <script>
-    const params=new URLSearchParams(location.search);const title=params.get('manga');
-    if(title){document.querySelector('#mangaTitle').textContent=title;document.querySelector('#chapterName').textContent=title+' · Capítulo 1';}
-    const pages=[...document.querySelectorAll('.manga-page')],counter=document.querySelector('#counter');
-    const update=()=>{let best=0,dist=Infinity;pages.forEach((p,i)=>{const d=Math.abs(p.getBoundingClientRect().top-90);if(d<dist){dist=d;best=i}});counter.textContent=(best+1)+' / '+pages.length};addEventListener('scroll',update,{passive:true});update();
-  </script>
+<header class="reader-top">
+<a class="back" href="index.html" aria-label="Voltar">‹</a>
+<div class="work-mark" id="workLogo">LOGO</div>
+<div class="work-meta"><strong id="topTitle">Tuketon</strong><span id="topAuthor">Kairox Studio</span></div>
+<div class="chapter"><small>LENDO AGORA</small><strong id="chapterName">Capítulo 1</strong></div>
+</header>
+<section class="reader-info"><div><p id="mangaAuthor">Kairox Studio</p><h1 id="mangaTitle">Tuketon</h1></div><div class="progress-wrap"><span id="progressText">18% lido</span><div class="progress"><i></i></div></div></section>
+<main class="pages">
+<article class="manga-page demo-page">
+<div class="demo-kicker">LINKSTORY · CAPÍTULO 01</div>
+<div class="demo-title">A história pertence a quem a criou.</div>
+<div class="demo-copy">No LinkStory, cada criador publica suas páginas como foram feitas. O leitor recebe a obra em seu formato original, sem o site reorganizar os quadros automaticamente.</div>
+<div class="demo-panel"><strong>ESTA ÁREA SERÁ A PÁGINA REAL DO MANGÁ</strong></div>
+<span class="page-number">01</span>
+</article>
+<article class="manga-page demo-page">
+<div class="demo-kicker">PÁGINA 02</div>
+<div class="demo-title">Formato livre.</div>
+<div class="demo-copy">O tamanho e a proporção da imagem serão preservados, enquanto o leitor se adapta à tela do celular ou computador.</div>
+<div class="demo-panel"><strong>SEM QUADROS GENÉRICOS.</strong></div>
+<span class="page-number">02</span>
+</article>
+</main>
+<section class="chapter-end">
+<div class="end-card">
+<div class="end-heading"><h2>Fim do capítulo</h2><span>Capítulo 1</span></div>
+<div class="actions"><button class="action active" onclick="this.classList.toggle('active')">♥ 128</button><button class="action" onclick="document.querySelector('.comment-box input').focus()">💬 Comentar</button><button class="action">↗ Compartilhar</button><button class="action">🔖 Salvar</button></div>
+<div class="rating"><div class="rating-label">Avalie este capítulo</div><div class="stars"><button class="star">★</button><button class="star">★</button><button class="star">★</button><button class="star">★</button><button class="star">★</button></div></div>
+<div class="comments"><div class="comment-box"><input placeholder="Escreva um comentário..." aria-label="Comentário"><button>Enviar</button></div><div class="comment"><b>Leitor</b><p>Esse capítulo ficou muito bom!</p></div></div>
+</div>
+</section>
+<nav class="reader-controls" aria-label="Controles do leitor"><button onclick="scrollTo({top:0,behavior:'smooth'})">↑</button><button class="counter" id="counter">1 / 2</button><button onclick="scrollBy({top:innerHeight*.85,behavior:'smooth'})">↓</button><button class="primary" onclick="location.href='index.html'">⌂</button></nav>
+<script>
+const params=new URLSearchParams(location.search),title=params.get('manga')||'Tuketon',author=params.get('author')||'Kairox Studio';document.querySelector('#mangaTitle').textContent=title;document.querySelector('#topTitle').textContent=title;document.querySelector('#mangaAuthor').textContent=author;document.querySelector('#topAuthor').textContent=author;document.querySelector('#chapterName').textContent='Capítulo 1';
+const pages=[...document.querySelectorAll('.manga-page')],counter=document.querySelector('#counter');const update=()=>{let best=0,dist=Infinity;pages.forEach((p,i)=>{const d=Math.abs(p.getBoundingClientRect().top-80);if(d<dist){dist=d;best=i}});counter.textContent=(best+1)+' / '+pages.length};addEventListener('scroll',update,{passive:true});update();
+</script>
 </body>
 </html>
