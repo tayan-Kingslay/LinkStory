@@ -7,6 +7,6 @@
   "theme_color":"#0b72e7",
   "lang":"pt-BR",
   "icons":[
-    {"src":"./assets/linkstory-logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {"src":"./assets/linkstory-wordmark.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
 }
