@@ -3,8 +3,10 @@
   "short_name":"LinkStory",
   "start_url":"./",
   "display":"standalone",
-  "background_color":"#070707",
-  "theme_color":"#070707",
+  "background_color":"#ffffff",
+  "theme_color":"#0b72e7",
   "lang":"pt-BR",
-  "icons":[]
+  "icons":[
+    {"src":"./assets/linkstory-logo.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
 }
