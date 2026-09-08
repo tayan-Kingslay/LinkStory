@@ -1,4 +1,4 @@
-const CACHE_NAME = 'linkstory-reader-v1';
+const CACHE_NAME = 'linkstory-reader-v2';
 const APP_SHELL = [
   './reader.html',
   './manifest.json',
@@ -25,22 +25,22 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
-  const url = new URL(event.request.url);
-  if (url.origin !== self.location.origin) return;
+  const request = event.request;
+  const isReaderAsset = request.destination === 'image' || request.destination === 'font' || request.destination === 'style' || request.destination === 'script' || request.mode === 'navigate';
+
+  if (!isReaderAsset) return;
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
+    caches.match(request).then(cached => {
       if (cached) return cached;
 
-      return fetch(event.request).then(response => {
-        if (!response || response.status !== 200 || response.type === 'opaque') return response;
+      return fetch(request).then(response => {
+        if (!response) return response;
         const copy = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        caches.open(CACHE_NAME).then(cache => cache.put(request, copy)).catch(() => {});
         return response;
       }).catch(() => {
-        if (event.request.mode === 'navigate') {
-          return caches.match('./reader.html');
-        }
+        if (request.mode === 'navigate') return caches.match('./reader.html');
         return new Response('', {status: 503, statusText: 'Offline'});
       });
     })
