@@ -1,11 +1,14 @@
 {
-  "name":"LinkStory",
+  "name":"LinkStory Reader",
   "short_name":"LinkStory",
-  "start_url":"./",
+  "description":"Leitor de mangás do LinkStory, com leitura offline.",
+  "start_url":"./reader.html?app=reader",
+  "scope":"./",
   "display":"standalone",
-  "background_color":"#ffffff",
+  "background_color":"#0b1220",
   "theme_color":"#0b72e7",
   "lang":"pt-BR",
+  "categories":["books","entertainment"],
   "icons":[
     {"src":"./assets/linkstory-wordmark.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
