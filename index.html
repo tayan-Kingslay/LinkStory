@@ -17,7 +17,21 @@
     .footer-logo .brand-mark{width:30px;height:30px}
     .menu-brand{display:flex;align-items:center;gap:8px}
     .menu-brand .brand-mark{width:30px;height:30px}
-    @media(max-width:800px){.brand-mark{width:32px;height:32px}}
+    .reader-app-banner{margin:0 auto 64px;width:min(1120px,calc(100% - 32px));padding:24px 26px;border:1px solid #dce8f5;border-radius:18px;background:#f7fbff;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .reader-app-copy .eyebrow{display:block;margin-bottom:7px}
+    .reader-app-copy h2{margin:0;font-size:22px;letter-spacing:-.4px}
+    .reader-app-copy p{margin:7px 0 0;color:#5e6b7a;font-size:13px;line-height:1.5}
+    .reader-app-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+    .reader-app-button{border:0;border-radius:11px;padding:12px 16px;background:#0b72e7;color:#fff;font-weight:800;font-size:12px;white-space:nowrap}
+    .reader-app-link{color:#0b72e7;font-size:12px;font-weight:800;white-space:nowrap}
+    .install-note{display:none;margin:0 auto 28px;width:min(1120px,calc(100% - 32px));padding:13px 15px;border-radius:12px;background:#eef6ff;color:#35536f;font-size:11px;line-height:1.5}
+    @media(max-width:800px){
+      .brand-mark{width:32px;height:32px}
+      .reader-app-banner{margin-bottom:44px;padding:20px;display:block}
+      .reader-app-actions{margin-top:16px}
+      .reader-app-button{width:100%}
+      .reader-app-link{display:block;padding:4px 0}
+    }
   </style>
 </head>
 <body>
@@ -53,6 +67,19 @@
         <div class="visual-dot"></div>
       </div>
     </section>
+
+    <section class="reader-app-banner" aria-label="Aplicativo LinkStory">
+      <div class="reader-app-copy">
+        <span class="eyebrow">LINKSTORY READER</span>
+        <h2>Baixe o app LinkStory para ler mangá off-line.</h2>
+        <p>Baixe capítulos enquanto estiver conectado e leia depois, mesmo sem internet.</p>
+      </div>
+      <div class="reader-app-actions">
+        <button class="reader-app-button" data-install-app onclick="installLinkStory()">Baixar app LinkStory</button>
+        <a class="reader-app-link" href="reader.html?app=reader">Abrir leitor</a>
+      </div>
+    </section>
+    <p class="install-note" id="installNote">No iPhone, use Compartilhar → Adicionar à Tela de Início. No Android/desktop, o navegador poderá mostrar a instalação do LinkStory.</p>
 
     <section class="section" id="explorar">
       <div class="section-heading">
@@ -99,6 +126,7 @@
         <a href="profile.html"><b>Perfil</b><strong>›</strong></a>
         <a href="publish.html"><b>Publicar mangá</b><strong>›</strong></a>
         <a href="settings.html"><b>Configurações</b><strong>›</strong></a>
+        <a href="reader.html?app=reader"><b>LinkStory Reader</b><strong>›</strong></a>
         <a href="login.html"><b>Entrar</b><strong>›</strong></a>
       </nav>
     </div>
@@ -129,6 +157,12 @@
     document.getElementById('openMenu').addEventListener('click', () => menuDialog.showModal());
     document.getElementById('closeMenu').addEventListener('click', () => menuDialog.close());
     menuDialog.querySelectorAll('a').forEach(link => link.addEventListener('click', () => menuDialog.close()));
+    const installNote=document.getElementById('installNote');
+    const originalInstall=window.installLinkStory;
+    window.installLinkStory=function(){
+      originalInstall();
+      if(/iphone|ipad|ipod/i.test(navigator.userAgent)) installNote.style.display='block';
+    };
   </script>
 </body>
 </html>
