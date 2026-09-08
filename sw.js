@@ -1,6 +1,7 @@
-const CACHE_NAME = 'linkstory-reader-v2';
+const CACHE_NAME = 'linkstory-reader-v3';
 const APP_SHELL = [
   './reader.html',
+  './reader.html?app=reader',
   './manifest.json',
   './brand.js?v=4',
   './assets/linkstory-wordmark.svg'
@@ -27,7 +28,6 @@ self.addEventListener('fetch', event => {
 
   const request = event.request;
   const isReaderAsset = request.destination === 'image' || request.destination === 'font' || request.destination === 'style' || request.destination === 'script' || request.mode === 'navigate';
-
   if (!isReaderAsset) return;
 
   event.respondWith(
@@ -40,7 +40,9 @@ self.addEventListener('fetch', event => {
         caches.open(CACHE_NAME).then(cache => cache.put(request, copy)).catch(() => {});
         return response;
       }).catch(() => {
-        if (request.mode === 'navigate') return caches.match('./reader.html');
+        if (request.mode === 'navigate') {
+          return caches.match('./reader.html?app=reader').then(app => app || caches.match('./reader.html'));
+        }
         return new Response('', {status: 503, statusText: 'Offline'});
       });
     })
