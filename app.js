@@ -9,26 +9,12 @@ $('#openSearch').onclick=openSearch;
 $('#searchInput').oninput=e=>{const q=e.target.value.trim().toLowerCase();const r=mangas.filter(m=>(m.title+' '+m.author+' '+m.genre).toLowerCase().includes(q));$('#searchResults').innerHTML=q?(r.length?r.map(m=>`<button class="result" data-index="${mangas.indexOf(m)}"><b>${m.title}</b><br><small>${m.author} · ${m.genre}</small></button>`).join(''):'<p class="detail-meta">Nenhum mangá encontrado.</p>'):'';document.querySelectorAll('.result').forEach(b=>b.onclick=()=>{d.close();openDetail(Number(b.dataset.index))})};
 ['#createButton','#bannerCreate'].forEach(id=>$(id).onclick=()=>location.href='publish.html');
 $('#loginButton').onclick=()=>toast('Login entra na próxima etapa.');
-
 let deferredInstallPrompt=null;
 window.addEventListener('beforeinstallprompt',event=>{event.preventDefault();deferredInstallPrompt=event;document.querySelectorAll('[data-install-app]').forEach(b=>b.hidden=false)});
 window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;document.querySelectorAll('[data-install-app]').forEach(b=>{b.textContent='✓ App instalado';b.disabled=true})});
-function installLinkStory(){
-  if(deferredInstallPrompt){
-    deferredInstallPrompt.prompt();
-    deferredInstallPrompt.userChoice.finally(()=>{deferredInstallPrompt=null});
-    return;
-  }
-  const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
-  if(isIOS){
-    toast('No iPhone: toque em Compartilhar e depois em “Adicionar à Tela de Início”.');
-  }else if(location.protocol==='https:'){
-    toast('O navegador pode mostrar a opção de instalar o LinkStory no menu dele.');
-  }else{
-    toast('A instalação do app precisa ser feita pelo LinkStory online.');
-  }
-}
+function installLinkStory(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.finally(()=>{deferredInstallPrompt=null});return}const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);if(isIOS){toast('No iPhone: toque em Compartilhar e depois em “Adicionar à Tela de Início”.')}else if(location.protocol==='https:'){toast('O navegador pode mostrar a opção de instalar o LinkStory no menu dele.')}else{toast('A instalação do app precisa ser feita pelo LinkStory online.')}}
 window.installLinkStory=installLinkStory;
-
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+// O leitor continua acessível pelo próprio botão "Começar a ler"; não aparece como opção solta no menu principal.
+document.querySelectorAll('#menuDialog a[href^="reader.html"]').forEach(link=>link.remove());
 render();
