@@ -8,4 +8,4 @@ async function signInWithEmail(email,password){return linkstorySupabase.auth.sig
 async function signUpWithEmail(email,password,fullName){return linkstorySupabase.auth.signUp({email,password,options:{data:{full_name:fullName},emailRedirectTo:authRedirect()}})}
 async function signOutLinkStory(){return linkstorySupabase.auth.signOut()}
 async function getLinkStorySession(){return linkstorySupabase.auth.getSession()}
-(function(){const s=document.createElement('script');s.src='global-nav.js?v=1';s.onload=()=>{};document.head.appendChild(s)})();
+(function(){const s=document.createElement('script');s.src='global-nav.js?v=2';document.head.appendChild(s)})();
