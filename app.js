@@ -16,5 +16,5 @@ window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;document.
 function installLinkStory(){if(deferredInstallPrompt){deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.finally(()=>{deferredInstallPrompt=null});return}const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent);if(isIOS)toast('No iPhone: toque em Compartilhar e depois em “Adicionar à Tela de Início”.');else if(location.protocol==='https:')toast('O navegador pode mostrar a opção de instalar o LinkStory no menu dele.');else toast('A instalação precisa ser feita pelo LinkStory online.')}
 window.installLinkStory=installLinkStory;
 if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-const navScript=document.createElement('script');navScript.src='global-nav.js?v=2';document.head.appendChild(navScript);
+const navScript=document.createElement('script');navScript.src='global-nav.js?v=3';document.head.appendChild(navScript);
 loadMangas();
