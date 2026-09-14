@@ -57,3 +57,23 @@ html[data-ls-theme="dark"] .menu-list a{border-color:#303030!important}
 html[data-ls-theme="dark"] .menu-list strong{color:#aab3be!important}
 html[data-ls-theme="dark"] .ls-global-menu-btn{color:#0b72e7!important;border-color:#3b3b3b!important;background:#151515!important}
 html[data-ls-theme="dark"] .back{color:#fff!important}
+
+/* Biblioteca: keep all three tabs inside the mobile viewport. */
+@media(max-width:699px){
+  .tabs{width:100%!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;overflow:visible!important}
+  .tabs button{min-width:0!important;width:100%!important;padding:0 2px!important;overflow:hidden!important;text-overflow:clip!important;white-space:nowrap!important;font-size:14px!important;letter-spacing:-.15px!important}
+}
+
+/* In dark mode the inactive tabs are dark surfaces, never white. */
+html[data-ls-theme="dark"] .tabs button:not(.active){
+  background:#151515!important;
+  color:#b8c0ca!important;
+  border-color:#3b3b3b!important;
+  box-shadow:none!important;
+}
+html[data-ls-theme="dark"] .tabs button.active{
+  background:#0b72e7!important;
+  color:#fff!important;
+  border-color:#0b72e7!important;
+  box-shadow:none!important;
+}
