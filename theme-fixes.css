@@ -55,3 +55,7 @@ html[data-ls-theme="dark"] .mock-cover{background:#20252b!important;color:#aab3b
 html[data-ls-theme="dark"] .mock-author,html[data-ls-theme="dark"] .mock-desc,html[data-ls-theme="dark"] .mock-chapter small{color:#aab3be!important}
 html[data-ls-theme="dark"] .mock-page{background:#242424!important}
 html[data-ls-theme="dark"] .toast{background:#fff!important;color:#111!important}
+
+/* Reader: the main site navigation must not cover manga pages. */
+html:has(.reader-title) #lsBottomNav{display:none!important}
+html:has(.reader-title) body{padding-bottom:0!important}
