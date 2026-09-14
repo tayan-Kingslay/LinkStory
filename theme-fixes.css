@@ -1,44 +1,13 @@
 /* Surgical theme fixes: preserve each page's existing design while correcting dark-mode contrast. */
-html[data-ls-theme="dark"] .tabs button{
-  background:#151515!important;
-  color:#b8c0ca!important;
-  border-color:#3b3b3b!important;
-}
-html[data-ls-theme="dark"] .tabs button.active{
-  background:#0b72e7!important;
-  color:#fff!important;
-  border-color:#0b72e7!important;
-}
-html[data-ls-theme="dark"] .empty:before{
-  background:linear-gradient(180deg,rgba(27,27,27,.95),rgba(17,17,17,0))!important;
-  border-color:#3b3b3b!important;
-}
-html[data-ls-theme="dark"] .empty:after{
-  background:rgba(23,23,23,.82)!important;
-}
-html[data-ls-theme="dark"] .menu-btn,
-html[data-ls-theme="dark"] .menu,
-html[data-ls-theme="dark"] .circle{
-  background:#151515!important;
-  border-color:#3b3b3b!important;
-}
-html[data-ls-theme="dark"] .menu-btn:before,
-html[data-ls-theme="dark"] .menu:before{
-  background:linear-gradient(#0b72e7 0 2px,transparent 2px 7.5px,#0b72e7 7.5px 9.5px,transparent 9.5px 15px,#0b72e7 15px 17px)!important;
-}
-html[data-ls-theme="dark"] .search input{
-  background:#151515!important;
-  color:#fff!important;
-  border-color:#3b3b3b!important;
-}
-html[data-ls-theme="dark"] .search input::placeholder{
-  color:#aab3be!important;
-}
-html[data-ls-theme="dark"] .empty-state{
-  background:#171717!important;
-  color:#fff!important;
-  border-color:#3b3b3b!important;
-}
+html[data-ls-theme="dark"] .tabs button{background:#151515!important;color:#b8c0ca!important;border-color:#3b3b3b!important}
+html[data-ls-theme="dark"] .tabs button.active{background:#0b72e7!important;color:#fff!important;border-color:#0b72e7!important}
+html[data-ls-theme="dark"] .empty:before{background:linear-gradient(180deg,rgba(27,27,27,.95),rgba(17,17,17,0))!important;border-color:#3b3b3b!important}
+html[data-ls-theme="dark"] .empty:after{background:rgba(23,23,23,.82)!important}
+html[data-ls-theme="dark"] .menu-btn,html[data-ls-theme="dark"] .menu,html[data-ls-theme="dark"] .circle{background:#151515!important;border-color:#3b3b3b!important}
+html[data-ls-theme="dark"] .menu-btn:before,html[data-ls-theme="dark"] .menu:before{background:linear-gradient(#0b72e7 0 2px,transparent 2px 7.5px,#0b72e7 7.5px 9.5px,transparent 9.5px 15px,#0b72e7 15px 17px)!important}
+html[data-ls-theme="dark"] .search input{background:#151515!important;color:#fff!important;border-color:#3b3b3b!important}
+html[data-ls-theme="dark"] .search input::placeholder{color:#aab3be!important}
+html[data-ls-theme="dark"] .empty-state{background:#171717!important;color:#fff!important;border-color:#3b3b3b!important}
 html[data-ls-theme="dark"] .empty-state strong{color:#fff!important}
 html[data-ls-theme="dark"] .empty-state span{color:#aab3be!important}
 html[data-ls-theme="dark"] .suggestions-head{color:#fff!important}
@@ -47,33 +16,42 @@ html[data-ls-theme="dark"] .suggestion{border-color:#3b3b3b!important;background
 html[data-ls-theme="dark"] .suggestion span{color:#e7edf4!important}
 html[data-ls-theme="dark"] .card{background:#151515!important;border-color:#303030!important}
 html[data-ls-theme="dark"] .cover{background:#20252b!important}
-html[data-ls-theme="dark"] .menu-dialog,
-html[data-ls-theme="dark"] .ls-menu-dialog{background:#151515!important;color:#fff!important}
+html[data-ls-theme="dark"] .menu-dialog,html[data-ls-theme="dark"] .ls-menu-dialog{background:#151515!important;color:#fff!important}
 html[data-ls-theme="dark"] .menu-head{border-color:#303030!important}
-html[data-ls-theme="dark"] .menu-head strong,
-html[data-ls-theme="dark"] .close,
-html[data-ls-theme="dark"] .menu-list a{color:#fff!important}
+html[data-ls-theme="dark"] .menu-head strong,html[data-ls-theme="dark"] .close,html[data-ls-theme="dark"] .menu-list a{color:#fff!important}
 html[data-ls-theme="dark"] .menu-list a{border-color:#303030!important}
 html[data-ls-theme="dark"] .menu-list strong{color:#aab3be!important}
 html[data-ls-theme="dark"] .ls-global-menu-btn{color:#0b72e7!important;border-color:#3b3b3b!important;background:#151515!important}
 html[data-ls-theme="dark"] .back{color:#fff!important}
 
-/* Biblioteca: keep all three tabs inside the mobile viewport. */
 @media(max-width:699px){
   .tabs{width:100%!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:7px!important;overflow:visible!important}
   .tabs button{min-width:0!important;width:100%!important;padding:0 2px!important;overflow:hidden!important;text-overflow:clip!important;white-space:nowrap!important;font-size:14px!important;letter-spacing:-.15px!important}
 }
+html[data-ls-theme="dark"] .tabs button:not(.active){background:#151515!important;color:#b8c0ca!important;border-color:#3b3b3b!important;box-shadow:none!important}
+html[data-ls-theme="dark"] .tabs button.active{background:#0b72e7!important;color:#fff!important;border-color:#0b72e7!important;box-shadow:none!important}
 
-/* In dark mode the inactive tabs are dark surfaces, never white. */
-html[data-ls-theme="dark"] .tabs button:not(.active){
-  background:#151515!important;
-  color:#b8c0ca!important;
-  border-color:#3b3b3b!important;
-  box-shadow:none!important;
-}
-html[data-ls-theme="dark"] .tabs button.active{
-  background:#0b72e7!important;
-  color:#fff!important;
-  border-color:#0b72e7!important;
-  box-shadow:none!important;
-}
+/* Publication page: keep every interactive surface readable in dark mode. */
+html[data-ls-theme="dark"] .test{background:#1b2b3b!important;border-color:#35516b!important;color:#e8f2fc!important}
+html[data-ls-theme="dark"] .test strong{color:#fff!important}
+html[data-ls-theme="dark"] .upload{background:#1b1b1b!important;border-color:#555!important;color:#fff!important}
+html[data-ls-theme="dark"] .upload strong{color:#fff!important}
+html[data-ls-theme="dark"] .upload span{color:#aab3be!important}
+html[data-ls-theme="dark"] .filebar{color:#aab3be!important}
+html[data-ls-theme="dark"] .linkbtn{color:#58a9ff!important}
+html[data-ls-theme="dark"] .preview{background:#1b1b1b!important;border-color:#3b3b3b!important}
+html[data-ls-theme="dark"] .pages{background:#171717!important;border-color:#303030!important}
+html[data-ls-theme="dark"] .page{background:#202020!important;border-color:#3b3b3b!important}
+html[data-ls-theme="dark"] .hint{color:#aab3be!important}
+html[data-ls-theme="dark"] .btn{background:#202020!important;color:#fff!important;border-color:#444!important}
+html[data-ls-theme="dark"] .btn.primary{background:#0b72e7!important;color:#fff!important;border-color:#0b72e7!important}
+html[data-ls-theme="dark"] .summary{border-color:#303030!important}
+html[data-ls-theme="dark"] .row{border-color:#303030!important;color:#fff!important}
+html[data-ls-theme="dark"] .row span{color:#aab3be!important}
+html[data-ls-theme="dark"] .mirror{background:#151515!important;border-color:#303030!important;color:#fff!important}
+html[data-ls-theme="dark"] .mirror-head{border-color:#303030!important}
+html[data-ls-theme="dark"] .mirror-body{color:#fff!important}
+html[data-ls-theme="dark"] .mock-cover{background:#20252b!important;color:#aab3be!important}
+html[data-ls-theme="dark"] .mock-author,html[data-ls-theme="dark"] .mock-desc,html[data-ls-theme="dark"] .mock-chapter small{color:#aab3be!important}
+html[data-ls-theme="dark"] .mock-page{background:#242424!important}
+html[data-ls-theme="dark"] .toast{background:#fff!important;color:#111!important}
