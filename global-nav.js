@@ -49,6 +49,8 @@
     @media(max-width:560px){#lsBottomNav{height:76px;bottom:8px}.ls-menu-wrap{padding:20px}.ls-menu-links a{padding:19px 2px;font-size:17px}}
   `;
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
+  /* Reader has its own reading controls and must stay completely free of global navigation. */
+  if(document.querySelector('.reader-title')) return;
   if(!document.getElementById('lsBottomNav')){
     const path=location.pathname.split('/').pop()||'index.html';
     const active=path==='explore.html'?'explore':path==='library.html'?'library':'home';
