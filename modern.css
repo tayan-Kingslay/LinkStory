@@ -20,3 +20,102 @@ body:has(.reader-title){background:#090d14!important;color:#fff!important;overfl
 
 /* Dark theme */
 html[data-ls-theme="dark"]{--ls-surface:#151515;--ls-surface-2:#1a1d21;--ls-ink:#f5f7fa;--ls-muted:#aab3be;--ls-line:#30343a}html[data-ls-theme="dark"] body:not(:has(.reader-title)){background:#0f1114!important;color:#f5f7fa!important}html[data-ls-theme="dark"] body:not(:has(.reader-title)):before{background:linear-gradient(180deg,#111317 0%,#0e1013 100%)!important}html[data-ls-theme="dark"] .header,html[data-ls-theme="dark"] .topbar,html[data-ls-theme="dark"] body:not(:has(.reader-title)) .top{background:rgba(17,19,23,.94)!important}html[data-ls-theme="dark"] .btn:not(.primary),html[data-ls-theme="dark"] .secondary,html[data-ls-theme="dark"] .login-button{background:#181b20!important;color:#f5f7fa!important;border-color:#343941!important}html[data-ls-theme="dark"] .card,html[data-ls-theme="dark"] .manga-card,html[data-ls-theme="dark"] .social,html[data-ls-theme="dark"] .panel{background:#15181d!important;border-color:#30343a!important}html[data-ls-theme="dark"] .desc,html[data-ls-theme="dark"] .author,html[data-ls-theme="dark"] .detail-meta{color:#aab3be!important}html[data-ls-theme="dark"] body:has(.head) .cover{background:#1b2027!important}html[data-ls-theme="dark"] input,html[data-ls-theme="dark"] textarea,html[data-ls-theme="dark"] select{background:#171a1f!important;color:#fff!important;border-color:#383d45!important}
+
+/* LinkStory scale v2 — true medium sizing at browser 100%, without CSS zoom. */
+:root{
+  --ls-content:980px;
+  --ls-radius:16px;
+}
+main{width:min(var(--ls-content),calc(100% - 32px))!important}
+.header,.topbar,.top{height:64px!important;min-height:64px!important;padding-left:16px!important;padding-right:16px!important}
+.header .logo img,.topbar .logo img{width:132px!important;height:44px!important}
+.header .brand,.top .brand{font-size:21px!important}
+.circle,.back,.menu,.menu-btn{width:40px!important;height:40px!important}
+.login{font-size:13px!important;padding:9px 13px!important;border-radius:11px!important}
+h1{font-size:clamp(32px,4.7vw,54px)!important;letter-spacing:-1.8px!important}
+h2{font-size:30px!important;letter-spacing:-.8px!important}
+.section{margin-top:24px!important;margin-bottom:36px!important}
+.feature{height:360px!important;border-radius:18px!important;margin-bottom:48px!important}
+.feature-content{padding:26px!important;max-width:620px!important}
+.feature h1{font-size:42px!important;letter-spacing:-2px!important}
+.feature p{font-size:15px!important}
+.cards{gap:14px!important}
+.card-cover{height:210px!important}
+.creator{border-radius:18px!important;padding:26px!important}
+.creator h2{font-size:27px!important}
+.btn{border-radius:11px!important}
+body:has(.head) main{width:min(900px,calc(100% - 32px))!important}
+body:has(.head) .head{grid-template-columns:230px minmax(0,1fr)!important;gap:30px!important}
+body:has(.head) .cover{width:230px!important}
+body:has(.head) h1{font-size:clamp(34px,5vw,52px)!important}
+body:has(.head) .actions{gap:9px!important}
+body:has(.head) .btn{min-height:48px!important;font-size:13px!important;padding:9px 8px!important}
+body:has(.head) .stats{margin-top:20px!important;padding:12px 0!important}
+body:has(.head) section.block{margin-top:24px!important}
+body:has(.head) .social{padding:17px!important}
+
+/* Reader medium scale and clean chrome. */
+body:has(.reader-title) .top{
+  height:76px!important;min-height:76px!important;padding:0 12px!important;
+  grid-template-columns:40px minmax(0,1fr) auto!important;
+}
+body:has(.reader-title) .reader-title{padding:0 8px!important}
+body:has(.reader-title) .reader-title small{font-size:8px!important;letter-spacing:2px!important}
+body:has(.reader-title) .reader-title strong{font-size:20px!important;line-height:1.1!important;margin-top:3px!important}
+body:has(.reader-title) .reader-title em{font-size:12px!important;line-height:1.1!important;margin-top:3px!important}
+body:has(.reader-title) .reader-right{display:flex!important;align-items:center!important;gap:9px!important}
+body:has(.reader-title) .chapter-no{position:static!important;font-size:12px!important;color:#b9c4d2!important}
+body:has(.reader-title) .reader-right .menu{width:40px!important;height:40px!important}
+body:has(.reader-title) .pages{width:min(820px,100%)!important}
+body:has(.reader-title) .end{width:min(820px,calc(100% - 20px))!important;padding:24px 0 60px!important}
+body:has(.reader-title) .panel{padding:17px!important;border-radius:15px!important}
+body:has(.reader-title) .controls{right:10px!important;bottom:10px!important}
+body:has(.reader-title) .controls button{height:32px!important;min-width:32px!important}
+
+/* Cover presentation: show the complete artwork instead of cropping it. */
+body:has(.head) .cover{background-position:center!important;background-size:contain!important;background-repeat:no-repeat!important}
+body:has(.head) .cover:after{height:24%!important;background:linear-gradient(to top,rgba(7,16,28,.28),transparent)!important}
+
+/* Bottom navigation should never become the dominant visual element. */
+#lsBottomNav{width:min(400px,calc(100% - 30px))!important;height:68px!important;border-radius:22px!important}
+#lsBottomNav a{font-size:10px!important;gap:4px!important}
+#lsBottomNav .ls-icon{width:21px!important;height:21px!important;font-size:19px!important}
+
+@media(max-width:720px){
+  main{width:calc(100% - 28px)!important}
+  .header,.topbar,.top{height:62px!important;min-height:62px!important;padding:0 12px!important}
+  .header .logo img,.topbar .logo img{width:124px!important;height:40px!important}
+  .circle,.back,.menu,.menu-btn{width:38px!important;height:38px!important}
+  .login{font-size:12px!important;padding:8px 11px!important}
+  h1{font-size:34px!important;letter-spacing:-1.5px!important}
+  h2{font-size:27px!important}
+  .feature{height:330px!important;margin-bottom:40px!important}
+  .feature-content{padding:22px!important}
+  .feature h1{font-size:36px!important}
+  .feature p{font-size:14px!important}
+  .cards{gap:10px!important}
+  .card-cover{height:172px!important}
+  .creator{padding:22px!important}
+  .creator h2{font-size:24px!important}
+  body:has(.head) .head{gap:20px!important}
+  body:has(.head) .cover{width:min(235px,68vw)!important}
+  body:has(.head) h1{font-size:34px!important}
+  body:has(.head) .btn{font-size:11px!important;min-height:46px!important;padding:8px 5px!important}
+  body:has(.reader-title) .top{height:72px!important;min-height:72px!important}
+  body:has(.reader-title) .reader-title strong{font-size:19px!important}
+  body:has(.reader-title) .reader-title em{font-size:12px!important}
+  body:has(.reader-title) .reader-right{gap:7px!important}
+  body:has(.reader-title) .reader-right .menu{width:38px!important;height:38px!important}
+}
+@media(max-width:420px){
+  .header .logo img,.topbar .logo img{width:116px!important}
+  .header-actions{gap:5px!important}
+  .circle,.back,.menu,.menu-btn{width:36px!important;height:36px!important}
+  .login{font-size:11px!important;padding:8px 10px!important}
+  .feature{height:310px!important}
+  .feature h1{font-size:33px!important}
+  .card-cover{height:160px!important}
+  body:has(.head) .cover{width:min(220px,66vw)!important}
+  body:has(.head) .actions{gap:5px!important}
+  body:has(.head) .btn{font-size:10.5px!important}
+}
