@@ -18,10 +18,10 @@ a{text-decoration:none;color:inherit}
 .search{font-size:22px}.menu{font-size:0}.menu:before{content:'☰';font-size:21px}
 .login{border:1px solid #cfe1f2;border-radius:11px;padding:9px 13px;color:var(--b);font-size:13px;font-weight:800}
 main{width:100%;margin:0;padding:0 0 100px}
-.home-hero{height:500px;position:relative;overflow:hidden;background:#17283d;width:100vw;margin-left:calc(50% - 50vw)}
-.home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center}
+.home-hero{height:320px;position:relative;overflow:hidden;background:#17283d;width:100%}
+.home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
 
-.hero-action{position:absolute;inset:0;z-index:2;font-size:0}
+
 .catalog{margin-top:34px}
 .shelf{margin:0 0 42px}
 .shelf-head{display:flex;align-items:center;justify-content:space-between;padding:0 16px;margin-bottom:13px}
@@ -50,13 +50,13 @@ main{width:100%;margin:0;padding:0 0 100px}
 .menu-list strong{font-size:26px;color:#71879d;font-weight:400}
 @media(max-width:720px){
  .header{height:62px;padding:0 12px}.logo img{width:124px;height:40px}.circle{width:38px;height:38px}.login{font-size:12px;padding:8px 11px}.header-actions{gap:6px}
- .home-hero{height:390px}.hero-action{right:14px;bottom:14px}
+ .home-hero{height:220px}
  .catalog{margin-top:30px}.shelf{margin-bottom:34px}.shelf-head{padding:0 12px}.shelf-title{font-size:27px}.track{padding-left:12px;padding-right:12px;gap:10px}
  .book{flex-basis:166px;height:252px}.book-title{font-size:16px}.rank{width:46px;height:46px;font-size:22px}
  .creator{display:block;padding:21px;margin-top:0}.creator a{display:inline-flex;margin-top:15px}
 }
 @media(max-width:420px){
- .login{display:none}.home-hero{height:350px}.book{flex-basis:154px;height:235px}.shelf-title{font-size:25px}
+ .login{display:none}.home-hero{height:190px}.book{flex-basis:154px;height:235px}.shelf-title{font-size:25px}
 }
 html[data-ls-theme="dark"] body{background:#0f1114!important;color:#f5f7fa!important}
 html[data-ls-theme="dark"] .header{background:#111317!important;border-color:#30343a!important}
@@ -96,7 +96,7 @@ html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!
 const feature=document.getElementById('feature'),shelves=[document.getElementById('popularShelf'),document.getElementById('recentShelf'),document.getElementById('allShelf')],tracks=[document.getElementById('popularTrack'),document.getElementById('recentTrack'),document.getElementById('allTrack')];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 let mangas=[];try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console.error(e)}
-if(!mangas.length){shelves.forEach(s=>s.style.display='none');return}
+if(!mangas.length){shelves.forEach(s=>s.style.display='none')}
 const stats=await Promise.all(mangas.map(async m=>{try{return{m,s:await LinkStoryManga.stats(m.id)}}catch{return{m,s:{likes:0,ratings:0,average:0}}}}));
 const popular=stats.slice().sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0)).map(x=>x.m),recent=mangas.slice().reverse();
 feature.innerHTML=(mangas[0].cover_url?'<img src="'+esc(mangas[0].cover_url)+'" alt="">':'')+'<a class="hero-action" href="manga.html?id='+encodeURIComponent(mangas[0].id)+'">Ler agora →</a>';
