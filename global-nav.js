@@ -32,11 +32,11 @@
     html[data-ls-theme="dark"] #lsBottomNav{background:rgba(22,22,22,.98)!important;border-color:#333!important;box-shadow:0 14px 38px rgba(0,0,0,.45)!important}
     html[data-ls-theme="dark"] #lsBottomNav a{color:#aab3be!important}
     html[data-ls-theme="dark"] #lsBottomNav a.active{color:#0b72e7!important}
-    #lsBottomNav{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(430px,calc(100% - 28px));height:78px;background:rgba(255,255,255,.98);border:1px solid #d9e5f0;border-radius:28px;box-shadow:0 14px 38px rgba(16,32,51,.13);display:grid;grid-template-columns:repeat(3,1fr);z-index:1000;backdrop-filter:blur(16px)}
+    #lsBottomNav{position:fixed;left:50%;bottom:10px;transform:translateX(-50%);width:min(430px,calc(100% - 28px));height:78px;background:rgba(255,255,255,.98);border:1px solid #d9e5f0;border-radius:28px;box-shadow:0 14px 38px rgba(16,32,51,.13);display:grid;grid-template-columns:repeat(2,1fr);z-index:1000;backdrop-filter:blur(16px)}
     #lsBottomNav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#687b90;text-decoration:none;font:700 12px/1 'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
     #lsBottomNav a.active{color:#0b72e7}
     #lsBottomNav .ls-icon{width:25px;height:25px;display:grid;place-items:center;font-size:21px;line-height:1;font-weight:700}
-    #lsBottomNav a:first-child .ls-icon{font-size:25px}#lsBottomNav a:nth-child(2) .ls-icon{font-size:23px}#lsBottomNav a:nth-child(3) .ls-icon{font-size:23px}
+    #lsBottomNav a:first-child .ls-icon{font-size:25px}#lsBottomNav a:nth-child(2) .ls-icon{font-size:23px}
     body{padding-bottom:104px!important}.desktop-nav{display:none!important}
     .ls-global-menu-btn{width:46px;height:46px;border:1px solid #dbe5ef;border-radius:50%;background:#fff;color:#102033;display:flex;align-items:center;justify-content:center;padding:0;font-size:21px;line-height:1;margin-left:auto;box-shadow:0 5px 18px rgba(16,32,51,.05)}
     .ls-global-menu-btn:hover{border-color:#0b72e7;color:#0b72e7}
@@ -53,9 +53,9 @@
   if(document.querySelector('.reader-title')) return;
   if(!document.getElementById('lsBottomNav')){
     const path=location.pathname.split('/').pop()||'index.html';
-    const active=path==='explore.html'?'explore':path==='library.html'?'library':'home';
+    const active=path==='library.html'?'library':'home';
     const nav=document.createElement('nav');nav.id='lsBottomNav';nav.setAttribute('aria-label','Navegação principal');
-    nav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon">⌂</span><span>Início</span></a><a href="explore.html" class="${active==='explore'?'active':''}"><span class="ls-icon">◉</span><span>Explorar</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon">▣</span><span>Biblioteca</span></a>`;
+    nav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon">⌂</span><span>Início</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon">▣</span><span>Biblioteca</span></a>`;
     document.body.appendChild(nav);
   }
   let menu=document.getElementById('menuDialog');let opener=document.getElementById('openMenu');
