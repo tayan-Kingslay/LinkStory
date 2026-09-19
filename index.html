@@ -19,7 +19,7 @@ a{text-decoration:none;color:inherit}
 .login{border:1px solid #cfe1f2;border-radius:11px;padding:9px 13px;color:var(--b);font-size:13px;font-weight:800}
 main{width:100%;margin:0;padding:0 0 100px}
 .home-hero{height:500px;position:relative;overflow:hidden;background:#17283d}
-.home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center}
 .home-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 30%,rgba(0,0,0,.48) 100%)}
 .hero-action{position:absolute;z-index:2;right:22px;bottom:22px;background:#fff;color:var(--b);padding:11px 16px;border-radius:10px;font-size:13px;font-weight:900;box-shadow:0 8px 22px rgba(0,0,0,.16)}
 .catalog{margin-top:34px}
@@ -76,95 +76,38 @@ html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!
 <a class="login" href="login.html">Entrar</a>
 </div>
 </header>
-
 <main>
 <section class="home-hero" id="feature">
 <div class="empty" style="position:absolute;inset:0;margin:0;border:0;border-radius:0;display:grid;place-items:center;color:#fff;background:#17283d"><strong style="color:#fff">Ainda não há mangás publicados.</strong></div>
 </section>
-
 <div class="catalog">
-<section class="shelf" id="popularShelf">
-<div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div>
-<div class="track" id="popularTrack"></div>
-</section>
-
-<section class="shelf" id="recentShelf">
-<div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div>
-<div class="track" id="recentTrack"></div>
-</section>
-
-<section class="shelf" id="allShelf">
-<div class="shelf-head"><h2 class="shelf-title">Mais histórias</h2></div>
-<div class="track" id="allTrack"></div>
-</section>
+<section class="shelf" id="popularShelf"><div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div><div class="track" id="popularTrack"></div></section>
+<section class="shelf" id="recentShelf"><div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div><div class="track" id="recentTrack"></div></section>
+<section class="shelf" id="allShelf"><div class="shelf-head"><h2 class="shelf-title">Mais histórias</h2></div><div class="track" id="allTrack"></div></section>
 </div>
-
-<section class="creator">
-<div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div>
-<a href="publish.html">Publicar mangá →</a>
-</section>
+<section class="creator"><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
-
-<dialog class="menu-dialog" id="menuDialog">
-<div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div>
-<nav class="menu-list">
-<a href="profile.html">Perfil <strong>›</strong></a>
-<a href="studio.html">Meu Estúdio <strong>›</strong></a>
-<a href="publish.html">Publicar mangá <strong>›</strong></a>
-<a href="settings.html">Configurações <strong>›</strong></a>
-<a href="login.html">Entrar <strong>›</strong></a>
-</nav></div>
-</dialog>
-
-<dialog class="menu-dialog" id="searchDialog">
-<div class="menu-wrap"><div class="menu-head"><strong>BUSCAR</strong><button class="close" id="closeSearch">×</button></div>
-<input id="searchInput" placeholder="Buscar mangá, autor ou gênero" style="width:100%;height:52px;border:1px solid #dbe5ef;border-radius:12px;padding:0 15px;font:inherit;margin-top:22px">
-<div id="searchResults" style="margin-top:15px"></div></div>
-</dialog>
-
+<dialog class="menu-dialog" id="menuDialog"><div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div><nav class="menu-list"><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a></nav></div></dialog>
+<dialog class="menu-dialog" id="searchDialog"><div class="menu-wrap"><div class="menu-head"><strong>BUSCAR</strong><button class="close" id="closeSearch">×</button></div><input id="searchInput" placeholder="Buscar mangá, autor ou gênero" style="width:100%;height:52px;border:1px solid #dbe5ef;border-radius:12px;padding:0 15px;font:inherit;margin-top:22px"><div id="searchResults" style="margin-top:15px"></div></div></dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
-<script src="manga-db.js"></script>
+<script src="auth.js"></script><script src="manga-db.js"></script>
 <script>
 (async()=>{
-const feature=document.getElementById('feature');
-const shelves=[document.getElementById('popularShelf'),document.getElementById('recentShelf'),document.getElementById('allShelf')];
-const tracks=[document.getElementById('popularTrack'),document.getElementById('recentTrack'),document.getElementById('allTrack')];
+const feature=document.getElementById('feature'),shelves=[document.getElementById('popularShelf'),document.getElementById('recentShelf'),document.getElementById('allShelf')],tracks=[document.getElementById('popularTrack'),document.getElementById('recentTrack'),document.getElementById('allTrack')];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-let mangas=[];
-try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console.error(e)}
-if(!mangas.length){
- shelves.forEach(s=>s.style.display='none');
- return;
-}
+let mangas=[];try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console.error(e)}
+if(!mangas.length){shelves.forEach(s=>s.style.display='none');return}
 const stats=await Promise.all(mangas.map(async m=>{try{return{m,s:await LinkStoryManga.stats(m.id)}}catch{return{m,s:{likes:0,ratings:0,average:0}}}}));
-const popular=stats.slice().sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0)).map(x=>x.m);
-const recent=mangas.slice().reverse();
+const popular=stats.slice().sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0)).map(x=>x.m),recent=mangas.slice().reverse();
 feature.innerHTML=(mangas[0].cover_url?'<img src="'+esc(mangas[0].cover_url)+'" alt="">':'')+'<a class="hero-action" href="manga.html?id='+encodeURIComponent(mangas[0].id)+'">Ler agora →</a>';
-
-const makeBook=(m,rank)=>{
-const a=document.createElement('a');a.className='book';a.href='manga.html?id='+encodeURIComponent(m.id);
-const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');
-a.innerHTML=(rank?'<span class="rank">'+rank+'</span>':'')+'<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+(m.cover_url?'<img src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+'<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span></span>';
-return a;
-};
+const makeBook=(m,rank)=>{const a=document.createElement('a');a.className='book';a.href='manga.html?id='+encodeURIComponent(m.id);const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');a.innerHTML=(rank?'<span class="rank">'+rank+'</span>':'')+'<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+(m.cover_url?'<img src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+'<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span></span>';return a};
 const render=(track,items,ranked)=>{track.innerHTML='';items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0)))};
 render(tracks[0],popular,true);render(tracks[1],recent,false);render(tracks[2],mangas,false);
-
-const searchInput=document.getElementById('searchInput');
-const searchResults=document.getElementById('searchResults');
-searchInput.addEventListener('input',()=>{
-const q=searchInput.value.trim().toLowerCase();
-const filtered=mangas.filter(m=>((m.title||'')+' '+(Array.isArray(m.genres)?m.genres.join(' '):(m.genres||''))).toLowerCase().includes(q)).slice(0,8);
-searchResults.innerHTML=filtered.map(m=>'<a href="manga.html?id='+encodeURIComponent(m.id)+'" style="display:block;padding:12px 0;border-bottom:1px solid #dbe5ef;font-weight:700">'+esc(m.title)+'</a>').join('')||(q?'Nenhum resultado.':'');
-});
+const searchInput=document.getElementById('searchInput'),searchResults=document.getElementById('searchResults');
+searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLowerCase(),filtered=mangas.filter(m=>((m.title||'')+' '+(Array.isArray(m.genres)?m.genres.join(' '):(m.genres||''))).toLowerCase().includes(q)).slice(0,8);searchResults.innerHTML=filtered.map(m=>'<a href="manga.html?id='+encodeURIComponent(m.id)+'" style="display:block;padding:12px 0;border-bottom:1px solid #dbe5ef;font-weight:700">'+esc(m.title)+'</a>').join('')||(q?'Nenhum resultado.':'')});
 })();
-
 const menu=document.getElementById('menuDialog'),search=document.getElementById('searchDialog');
-document.getElementById('openMenu').onclick=()=>menu.showModal();
-document.getElementById('closeMenu').onclick=()=>menu.close();
-document.getElementById('openSearch').onclick=()=>search.showModal();
-document.getElementById('closeSearch').onclick=()=>search.close();
+document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
 </script>
 </body>
 </html>
