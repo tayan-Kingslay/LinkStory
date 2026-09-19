@@ -194,3 +194,7 @@ body:has(.reader-title) .page{
   max-width:100%!important;
   margin:0!important;
 }
+
+/* Home poster: full viewport width, aligned to the site edges. */
+body:has(.home-hero) main{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important}
+body:has(.home-hero) .home-hero{width:100%!important;max-width:none!important;margin-left:0!important;margin-right:0!important}
