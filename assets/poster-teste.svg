@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" role="img" aria-labelledby="t d">
+<title id="t">LinkStory — pôster de teste</title>
+<desc id="d">Pôster horizontal de teste para a área de destaque da Home do LinkStory.</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#071a33"/>
+    <stop offset=".55" stop-color="#0b72e7"/>
+    <stop offset="1" stop-color="#123b70"/>
+  </linearGradient>
+  <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#fff" stop-opacity="0"/>
+    <stop offset=".5" stop-color="#fff" stop-opacity=".9"/>
+    <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </linearGradient>
+</defs>
+<rect width="1600" height="600" fill="url(#bg)"/>
+<circle cx="1370" cy="90" r="180" fill="#fff" opacity=".07"/>
+<circle cx="1510" cy="480" r="260" fill="#fff" opacity=".05"/>
+<path d="M0 455 C260 390 390 535 650 455 S1120 365 1600 455 V600 H0Z" fill="#061a34" opacity=".28"/>
+<path d="M80 420 H710" stroke="url(#line)" stroke-width="4"/>
+<text x="100" y="155" fill="#dceeff" font-family="Arial,Helvetica,sans-serif" font-size="34" font-weight="800" letter-spacing="10">LINKSTORY</text>
+<text x="100" y="270" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="82" font-weight="900">PÔSTER DE TESTE</text>
+<text x="100" y="330" fill="#dceeff" font-family="Arial,Helvetica,sans-serif" font-size="31" font-weight="600">Espaço para lançamentos, anúncios e novidades.</text>
+<rect x="100" y="380" width="265" height="62" rx="12" fill="#fff"/>
+<text x="232" y="421" text-anchor="middle" fill="#0b72e7" font-family="Arial,Helvetica,sans-serif" font-size="24" font-weight="800">EM BREVE</text>
+<text x="1450" y="535" text-anchor="end" fill="#fff" opacity=".7" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" letter-spacing="4">TESTE • 01</text>
+</svg>
