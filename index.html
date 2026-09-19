@@ -99,7 +99,7 @@ let mangas=[];try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console
 if(!mangas.length){shelves.forEach(s=>s.style.display='none')}
 const stats=await Promise.all(mangas.map(async m=>{try{return{m,s:await LinkStoryManga.stats(m.id)}}catch{return{m,s:{likes:0,ratings:0,average:0}}}}));
 const popular=stats.slice().sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0)).map(x=>x.m),recent=mangas.slice().reverse();
-feature.innerHTML=(mangas[0].cover_url?'<img src="'+esc(mangas[0].cover_url)+'" alt="">':'')+'<a class="hero-action" href="manga.html?id='+encodeURIComponent(mangas[0].id)+'">Ler agora →</a>';
+feature.innerHTML='<img src="assets/poster-teste.svg" alt="Pôster de teste do LinkStory">';
 const makeBook=(m,rank)=>{const a=document.createElement('a');a.className='book';a.href='manga.html?id='+encodeURIComponent(m.id);const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');a.innerHTML=(rank?'<span class="rank">'+rank+'</span>':'')+'<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+(m.cover_url?'<img src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+'<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span></span>';return a};
 const render=(track,items,ranked)=>{track.innerHTML='';items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0)))};
 render(tracks[0],popular,true);render(tracks[1],recent,false);render(tracks[2],mangas,false);
