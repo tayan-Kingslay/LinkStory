@@ -18,13 +18,10 @@ a{text-decoration:none;color:inherit}
 .search{font-size:22px}.menu{font-size:0}.menu:before{content:'☰';font-size:21px}
 .login{border:1px solid #cfe1f2;border-radius:11px;padding:9px 13px;color:var(--b);font-size:13px;font-weight:800}
 main{width:100%;margin:0;padding:0 0 100px}
-.home-hero{height:390px;position:relative;overflow:hidden;background:#17283d}
+.home-hero{height:500px;position:relative;overflow:hidden;background:#17283d}
 .home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .home-hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04) 30%,rgba(0,0,0,.48) 100%)}
 .hero-action{position:absolute;z-index:2;right:22px;bottom:22px;background:#fff;color:var(--b);padding:11px 16px;border-radius:10px;font-size:13px;font-weight:900;box-shadow:0 8px 22px rgba(0,0,0,.16)}
-.search-wrap{position:relative;z-index:5;width:min(920px,calc(100% - 24px));margin:-28px auto 0}
-.search-input{width:100%;height:52px;border:1px solid #d7e2ec;border-radius:10px;background:#fff;color:var(--i);box-shadow:0 8px 22px rgba(16,32,51,.16);padding:0 16px;font:500 15px 'DM Sans',sans-serif;outline:none}
-.search-input::placeholder{color:#66788d}
 .catalog{margin-top:34px}
 .shelf{margin:0 0 42px}
 .shelf-head{display:flex;align-items:center;justify-content:space-between;padding:0 16px;margin-bottom:13px}
@@ -53,20 +50,18 @@ main{width:100%;margin:0;padding:0 0 100px}
 .menu-list strong{font-size:26px;color:#71879d;font-weight:400}
 @media(max-width:720px){
  .header{height:62px;padding:0 12px}.logo img{width:124px;height:40px}.circle{width:38px;height:38px}.login{font-size:12px;padding:8px 11px}.header-actions{gap:6px}
- .home-hero{height:330px}.hero-action{right:14px;bottom:14px}
- .search-wrap{width:calc(100% - 16px);margin-top:-25px}.search-input{height:50px;font-size:14px}
+ .home-hero{height:390px}.hero-action{right:14px;bottom:14px}
  .catalog{margin-top:30px}.shelf{margin-bottom:34px}.shelf-head{padding:0 12px}.shelf-title{font-size:27px}.track{padding-left:12px;padding-right:12px;gap:10px}
  .book{flex-basis:166px;height:252px}.book-title{font-size:16px}.rank{width:46px;height:46px;font-size:22px}
  .creator{display:block;padding:21px;margin-top:0}.creator a{display:inline-flex;margin-top:15px}
 }
 @media(max-width:420px){
- .login{display:none}.home-hero{height:300px}.book{flex-basis:154px;height:235px}.shelf-title{font-size:25px}
+ .login{display:none}.home-hero{height:350px}.book{flex-basis:154px;height:235px}.shelf-title{font-size:25px}
 }
 html[data-ls-theme="dark"] body{background:#0f1114!important;color:#f5f7fa!important}
 html[data-ls-theme="dark"] .header{background:#111317!important;border-color:#30343a!important}
 html[data-ls-theme="dark"] .circle{background:#181b20!important;color:#fff!important;border-color:#343941!important}
 html[data-ls-theme="dark"] .login{border-color:#343941!important}
-html[data-ls-theme="dark"] .search-input{background:#171a1f!important;color:#fff!important;border-color:#383d45!important}
 html[data-ls-theme="dark"] .empty{border-color:#30343a!important;color:#aab3be!important}
 html[data-ls-theme="dark"] .empty strong{color:#fff!important}
 html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!important}
@@ -86,10 +81,6 @@ html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!
 <section class="home-hero" id="feature">
 <div class="empty" style="position:absolute;inset:0;margin:0;border:0;border-radius:0;display:grid;place-items:center;color:#fff;background:#17283d"><strong style="color:#fff">Ainda não há mangás publicados.</strong></div>
 </section>
-
-<div class="search-wrap">
-<input class="search-input" id="searchInputHome" placeholder="Procure título, autor ou categoria..." autocomplete="off">
-</div>
 
 <div class="catalog">
 <section class="shelf" id="popularShelf">
@@ -160,13 +151,6 @@ return a;
 const render=(track,items,ranked)=>{track.innerHTML='';items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0)))};
 render(tracks[0],popular,true);render(tracks[1],recent,false);render(tracks[2],mangas,false);
 
-const homeSearch=document.getElementById('searchInputHome');
-const filter=()=>{
-const q=homeSearch.value.trim().toLowerCase();
-const filtered=mangas.filter(m=>((m.title||'')+' '+(Array.isArray(m.genres)?m.genres.join(' '):(m.genres||''))).toLowerCase().includes(q));
-render(tracks[2],filtered,false);
-};
-homeSearch.addEventListener('input',filter);
 const searchInput=document.getElementById('searchInput');
 const searchResults=document.getElementById('searchResults');
 searchInput.addEventListener('input',()=>{
