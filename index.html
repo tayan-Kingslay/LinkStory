@@ -214,11 +214,155 @@ html[data-ls-theme="dark"] .close{color:#fff}
 html[data-ls-theme="dark"] .search-input{background:#101317;color:#fff;border-color:#343941}
 html[data-ls-theme="dark"] .search-result{background:#191d22;border-color:#343941}
 html[data-ls-theme="dark"] .search-result small{color:#aab3be}
+
+/* =========================================================
+   LINKSTORY HOME — VISUAL REDESIGN
+   Large visual pass. Data, links and existing JS stay intact.
+   ========================================================= */
+:root{
+  --ls-blue:#0b72e7;
+  --ls-deep:#07111f;
+  --ls-ink:#101a28;
+  --ls-muted:#728096;
+  --ls-line:#e4e9f0;
+  --ls-paper:#fff;
+  --ls-soft:#f5f7fa;
+}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:var(--ls-ink)}
+.header{
+  position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  width:min(1240px,calc(100% - 36px));height:66px;padding:0 10px 0 18px;
+  border:1px solid rgba(255,255,255,.22);border-radius:18px;
+  background:rgba(9,16,27,.30);backdrop-filter:blur(18px) saturate(140%);
+  box-shadow:0 14px 40px rgba(0,0,0,.12);z-index:50;color:#fff;
+}
+.logo img{filter:brightness(0) invert(1);width:132px;height:44px}
+.main-nav{display:flex;align-items:center;gap:5px;margin-left:28px;height:100%}
+.main-nav a{font-size:12px;font-weight:800;color:rgba(255,255,255,.76);padding:10px 13px;border-radius:10px;transition:.2s ease}
+.main-nav a:hover,.main-nav a.nav-active{color:#fff;background:rgba(255,255,255,.12)}
+.header-actions{gap:7px}
+.circle{
+  width:39px;height:39px;border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.08);
+  color:#fff;border-radius:11px
+}
+.circle:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.42);transform:none}
+.login{border-color:rgba(255,255,255,.35);background:#fff;color:#102033;border-radius:10px;padding:9px 14px}
+.login:hover{background:#fff;border-color:#fff;transform:translateY(-1px)}
+
+.home-hero{
+  min-height:min(690px,78vh);height:690px;display:flex;align-items:flex-end;
+  isolation:isolate;box-shadow:none;background:#07111f;
+}
+.home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;aspect-ratio:auto}
+.hero-shade{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(90deg,rgba(3,9,17,.94) 0%,rgba(3,9,17,.68) 28%,rgba(3,9,17,.12) 65%,rgba(3,9,17,.35) 100%),
+  linear-gradient(0deg,rgba(3,9,17,.80) 0%,transparent 42%);
+}
+.hero-copy{
+  position:relative;z-index:3;width:min(1240px,calc(100% - 56px));margin:0 auto;
+  padding:0 0 78px;color:#fff;max-width:1240px
+}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:10px;letter-spacing:3px;font-weight:950;color:#91caff;margin-bottom:15px}
+.hero-eyebrow:before{content:"";width:24px;height:2px;background:#0b8cff;border-radius:2px}
+.hero-copy h1{font-size:clamp(48px,6.2vw,82px);line-height:.91;letter-spacing:-4px;margin:0;max-width:760px;font-weight:950}
+.hero-copy h1 em{font-style:normal;color:#8dc8ff}
+.hero-copy p{max-width:520px;margin:23px 0 0;color:rgba(255,255,255,.74);font-size:14px;line-height:1.65}
+.hero-buttons{display:flex;align-items:center;gap:10px;margin-top:25px}
+.hero-primary,.hero-secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 17px;border-radius:11px;font-size:12px;font-weight:900;transition:.2s ease}
+.hero-primary{background:#fff;color:#081321;box-shadow:0 14px 35px rgba(0,0,0,.22)}
+.hero-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.3)}
+.hero-primary span{font-size:17px}
+.hero-secondary{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;backdrop-filter:blur(12px)}
+.hero-secondary:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
+.hero-scroll{position:absolute;z-index:3;right:max(28px,calc((100% - 1240px)/2));bottom:35px;color:rgba(255,255,255,.62);font-size:8px;font-weight:900;letter-spacing:2px;display:flex;align-items:center;gap:8px}
+.hero-scroll span{font-size:15px}
+
+.catalog{width:min(1240px,calc(100% - 56px));margin:74px auto 0}
+.shelf{position:relative;margin:0 0 74px}
+.shelf-head{align-items:center;margin-bottom:22px;padding:0 2px}
+.shelf-kicker{font-size:9px;letter-spacing:3px;color:#8a95a5;margin-bottom:8px}
+.shelf-title{font-size:32px;letter-spacing:-1.5px;color:#101a28}
+.shelf-count{font-size:10px;color:#9aa4b2}
+.shelf-tools{
+  position:absolute;right:0;top:calc(50% + 18px);z-index:8;display:flex;gap:7px
+}
+.shelf-arrow{
+  width:42px;height:42px;border-radius:50%;border:1px solid #dce3eb;background:rgba(255,255,255,.96);
+  box-shadow:0 8px 24px rgba(15,31,50,.12);font-size:25px;line-height:1
+}
+.shelf-arrow:hover{border-color:#9bc7ef;background:#fff;color:var(--ls-blue);transform:scale(1.05)}
+.shelf-arrow:disabled{opacity:0;pointer-events:none}
+.track{gap:17px;padding:5px 2px 18px;scroll-padding-left:2px}
+.book{
+  flex-basis:205px;height:307px;border-radius:15px;
+  box-shadow:0 10px 28px rgba(16,32,51,.12);
+  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease
+}
+.book:hover{transform:translateY(-8px);box-shadow:0 24px 42px rgba(16,32,51,.20)}
+.book:after{inset:28% 0 0;background:linear-gradient(0deg,rgba(3,10,18,.94),rgba(3,10,18,.15),transparent)}
+.book-info{left:15px;right:13px;bottom:15px}
+.book-meta{font-size:8px;letter-spacing:1px}
+.book-title{font-size:18px;line-height:1.02}
+.book-extra{font-size:9px;opacity:.75}
+.rank{width:52px;height:52px;border-bottom-left-radius:15px;background:#0b72e7}
+.age{top:11px;left:11px;border-radius:7px;padding:5px 8px}
+.creator{
+  width:min(1240px,calc(100% - 56px));margin:4px auto 0;border-radius:24px;padding:38px 40px;
+  background:#0b1421;box-shadow:0 24px 60px rgba(8,22,38,.18)
+}
+.creator:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 30%,rgba(28,130,240,.28),transparent 34%);pointer-events:none}
+.creator:after{width:420px;height:420px;right:-170px;top:-200px}
+.creator h2{font-size:32px;letter-spacing:-1.2px}
+.creator p{color:#aab6c5}
+.creator a{border-radius:12px;padding:13px 17px}
+
+.footer{margin-top:72px;background:#f7f8fa;border-color:#e7ebf0;padding:55px 20px 60px}
+.footer-logo{font-size:23px}.footer p{font-size:12px}
+
+@media(max-width:800px){
+  .header{top:10px;width:calc(100% - 20px);height:58px;border-radius:15px;padding-left:12px}
+  .logo img{width:116px;height:39px}
+  .main-nav{display:none}
+  .home-hero{height:620px;min-height:620px}
+  .hero-shade{background:linear-gradient(0deg,rgba(3,9,17,.96) 0%,rgba(3,9,17,.48) 48%,rgba(3,9,17,.16) 100%)}
+  .hero-copy{width:calc(100% - 34px);padding-bottom:66px}
+  .hero-copy h1{font-size:clamp(42px,12vw,62px);letter-spacing:-2.8px}
+  .hero-copy p{font-size:13px;max-width:470px;margin-top:17px}
+  .hero-buttons{margin-top:19px}
+  .hero-scroll{display:none}
+  .catalog{width:calc(100% - 28px);margin-top:50px}
+  .shelf{margin-bottom:54px}
+  .shelf-title{font-size:27px}
+  .shelf-tools{display:flex;top:calc(50% + 13px)}
+  .shelf-arrow{width:36px;height:36px;font-size:21px}
+  .book{flex-basis:174px;height:262px;border-radius:13px}
+  .book-title{font-size:16px}
+  .creator{width:calc(100% - 28px);padding:28px 24px;border-radius:20px}
+  .creator h2{font-size:26px}
+}
+@media(max-width:500px){
+  .login{display:none}
+  .home-hero{height:590px;min-height:590px}
+  .hero-copy{padding-bottom:54px}
+  .hero-copy p{max-width:340px}
+  .hero-buttons{align-items:stretch;flex-direction:column;width:min(100%,300px)}
+  .hero-primary,.hero-secondary{width:100%}
+  .catalog{margin-top:42px}
+  .shelf-tools{display:none}
+  .book{flex-basis:158px;height:238px}
+  .creator{margin-top:0}
+}
 </style>
 </head>
 <body>
 <header class="header">
   <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
+  <nav class="main-nav" aria-label="Navegação principal">
+    <a class="nav-active" href="index.html">Início</a>
+    <a href="#popularShelf">Explorar</a>
+    <a href="#allShelf">Mangás</a>
+    <a href="publish.html">Criadores</a>
+  </nav>
   <div class="header-actions">
     <button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
     <button class="circle menu" id="openMenu" aria-label="Abrir menu"></button>
@@ -229,7 +373,17 @@ html[data-ls-theme="dark"] .search-result small{color:#aab3be}
 <main>
   <section class="home-hero" id="feature">
     <img src="assets/poster-teste.svg" alt="Destaque do LinkStory">
-    <a class="hero-action" href="#popularShelf">Explorar histórias <span>↓</span></a>
+    <div class="hero-shade"></div>
+    <div class="hero-copy">
+      <span class="hero-eyebrow">LINKSTORY ORIGINAL</span>
+      <h1>Histórias que<br><em>merecem ser lidas.</em></h1>
+      <p>Descubra novos mangás, acompanhe seus capítulos e encontre universos criados por quem tem uma história para contar.</p>
+      <div class="hero-buttons">
+        <a class="hero-primary" href="#popularShelf">Explorar agora <span>→</span></a>
+        <a class="hero-secondary" href="publish.html">Quero publicar</a>
+      </div>
+    </div>
+    <div class="hero-scroll">SCROLL <span>↓</span></div>
   </section>
 
   <div class="catalog">
