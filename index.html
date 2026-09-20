@@ -136,55 +136,32 @@ html[data-ls-theme="dark"] .inspex-body h1{color:#f5f7fa}
 html[data-ls-theme="dark"] .inspex-body p,.inspex-kicker{color:#aab3be}
 
 
-/* LinkStory AI — apenas design nesta etapa */
+/* LinkStory AI — mini robô, usando o mascote original */
 .ai-fab{
   position:fixed;right:18px;bottom:92px;z-index:80;
-  width:58px;height:58px;border:1px solid #cfe1f2;border-radius:19px;
-  background:#fff;box-shadow:0 12px 28px rgba(16,32,51,.16);
-  display:grid;place-items:center;padding:7px;cursor:pointer;
+  width:76px;height:76px;padding:8px;
+  border:1px solid rgba(219,229,239,.92);border-radius:23px;
+  background:rgba(255,255,255,.58);
+  box-shadow:0 14px 32px rgba(16,32,51,.14);
+  backdrop-filter:blur(18px) saturate(150%);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);
+  display:grid;place-items:center;cursor:pointer;
 }
-.ai-fab svg{width:100%;height:100%}
+.ai-fab img{display:block;width:100%;height:100%;object-fit:contain;border-radius:17px}
 .ai-fab-label{
-  position:absolute;right:0;top:-9px;padding:4px 7px;border-radius:7px;
-  background:#102033;color:#fff;font-size:8px;font-weight:900;letter-spacing:1px;
+  position:absolute;right:-7px;top:-10px;padding:6px 9px;border-radius:12px;
+  background:#102033;color:#fff;font-size:12px;font-weight:900;letter-spacing:.5px;
+  box-shadow:0 7px 16px rgba(16,32,51,.16);
 }
-.ai-chat{
-  position:fixed;right:14px;bottom:88px;z-index:81;
-  width:min(370px,calc(100vw - 28px));height:500px;
-  border:1px solid #dbe5ef;border-radius:26px;background:#fff;
-  box-shadow:0 22px 55px rgba(16,32,51,.2);overflow:hidden;
-  display:none;flex-direction:column;
-}
-.ai-chat-head{
-  height:64px;display:flex;align-items:center;gap:10px;padding:0 14px;
-  border-bottom:1px solid #edf2f6;background:rgba(255,255,255,.92);
-}
-.ai-chat-avatar{width:38px;height:38px;flex:0 0 38px;border:1px solid #dbe5ef;border-radius:12px;padding:4px;display:grid;place-items:center;background:#fff}
-.ai-chat-avatar svg{width:100%;height:100%}
-.ai-chat-title{min-width:0;display:flex;flex-direction:column;line-height:1.05}
-.ai-chat-title strong{font-size:14px;color:#102033}
-.ai-chat-title span{font-size:9px;color:#7b8da0;font-weight:800;letter-spacing:.8px;margin-top:4px}
-.ai-chat-close{margin-left:auto;width:34px;height:34px;border:0;border-radius:10px;background:#f4f7fa;color:#526579;font-size:22px;line-height:1;cursor:pointer}
-.ai-chat-body{flex:1;padding:18px 15px;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;background:#fff}
-.ai-msg{max-width:82%;padding:11px 13px;border-radius:16px;font-size:12px;line-height:1.45}
-.ai-msg-user{align-self:flex-end;background:#eaf4ff;color:#245071;border-bottom-right-radius:6px}
-.ai-msg-ai{align-self:flex-start;background:#f4f6f9;color:#53677b;border-bottom-left-radius:6px}
-.ai-chat-foot{padding:11px;border-top:1px solid #edf2f6;background:#fff;display:flex;gap:8px}
-.ai-chat-input{height:44px;flex:1;border:1px solid #dbe5ef;border-radius:15px;background:#f8fafc;padding:0 13px;color:#7b8da0;display:flex;align-items:center;font-size:11px}
-.ai-chat-send{width:44px;height:44px;border:0;border-radius:15px;background:#0b72e7;color:#fff;font-size:20px;display:grid;place-items:center}
 @media(max-width:720px){
- .ai-fab{right:14px;bottom:88px;width:54px;height:54px;border-radius:18px}
- .ai-chat{right:10px;bottom:82px;width:calc(100vw - 20px);height:min(500px,68dvh);border-radius:23px}
+ .ai-fab{right:14px;bottom:88px;width:68px;height:68px;padding:7px;border-radius:21px}
+ .ai-fab img{border-radius:15px}
+ .ai-fab-label{right:-6px;top:-9px;padding:5px 8px;border-radius:10px;font-size:11px}
 }
-html[data-ls-theme="dark"] .ai-fab{background:#15181d;border-color:#343941;box-shadow:0 16px 35px rgba(0,0,0,.28)}
-html[data-ls-theme="dark"] .ai-chat,
-html[data-ls-theme="dark"] .ai-chat-head,
-html[data-ls-theme="dark"] .ai-chat-body,
-html[data-ls-theme="dark"] .ai-chat-foot{background:#15181d;border-color:#30343a}
-html[data-ls-theme="dark"] .ai-chat-title strong{color:#f5f7fa}
-html[data-ls-theme="dark"] .ai-chat-close{background:#20242a;color:#d9e0e7}
-html[data-ls-theme="dark"] .ai-chat-input{background:#1c2026;border-color:#343941;color:#aab3be}
-html[data-ls-theme="dark"] .ai-msg-ai{background:#20242a;color:#c3ccd5}
+html[data-ls-theme="dark"] .ai-fab{
+  background:rgba(21,24,29,.58);border-color:rgba(52,57,65,.9);
+  box-shadow:0 16px 35px rgba(0,0,0,.28)
+}
 
 </style>
 </head>
@@ -199,32 +176,12 @@ html[data-ls-theme="dark"] .ai-msg-ai{background:#20242a;color:#c3ccd5}
 </header>
 
 <div class="ai-fab" id="aiFab" aria-label="Abrir LinkStory AI">
-  
-<svg viewBox="0 0 100 100" aria-hidden="true">
-  <path d="M39 84c-9 0-16-5-18-12-2-8 2-14 7-19 4-4 6-10 6-18 0-13 8-23 20-25 8-2 16 1 21 7 4 4 7 10 8 17 2 11-2 19-8 26-4 5-6 11-6 17 0 5-4 7-9 7H39Z" fill="#fff" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M71 25c8 1 14 6 16 12-4 4-10 6-17 5" fill="#fff" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M77 37c5 2 9 5 12 9-6 2-11 1-16-2" fill="#fff" stroke="#111" stroke-width="3"/>
-  <circle cx="63" cy="25" r="7" fill="#fff" stroke="#111" stroke-width="3"/>
-  <circle cx="63" cy="25" r="2" fill="#111"/>
-  <path d="M48 27c-5 0-9 3-9 8 0 5 4 8 9 8 5 0 9-3 9-8 0-5-4-8-9-8Zm18 0c-5 0-9 3-9 8 0 5 4 8 9 8 5 0 9-3 9-8 0-5-4-8-9-8ZM57 34h2" fill="none" stroke="#111" stroke-width="2.5"/>
-  <path d="M39 52c-6 6-9 13-8 19m22-13v12m-10-8c-3 5-4 10-2 15m22-15c4 5 5 10 3 15" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
-  <path d="M32 78c-3 4-7 7-11 8m42-5c4 3 8 5 13 5" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
-</svg>
+  <img src="assets/linkstory-ai-mascot.png" alt="LinkStory AI">
   <span class="ai-fab-label">AI</span>
 </div>
 <section class="ai-chat" id="aiChat" aria-label="LinkStory AI">
   <header class="ai-chat-head">
-    <div class="ai-chat-avatar">
-<svg viewBox="0 0 100 100" aria-hidden="true">
-  <path d="M39 84c-9 0-16-5-18-12-2-8 2-14 7-19 4-4 6-10 6-18 0-13 8-23 20-25 8-2 16 1 21 7 4 4 7 10 8 17 2 11-2 19-8 26-4 5-6 11-6 17 0 5-4 7-9 7H39Z" fill="#fff" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M71 25c8 1 14 6 16 12-4 4-10 6-17 5" fill="#fff" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M77 37c5 2 9 5 12 9-6 2-11 1-16-2" fill="#fff" stroke="#111" stroke-width="3"/>
-  <circle cx="63" cy="25" r="7" fill="#fff" stroke="#111" stroke-width="3"/>
-  <circle cx="63" cy="25" r="2" fill="#111"/>
-  <path d="M48 27c-5 0-9 3-9 8 0 5 4 8 9 8 5 0 9-3 9-8 0-5-4-8-9-8Zm18 0c-5 0-9 3-9 8 0 5 4 8 9 8 5 0 9-3 9-8 0-5-4-8-9-8ZM57 34h2" fill="none" stroke="#111" stroke-width="2.5"/>
-  <path d="M39 52c-6 6-9 13-8 19m22-13v12m-10-8c-3 5-4 10-2 15m22-15c4 5 5 10 3 15" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
-  <path d="M32 78c-3 4-7 7-11 8m42-5c4 3 8 5 13 5" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
-</svg></div>
+    <div class="ai-chat-avatar"><img src="assets/linkstory-ai-mascot.png" alt="LinkStory AI"></div>
     <div class="ai-chat-title"><strong>AI</strong><span>LINKSTORY ASSISTANT</span></div>
     <button class="ai-chat-close" id="aiChatClose" aria-label="Fechar">×</button>
   </header>
