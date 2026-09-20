@@ -352,6 +352,33 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;ba
   .book{flex-basis:158px;height:238px}
   .creator{margin-top:0}
 }
+
+/* FORCE MOBILE LAYOUT ON REAL TOUCH DEVICES, INCLUDING SAFARI DESKTOP-SITE MODE */
+@media (pointer:coarse) and (min-width:700px){
+  .header{top:10px!important;width:calc(100% - 20px)!important;height:58px!important;padding:0 10px 0 12px!important;border-radius:15px!important}
+  .logo img{width:116px!important;height:39px!important}
+  .main-nav{display:none!important}
+  .login{display:none!important}
+  .home-hero{height:590px!important;min-height:590px!important}
+  .hero-shade{background:linear-gradient(0deg,rgba(3,9,17,.96) 0%,rgba(3,9,17,.48) 48%,rgba(3,9,17,.16) 100%)!important}
+  .hero-copy{width:calc(100% - 34px)!important;padding-bottom:54px!important}
+  .hero-copy h1{font-size:clamp(42px,12vw,62px)!important;letter-spacing:-2.8px!important}
+  .hero-copy p{font-size:13px!important;max-width:340px!important;margin-top:17px!important}
+  .hero-buttons{align-items:stretch!important;flex-direction:column!important;width:min(100%,300px)!important;margin-top:19px!important}
+  .hero-primary,.hero-secondary{width:100%!important}
+  .hero-scroll{display:none!important}
+  .catalog{width:calc(100% - 28px)!important;margin-top:42px!important}
+  .shelf{margin-bottom:54px!important}
+  .shelf-head{margin-bottom:14px!important}
+  .shelf-title{font-size:24px!important}
+  .shelf-tools{display:none!important}
+  .track{gap:10px!important;padding:4px 1px 16px!important}
+  .book{flex-basis:158px!important;height:238px!important;border-radius:13px!important}
+  .book-title{font-size:16px!important}
+  .creator{width:calc(100% - 28px)!important;margin-top:0!important;padding:28px 24px!important;border-radius:20px!important;display:block!important}
+  .creator h2{font-size:26px!important}
+  .footer{margin-top:52px!important;padding-bottom:120px!important}
+}
 </style>
 </head>
 <body>
@@ -571,5 +598,6 @@ document.getElementById('closeSearch').onclick=()=>search.close();
   dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
 });
 </script>
+<script src="global-nav.js"></script>
 </body>
 </html>
