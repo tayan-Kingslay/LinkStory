@@ -7,569 +7,107 @@
 <title>LinkStory — Mangás para ler e publicar</title>
 <link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
 <style>
-:root{
-  --blue:#0b72e7;--blue-dark:#0758b5;--blue-soft:#eaf4ff;
-  --ink:#102033;--muted:#66788d;--line:#dbe5ef;--paper:#fff;--soft:#f6f9fc;
-  --shadow:0 16px 38px rgba(16,32,51,.10);
-}
+:root{--b:#0b72e7;--i:#102033;--m:#66788d;--l:#dbe5ef}
 *{box-sizing:border-box}
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-x:hidden}
+html,body{width:100%;max-width:100%;overflow-x:hidden}body{margin:0;background:#fff;color:var(--i);font-family:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
 a{text-decoration:none;color:inherit}
-button,input{font:inherit}
-button,a{cursor:pointer}
-
-.header{
-  height:68px;display:flex;align-items:center;gap:12px;padding:0 max(16px,calc((100% - 1180px)/2));
-  background:rgba(255,255,255,.94);border-bottom:1px solid var(--line);
-  position:sticky;top:0;z-index:30;backdrop-filter:blur(18px);
-}
+.header{height:68px;border-bottom:1px solid var(--l);display:flex;align-items:center;padding:0 max(16px,calc((100% - 1080px)/2));gap:12px;background:#fff;position:sticky;top:0;z-index:20}
 .logo img{display:block;width:132px;height:44px;object-fit:contain}
-.header-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
-.circle{
-  width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:#fff;
-  display:grid;place-items:center;color:var(--ink);transition:.18s ease;
-}
-.circle:hover{border-color:#b8d5f1;background:var(--blue-soft);transform:translateY(-1px)}
-.search{font-size:24px;line-height:1}
-.menu{font-size:0}
-.menu:before{content:"☰";font-size:20px}
-.login{
-  border:1px solid #c9ddef;border-radius:12px;padding:9px 14px;color:var(--blue);
-  font-size:13px;font-weight:850;transition:.18s ease
-}
-.login:hover{background:var(--blue-soft);border-color:#a9cdef}
-
-main{width:100%;padding-bottom:88px}
-.home-hero{
-  width:100%;position:relative;overflow:hidden;background:#071a33;
-  box-shadow:0 18px 50px rgba(16,32,51,.10)
-}
-.home-hero img{display:block;width:100%;height:auto;aspect-ratio:1600/600;object-fit:cover}
-.hero-action{
-  position:absolute;right:max(18px,calc((100% - 1180px)/2));bottom:18px;
-  display:inline-flex;align-items:center;gap:8px;padding:11px 15px;border-radius:999px;
-  background:rgba(255,255,255,.94);color:var(--blue-dark);font-size:12px;font-weight:900;
-  box-shadow:0 10px 30px rgba(0,0,0,.18);backdrop-filter:blur(10px);transition:.18s ease
-}
-.hero-action:hover{transform:translateY(-2px);background:#fff}
-.hero-action span{font-size:15px;transition:transform .18s ease}
-.hero-action:hover span{transform:translateY(2px)}
+.header-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.circle{width:40px;height:40px;border:1px solid var(--l);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--i)}
+.search{font-size:22px}.menu{font-size:0}.menu:before{content:'☰';font-size:21px}
+.login{border:1px solid #cfe1f2;border-radius:11px;padding:9px 13px;color:var(--b);font-size:13px;font-weight:800}
+main{width:100%!important;max-width:none!important;margin:0;padding:0 0 100px}
+.home-hero{width:100%;height:auto;aspect-ratio:8 / 3;position:relative;overflow:hidden;background:#17283d}
+.home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center center;display:block}
 
 
-.catalog{width:min(1180px,calc(100% - 32px));margin:50px auto 0}
-.shelf{margin:0 0 48px}
-.shelf-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:16px}
-.shelf-tools{display:flex;align-items:center;gap:8px}
-.shelf-arrow{width:34px;height:34px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);display:grid;place-items:center;font-size:19px;font-weight:800;transition:.18s ease}
-.shelf-arrow:hover{border-color:#9fc8eb;background:var(--blue-soft);color:var(--blue);transform:translateY(-1px)}
-.shelf-arrow:disabled{opacity:.35;cursor:default;transform:none;background:#f7f9fb}
-
-.shelf-kicker{
-  display:block;color:var(--blue);font-size:10px;font-weight:900;letter-spacing:2.3px;
-  margin-bottom:6px
-}
-.shelf-title{font-size:30px;line-height:1;letter-spacing:-1.2px;font-weight:900;margin:0}
-.shelf-count{font-size:10px;color:var(--muted);font-weight:750;margin-left:9px}
-
-.shelf-link{font-size:12px;color:var(--blue);font-weight:850}
-.track{
-  display:flex;gap:14px;overflow-x:auto;padding:4px 2px 12px;
-  scroll-snap-type:x proximity;scrollbar-width:none
-}
+.catalog{margin-top:34px}
+.shelf{margin:0 0 42px}
+.shelf-head{display:flex;align-items:center;justify-content:space-between;padding:0 16px;margin-bottom:13px}
+.shelf-title{font-size:29px;line-height:1;font-weight:800;letter-spacing:-1px;margin:0}
+.shelf-link{font-size:12px;color:var(--b);font-weight:800}
+.track{display:flex;gap:12px;overflow-x:auto;padding:0 16px 9px;scroll-snap-type:x proximity;scrollbar-width:none}
 .track::-webkit-scrollbar{display:none}
-.track.is-dragging{cursor:grabbing;scroll-behavior:auto}
-.track{cursor:grab;overscroll-behavior-x:contain}
-
-.book{
-  position:relative;flex:0 0 184px;height:276px;border-radius:12px;overflow:hidden;
-  background:#edf3f8;scroll-snap-align:start;box-shadow:0 9px 24px rgba(16,32,51,.13);
-  transition:transform .2s ease,box-shadow .2s ease
-}
-.book:hover{transform:translateY(-5px);box-shadow:0 18px 34px rgba(16,32,51,.18)}
+.book{position:relative;flex:0 0 184px;height:275px;border-radius:2px;overflow:hidden;background:#edf3f8;scroll-snap-align:start;box-shadow:0 7px 18px rgba(16,32,51,.12)}
 .book img{display:block;width:100%;height:100%;object-fit:cover}
-.book:after{
-  content:"";position:absolute;inset:35% 0 0;
-  background:linear-gradient(0deg,rgba(5,14,25,.92),rgba(5,14,25,.08),transparent);
-  pointer-events:none
-}
-.book-info{position:absolute;z-index:2;left:12px;right:10px;bottom:12px;color:#fff}
-.book-info:before{content:"";position:absolute;left:-12px;right:-10px;bottom:-12px;height:1px;background:rgba(255,255,255,.12);opacity:.7}
-
-.book-meta{
-  display:block;font-size:9px;font-weight:850;letter-spacing:.65px;text-transform:uppercase;
-  margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.82
-}
-.book-title{display:block;font-size:17px;font-weight:900;line-height:1.05;text-shadow:0 2px 9px rgba(0,0,0,.45)}
-.book-extra{display:flex;align-items:center;gap:7px;margin-top:7px;font-size:9px;font-weight:800;opacity:.9}
-.book-extra span{display:inline-flex;align-items:center;gap:3px}
-.book:hover .book-extra{opacity:1}
-
-.rank{
-  position:absolute;z-index:4;right:0;top:0;width:48px;height:48px;
-  background:var(--blue);color:#fff;display:grid;place-items:center;
-  font-size:21px;font-weight:950;border-bottom-left-radius:12px
-}
-.age{
-  position:absolute;z-index:4;left:9px;top:9px;background:rgba(7,19,34,.78);
-  color:#fff;border:1px solid rgba(255,255,255,.18);border-radius:6px;padding:5px 7px;
-  font-size:9px;font-weight:900;backdrop-filter:blur(7px)
-}
-.empty{
-  border:1px dashed #cbd9e6;border-radius:16px;padding:34px 18px;text-align:center;
-  color:var(--muted);background:linear-gradient(180deg,#fbfdff,#f6f9fc)
-}
-.empty strong{display:block;color:var(--ink);font-size:16px;margin-bottom:5px}
-
-.creator{
-  width:min(1180px,calc(100% - 32px));margin:8px auto 0;
-  background:linear-gradient(135deg,#0758b5,#0b72e7 58%,#2388ef);
-  color:#fff;border-radius:20px;padding:28px 30px;display:flex;
-  justify-content:space-between;align-items:center;gap:24px;position:relative;overflow:hidden;
-  box-shadow:0 22px 50px rgba(11,114,231,.20)
-}
-.creator:after{
-  content:"";position:absolute;width:310px;height:310px;border:1px solid rgba(255,255,255,.18);
-  border-radius:50%;right:-125px;top:-150px;box-shadow:0 0 0 32px rgba(255,255,255,.05),0 0 0 64px rgba(255,255,255,.035)
-}
-.creator > div,.creator a{position:relative;z-index:1}
-.creator .ey{font-size:9px;letter-spacing:2.4px;font-weight:900;color:#cfeaff}
-.creator h2{font-size:26px;letter-spacing:-.7px;margin:5px 0 5px}
-.creator p{margin:0;color:#e2f1ff;font-size:13px}
-.creator a{
-  background:#fff;color:var(--blue-dark);padding:11px 15px;border-radius:11px;
-  font-size:12px;font-weight:900;white-space:nowrap;transition:.18s ease
-}
-.creator a:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.14)}
-
-.footer{
-  border-top:1px solid var(--line);padding:38px 20px 46px;text-align:center;
-  color:var(--muted);background:#fff
-}
-.footer-logo{font-size:20px;font-weight:950;letter-spacing:-.8px;color:var(--ink)}
-.footer-logo b{color:var(--blue)}
-.footer p{font-size:12px;margin:7px 0 4px}
-.footer small{font-size:10px}
-
-.menu-dialog{
-  width:min(100%,560px);height:100dvh;max-height:none;margin:0 0 0 auto;
-  border:0;padding:0;background:#fff;color:var(--ink);box-shadow:-25px 0 70px rgba(16,32,51,.14)
-}
-.menu-dialog::backdrop{background:rgba(8,20,34,.35);backdrop-filter:blur(4px)}
-.menu-wrap{height:100%;padding:24px 22px}
-.menu-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--line)}
-.menu-head strong{color:var(--blue);letter-spacing:3px;font-size:13px}
-.close{border:0;background:none;color:var(--ink);font-size:34px;line-height:1;padding:0 4px}
-.menu-list a{
-  display:flex;justify-content:space-between;align-items:center;padding:19px 2px;
-  border-bottom:1px solid var(--line);font-size:16px;font-weight:750;transition:.15s ease
-}
-.menu-list a:hover{color:var(--blue);padding-left:6px}
-.menu-list strong{font-size:25px;color:#8192a5;font-weight:400}
-
-.search-dialog{width:min(560px,calc(100% - 24px));height:auto;max-height:80dvh;margin:auto;border:1px solid var(--line);border-radius:20px;padding:0;background:#fff;color:var(--ink);box-shadow:0 30px 90px rgba(16,32,51,.22)}
-.search-dialog::backdrop{background:rgba(8,20,34,.42);backdrop-filter:blur(4px)}
-.search-wrap{padding:22px}
-.search-input{
-  width:100%;height:52px;border:1px solid var(--line);border-radius:13px;
-  padding:0 15px;outline:none;margin-top:20px;background:#f8fafc
-}
-.search-input:focus{border-color:#8fc0ed;background:#fff;box-shadow:0 0 0 4px rgba(11,114,231,.09)}
-.search-results{margin-top:12px;display:grid;gap:7px;max-height:52dvh;overflow:auto}
-.search-result{display:block;padding:12px;border:1px solid var(--line);border-radius:11px;background:#fafcff}
-.search-result:hover{border-color:#b8d5f1;background:var(--blue-soft)}
-.search-result small{display:block;margin-top:3px;color:var(--muted)}
-
+.book:after{content:"";position:absolute;inset:42% 0 0;background:linear-gradient(0deg,rgba(0,0,0,.86),transparent);pointer-events:none}
+.book-info{position:absolute;z-index:2;left:11px;right:10px;bottom:11px;color:#fff}
+.book-meta{display:block;font-size:10px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.book-title{display:block;font-size:17px;font-weight:900;line-height:1.05;text-shadow:0 2px 7px rgba(0,0,0,.5)}
+.rank{position:absolute;z-index:4;right:0;top:0;width:50px;height:50px;background:#ed302f;color:#fff;display:grid;place-items:center;font-size:24px;font-weight:900}
+.age{position:absolute;z-index:4;left:9px;top:9px;background:#ed302f;color:#fff;border-radius:5px;padding:6px 7px;font-size:10px;font-weight:900}
+.empty{margin:0 16px;border:1px dashed var(--l);border-radius:12px;padding:26px 16px;text-align:center;color:var(--m)}
+.empty strong{display:block;color:var(--i);margin-bottom:4px}
+.creator{width:min(1080px,calc(100% - 32px));margin:4px auto 0;background:var(--b);color:#fff;border-radius:16px;padding:24px;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.creator .ey{font-size:10px;letter-spacing:2px;font-weight:900;color:#d8edff}
+.creator h2{font-size:25px;margin:4px 0}.creator p{margin:0;color:#e6f3ff;font-size:13px}
+.creator a{background:#fff;color:var(--b);padding:10px 14px;border-radius:10px;font-size:12px;font-weight:900;white-space:nowrap}
+.menu-dialog{width:min(100%,560px);height:100dvh;max-height:none;margin:0 0 0 auto;border:0;padding:0;background:#fff}
+.menu-wrap{height:100%;padding:24px 20px}.menu-head{display:flex;justify-content:space-between;align-items:center;padding-bottom:20px;border-bottom:1px solid var(--l)}
+.menu-head strong{color:var(--b);letter-spacing:3px}.close{border:0;background:none;font-size:36px}
+.menu-list a{display:flex;justify-content:space-between;padding:19px 0;border-bottom:1px solid var(--l);font-size:17px;font-weight:700}
+.menu-list strong{font-size:26px;color:#71879d;font-weight:400}
 @media(max-width:720px){
-  .shelf-tools{display:none}
-  .shelf-count{font-size:9px}
-
-  .header{height:62px;padding:0 12px}.logo img{width:124px;height:40px}
-  .header-actions{gap:6px}.circle{width:38px;height:38px}.login{font-size:12px;padding:8px 11px}
-  .hero-action{right:12px;bottom:12px;padding:9px 12px}
-  .catalog{width:calc(100% - 24px);margin-top:34px}
-  .shelf{margin-bottom:38px}.shelf-head{margin-bottom:13px}
-  .shelf-title{font-size:26px}.track{gap:10px;padding-left:1px;padding-right:1px}
-  .book{flex-basis:164px;height:248px;border-radius:11px}
-  .book-title{font-size:16px}
-  .creator{width:calc(100% - 24px);display:block;padding:23px 21px;border-radius:17px}
-  .creator h2{font-size:23px}.creator a{display:inline-flex;margin-top:16px}
+ .header{height:62px;padding:0 12px}.logo img{width:124px;height:40px}.circle{width:38px;height:38px}.login{font-size:12px;padding:8px 11px}.header-actions{gap:6px}
+ .home-hero{height:auto;aspect-ratio:8 / 3}
+ .catalog{margin-top:30px}.shelf{margin-bottom:34px}.shelf-head{padding:0 12px}.shelf-title{font-size:27px}.track{padding-left:12px;padding-right:12px;gap:10px}
+ .book{flex-basis:166px;height:252px}.book-title{font-size:16px}.rank{width:46px;height:46px;font-size:22px}
+ .creator{display:block;padding:21px;margin-top:0}.creator a{display:inline-flex;margin-top:15px}
 }
 @media(max-width:420px){
-  .login{display:none}.hero-action{font-size:10px}
-  .book{flex-basis:151px;height:229px}.shelf-title{font-size:24px}
+ .login{display:none}.home-hero{height:auto;aspect-ratio:8 / 3}.book{flex-basis:154px;height:235px}.shelf-title{font-size:25px}
 }
-
-html[data-ls-theme="dark"] body{background:#0e1013;color:#f5f7fa}
-html[data-ls-theme="dark"] .header{background:rgba(17,19,23,.94);border-color:#30343a}
-html[data-ls-theme="dark"] .circle{background:#181b20;color:#fff;border-color:#343941}
-html[data-ls-theme="dark"] .login{border-color:#343941;color:#58a9ff}
-html[data-ls-theme="dark"] .empty{background:#15181d;border-color:#3b424b;color:#aab3be}
-html[data-ls-theme="dark"] .empty strong{color:#fff}
-html[data-ls-theme="dark"] .footer{background:#111317;border-color:#30343a}
-html[data-ls-theme="dark"] .footer-logo{color:#fff}
-html[data-ls-theme="dark"] .menu-dialog,html[data-ls-theme="dark"] .search-dialog{background:#15181d;color:#fff}
-html[data-ls-theme="dark"] .menu-head,html[data-ls-theme="dark"] .menu-list a{border-color:#30343a}
-html[data-ls-theme="dark"] .close{color:#fff}
-html[data-ls-theme="dark"] .search-input{background:#101317;color:#fff;border-color:#343941}
-html[data-ls-theme="dark"] .search-result{background:#191d22;border-color:#343941}
-html[data-ls-theme="dark"] .search-result small{color:#aab3be}
-
-/* =========================================================
-   LINKSTORY HOME — VISUAL REDESIGN
-   Large visual pass. Data, links and existing JS stay intact.
-   ========================================================= */
-:root{
-  --ls-blue:#0b72e7;
-  --ls-deep:#07111f;
-  --ls-ink:#101a28;
-  --ls-muted:#728096;
-  --ls-line:#e4e9f0;
-  --ls-paper:#fff;
-  --ls-soft:#f5f7fa;
-}
-body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:var(--ls-ink)}
-.header{
-  position:absolute;top:18px;left:50%;transform:translateX(-50%);
-  width:min(1240px,calc(100% - 36px));height:66px;padding:0 10px 0 18px;
-  border:1px solid rgba(255,255,255,.22);border-radius:18px;
-  background:rgba(9,16,27,.30);backdrop-filter:blur(18px) saturate(140%);
-  box-shadow:0 14px 40px rgba(0,0,0,.12);z-index:50;color:#fff;
-}
-.logo img{filter:brightness(0) invert(1);width:132px;height:44px}
-.main-nav{display:flex;align-items:center;gap:5px;margin-left:28px;height:100%}
-.main-nav a{font-size:12px;font-weight:800;color:rgba(255,255,255,.76);padding:10px 13px;border-radius:10px;transition:.2s ease}
-.main-nav a:hover,.main-nav a.nav-active{color:#fff;background:rgba(255,255,255,.12)}
-.header-actions{gap:7px}
-.circle{
-  width:39px;height:39px;border-color:rgba(255,255,255,.22);background:rgba(255,255,255,.08);
-  color:#fff;border-radius:11px
-}
-.circle:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.42);transform:none}
-.login{border-color:rgba(255,255,255,.35);background:#fff;color:#102033;border-radius:10px;padding:9px 14px}
-.login:hover{background:#fff;border-color:#fff;transform:translateY(-1px)}
-
-.home-hero{
-  min-height:min(690px,78vh);height:690px;display:flex;align-items:flex-end;
-  isolation:isolate;box-shadow:none;background:#07111f;
-}
-.home-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;aspect-ratio:auto}
-.hero-shade{position:absolute;inset:0;z-index:1;background:
-  linear-gradient(90deg,rgba(3,9,17,.94) 0%,rgba(3,9,17,.68) 28%,rgba(3,9,17,.12) 65%,rgba(3,9,17,.35) 100%),
-  linear-gradient(0deg,rgba(3,9,17,.80) 0%,transparent 42%);
-}
-.hero-copy{
-  position:relative;z-index:3;width:min(1240px,calc(100% - 56px));margin:0 auto;
-  padding:0 0 78px;color:#fff;max-width:1240px
-}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:9px;font-size:10px;letter-spacing:3px;font-weight:950;color:#91caff;margin-bottom:15px}
-.hero-eyebrow:before{content:"";width:24px;height:2px;background:#0b8cff;border-radius:2px}
-.hero-copy h1{font-size:clamp(48px,6.2vw,82px);line-height:.91;letter-spacing:-4px;margin:0;max-width:760px;font-weight:950}
-.hero-copy h1 em{font-style:normal;color:#8dc8ff}
-.hero-copy p{max-width:520px;margin:23px 0 0;color:rgba(255,255,255,.74);font-size:14px;line-height:1.65}
-.hero-buttons{display:flex;align-items:center;gap:10px;margin-top:25px}
-.hero-primary,.hero-secondary{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:13px 17px;border-radius:11px;font-size:12px;font-weight:900;transition:.2s ease}
-.hero-primary{background:#fff;color:#081321;box-shadow:0 14px 35px rgba(0,0,0,.22)}
-.hero-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.3)}
-.hero-primary span{font-size:17px}
-.hero-secondary{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;backdrop-filter:blur(12px)}
-.hero-secondary:hover{background:rgba(255,255,255,.14);transform:translateY(-2px)}
-.hero-scroll{position:absolute;z-index:3;right:max(28px,calc((100% - 1240px)/2));bottom:35px;color:rgba(255,255,255,.62);font-size:8px;font-weight:900;letter-spacing:2px;display:flex;align-items:center;gap:8px}
-.hero-scroll span{font-size:15px}
-
-.catalog{width:min(1240px,calc(100% - 56px));margin:74px auto 0}
-.shelf{position:relative;margin:0 0 74px}
-.shelf-head{align-items:center;margin-bottom:22px;padding:0 2px}
-.shelf-kicker{font-size:9px;letter-spacing:3px;color:#8a95a5;margin-bottom:8px}
-.shelf-title{font-size:32px;letter-spacing:-1.5px;color:#101a28}
-.shelf-count{font-size:10px;color:#9aa4b2}
-.shelf-tools{
-  position:absolute;right:0;top:calc(50% + 18px);z-index:8;display:flex;gap:7px
-}
-.shelf-arrow{
-  width:42px;height:42px;border-radius:50%;border:1px solid #dce3eb;background:rgba(255,255,255,.96);
-  box-shadow:0 8px 24px rgba(15,31,50,.12);font-size:25px;line-height:1
-}
-.shelf-arrow:hover{border-color:#9bc7ef;background:#fff;color:var(--ls-blue);transform:scale(1.05)}
-.shelf-arrow:disabled{opacity:0;pointer-events:none}
-.track{gap:17px;padding:5px 2px 18px;scroll-padding-left:2px}
-.book{
-  flex-basis:205px;height:307px;border-radius:15px;
-  box-shadow:0 10px 28px rgba(16,32,51,.12);
-  transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s ease
-}
-.book:hover{transform:translateY(-8px);box-shadow:0 24px 42px rgba(16,32,51,.20)}
-.book:after{inset:28% 0 0;background:linear-gradient(0deg,rgba(3,10,18,.94),rgba(3,10,18,.15),transparent)}
-.book-info{left:15px;right:13px;bottom:15px}
-.book-meta{font-size:8px;letter-spacing:1px}
-.book-title{font-size:18px;line-height:1.02}
-.book-extra{font-size:9px;opacity:.75}
-.rank{width:52px;height:52px;border-bottom-left-radius:15px;background:#0b72e7}
-.age{top:11px;left:11px;border-radius:7px;padding:5px 8px}
-.creator{
-  width:min(1240px,calc(100% - 56px));margin:4px auto 0;border-radius:24px;padding:38px 40px;
-  background:#0b1421;box-shadow:0 24px 60px rgba(8,22,38,.18)
-}
-.creator:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 30%,rgba(28,130,240,.28),transparent 34%);pointer-events:none}
-.creator:after{width:420px;height:420px;right:-170px;top:-200px}
-.creator h2{font-size:32px;letter-spacing:-1.2px}
-.creator p{color:#aab6c5}
-.creator a{border-radius:12px;padding:13px 17px}
-
-.footer{margin-top:72px;background:#f7f8fa;border-color:#e7ebf0;padding:55px 20px 60px}
-.footer-logo{font-size:23px}.footer p{font-size:12px}
-
-@media(max-width:800px){
-  .header{top:10px;width:calc(100% - 20px);height:58px;border-radius:15px;padding-left:12px}
-  .logo img{width:116px;height:39px}
-  .main-nav{display:none}
-  .home-hero{height:620px;min-height:620px}
-  .hero-shade{background:linear-gradient(0deg,rgba(3,9,17,.96) 0%,rgba(3,9,17,.48) 48%,rgba(3,9,17,.16) 100%)}
-  .hero-copy{width:calc(100% - 34px);padding-bottom:66px}
-  .hero-copy h1{font-size:clamp(42px,12vw,62px);letter-spacing:-2.8px}
-  .hero-copy p{font-size:13px;max-width:470px;margin-top:17px}
-  .hero-buttons{margin-top:19px}
-  .hero-scroll{display:none}
-  .catalog{width:calc(100% - 28px);margin-top:50px}
-  .shelf{margin-bottom:54px}
-  .shelf-title{font-size:27px}
-  .shelf-tools{display:flex;top:calc(50% + 13px)}
-  .shelf-arrow{width:36px;height:36px;font-size:21px}
-  .book{flex-basis:174px;height:262px;border-radius:13px}
-  .book-title{font-size:16px}
-  .creator{width:calc(100% - 28px);padding:28px 24px;border-radius:20px}
-  .creator h2{font-size:26px}
-}
-@media(max-width:500px){
-  .login{display:none}
-  .home-hero{height:590px;min-height:590px}
-  .hero-copy{padding-bottom:54px}
-  .hero-copy p{max-width:340px}
-  .hero-buttons{align-items:stretch;flex-direction:column;width:min(100%,300px)}
-  .hero-primary,.hero-secondary{width:100%}
-  .catalog{margin-top:42px}
-  .shelf-tools{display:none}
-  .book{flex-basis:158px;height:238px}
-  .creator{margin-top:0}
-}
+html[data-ls-theme="dark"] body{background:#0f1114!important;color:#f5f7fa!important}
+html[data-ls-theme="dark"] .header{background:#111317!important;border-color:#30343a!important}
+html[data-ls-theme="dark"] .circle{background:#181b20!important;color:#fff!important;border-color:#343941!important}
+html[data-ls-theme="dark"] .login{border-color:#343941!important}
+html[data-ls-theme="dark"] .empty{border-color:#30343a!important;color:#aab3be!important}
+html[data-ls-theme="dark"] .empty strong{color:#fff!important}
+html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!important}
 </style>
 </head>
 <body>
 <header class="header">
-  <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
-  <nav class="main-nav" aria-label="Navegação principal">
-    <a class="nav-active" href="index.html">Início</a>
-    <a href="#popularShelf">Explorar</a>
-    <a href="#allShelf">Mangás</a>
-    <a href="publish.html">Criadores</a>
-  </nav>
-  <div class="header-actions">
-    <button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
-    <button class="circle menu" id="openMenu" aria-label="Abrir menu"></button>
-    <a class="login" href="login.html">Entrar</a>
-  </div>
+<a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
+<div class="header-actions">
+<button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
+<button class="circle menu" id="openMenu" aria-label="Abrir menu"></button>
+<a class="login" href="login.html">Entrar</a>
+</div>
 </header>
-
 <main>
-  <section class="home-hero" id="feature">
-    <img src="assets/poster-teste.svg" alt="Destaque do LinkStory">
-    <div class="hero-shade"></div>
-    <div class="hero-copy">
-      <span class="hero-eyebrow">LINKSTORY ORIGINAL</span>
-      <h1>Histórias que<br><em>merecem ser lidas.</em></h1>
-      <p>Descubra novos mangás, acompanhe seus capítulos e encontre universos criados por quem tem uma história para contar.</p>
-      <div class="hero-buttons">
-        <a class="hero-primary" href="#popularShelf">Explorar agora <span>→</span></a>
-        <a class="hero-secondary" href="publish.html">Quero publicar</a>
-      </div>
-    </div>
-    <div class="hero-scroll">SCROLL <span>↓</span></div>
-  </section>
-
-  <div class="catalog">
-    <section class="shelf" id="popularShelf">
-      <div class="shelf-head">
-        <div><span class="shelf-kicker">EM DESTAQUE</span><h2 class="shelf-title">Mais populares <span class="shelf-count" id="popularCount"></span></h2></div>
-        <div class="shelf-tools" aria-label="Navegação da seção"><button class="shelf-arrow" data-track="popularTrack" data-dir="-1" aria-label="Voltar">‹</button><button class="shelf-arrow" data-track="popularTrack" data-dir="1" aria-label="Avançar">›</button></div>
-      </div>
-      <div class="track" id="popularTrack"></div>
-    </section>
-
-    <section class="shelf" id="recentShelf">
-      <div class="shelf-head">
-        <div><span class="shelf-kicker">CHEGARAM AGORA</span><h2 class="shelf-title">Recém-publicados <span class="shelf-count" id="recentCount"></span></h2></div>
-        <div class="shelf-tools" aria-label="Navegação da seção"><button class="shelf-arrow" data-track="recentTrack" data-dir="-1" aria-label="Voltar">‹</button><button class="shelf-arrow" data-track="recentTrack" data-dir="1" aria-label="Avançar">›</button></div>
-      </div>
-      <div class="track" id="recentTrack"></div>
-    </section>
-
-    <section class="shelf" id="allShelf">
-      <div class="shelf-head">
-        <div><span class="shelf-kicker">CATÁLOGO</span><h2 class="shelf-title">Mais histórias <span class="shelf-count" id="allCount"></span></h2></div>
-        <div class="shelf-tools" aria-label="Navegação da seção"><button class="shelf-arrow" data-track="allTrack" data-dir="-1" aria-label="Voltar">‹</button><button class="shelf-arrow" data-track="allTrack" data-dir="1" aria-label="Avançar">›</button></div>
-      </div>
-      <div class="track" id="allTrack"></div>
-    </section>
-  </div>
-
-  <section class="creator">
-    <div>
-      <span class="ey">PARA CRIADORES</span>
-      <h2>Publique sua história no LinkStory.</h2>
-      <p>Crie sua obra, adicione capítulos e encontre leitores.</p>
-    </div>
-    <a href="publish.html">Publicar mangá →</a>
-  </section>
+<section class="home-hero" id="feature">
+<div class="empty" style="position:absolute;inset:0;margin:0;border:0;border-radius:0;display:grid;place-items:center;color:#fff;background:#17283d"><strong style="color:#fff">Ainda não há mangás publicados.</strong></div>
+</section>
+<div class="catalog">
+<section class="shelf" id="popularShelf"><div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div><div class="track" id="popularTrack"></div></section>
+<section class="shelf" id="recentShelf"><div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div><div class="track" id="recentTrack"></div></section>
+<section class="shelf" id="allShelf"><div class="shelf-head"><h2 class="shelf-title">Mais histórias</h2></div><div class="track" id="allTrack"></div></section>
+</div>
+<section class="creator"><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
-
-<footer class="footer">
-  <div class="footer-logo">Link<b>Story</b></div>
-  <p>Histórias para ler. Universos para criar.</p>
-  <small>© 2026 LinkStory</small>
-</footer>
-
-<dialog class="menu-dialog" id="menuDialog">
-  <div class="menu-wrap">
-    <div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu" aria-label="Fechar">×</button></div>
-    <nav class="menu-list">
-      <a href="profile.html">Perfil <strong>›</strong></a>
-      <a href="studio.html">Meu Estúdio <strong>›</strong></a>
-      <a href="publish.html">Publicar mangá <strong>›</strong></a>
-      <a href="settings.html">Configurações <strong>›</strong></a>
-      <a href="login.html">Entrar <strong>›</strong></a>
-    </nav>
-  </div>
-</dialog>
-
-<dialog class="search-dialog" id="searchDialog">
-  <div class="search-wrap">
-    <div class="menu-head"><strong>BUSCAR</strong><button class="close" id="closeSearch" aria-label="Fechar">×</button></div>
-    <input class="search-input" id="searchInput" placeholder="Buscar mangá, autor ou gênero" autocomplete="off">
-    <div class="search-results" id="searchResults"></div>
-  </div>
-</dialog>
-
+<dialog class="menu-dialog" id="menuDialog"><div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div><nav class="menu-list"><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a></nav></div></dialog>
+<dialog class="menu-dialog" id="searchDialog"><div class="menu-wrap"><div class="menu-head"><strong>BUSCAR</strong><button class="close" id="closeSearch">×</button></div><input id="searchInput" placeholder="Buscar mangá, autor ou gênero" style="width:100%;height:52px;border:1px solid #dbe5ef;border-radius:12px;padding:0 15px;font:inherit;margin-top:22px"><div id="searchResults" style="margin-top:15px"></div></div></dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
-<script src="manga-db.js"></script>
+<script src="auth.js"></script><script src="manga-db.js"></script>
 <script>
 (async()=>{
-  const shelves=[
-    document.getElementById('popularShelf'),
-    document.getElementById('recentShelf'),
-    document.getElementById('allShelf')
-  ];
-  const tracks=[
-    document.getElementById('popularTrack'),
-    document.getElementById('recentTrack'),
-    document.getElementById('allTrack')
-  ];
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-  let mangas=[];
-  try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console.error(e)}
-
-  if(!mangas.length){
-    shelves.forEach(s=>s.innerHTML='<div class="empty"><strong>O catálogo está começando.</strong>Quando uma nova história for publicada, ela aparecerá aqui.</div>');
-    return;
-  }
-
-  const stats=await Promise.all(mangas.map(async m=>{
-    try{return{m,s:await LinkStoryManga.stats(m.id)}}
-    catch{return{m,s:{likes:0,ratings:0,average:0}}}
-  }));
-
-  const popular=stats.slice()
-    .sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0))
-    .map(x=>x.m);
-  const recent=mangas.slice().reverse();
-
-  const makeBook=(m,rank,stat)=>{
-    const a=document.createElement('a');
-    a.className='book';
-    a.href='manga.html?id='+encodeURIComponent(m.id);
-    const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');
-    a.innerHTML=
-      (rank?'<span class="rank">'+rank+'</span>':'')+
-      '<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+
-      (m.cover_url?'<img src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+
-      '<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span><span class="book-extra"><span>♡ '+(stat?.likes||0)+'</span><span>★ '+(stat?.average?Number(stat.average).toFixed(1):'—')+'</span></span></span>';
-    return a;
-  };
-
-  const statById=new Map(stats.map(x=>[x.m.id,x.s]));
-  const render=(track,items,ranked)=>{
-    track.innerHTML='';
-    items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0,statById.get(m.id))));
-  };
-
-  render(tracks[0],popular,true);
-  render(tracks[1],recent,false);
-  render(tracks[2],mangas,false);
-
-  document.getElementById('popularCount').textContent=popular.length?popular.length+' obras':'';
-  document.getElementById('recentCount').textContent=recent.length?recent.length+' obras':'';
-  document.getElementById('allCount').textContent=mangas.length?mangas.length+' obras':'';
-
-  const updateArrows=track=>{
-    const box=track.closest('.shelf');
-    const left=box.querySelector('[data-dir="-1"]');
-    const right=box.querySelector('[data-dir="1"]');
-    left.disabled=track.scrollLeft<=4;
-    right.disabled=track.scrollLeft+track.clientWidth>=track.scrollWidth-4;
-  };
-  document.querySelectorAll('.shelf-arrow').forEach(btn=>{
-    const track=document.getElementById(btn.dataset.track);
-    btn.addEventListener('click',()=>{
-      track.scrollBy({left:Number(btn.dataset.dir)*Math.max(250,track.clientWidth*.72),behavior:'smooth'});
-    });
-    updateArrows(track);
-    track.addEventListener('scroll',()=>updateArrows(track),{passive:true});
-  });
-
-  document.querySelectorAll('.track').forEach(track=>{
-    let down=false,startX=0,startScroll=0;
-    track.addEventListener('pointerdown',e=>{
-      if(e.pointerType==='mouse'&&e.button!==0)return;
-      down=true;startX=e.clientX;startScroll=track.scrollLeft;track.classList.add('is-dragging');
-      track.setPointerCapture?.(e.pointerId);
-    });
-    track.addEventListener('pointermove',e=>{
-      if(!down)return;
-      track.scrollLeft=startScroll-(e.clientX-startX);
-    });
-    const end=()=>{down=false;track.classList.remove('is-dragging')};
-    track.addEventListener('pointerup',end);
-    track.addEventListener('pointercancel',end);
-  });
-
-  const searchInput=document.getElementById('searchInput');
-  const searchResults=document.getElementById('searchResults');
-  searchInput.addEventListener('input',()=>{
-    const q=searchInput.value.trim().toLowerCase();
-    const filtered=mangas.filter(m=>
-      ((m.title||'')+' '+(Array.isArray(m.genres)?m.genres.join(' '):(m.genres||'')))
-      .toLowerCase().includes(q)
-    ).slice(0,8);
-
-    searchResults.innerHTML=filtered.map(m=>
-      '<a class="search-result" href="manga.html?id='+encodeURIComponent(m.id)+'"><b>'+esc(m.title)+'</b><small>'+esc(Array.isArray(m.genres)?m.genres.join(' · '):(m.genres||'Mangá'))+'</small></a>'
-    ).join('')||(q?'<p class="detail-meta">Nenhum mangá encontrado.</p>':'');
-  });
+const feature=document.getElementById('feature'),shelves=[document.getElementById('popularShelf'),document.getElementById('recentShelf'),document.getElementById('allShelf')],tracks=[document.getElementById('popularTrack'),document.getElementById('recentTrack'),document.getElementById('allTrack')];
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+let mangas=[];try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console.error(e)}
+if(!mangas.length){shelves.forEach(s=>s.style.display='none')}
+const stats=await Promise.all(mangas.map(async m=>{try{return{m,s:await LinkStoryManga.stats(m.id)}}catch{return{m,s:{likes:0,ratings:0,average:0}}}}));
+const popular=stats.slice().sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0)).map(x=>x.m),recent=mangas.slice().reverse();
+feature.innerHTML='<img src="assets/poster-teste.svg" alt="Pôster de teste do LinkStory">';
+const makeBook=(m,rank)=>{const a=document.createElement('a');a.className='book';a.href='manga.html?id='+encodeURIComponent(m.id);const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');a.innerHTML=(rank?'<span class="rank">'+rank+'</span>':'')+'<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+(m.cover_url?'<img src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+'<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span></span>';return a};
+const render=(track,items,ranked)=>{track.innerHTML='';items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0)))};
+render(tracks[0],popular,true);render(tracks[1],recent,false);render(tracks[2],mangas,false);
+const searchInput=document.getElementById('searchInput'),searchResults=document.getElementById('searchResults');
+searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLowerCase(),filtered=mangas.filter(m=>((m.title||'')+' '+(Array.isArray(m.genres)?m.genres.join(' '):(m.genres||''))).toLowerCase().includes(q)).slice(0,8);searchResults.innerHTML=filtered.map(m=>'<a href="manga.html?id='+encodeURIComponent(m.id)+'" style="display:block;padding:12px 0;border-bottom:1px solid #dbe5ef;font-weight:700">'+esc(m.title)+'</a>').join('')||(q?'Nenhum resultado.':'')});
 })();
-
-const menu=document.getElementById('menuDialog');
-const search=document.getElementById('searchDialog');
-document.getElementById('openMenu').onclick=()=>menu.showModal();
-document.getElementById('closeMenu').onclick=()=>menu.close();
-document.getElementById('openSearch').onclick=()=>{
-  search.showModal();
-  setTimeout(()=>document.getElementById('searchInput').focus(),50);
-};
-document.getElementById('closeSearch').onclick=()=>search.close();
-
-[menu,search].forEach(dialog=>{
-  dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
-});
+const menu=document.getElementById('menuDialog'),search=document.getElementById('searchDialog');
+document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
 </script>
 </body>
 </html>
