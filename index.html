@@ -353,6 +353,66 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;ba
   .creator{margin-top:0}
 }
 
+/* FINAL MOBILE HEADER: compact, centered logo, no desktop-sized header on touch devices */
+@media (pointer:coarse){
+  .header{
+    position:fixed!important;
+    top:10px!important;
+    left:10px!important;
+    right:10px!important;
+    width:auto!important;
+    height:58px!important;
+    min-height:58px!important;
+    padding:0 10px!important;
+    border-radius:18px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    z-index:1000!important;
+  }
+  .header .logo{
+    position:absolute!important;
+    left:50%!important;
+    top:50%!important;
+    transform:translate(-50%,-50%)!important;
+    margin:0!important;
+    width:132px!important;
+    height:42px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    z-index:2!important;
+  }
+  .header .logo img{
+    display:block!important;
+    width:126px!important;
+    height:40px!important;
+    object-fit:contain!important;
+    opacity:1!important;
+  }
+  .header .header-actions{
+    width:100%!important;
+    height:100%!important;
+    margin:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:0!important;
+    z-index:3!important;
+  }
+  .header .search,
+  .header .menu{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    flex:0 0 42px!important;
+    margin:0!important;
+  }
+  .header .search{display:flex!important;align-items:center!important;justify-content:center!important}
+  .header .menu{display:flex!important;align-items:center!important;justify-content:center!important}
+  .header .login{display:none!important}
+}
+
 /* FORCE MOBILE LAYOUT ON REAL TOUCH DEVICES, INCLUDING SAFARI DESKTOP-SITE MODE */
 @media (pointer:coarse) and (min-width:700px){
   .header{top:10px!important;width:calc(100% - 20px)!important;height:58px!important;padding:0 10px 0 12px!important;border-radius:15px!important}
