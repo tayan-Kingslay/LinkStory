@@ -45,8 +45,9 @@
     html[data-ls-theme="dark"] .ls-menu-head{border-color:#303030}.ls-menu-dialog{color:#102033}
     html[data-ls-theme="dark"] .ls-menu-head strong,html[data-ls-theme="dark"] .ls-menu-close,html[data-ls-theme="dark"] .ls-menu-links a{color:#fff!important}
     html[data-ls-theme="dark"] .ls-menu-links a{border-color:#303030}html[data-ls-theme="dark"] .ls-menu-links span{color:#aab3be}
-    @media(min-width:801px){#lsBottomNav{display:none!important}body{padding-bottom:0!important}.ls-menu-dialog{border-radius:20px;margin:16px;max-height:calc(100dvh - 32px);height:auto}.ls-menu-wrap{min-height:520px}}
-    @media(max-width:560px){#lsBottomNav{height:70px;bottom:8px}.ls-menu-wrap{padding:20px}.ls-menu-links a{padding:19px 2px;font-size:17px}}
+    @media(min-width:801px) and (pointer:fine){#lsBottomNav{display:none!important}body{padding-bottom:0!important}.ls-menu-dialog{border-radius:20px;margin:16px;max-height:calc(100dvh - 32px);height:auto}.ls-menu-wrap{min-height:520px}}
+    @media(min-width:801px) and (pointer:coarse){#lsBottomNav{display:grid!important}body{padding-bottom:96px!important}.ls-menu-dialog{border-radius:0!important;margin:0!important;max-height:none!important;height:100dvh!important}.ls-menu-wrap{min-height:100%!important}}
+    @media(max-width:560px),(pointer:coarse){#lsBottomNav{height:70px;bottom:8px}.ls-menu-wrap{padding:20px}.ls-menu-links a{padding:19px 2px;font-size:17px}}
   `;
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
   /* Reader has its own reading controls and must stay completely free of global navigation. */
