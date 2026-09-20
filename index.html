@@ -96,6 +96,45 @@ html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!
 @media(max-width:420px){.header .search{display:flex!important}.header .logo img{width:112px;height:36px}.header .circle{width:38px;height:38px}}
 html[data-ls-theme="dark"] .header{background:rgba(17,19,23,.72)!important;border-color:rgba(52,57,65,.9)!important;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 html[data-ls-theme="dark"] .header .circle{background:rgba(24,27,32,.62)!important;border-color:#343941!important}
+
+/* INSPEX — janela de notícias */
+.inspex-window{width:min(900px,calc(100% - 32px));margin:26px auto 0;border:1px solid #dbe5ef;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 12px 30px rgba(16,32,51,.08);display:grid;grid-template-columns:44% 56%;min-height:240px}
+.inspex-media{position:relative;min-height:240px;background:#101923;overflow:hidden}
+.inspex-placeholder{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#31516e 0,#182b3e 38%,#0d151e 78%);color:#fff}
+.inspex-placeholder:after{content:"";position:absolute;width:150px;height:150px;border:1px solid rgba(255,255,255,.18);border-radius:50%;box-shadow:0 0 0 28px rgba(255,255,255,.035),0 0 0 58px rgba(255,255,255,.025)}
+.inspex-placeholder span{position:relative;z-index:1;font-size:28px;letter-spacing:5px;font-weight:900}
+.inspex-tag{position:absolute;z-index:2;top:13px;left:13px;padding:6px 9px;border-radius:7px;background:#fff;color:#102033;font-size:9px;font-weight:900;letter-spacing:1.2px}
+.inspex-body{padding:24px 24px 20px;display:flex;flex-direction:column;justify-content:center}
+.inspex-kicker{display:flex;align-items:center;gap:8px;color:#66788d;font-size:9px;font-weight:900;letter-spacing:1.4px;margin-bottom:12px}
+.inspex-kicker span:first-child{color:#0b72e7}.inspex-kicker i{width:4px;height:4px;border-radius:50%;background:#b6c4d1}
+.inspex-body h1{font-size:23px;line-height:1.12;letter-spacing:-.6px;margin:0 0 10px;color:#102033}
+.inspex-body p{font-size:12px;line-height:1.5;color:#66788d;margin:0 0 17px;max-width:420px}
+.inspex-link{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;color:#0b72e7;font-size:11px;font-weight:900}
+.inspex-link span{font-size:17px;line-height:1;transition:transform .2s ease}.inspex-link:hover span{transform:translateX(3px)}
+@media(max-width:720px){
+ .inspex-window{width:calc(100% - 24px);grid-template-columns:42% 58%;min-height:190px;margin-top:22px;border-radius:15px}
+ .inspex-media{min-height:190px}
+ .inspex-placeholder span{font-size:20px;letter-spacing:3px}
+ .inspex-placeholder:after{width:100px;height:100px;box-shadow:0 0 0 20px rgba(255,255,255,.035),0 0 0 42px rgba(255,255,255,.025)}
+ .inspex-tag{top:9px;left:9px;padding:5px 7px;font-size:8px}
+ .inspex-body{padding:17px 15px 15px}
+ .inspex-kicker{font-size:8px;margin-bottom:8px;gap:6px}
+ .inspex-body h1{font-size:17px;letter-spacing:-.35px;margin-bottom:7px}
+ .inspex-body p{font-size:10px;line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+ .inspex-link{font-size:10px}
+}
+@media(max-width:420px){
+ .inspex-window{width:calc(100% - 20px);grid-template-columns:40% 60%;min-height:172px}
+ .inspex-media{min-height:172px}
+ .inspex-body{padding:14px 12px}
+ .inspex-body h1{font-size:15px;line-height:1.13}
+ .inspex-body p{font-size:9px;-webkit-line-clamp:2}
+ .inspex-placeholder span{font-size:17px}
+}
+html[data-ls-theme="dark"] .inspex-window{background:#15181d;border-color:#30343a;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+html[data-ls-theme="dark"] .inspex-body h1{color:#f5f7fa}
+html[data-ls-theme="dark"] .inspex-body p,.inspex-kicker{color:#aab3be}
+
 </style>
 </head>
 <body>
@@ -108,8 +147,17 @@ html[data-ls-theme="dark"] .header .circle{background:rgba(24,27,32,.62)!importa
 </div>
 </header>
 <main>
-<section class="home-hero" id="feature">
-<div class="empty" style="position:absolute;inset:0;margin:0;border:0;border-radius:0;display:grid;place-items:center;color:#fff;background:#17283d"><strong style="color:#fff">Ainda não há mangás publicados.</strong></div>
+<section class="inspex-window" id="inspexWindow" aria-label="Notícias do INSPEX">
+  <div class="inspex-media">
+    <div class="inspex-placeholder"><span>INSPEX</span></div>
+    <span class="inspex-tag">NOTÍCIAS</span>
+  </div>
+  <div class="inspex-body">
+    <div class="inspex-kicker"><span>INSPEX</span><i></i><span>AGORA</span></div>
+    <h1>As principais novidades do mundo dos mangás, direto do INSPEX.</h1>
+    <p>Uma pequena janela para acompanhar o que está acontecendo fora do LinkStory.</p>
+    <a href="#" class="inspex-link" id="inspexLink">Ler matéria <span>→</span></a>
+  </div>
 </section>
 <div class="catalog">
 <section class="shelf" id="popularShelf"><div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div><div class="track" id="popularTrack"></div></section>
@@ -130,7 +178,7 @@ let mangas=[];try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console
 if(!mangas.length){shelves.forEach(s=>s.style.display='none')}
 const stats=await Promise.all(mangas.map(async m=>{try{return{m,s:await LinkStoryManga.stats(m.id)}}catch{return{m,s:{likes:0,ratings:0,average:0}}}}));
 const popular=stats.slice().sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0)).map(x=>x.m),recent=mangas.slice().reverse();
-feature.innerHTML='<img src="assets/poster-teste.svg" alt="Pôster de teste do LinkStory">';
+// O bloco INSPEX já nasce como componente independente; depois o conteúdo poderá vir automaticamente do portal.
 const makeBook=(m,rank)=>{const a=document.createElement('a');a.className='book';a.href='manga.html?id='+encodeURIComponent(m.id);const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');a.innerHTML=(rank?'<span class="rank">'+rank+'</span>':'')+'<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+(m.cover_url?'<img src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+'<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span></span>';return a};
 const render=(track,items,ranked)=>{track.innerHTML='';items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0)))};
 render(tracks[0],popular,true);render(tracks[1],recent,false);render(tracks[2],mangas,false);
