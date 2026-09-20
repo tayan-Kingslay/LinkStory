@@ -65,6 +65,37 @@ html[data-ls-theme="dark"] .login{border-color:#343941!important}
 html[data-ls-theme="dark"] .empty{border-color:#30343a!important;color:#aab3be!important}
 html[data-ls-theme="dark"] .empty strong{color:#fff!important}
 html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!important}
+
+/* LinkStory glass header — mobile first */
+.header{
+  width:min(1080px,calc(100% - 28px));
+  height:64px;
+  margin:12px auto 0;
+  padding:0 12px;
+  border:1px solid rgba(219,229,239,.82);
+  border-radius:20px;
+  background:rgba(255,255,255,.72);
+  box-shadow:0 10px 30px rgba(16,32,51,.08);
+  backdrop-filter:blur(18px) saturate(140%);
+  -webkit-backdrop-filter:blur(18px) saturate(140%);
+  position:sticky;
+  top:10px;
+  z-index:50;
+}
+.header .logo{flex:0 0 auto;display:flex;align-items:center}
+.header .logo img{width:124px;height:40px;object-fit:contain}
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.header .circle{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.52);border-color:rgba(207,225,242,.95);box-shadow:0 4px 14px rgba(16,32,51,.05)}
+@media(max-width:720px){
+  .header{width:calc(100% - 20px);height:58px;margin-top:9px;padding:0 9px;border-radius:18px;top:8px}
+  .header .logo img{width:112px;height:36px}
+  .header .circle{width:40px;height:40px;border-radius:13px}
+  .header-actions{gap:6px}
+  main{padding-top:2px}
+}
+@media(max-width:420px){.header .search{display:none}.header .logo img{width:116px;height:38px}}
+html[data-ls-theme="dark"] .header{background:rgba(17,19,23,.72)!important;border-color:rgba(52,57,65,.9)!important;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+html[data-ls-theme="dark"] .header .circle{background:rgba(24,27,32,.62)!important;border-color:#343941!important}
 </style>
 </head>
 <body>
