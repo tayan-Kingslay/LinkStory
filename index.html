@@ -24,7 +24,7 @@ button,a{cursor:pointer}
   background:rgba(255,255,255,.94);border-bottom:1px solid var(--line);
   position:sticky;top:0;z-index:30;backdrop-filter:blur(18px);
 }
-.logo img{display:block;width:132px;height:44px;object-fit:contain}
+.logo{display:flex;align-items:center;min-width:0}.logo img{display:block;width:132px;height:44px;object-fit:contain}.logo-fallback{display:none;font-size:20px;font-weight:950;letter-spacing:-1px;color:#102033}
 .header-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
 .circle{
   width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:#fff;
@@ -356,7 +356,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;ba
 /* FORCE MOBILE LAYOUT ON REAL TOUCH DEVICES, INCLUDING SAFARI DESKTOP-SITE MODE */
 @media (pointer:coarse) and (min-width:700px){
   .header{top:10px!important;width:calc(100% - 20px)!important;height:58px!important;padding:0 10px 0 12px!important;border-radius:15px!important}
-  .logo img{width:116px!important;height:39px!important}
+  .logo img{width:116px!important;height:39px!important}.logo-fallback{font-size:18px!important}
   .main-nav{display:none!important}
   .login{display:none!important}
   .home-hero{height:590px!important;min-height:590px!important}
@@ -383,7 +383,7 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;ba
 </head>
 <body>
 <header class="header">
-  <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
+  <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'"><span class="logo-fallback">LINKSTORY</span></a>
   <nav class="main-nav" aria-label="Navegação principal">
     <a class="nav-active" href="index.html">Início</a>
     <a href="#popularShelf">Explorar</a>
