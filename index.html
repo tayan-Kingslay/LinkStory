@@ -24,7 +24,7 @@ button,a{cursor:pointer}
   background:rgba(255,255,255,.94);border-bottom:1px solid var(--line);
   position:sticky;top:0;z-index:30;backdrop-filter:blur(18px);
 }
-.logo{display:flex;align-items:center;min-width:0}.logo img{display:block;width:132px;height:44px;object-fit:contain}.logo-fallback{display:none;font-size:20px;font-weight:950;letter-spacing:-1px;color:#102033}
+.logo img{display:block;width:132px;height:44px;object-fit:contain}
 .header-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
 .circle{
   width:40px;height:40px;border:1px solid var(--line);border-radius:12px;background:#fff;
@@ -352,98 +352,11 @@ body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;ba
   .book{flex-basis:158px;height:238px}
   .creator{margin-top:0}
 }
-
-/* FINAL MOBILE HEADER: compact, centered logo, no desktop-sized header on touch devices */
-@media (pointer:coarse){
-  .header{
-    position:fixed!important;
-    top:10px!important;
-    left:10px!important;
-    right:10px!important;
-    width:auto!important;
-    height:58px!important;
-    min-height:58px!important;
-    padding:0 10px!important;
-    border-radius:18px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:space-between!important;
-    z-index:1000!important;
-  }
-  .header .logo{
-    position:absolute!important;
-    left:50%!important;
-    top:50%!important;
-    transform:translate(-50%,-50%)!important;
-    margin:0!important;
-    width:132px!important;
-    height:42px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    z-index:2!important;
-  }
-  .header .logo img{
-    display:block!important;
-    width:126px!important;
-    height:40px!important;
-    object-fit:contain!important;
-    opacity:1!important;
-  }
-  .header .header-actions{
-    width:100%!important;
-    height:100%!important;
-    margin:0!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:space-between!important;
-    gap:0!important;
-    z-index:3!important;
-  }
-  .header .search,
-  .header .menu{
-    width:42px!important;
-    height:42px!important;
-    min-width:42px!important;
-    flex:0 0 42px!important;
-    margin:0!important;
-  }
-  .header .search{display:flex!important;align-items:center!important;justify-content:center!important}
-  .header .menu{display:flex!important;align-items:center!important;justify-content:center!important}
-  .header .login{display:none!important}
-}
-
-/* FORCE MOBILE LAYOUT ON REAL TOUCH DEVICES, INCLUDING SAFARI DESKTOP-SITE MODE */
-@media (pointer:coarse) and (min-width:700px){
-  .header{top:10px!important;width:calc(100% - 20px)!important;height:58px!important;padding:0 10px 0 12px!important;border-radius:15px!important}
-  .logo img{width:116px!important;height:39px!important}.logo-fallback{font-size:18px!important}
-  .main-nav{display:none!important}
-  .login{display:none!important}
-  .home-hero{height:590px!important;min-height:590px!important}
-  .hero-shade{background:linear-gradient(0deg,rgba(3,9,17,.96) 0%,rgba(3,9,17,.48) 48%,rgba(3,9,17,.16) 100%)!important}
-  .hero-copy{width:calc(100% - 34px)!important;padding-bottom:54px!important}
-  .hero-copy h1{font-size:clamp(42px,12vw,62px)!important;letter-spacing:-2.8px!important}
-  .hero-copy p{font-size:13px!important;max-width:340px!important;margin-top:17px!important}
-  .hero-buttons{align-items:stretch!important;flex-direction:column!important;width:min(100%,300px)!important;margin-top:19px!important}
-  .hero-primary,.hero-secondary{width:100%!important}
-  .hero-scroll{display:none!important}
-  .catalog{width:calc(100% - 28px)!important;margin-top:42px!important}
-  .shelf{margin-bottom:54px!important}
-  .shelf-head{margin-bottom:14px!important}
-  .shelf-title{font-size:24px!important}
-  .shelf-tools{display:none!important}
-  .track{gap:10px!important;padding:4px 1px 16px!important}
-  .book{flex-basis:158px!important;height:238px!important;border-radius:13px!important}
-  .book-title{font-size:16px!important}
-  .creator{width:calc(100% - 28px)!important;margin-top:0!important;padding:28px 24px!important;border-radius:20px!important;display:block!important}
-  .creator h2{font-size:26px!important}
-  .footer{margin-top:52px!important;padding-bottom:120px!important}
-}
 </style>
 </head>
 <body>
 <header class="header">
-  <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'"><span class="logo-fallback">LINKSTORY</span></a>
+  <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
   <nav class="main-nav" aria-label="Navegação principal">
     <a class="nav-active" href="index.html">Início</a>
     <a href="#popularShelf">Explorar</a>
@@ -658,6 +571,5 @@ document.getElementById('closeSearch').onclick=()=>search.close();
   dialog.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});
 });
 </script>
-<script src="global-nav.js"></script>
 </body>
 </html>
