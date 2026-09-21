@@ -137,29 +137,32 @@ html[data-ls-theme="dark"] .inspex-body h1{color:#f5f7fa}
 html[data-ls-theme="dark"] .inspex-body p,.inspex-kicker{color:#aab3be}
 
 
-/* Navegação inferior — sempre visível */
-.bottom-nav{
+/* Navegação inferior — um único vidro */
+.ls-glass-nav{
   position:fixed;
   left:50%;
-  bottom:14px;
+  bottom:10px;
   transform:translateX(-50%);
   z-index:150;
-  width:min(860px,calc(100% - 32px));
-  height:82px;
-  padding:8px 20px;
+  width:calc(100% - 24px);
+  max-width:860px;
+  height:78px;
+  padding:7px 14px;
   display:flex;
   align-items:center;
   justify-content:space-around;
   gap:8px;
-  border:1px solid rgba(219,229,239,.92);
-  border-radius:28px;
-  background:rgba(255,255,255,.14);
-  box-shadow:0 10px 28px rgba(16,32,51,.10);
-  backdrop-filter:blur(18px) saturate(165%);
-  -webkit-backdrop-filter:blur(18px) saturate(165%);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:27px;
+  background:rgba(255,255,255,.22)!important;
+  box-shadow:0 10px 30px rgba(16,32,51,.10);
+  backdrop-filter:blur(20px) saturate(165%);
+  -webkit-backdrop-filter:blur(20px) saturate(165%);
+  isolation:isolate;
 }
-.bottom-nav-item{
-  min-width:100px;
+.ls-glass-nav::before,.ls-glass-nav::after{content:none!important}
+.ls-glass-nav .bottom-nav-item{
+  min-width:70px;
   height:100%;
   display:flex;
   flex-direction:column;
@@ -167,41 +170,25 @@ html[data-ls-theme="dark"] .inspex-body p,.inspex-kicker{color:#aab3be}
   justify-content:center;
   gap:3px;
   color:#71879d;
-  font-size:13px;
+  font-size:12px;
   font-weight:800;
 }
-.bottom-nav-icon{
-  height:31px;
+.ls-glass-nav .bottom-nav-icon{
+  height:29px;
   display:grid;
   place-items:center;
-  font-size:29px;
+  font-size:27px;
   line-height:1;
   font-weight:700;
 }
-.bottom-nav-item.active{color:#0b72e7}
-html[data-ls-theme="dark"] .bottom-nav{
-  background:rgba(21,24,29,.82);
-  border-color:#343941;
-  box-shadow:0 12px 34px rgba(0,0,0,.28)
+.ls-glass-nav .bottom-nav-item.active{color:#0b72e7}
+html[data-ls-theme="dark"] .ls-glass-nav{
+  background:rgba(21,24,29,.28)!important;
+  border-color:rgba(255,255,255,.16);
+  box-shadow:0 12px 34px rgba(0,0,0,.28);
 }
-html[data-ls-theme="dark"] .bottom-nav-item{color:#aab3be}
-html[data-ls-theme="dark"] .bottom-nav-item.active{color:#4b9cff}
-@media(max-width:720px){
-  .bottom-nav{
-    width:calc(100% - 28px);
-    height:82px;
-    bottom:12px;
-    padding:7px 14px;
-    border-radius:27px;
-  }
-  .bottom-nav-item{min-width:76px;font-size:12px}
-  .bottom-nav-icon{font-size:27px;height:29px}
-}
-@media(max-width:420px){
-  .bottom-nav{width:calc(100% - 24px);bottom:10px;height:78px}
-  .bottom-nav-item{min-width:70px}
-}
-
+html[data-ls-theme="dark"] .ls-glass-nav .bottom-nav-item{color:#aab3be}
+html[data-ls-theme="dark"] .ls-glass-nav .bottom-nav-item.active{color:#4b9cff}
 /* LinkStory AI — mini robô, usando o mascote original */
 .ai-fab{
   position:fixed;right:18px;bottom:110px;z-index:160;
@@ -321,7 +308,7 @@ html[data-ls-theme="dark"] .ai-chat-input{background:#2a2e34;color:#aab3be}
 </div>
 <section class="creator"><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
-<nav class="bottom-nav" aria-label="Navegação principal">
+<nav class="ls-glass-nav" aria-label="Navegação principal">
   <a class="bottom-nav-item active" href="index.html" aria-current="page"><span class="bottom-nav-icon">⌂</span><strong>Início</strong></a>
   <a class="bottom-nav-item" href="library.html"><span class="bottom-nav-icon">□</span><strong>Biblioteca</strong></a>
   <a class="bottom-nav-item" href="profile.html"><span class="bottom-nav-icon">●</span><strong>Perfil</strong></a>
