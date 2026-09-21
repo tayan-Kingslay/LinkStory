@@ -285,8 +285,8 @@ html[data-ls-theme="dark"] .ai-chat-input{background:#2a2e34;color:#aab3be}
     <div class="ai-msg ai-msg-ai">Esse é só o visual por enquanto. Meu cérebro vem depois. 🧠</div>
   </div>
   <div class="ai-chat-foot">
-    <div class="ai-chat-input">Como posso ajudar?</div>
-    <div class="ai-chat-send">↑</div>
+    <div class="ai-chat-input" id="aiChatInput" contenteditable="true" role="textbox" aria-label="Mensagem para a LinkStory AI">Como posso ajudar?</div>
+    <button class="ai-chat-send" id="aiChatSend" type="button" aria-label="Enviar">↑</button>
   </div>
 </section>
 <main>
@@ -342,6 +342,32 @@ document.querySelectorAll("[data-ai-mascot]").forEach(img=>{img.src=window.LINKS
 const aiFab=document.getElementById('aiFab'),aiChat=document.getElementById('aiChat'),aiChatClose=document.getElementById('aiChatClose');
 aiFab?.addEventListener('click',()=>{aiChat.style.display='flex';aiFab.style.display='none'});
 aiChatClose?.addEventListener('click',()=>{aiChat.style.display='none';aiFab.style.display='grid'});
+
+const aiInput=document.getElementById('aiChatInput'),aiSend=document.getElementById('aiChatSend'),aiBody=aiChat?.querySelector('.ai-chat-body');
+const aiHistory=[];
+const aiAddMessage=(text,role)=>{const el=document.createElement('div');el.className='ai-msg '+(role==='user'?'ai-msg-user':'ai-msg-ai');el.textContent=text;aiBody?.appendChild(el);if(aiBody)aiBody.scrollTop=aiBody.scrollHeight};
+const aiSendMessage=async()=>{
+  const message=(aiInput?.innerText||'').trim();
+  if(!message||!aiSend)return;
+  if(aiInput)aiInput.textContent='';
+  aiAddMessage(message,'user');
+  aiHistory.push({role:'user',content:message});
+  aiSend.disabled=true;
+  const loading=document.createElement('div');loading.className='ai-msg ai-msg-ai';loading.textContent='Pensando…';aiBody?.appendChild(loading);
+  try{
+    const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:aiHistory})});
+    const data=await response.json();
+    loading.remove();
+    if(!response.ok)throw new Error(data.error||'Falha ao responder.');
+    aiAddMessage(data.text,'assistant');
+    aiHistory.push({role:'assistant',content:data.text});
+  }catch(error){
+    loading.textContent=error.message||'Não consegui responder agora.';
+  }finally{aiSend.disabled=false;aiInput?.focus()}
+};
+aiSend?.addEventListener('click',aiSendMessage);
+aiInput?.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSendMessage()}});
+aiInput?.addEventListener('focus',()=>{if(aiInput.innerText.trim()==='Como posso ajudar?')aiInput.textContent=''});
 </script>
 
 </body>
