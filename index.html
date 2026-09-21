@@ -137,58 +137,6 @@ html[data-ls-theme="dark"] .inspex-body h1{color:#f5f7fa}
 html[data-ls-theme="dark"] .inspex-body p,.inspex-kicker{color:#aab3be}
 
 
-/* Navegação inferior — um único vidro */
-.ls-glass-nav{
-  position:fixed;
-  left:50%;
-  bottom:10px;
-  transform:translateX(-50%);
-  z-index:150;
-  width:calc(100% - 24px);
-  max-width:860px;
-  height:78px;
-  padding:7px 14px;
-  display:flex;
-  align-items:center;
-  justify-content:space-around;
-  gap:8px;
-  border:1px solid rgba(255,255,255,.72);
-  border-radius:27px;
-  background:rgba(255,255,255,.22)!important;
-  box-shadow:0 10px 30px rgba(16,32,51,.10);
-  backdrop-filter:blur(20px) saturate(165%);
-  -webkit-backdrop-filter:blur(20px) saturate(165%);
-  isolation:isolate;
-}
-.ls-glass-nav::before,.ls-glass-nav::after{content:none!important}
-.ls-glass-nav .bottom-nav-item{
-  min-width:70px;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
-  color:#71879d;
-  font-size:12px;
-  font-weight:800;
-}
-.ls-glass-nav .bottom-nav-icon{
-  height:29px;
-  display:grid;
-  place-items:center;
-  font-size:27px;
-  line-height:1;
-  font-weight:700;
-}
-.ls-glass-nav .bottom-nav-item.active{color:#0b72e7}
-html[data-ls-theme="dark"] .ls-glass-nav{
-  background:rgba(21,24,29,.28)!important;
-  border-color:rgba(255,255,255,.16);
-  box-shadow:0 12px 34px rgba(0,0,0,.28);
-}
-html[data-ls-theme="dark"] .ls-glass-nav .bottom-nav-item{color:#aab3be}
-html[data-ls-theme="dark"] .ls-glass-nav .bottom-nav-item.active{color:#4b9cff}
 /* LinkStory AI — mini robô, usando o mascote original */
 .ai-fab{
   position:fixed;right:18px;bottom:110px;z-index:160;
@@ -308,11 +256,6 @@ html[data-ls-theme="dark"] .ai-chat-input{background:#2a2e34;color:#aab3be}
 </div>
 <section class="creator"><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
-<nav class="ls-glass-nav" aria-label="Navegação principal">
-  <a class="bottom-nav-item active" href="index.html" aria-current="page"><span class="bottom-nav-icon">⌂</span><strong>Início</strong></a>
-  <a class="bottom-nav-item" href="library.html"><span class="bottom-nav-icon">□</span><strong>Biblioteca</strong></a>
-  <a class="bottom-nav-item" href="profile.html"><span class="bottom-nav-icon">●</span><strong>Perfil</strong></a>
-</nav>
 <dialog class="menu-dialog" id="menuDialog"><div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div><nav class="menu-list"><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a></nav></div></dialog>
 <dialog class="menu-dialog" id="searchDialog"><div class="menu-wrap"><div class="menu-head"><strong>BUSCAR</strong><button class="close" id="closeSearch">×</button></div><input id="searchInput" placeholder="Buscar mangá, autor ou gênero" style="width:100%;height:52px;border:1px solid #dbe5ef;border-radius:12px;padding:0 15px;font:inherit;margin-top:22px"><div id="searchResults" style="margin-top:15px"></div></div></dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
