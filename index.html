@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#ffffff">
 <title>LinkStory — Mangás para ler e publicar</title>
 <link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
+<script src="assets/linkstory-ai-mascot-data.js"></script>
 <style>
 :root{--b:#0b72e7;--i:#102033;--m:#66788d;--l:#dbe5ef}
 *{box-sizing:border-box}
@@ -212,7 +213,7 @@ html[data-ls-theme="dark"] .bottom-nav-item.active{color:#4b9cff}
   -webkit-backdrop-filter:blur(18px) saturate(150%);
   display:grid;place-items:center;cursor:pointer;
 }
-.ai-fab img{display:block;width:100%;height:100%;object-fit:contain;border-radius:14px;mix-blend-mode:multiply}
+.ai-fab img{display:block;width:100%;height:100%;object-fit:contain;border-radius:14px}
 .ai-fab-label{
   display:none;position:absolute;right:-7px;top:-10px;padding:6px 9px;border-radius:12px;
   background:#102033;color:#fff;font-size:12px;font-weight:900;letter-spacing:.5px;
@@ -281,7 +282,7 @@ html[data-ls-theme="dark"] .ai-chat-input{background:#2a2e34;color:#aab3be}
 </header>
 
 <div class="ai-fab" id="aiFab" aria-label="Abrir LinkStory AI">
-  <img src="assets/linkstory-ai-mascot.png" alt="LinkStory AI">
+  <img src="" data-ai-mascot alt="LinkStory AI">
   <span class="ai-fab-label">AI</span>
 </div>
 <section class="ai-chat" id="aiChat" aria-label="LinkStory AI">
@@ -349,6 +350,7 @@ document.getElementById('openMenu').onclick=()=>menu.showModal();document.getEle
 </script>
 
 <script>
+document.querySelectorAll("[data-ai-mascot]").forEach(img=>{img.src=window.LINKSTORY_AI_MASCOT});
 const aiFab=document.getElementById('aiFab'),aiChat=document.getElementById('aiChat'),aiChatClose=document.getElementById('aiChatClose');
 aiFab?.addEventListener('click',()=>{aiChat.style.display='flex';aiFab.style.display='none'});
 aiChatClose?.addEventListener('click',()=>{aiChat.style.display='none';aiFab.style.display='grid'});
