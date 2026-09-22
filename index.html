@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#ffffff">
 <title>LinkStory — Mangás para ler e publicar</title>
 <link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
-<script src="assets/linkstory-ai-mascot-data.js"></script>
 <style>
 :root{--b:#0b72e7;--i:#102033;--m:#66788d;--l:#dbe5ef}
 *{box-sizing:border-box}
@@ -218,44 +217,6 @@ html[data-ls-theme="dark"] .ai-fab{
 }
 
 
-/* LinkStory AI — chat window */
-.ai-chat{
-  position:fixed;right:24px;bottom:178px;z-index:200;
-  width:min(370px,calc(100vw - 28px));height:500px;max-height:calc(100vh - 190px);
-  display:none;flex-direction:column;overflow:hidden;box-sizing:border-box;
-  transform:none!important;
-  border:1px solid rgba(219,229,239,.9);border-radius:24px;
-  background:rgba(255,255,255,.92);
-  box-shadow:0 22px 60px rgba(16,32,51,.18);
-  backdrop-filter:blur(22px) saturate(150%);
-  -webkit-backdrop-filter:blur(22px) saturate(150%);
-}
-.ai-chat-head{position:relative;display:flex;align-items:center;gap:10px;min-height:66px;padding:12px 15px;border-bottom:1px solid #e8eef4;box-sizing:border-box}
-.ai-chat-avatar{width:38px;height:38px;flex:0 0 38px;border:1px solid #dbe5ef;border-radius:12px;background:rgba(255,255,255,.72);overflow:hidden;display:grid;place-items:center}
-.ai-chat-avatar img{display:block;width:100%;height:100%;object-fit:contain}
-.ai-chat-title{display:flex;flex-direction:column;line-height:1.05}
-.ai-chat-title strong{font-size:14px;color:#102033}
-.ai-chat-title span{font-size:8px;font-weight:900;letter-spacing:1.2px;color:#8a9aad;margin-top:4px}
-.ai-chat-close{position:relative;z-index:5;margin-left:auto;flex:0 0 34px;width:34px;height:34px;border:0;border-radius:11px;background:#f0f3f6;color:#102033;font-size:21px;line-height:34px;text-align:center;cursor:pointer;display:grid;place-items:center;visibility:visible;opacity:1}
-.ai-chat-body{flex:1;padding:18px;display:flex;flex-direction:column;gap:10px;overflow:auto}
-.ai-msg{max-width:82%;padding:11px 13px;border-radius:15px;font-size:13px;line-height:1.45}
-.ai-msg-ai{align-self:flex-start;background:#f0f4f8;color:#102033;border-bottom-left-radius:6px}
-.ai-msg-user{align-self:flex-end;background:#0b72e7;color:#fff;border-bottom-right-radius:6px}
-.ai-chat-foot{display:flex;align-items:center;gap:8px;padding:12px;border-top:1px solid #e8eef4}
-.ai-chat-input{flex:1;min-width:0;padding:12px 14px;border-radius:18px;background:#f1f4f7;color:#8b98a7;font-size:12px}
-.ai-chat-send{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#0b72e7;color:#fff;font-size:20px;font-weight:700}
-@media(max-width:720px){
- .ai-chat{right:14px;bottom:104px;width:calc(100vw - 112px);height:330px;max-height:calc(100dvh - 270px);border-radius:20px}
- .ai-chat-head{padding:10px 12px;min-height:60px}
- .ai-chat-body{padding:14px}
-}
-html[data-ls-theme="dark"] .ai-chat{background:rgba(21,24,29,.94);border-color:#343941;box-shadow:0 22px 60px rgba(0,0,0,.3)}
-html[data-ls-theme="dark"] .ai-chat-head,html[data-ls-theme="dark"] .ai-chat-foot{border-color:#30343a}
-html[data-ls-theme="dark"] .ai-chat-title strong{color:#f5f7fa}
-html[data-ls-theme="dark"] .ai-chat-title span{color:#aab3be}
-html[data-ls-theme="dark"] .ai-chat-close{background:#2a2e34;color:#f5f7fa}
-html[data-ls-theme="dark"] .ai-msg-ai{background:#2a2e34;color:#f5f7fa}
-html[data-ls-theme="dark"] .ai-chat-input{background:#2a2e34;color:#aab3be}
 
 </style>
 </head>
@@ -269,26 +230,6 @@ html[data-ls-theme="dark"] .ai-chat-input{background:#2a2e34;color:#aab3be}
 </div>
 </header>
 
-<div class="ai-fab" id="aiFab" aria-label="Abrir LinkStory AI">
-  <img src="" data-ai-mascot alt="LinkStory AI">
-  <span class="ai-fab-label">AI</span>
-</div>
-<section class="ai-chat" id="aiChat" aria-label="LinkStory AI">
-  <header class="ai-chat-head">
-    <div class="ai-chat-avatar"><img src="assets/linkstory-ai-mascot.png" alt="LinkStory AI"></div>
-    <div class="ai-chat-title"><strong>AI</strong><span>LINKSTORY ASSISTANT</span></div>
-    <button class="ai-chat-close" id="aiChatClose" aria-label="Fechar">×</button>
-  </header>
-  <div class="ai-chat-body">
-    <div class="ai-msg ai-msg-ai">Olá! Eu sou a IA do LinkStory. 👋</div>
-    <div class="ai-msg ai-msg-user">Como funciona?</div>
-    <div class="ai-msg ai-msg-ai">Esse é só o visual por enquanto. Meu cérebro vem depois. 🧠</div>
-  </div>
-  <div class="ai-chat-foot">
-    <div class="ai-chat-input" id="aiChatInput" contenteditable="true" role="textbox" aria-label="Mensagem para a LinkStory AI">Como posso ajudar?</div>
-    <button class="ai-chat-send" id="aiChatSend" type="button" aria-label="Enviar">↑</button>
-  </div>
-</section>
 <main>
 <section class="inspex-window" id="inspexWindow" aria-label="Notícias do INSPEX">
   <div class="inspex-media">
@@ -337,38 +278,6 @@ const menu=document.getElementById('menuDialog'),search=document.getElementById(
 document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
 </script>
 
-<script>
-document.querySelectorAll("[data-ai-mascot]").forEach(img=>{img.src=window.LINKSTORY_AI_MASCOT});
-const aiFab=document.getElementById('aiFab'),aiChat=document.getElementById('aiChat'),aiChatClose=document.getElementById('aiChatClose');
-aiFab?.addEventListener('click',()=>{aiChat.style.display='flex';aiFab.style.display='none'});
-aiChatClose?.addEventListener('click',()=>{aiChat.style.display='none';aiFab.style.display='grid'});
-
-const aiInput=document.getElementById('aiChatInput'),aiSend=document.getElementById('aiChatSend'),aiBody=aiChat?.querySelector('.ai-chat-body');
-const aiHistory=[];
-const aiAddMessage=(text,role)=>{const el=document.createElement('div');el.className='ai-msg '+(role==='user'?'ai-msg-user':'ai-msg-ai');el.textContent=text;aiBody?.appendChild(el);if(aiBody)aiBody.scrollTop=aiBody.scrollHeight};
-const aiSendMessage=async()=>{
-  const message=(aiInput?.innerText||'').trim();
-  if(!message||!aiSend)return;
-  if(aiInput)aiInput.textContent='';
-  aiAddMessage(message,'user');
-  aiHistory.push({role:'user',content:message});
-  aiSend.disabled=true;
-  const loading=document.createElement('div');loading.className='ai-msg ai-msg-ai';loading.textContent='Pensando…';aiBody?.appendChild(loading);
-  try{
-    const response=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:aiHistory})});
-    const data=await response.json();
-    loading.remove();
-    if(!response.ok)throw new Error(data.error||'Falha ao responder.');
-    aiAddMessage(data.text,'assistant');
-    aiHistory.push({role:'assistant',content:data.text});
-  }catch(error){
-    loading.textContent=error.message||'Não consegui responder agora.';
-  }finally{aiSend.disabled=false;aiInput?.focus()}
-};
-aiSend?.addEventListener('click',aiSendMessage);
-aiInput?.addEventListener('keydown',event=>{if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();aiSendMessage()}});
-aiInput?.addEventListener('focus',()=>{if(aiInput.innerText.trim()==='Como posso ajudar?')aiInput.textContent=''});
-</script>
 
 </body>
 </html>
