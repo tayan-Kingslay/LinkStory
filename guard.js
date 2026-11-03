@@ -4,18 +4,22 @@
   if (!client) return;
   const allowedReasons = new Set(['harassment','hate','sexual_content','minor_safety','violence','self_harm','copyright','spam','privacy','other']);
   window.LinkStoryGuard = {
+    async getSafetySettings() {
+      const { data: { user }, error: authError } = await client.auth.getUser();
+      if (authError || !user) throw new Error('Entre na sua conta para consultar a privacidade.');
+      const { data, error } = await client.rpc('get_linkstory_safety_settings');
+      if (error) throw error;
+      return data?.[0] || { birth_date: null, profile_visibility: 'public', show_library: false, adult_content_enabled: false };
+    },
     async saveSafetySettings(settings) {
       const { data: { user }, error: authError } = await client.auth.getUser();
       if (authError || !user) throw new Error('Entre na sua conta para alterar a privacidade.');
-      const payload = {
-        user_id: user.id,
-        birth_date: settings.birth_date || null,
-        profile_visibility: settings.profile_visibility === 'private' ? 'private' : 'public',
-        show_library: Boolean(settings.show_library),
-        adult_content_enabled: Boolean(settings.adult_content_enabled),
-        updated_at: new Date().toISOString()
-      };
-      const { error } = await client.schema('private').from('user_safety_settings').upsert(payload, { onConflict: 'user_id' });
+      const { error } = await client.rpc('set_linkstory_safety_settings', {
+        p_birth_date: settings.birth_date || null,
+        p_profile_visibility: settings.profile_visibility === 'private' ? 'private' : 'public',
+        p_show_library: Boolean(settings.show_library),
+        p_adult_content_enabled: Boolean(settings.adult_content_enabled)
+      });
       if (error) throw error;
       return true;
     },
