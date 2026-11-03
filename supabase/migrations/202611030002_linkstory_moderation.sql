@@ -100,3 +100,68 @@ grant execute on function public.linkstory_review_report(uuid,text,text) to auth
 
 comment on table private.linkstory_moderators is 'Allowlist of trusted moderators. Manage only through the Supabase SQL editor after identity verification.';
 comment on function public.linkstory_review_report(uuid,text,text) is 'Records a moderation decision and audit trail. Does not itself delete content or ban accounts; those require a separate verified enforcement workflow.';
+
+-- Harden manga visibility: allow creators to preview their own unpublished work,
+-- moderators to review any item, and enforce the age gate for everyone else.
+create or replace function private.can_view_manga_record(
+  p_rating text,
+  p_creator_id uuid,
+  p_status text
+) returns boolean
+language sql
+stable
+security definer
+set search_path = pg_catalog, private, public
+as $$
+  select
+    (
+      auth.uid() is not null
+      and (
+        p_creator_id = auth.uid()
+        and coalesce(p_status, '') <> 'published'
+      )
+    )
+    or (
+      auth.uid() is not null
+      and private.is_linkstory_moderator()
+    )
+    or (
+      coalesce(p_status, '') = 'published'
+      and private.can_view_manga(p_rating)
+    );
+$$;
+revoke all on function private.can_view_manga_record(text,uuid,text) from public, anon, authenticated;
+grant execute on function private.can_view_manga_record(text,uuid,text) to anon, authenticated;
+
+-- Remove legacy anonymous test-write policies found during the policy audit.
+-- These policies allowed unauthenticated users to insert/update manga records and chapters/pages.
+drop policy if exists mangas_public_test_insert on public.mangas;
+drop policy if exists mangas_public_test_update on public.mangas;
+drop policy if exists manga_chapters_public_test_insert on public.manga_chapters;
+drop policy if exists manga_pages_public_test_insert on public.manga_pages;
+
+-- Replace read policies with a shared server-side visibility decision.
+drop policy if exists mangas_age_gated_read on public.mangas;
+create policy mangas_age_gated_read on public.mangas
+  for select to anon, authenticated
+  using (private.can_view_manga_record(age_rating, creator_id, status));
+
+drop policy if exists manga_chapters_age_gated_read on public.manga_chapters;
+create policy manga_chapters_age_gated_read on public.manga_chapters
+  for select to anon, authenticated
+  using (exists (
+    select 1 from public.mangas m
+    where m.id = manga_chapters.manga_id
+      and private.can_view_manga_record(m.age_rating, m.creator_id, m.status)
+  ));
+
+drop policy if exists manga_pages_age_gated_read on public.manga_pages;
+create policy manga_pages_age_gated_read on public.manga_pages
+  for select to anon, authenticated
+  using (exists (
+    select 1
+    from public.manga_chapters c
+    join public.mangas m on m.id = c.manga_id
+    where c.id = manga_pages.chapter_id
+      and private.can_view_manga_record(m.age_rating, m.creator_id, m.status)
+  ));
