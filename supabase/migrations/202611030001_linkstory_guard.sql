@@ -79,30 +79,31 @@ language sql
 stable
 security definer
 set search_path = pg_catalog, private, public
-as $$
+as $
   select case
-    when upper(coalesce(p_rating, 'L')) in ('L','LIVRE') then true
+    when upper(trim(coalesce(p_rating, ''))) in ('L','LIVRE') then true
     when auth.uid() is null then false
-    when not exists (
-      select 1 from private.user_safety_settings s
-      where s.user_id = auth.uid() and s.birth_date is not null
-    ) then false
-    else (
-      select
-        extract(year from age(current_date, s.birth_date)) >=
-        case upper(coalesce(p_rating,'L'))
-          when '10' then 10 when '10+' then 10
-          when '12' then 12 when '12+' then 12
-          when '14' then 14 when '14+' then 14
-          when '16' then 16 when '16+' then 16
-          when '18' then 18 when '18+' then 18
-          else 99
-        end
+    when upper(trim(coalesce(p_rating, ''))) not in ('10','10+','12','12+','14','14+','16','16+','18','18+') then false
+    else exists (
+      select 1
       from private.user_safety_settings s
       where s.user_id = auth.uid()
+        and s.birth_date is not null
+        and extract(year from age(current_date, s.birth_date)) >=
+          case upper(trim(p_rating))
+            when '10' then 10 when '10+' then 10
+            when '12' then 12 when '12+' then 12
+            when '14' then 14 when '14+' then 14
+            when '16' then 16 when '16+' then 16
+            when '18' then 18 when '18+' then 18
+          end
+        and (
+          upper(trim(p_rating)) not in ('18','18+')
+          or s.adult_content_enabled = true
+        )
     )
   end;
-$$;
+$;
 revoke all on function private.can_view_manga(text) from public;
 grant execute on function private.can_view_manga(text) to anon, authenticated;
 
