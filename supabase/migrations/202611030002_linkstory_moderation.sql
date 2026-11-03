@@ -246,3 +246,44 @@ as $function$
 $function$;
 revoke all on function public.is_creator(uuid) from public, anon;
 grant execute on function public.is_creator(uuid) to authenticated;
+
+
+-- Match the exact age labels emitted by the current publication form ("10 anos", etc.).
+-- Unknown values remain denied; anonymous visitors can only view Livre content.
+create or replace function private.can_view_manga(p_rating text)
+returns boolean
+language sql
+stable
+security definer
+set search_path = pg_catalog, private, public, auth
+as $$
+  select case
+    when upper(trim(coalesce(p_rating, ''))) in ('L','LIVRE') then true
+    when auth.uid() is null then false
+    when upper(trim(coalesce(p_rating, ''))) not in (
+      '10','10+','10 ANOS','12','12+','12 ANOS',
+      '14','14+','14 ANOS','16','16+','16 ANOS',
+      '18','18+','18 ANOS'
+    ) then false
+    else exists (
+      select 1
+      from private.user_safety_settings s
+      where s.user_id = auth.uid()
+        and s.birth_date is not null
+        and extract(year from age(current_date, s.birth_date)) >=
+          case upper(trim(p_rating))
+            when '10' then 10 when '10+' then 10 when '10 ANOS' then 10
+            when '12' then 12 when '12+' then 12 when '12 ANOS' then 12
+            when '14' then 14 when '14+' then 14 when '14 ANOS' then 14
+            when '16' then 16 when '16+' then 16 when '16 ANOS' then 16
+            when '18' then 18 when '18+' then 18 when '18 ANOS' then 18
+          end
+        and (
+          upper(trim(p_rating)) not in ('18','18+','18 ANOS')
+          or s.adult_content_enabled = true
+        )
+    )
+  end;
+$$;
+revoke all on function private.can_view_manga(text) from public;
+grant execute on function private.can_view_manga(text) to anon, authenticated;
