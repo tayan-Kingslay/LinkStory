@@ -136,3 +136,47 @@ create policy "manga_pages_age_gated_read" on public.manga_pages
 
 -- Prevent self-declared settings from being used to grant moderation privileges.
 comment on table private.user_safety_settings is 'Private user settings. Birth date is self-declared unless verified by a separate approved process; never treat this alone as identity verification.';
+
+-- Safe RPCs keep the private schema out of the browser-facing Data API.
+create or replace function public.set_linkstory_safety_settings(
+  p_birth_date date,
+  p_profile_visibility text default 'public',
+  p_show_library boolean default false,
+  p_adult_content_enabled boolean default false
+) returns void
+language plpgsql
+security definer
+set search_path = pg_catalog, private, public
+as $$
+begin
+  if auth.uid() is null then raise exception 'Authentication required'; end if;
+  if p_birth_date is not null and (p_birth_date < date '1900-01-01' or p_birth_date > current_date) then
+    raise exception 'Invalid birth date';
+  end if;
+  if p_profile_visibility not in ('public','private') then raise exception 'Invalid profile visibility'; end if;
+  insert into private.user_safety_settings(user_id,birth_date,profile_visibility,show_library,adult_content_enabled,updated_at)
+  values(auth.uid(),p_birth_date,p_profile_visibility,coalesce(p_show_library,false),coalesce(p_adult_content_enabled,false),now())
+  on conflict(user_id) do update set
+    birth_date=excluded.birth_date,
+    profile_visibility=excluded.profile_visibility,
+    show_library=excluded.show_library,
+    adult_content_enabled=excluded.adult_content_enabled,
+    updated_at=now();
+end;
+$$;
+revoke all on function public.set_linkstory_safety_settings(date,text,boolean,boolean) from public, anon;
+grant execute on function public.set_linkstory_safety_settings(date,text,boolean,boolean) to authenticated;
+
+create or replace function public.get_linkstory_safety_settings()
+returns table(birth_date date, profile_visibility text, show_library boolean, adult_content_enabled boolean)
+language sql
+stable
+security definer
+set search_path = pg_catalog, private, public
+as $$
+  select s.birth_date,s.profile_visibility,s.show_library,s.adult_content_enabled
+  from private.user_safety_settings s
+  where s.user_id = auth.uid();
+$$;
+revoke all on function public.get_linkstory_safety_settings() from public, anon;
+grant execute on function public.get_linkstory_safety_settings() to authenticated;
