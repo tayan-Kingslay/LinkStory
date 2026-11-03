@@ -173,3 +173,76 @@ drop policy if exists linkstory_media_test_anon_update on storage.objects;
 -- IMPORTANT: linkstory-media is currently a public bucket. Public object URLs bypass
 -- database age-gating. Do not claim 18+ media is protected until a private-bucket /
 -- signed-delivery migration is implemented and existing objects are migrated.
+
+
+-- Prevent privilege escalation through user-editable signup metadata or profile updates.
+-- New accounts always start as readers; account role changes require a trusted server/admin path.
+create or replace function public.handle_linkstory_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $function$
+declare
+  base_username text;
+  candidate_username text;
+  suffix text;
+  display_name_value text;
+  role_value public.account_role;
+  kx_mail_value text;
+begin
+  display_name_value := left(coalesce(nullif(new.raw_user_meta_data ->> 'full_name',''),nullif(split_part(coalesce(new.email,''),'@',1),''),'Leitor'),80);
+  base_username := lower(regexp_replace(coalesce(nullif(new.raw_user_meta_data ->> 'username',''),nullif(split_part(coalesce(new.email,''),'@',1),''),'usuario'),'[^a-zA-Z0-9_]','','g'));
+  if char_length(base_username) < 3 then base_username := 'user' || substr(replace(new.id::text,'-',''),1,6); end if;
+  base_username := left(base_username,25);
+  candidate_username := base_username;
+  while exists (select 1 from public.profiles p where p.username = candidate_username) loop
+    suffix := substr(replace(gen_random_uuid()::text,'-',''),1,4);
+    candidate_username := left(base_username,25) || '_' || suffix;
+  end loop;
+  role_value := 'leitor'::public.account_role;
+  kx_mail_value := lower(coalesce(nullif(new.raw_user_meta_data ->> 'kx_mail',''),candidate_username || '@kx.mail'));
+  insert into public.profiles (id,username,display_name,role,kx_id,kx_mail,recovery_email)
+  values (new.id,candidate_username,display_name_value,role_value,public.make_linkstory_kx_id(new.id),kx_mail_value,nullif(new.raw_user_meta_data ->> 'recovery_email',''))
+  on conflict (id) do update set kx_mail=coalesce(public.profiles.kx_mail,excluded.kx_mail);
+  return new;
+end;
+$function$;
+
+create or replace function public.prevent_profile_role_escalation()
+returns trigger
+language plpgsql
+set search_path = pg_catalog, public
+as $$
+begin
+  if new.role is distinct from old.role
+     and current_user not in ('postgres','service_role') then
+    raise exception 'A alteração do tipo de conta exige autorização administrativa'
+      using errcode = '42501';
+  end if;
+  return new;
+end;
+$$;
+revoke all on function public.prevent_profile_role_escalation() from public, anon, authenticated;
+drop trigger if exists prevent_profile_role_escalation on public.profiles;
+create trigger prevent_profile_role_escalation
+before update of role on public.profiles
+for each row execute function public.prevent_profile_role_escalation();
+
+-- The creator helper may only answer for the current signed-in user.
+create or replace function public.is_creator(uid uuid default auth.uid())
+returns boolean
+language sql
+stable
+security definer
+set search_path = pg_catalog, public, auth
+as $function$
+  select auth.uid() is not null
+    and uid = auth.uid()
+    and exists (
+      select 1 from public.profiles
+      where id = auth.uid() and role::text = 'criador'
+    );
+$function$;
+revoke all on function public.is_creator(uuid) from public, anon;
+grant execute on function public.is_creator(uuid) to authenticated;
