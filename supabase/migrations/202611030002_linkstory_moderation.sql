@@ -333,3 +333,32 @@ grant execute on function public.set_my_linkstory_account_role(text) to authenti
 -- They do not need direct RPC EXECUTE grants.
 revoke all on function public.handle_linkstory_new_user() from public, anon, authenticated;
 revoke all on function public.prevent_profile_role_escalation() from public, anon, authenticated;
+
+
+-- Close direct API execution of obsolete/orphaned signup trigger functions.
+-- The active auth.users trigger invokes handle_linkstory_new_user internally.
+revoke all on function public.handle_new_user() from public, anon, authenticated;
+
+-- Remove mutable search_path warnings from the two ordinary utility functions.
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+set search_path = pg_catalog
+as $$
+begin
+  new.updated_at := now();
+  return new;
+end;
+$$;
+
+create or replace function public.make_linkstory_kx_id(p_id uuid)
+returns text
+language sql
+immutable
+set search_path = pg_catalog
+as $$
+  select 'KX-' || upper(substr(md5(p_id::text),1,4)) || '-' ||
+         upper(substr(md5(p_id::text),5,4)) || '-' ||
+         upper(substr(md5(p_id::text),9,4)) || '-' ||
+         upper(substr(md5(p_id::text),13,4));
+$$;
