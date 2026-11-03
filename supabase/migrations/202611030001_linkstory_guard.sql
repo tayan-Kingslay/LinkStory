@@ -39,11 +39,18 @@ create index if not exists content_reports_target_idx on public.content_reports(
 alter table public.content_reports enable row level security;
 drop policy if exists "Users submit reports" on public.content_reports;
 create policy "Users submit reports" on public.content_reports
-  for insert to authenticated with check ((select auth.uid()) = reporter_id);
+  for insert to authenticated
+  with check (
+    (select auth.uid()) = reporter_id
+    and status = 'pending'
+    and reviewed_at is null
+    and resolution is null
+  );
 drop policy if exists "Users read own reports" on public.content_reports;
 create policy "Users read own reports" on public.content_reports
   for select to authenticated using ((select auth.uid()) = reporter_id);
-grant insert, select on public.content_reports to authenticated;
+revoke insert on public.content_reports from authenticated;
+grant insert (reporter_id, target_type, target_id, reason, details), select on public.content_reports to authenticated;
 
 create table if not exists public.user_blocks (
   blocker_id uuid not null references auth.users(id) on delete cascade,
@@ -65,7 +72,7 @@ create table if not exists private.moderation_actions (
   report_id uuid references public.content_reports(id) on delete set null,
   target_type text not null,
   target_id uuid not null,
-  action text not null check (action in ('warning','content_removed','temporary_suspension','permanent_ban','no_violation')),
+  action text not null check (action in ('warning','content_removed','temporary_suspension','permanent_ban','no_violation','report_reviewed')),
   reason text not null,
   moderator_id uuid references auth.users(id) on delete set null,
   created_at timestamptz not null default now()
