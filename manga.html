@@ -98,6 +98,7 @@ h2{letter-spacing:-.8px}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
+<script src="guard.js"></script>
 <script src="manga-db.js"></script>
 <script>
 (async()=>{
@@ -135,6 +136,8 @@ h2{letter-spacing:-.8px}
     '<div class="comment"><input id="commentText" maxlength="1000" placeholder="Escreva um comentário"><button id="commentBtn">Comentar</button></div>'+
     '<div class="comments" id="comments"></div>'+
   '</section>';
+
+  if(window.LinkStoryGuard){const reportArea=document.querySelector('.social');window.LinkStoryGuard.mountReportButton(reportArea,{target_type:'manga',target_id:m.id});}
 
   if(m.cover_url)$("cover").style.backgroundImage='url("'+m.cover_url.replace(/"/g,'&quot;')+'")';
 
