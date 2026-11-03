@@ -32,10 +32,23 @@ create policy profiles_visibility_read
 -- Do not expose recovery email, KX identifiers, or private preferences through
 -- ordinary table reads. Keep the public profile fields needed by profile cards
 -- and creator attribution available to both signed-out and signed-in visitors.
-revoke select on table public.profiles from public, anon, authenticated;
+-- Remove dangerous table-level grants as well: RLS does not protect TRUNCATE,
+-- and clients must never create/delete profile rows directly.
+revoke all on table public.profiles from public, anon, authenticated;
 grant select (
   id, username, display_name, role, bio, avatar_url, created_at, updated_at
 ) on table public.profiles to anon, authenticated;
+grant update (
+  username, display_name, bio, avatar_url, recovery_email, preferences
+) on table public.profiles to authenticated;
+
+drop policy if exists profiles_insert_own on public.profiles;
+drop policy if exists profiles_update_own on public.profiles;
+create policy profiles_update_own
+  on public.profiles
+  for update to authenticated
+  using (auth.uid() = id)
+  with check (auth.uid() = id);
 
 create or replace function public.get_my_linkstory_private_profile()
 returns jsonb
