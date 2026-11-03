@@ -287,3 +287,49 @@ as $$
 $$;
 revoke all on function private.can_view_manga(text) from public;
 grant execute on function private.can_view_manga(text) to anon, authenticated;
+
+
+-- Allow a signed-in user to switch only between reader and creator.
+-- The SECURITY DEFINER RPC performs the update as its trusted owner, so the
+-- role-protection trigger continues to reject direct client-side UPDATEs.
+create or replace function public.set_my_linkstory_account_role(p_role text)
+returns text
+language plpgsql
+security definer
+set search_path = pg_catalog, public, auth
+as $$
+declare
+  v_user_id uuid := auth.uid();
+  v_role public.account_role;
+begin
+  if v_user_id is null then
+    raise exception 'Entre na sua conta para alterar o tipo de conta'
+      using errcode = '42501';
+  end if;
+
+  if p_role not in ('leitor', 'criador') then
+    raise exception 'Tipo de conta inválido'
+      using errcode = '22023';
+  end if;
+
+  v_role := p_role::public.account_role;
+
+  update public.profiles
+     set role = v_role
+   where id = v_user_id;
+
+  if not found then
+    raise exception 'Perfil não encontrado';
+  end if;
+
+  return p_role;
+end;
+$$;
+
+revoke all on function public.set_my_linkstory_account_role(text) from public, anon;
+grant execute on function public.set_my_linkstory_account_role(text) to authenticated;
+
+-- Trigger functions are invoked by PostgreSQL triggers, not through the API.
+-- They do not need direct RPC EXECUTE grants.
+revoke all on function public.handle_linkstory_new_user() from public, anon, authenticated;
+revoke all on function public.prevent_profile_role_escalation() from public, anon, authenticated;
