@@ -165,3 +165,11 @@ create policy manga_pages_age_gated_read on public.manga_pages
     where c.id = manga_pages.chapter_id
       and private.can_view_manga_record(m.age_rating, m.creator_id, m.status)
   ));
+
+-- Remove legacy anonymous write access to the media bucket.
+drop policy if exists linkstory_media_test_anon_insert on storage.objects;
+drop policy if exists linkstory_media_test_anon_update on storage.objects;
+
+-- IMPORTANT: linkstory-media is currently a public bucket. Public object URLs bypass
+-- database age-gating. Do not claim 18+ media is protected until a private-bucket /
+-- signed-delivery migration is implemented and existing objects are migrated.
