@@ -183,6 +183,7 @@ h2{letter-spacing:-.8px}
     const d=document.createElement("div");d.className="one-comment";
     d.innerHTML="<strong>"+(c.profiles?.display_name||c.profiles?.username||"Usuário")+"</strong><p>"+c.body+"</p>";
     box.append(d);
+    if(window.LinkStoryGuard&&c.id)window.LinkStoryGuard.mountReportButton(d,{target_type:'comment',target_id:c.id},'Denunciar comentário');
    });
   }
 
