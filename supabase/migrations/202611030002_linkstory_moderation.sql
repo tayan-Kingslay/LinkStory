@@ -89,7 +89,7 @@ begin
     insert into private.moderation_actions(report_id,target_type,target_id,action,reason,moderator_id)
     values (
       v_report.id,v_report.target_type,v_report.target_id,
-      case when p_decision = 'actioned' then 'content_removed' else 'no_violation' end,
+      case when p_decision = 'actioned' then 'report_reviewed' else 'no_violation' end,
       p_resolution,auth.uid()
     );
   end if;
