@@ -26,6 +26,6 @@ $('postMedia').onchange=()=>{const f=$('postMedia').files?.[0],box=$('mediaPrevi
 $('composeForm').addEventListener('submit',publishPost);$('commentForm').addEventListener('submit',sendComment);
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
 $('loadMore').onclick=()=>loadFeed(false);
-$('feedList').addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b)return;const card=b.closest('.post'),id=card?.dataset.id;if(!id)return;switch(b.dataset.action){case'like':return toggleLike(id,b);case'comment':return openComments(id);case'share':try{await navigator.clipboard.writeText(location.origin+'/fy.html?post='+id);toast('Link da publicação copiado.')}catch{toast('Não foi possível copiar o link neste navegador.')}return;case'follow':return followAuthor(id,b);case'report':return reportPost(id)}}});
+$('feedList').addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b)return;const card=b.closest('.post'),id=card?.dataset.id;if(!id)return;switch(b.dataset.action){case'like':return toggleLike(id,b);case'comment':return openComments(id);case'share':try{await navigator.clipboard.writeText(location.origin+'/fy.html?post='+id);toast('Link da publicação copiado.')}catch{toast('Não foi possível copiar o link neste navegador.')}return;case'follow':return followAuthor(id,b);case'report':return reportPost(id)}});
 init();
 })();
