@@ -81,6 +81,67 @@
       container.append(button);
       return button;
     },
+    async isUserBlocked(userId) {
+      const { data: { user }, error: authError } = await client.auth.getUser();
+      if (authError || !user) return false;
+      const { data, error } = await client.from('user_blocks')
+        .select('blocked_id')
+        .eq('blocker_id', user.id)
+        .eq('blocked_id', userId)
+        .maybeSingle();
+      if (error) throw error;
+      return Boolean(data);
+    },
+    mountBlockButton(container, userId, label = 'Bloquear criador') {
+      if (!container || !userId) return null;
+      const button = document.createElement('button');
+      const status = document.createElement('span');
+      status.className = 'linkstory-block-status';
+      status.setAttribute('role', 'status');
+      button.type = 'button';
+      button.textContent = label;
+      button.setAttribute('aria-pressed', 'false');
+      let busy = false;
+      const refresh = async () => {
+        const { data: { user }, error } = await client.auth.getUser();
+        if (error || !user || user.id === userId) {
+          button.hidden = true;
+          status.hidden = true;
+          return;
+        }
+        const blocked = await window.LinkStoryGuard.isUserBlocked(userId);
+        button.textContent = blocked ? 'Desbloquear criador' : label;
+        button.setAttribute('aria-pressed', String(blocked));
+      };
+      button.addEventListener('click', async () => {
+        if (busy) return;
+        busy = true;
+        button.disabled = true;
+        status.textContent = '';
+        try {
+          const blocked = await window.LinkStoryGuard.isUserBlocked(userId);
+          if (blocked) {
+            await window.LinkStoryGuard.unblockUser(userId);
+            button.textContent = label;
+            button.setAttribute('aria-pressed', 'false');
+            status.textContent = 'Bloqueio removido.';
+          } else {
+            await window.LinkStoryGuard.blockUser(userId);
+            button.textContent = 'Desbloquear criador';
+            button.setAttribute('aria-pressed', 'true');
+            status.textContent = 'Criador bloqueado. O conteúdo será atualizado ao sair desta página.';
+          }
+        } catch (error) {
+          status.textContent = error?.message || 'Não foi possível alterar o bloqueio.';
+        } finally {
+          busy = false;
+          button.disabled = false;
+        }
+      });
+      container.append(button, status);
+      refresh().catch(error => { status.textContent = error?.message || 'Não foi possível consultar o bloqueio.'; });
+      return button;
+    },
     async blockUser(userId) {
       const { data: { user }, error: authError } = await client.auth.getUser();
       if (authError || !user) throw new Error('Entre na sua conta para bloquear alguém.');
