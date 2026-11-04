@@ -55,7 +55,8 @@
   if(!document.getElementById('lsBottomNav')){
     const path=location.pathname.split('/').pop()||'index.html';
     const active=path==='fy.html'?'fy':path==='library.html'?'library':path==='profile.html'?'profile':'home';
-    const nav=document.createElement('nav');nav.id='lsBottomNav';nav.setAttribute('aria-label','Navegnav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon">⌂</span><span>Início</span></a><a href="fy.html" class="${active==='fy'?'active':''}"><span class="ls-icon">✦</span><span>FY</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon">▣</span><span>Biblioteca</span></a><a href="profile.html" class="${active==='profile'?'active':''}"><span class="ls-icon">●</span><span>Perfil</span></a>`;
+    const nav=document.createElement('nav');nav.id='lsBottomNav';nav.setAttribute('aria-label','Navegação principal');
+    nav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon">⌂</span><span>Início</span></a><a href="fy.html" class="${active==='fy'?'active':''}"><span class="ls-icon">✦</span><span>FY</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon">▣</span><span>Biblioteca</span></a><a href="profile.html" class="${active==='profile'?'active':''}"><span class="ls-icon">●</span><span>Perfil</span></a>`;
     document.body.appendChild(nav);
   }
   let menu=document.getElementById('menuDialog');let opener=document.getElementById('openMenu');
