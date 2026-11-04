@@ -137,7 +137,7 @@ h2{letter-spacing:-.8px}
     '<div class="comments" id="comments"></div>'+
   '</section>';
 
-  if(window.LinkStoryGuard){const reportArea=document.querySelector('.social');window.LinkStoryGuard.mountReportButton(reportArea,{target_type:'manga',target_id:m.id});}
+  if(window.LinkStoryGuard){const reportArea=document.querySelector('.social');window.LinkStoryGuard.mountReportButton(reportArea,{target_type:'manga',target_id:m.id});window.LinkStoryGuard.mountBlockButton(reportArea,m.creator_id,'Bloquear criador');}
 
   if(m.cover_url)$("cover").style.backgroundImage='url("'+m.cover_url.replace(/"/g,'&quot;')+'")';
 
