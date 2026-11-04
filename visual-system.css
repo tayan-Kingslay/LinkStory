@@ -7,5 +7,23 @@ button{transition:background-color .18s ease,border-color .18s ease,color .18s e
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ls-brand,#0877ed);outline-offset:3px}
 ::selection{background:rgba(8,119,237,.18);color:inherit}
 img{max-width:100%}
+:where(.top,.topbar,.header){backdrop-filter:saturate(150%) blur(14px)}
+:where(.top,.topbar){box-shadow:0 5px 24px rgba(20,42,70,.045)}
+:where(.circle,.back,.menu,.menu-btn){transition:transform .18s ease,border-color .18s ease,background .18s ease}
+:where(.circle,.back,.menu,.menu-btn):active{transform:scale(.96)}
+:where(.btn,.login,.account-pill){transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+:where(.btn.primary,.login):hover{box-shadow:0 8px 20px rgba(8,119,237,.18)}
+:where(.cover-shell,.suggestion-item,.stat,.account-pill){box-shadow:var(--ls-shadow-card)}
+:where(.empty,.empty-state){border:1px dashed var(--ls-line);border-radius:var(--ls-radius-lg);background:linear-gradient(145deg,#fff,#f7faff);padding:28px}
+:where(.section,.shelf){margin-block:30px}
+:where(.section-head,.shelf-head){gap:12px}
+:where(.section-head,.shelf-head) :where(h2,.shelf-title){letter-spacing:-.035em}
+:where(.search input,#search){transition:border-color .18s ease,box-shadow .18s ease}
+:where(.search input,#search):focus{border-color:#8dbdf2;box-shadow:0 0 0 4px rgba(8,119,237,.09)}
+:where(.profile,.intro){border-radius:var(--ls-radius-lg)}
+:where(.avatar,.cover-shell){overflow:hidden}
+:where(.stats){gap:12px}
+:where(.stat){border:1px solid var(--ls-line);border-radius:var(--ls-radius-md);background:var(--ls-surface)}
+@media(max-width:640px){:where(main){padding-bottom:max(88px,env(safe-area-inset-bottom))}:where(.top,.topbar,.header){padding-left:14px;padding-right:14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 html[data-ls-theme="dark"]{color-scheme:dark}
