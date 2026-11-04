@@ -43,8 +43,7 @@ html[data-ls-theme="dark"] #lsBottomNav{background:rgba(19,24,31,.98);border-top
 html[data-ls-theme="dark"] #lsBottomNav a{color:#aab5c3}
 html[data-ls-theme="dark"] #lsBottomNav a.active{color:#69b2ff}
 html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
-        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
-    .ls-menu-dialog,.menu-dialog{width:min(430px,100%);height:100dvh;max-height:none;margin:0 0 0 auto;padding:0;border:0;border-radius:26px 0 0 26px;background:#f8faff;color:#14243a;box-shadow:-18px 0 55px rgba(18,39,67,.16);overflow:hidden}
+        .ls-menu-dialog,.menu-dialog{width:min(430px,100%);height:100dvh;max-height:none;margin:0 0 0 auto;padding:0;border:0;border-radius:26px 0 0 26px;background:#f8faff;color:#14243a;box-shadow:-18px 0 55px rgba(18,39,67,.16);overflow:hidden}
     .ls-menu-dialog[open],.menu-dialog[open]{animation:lsDrawerIn .24s cubic-bezier(.2,.8,.2,1)}
     @keyframes lsDrawerIn{from{transform:translateX(28px);opacity:.6}to{transform:translateX(0);opacity:1}}
     .ls-menu-wrap{height:100%;overflow:auto;padding:26px 22px 34px;font-family:Manrope,'DM Sans',sans-serif}
@@ -90,6 +89,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     @media(min-width:801px) and (pointer:coarse){#lsBottomNav{display:grid!important}body{padding-bottom:96px!important}.ls-menu-dialog{border-radius:0!important;margin:0!important;max-height:none!important;height:100dvh!important}.ls-menu-wrap{min-height:100%!important}}
     @media(max-width:560px),(pointer:coarse){#lsBottomNav{height:calc(62px + env(safe-area-inset-bottom));bottom:0;width:100%;max-width:none}.ls-menu-wrap{padding:20px}.ls-menu-links a{padding:19px 2px;font-size:17px}}
   `;
+  if(!document.getElementById('lsMenuFont')){const font=document.createElement('link');font.id='lsMenuFont';font.rel='stylesheet';font.href='https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap';document.head.appendChild(font)}
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
   /* Reader has its own reading controls and must stay completely free of global navigation. */
   if(document.querySelector('.reader-title')) return;
