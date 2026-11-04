@@ -26,6 +26,42 @@ dialog{width:min(620px,calc(100% - 20px));max-height:90dvh;border:1px solid var(
 .comment-list{display:grid;gap:10px;margin-bottom:14px}.comment{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#ffffff06}.comment b{font-size:11px}.comment p{margin:5px 0 0;font-size:12px;line-height:1.45;color:#dce3ee;white-space:pre-wrap}.comment small{color:#8391a6;font-size:9px}.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,15px);opacity:0;pointer-events:none;z-index:9999;background:#e4edff;color:#111827;padding:11px 15px;border-radius:12px;font-size:12px;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
 @media(min-width:760px){main{padding-top:24px}.topbar{top:12px}.tabs{top:84px;border:1px solid var(--line);border-radius:16px;margin:0 12px}.post{margin-left:12px;margin-right:12px}}
 @media(max-width:430px){.tabs{padding:10px 10px}.tab{font-size:11px}.composer{margin-left:10px;margin-right:10px}.post{margin-left:9px;margin-right:9px;padding:13px}.actions{grid-template-columns:repeat(4,minmax(0,1fr))}.action{font-size:10px}}
+
+/* FY aligned with LinkStory's default light visual identity */
+:root{color-scheme:light;--bg:#f7f9fc;--panel:#fff;--line:#e2e8f0;--text:#102033;--muted:#66788d;--blue:#0b72e7;--glow:rgba(11,114,231,.12)}
+html,body{background:var(--bg)!important;color:var(--text)!important}
+body{background-image:linear-gradient(180deg,#fff 0%,#f7f9fc 100%)!important}
+.topbar{background:rgba(255,255,255,.88)!important;border-color:var(--line)!important;box-shadow:0 8px 28px rgba(16,32,51,.07)!important}
+.brand b{color:var(--blue)!important}
+.icon-btn{background:#fff!important;color:var(--text)!important;border-color:var(--line)!important}
+.tabs{background:rgba(255,255,255,.92)!important;border-color:var(--line)!important}
+.tab{background:#f4f7fb!important;color:#66788d!important;border-color:var(--line)!important}
+.tab.active{background:#eaf4ff!important;color:#0758b5!important;border-color:#b9d8fb!important;box-shadow:0 5px 18px var(--glow)!important}
+.composer{background:#fff!important;border-color:var(--line)!important;box-shadow:0 8px 26px rgba(16,32,51,.05)!important}
+.avatar{background:#eaf4ff!important;color:#0b72e7!important;border-color:#cfe1f2!important}
+.compose-open,.chip{background:#f7f9fc!important;color:#66788d!important;border-color:var(--line)!important}
+.post{background:#fff!important;border-color:var(--line)!important;box-shadow:0 8px 26px rgba(16,32,51,.06)!important}
+.author small,.more,.post-stats,.action{color:#66788d!important}
+.kind{color:#0b72e7!important;border-color:#cfe1f2!important}
+.body,.comment p{color:#26384b!important}
+.actions{border-color:#e8edf3!important}
+.action:hover{background:#f2f7fd!important;color:#0b72e7!important}
+.empty,.loading{color:#66788d!important;border-color:#d5e0eb!important}
+.empty strong{color:#102033!important}
+.load-more{background:#fff!important;color:#0b72e7!important;border-color:#cfe1f2!important}
+dialog{background:#fff!important;color:#102033!important;border-color:#dbe5ef!important;box-shadow:0 25px 90px rgba(16,32,51,.2)!important}
+dialog::backdrop{background:rgba(16,32,51,.38)!important}
+.modal-head{border-color:#e2e8f0!important}
+.close{background:#f1f5f9!important;color:#334155!important}
+.field label{color:#52657a!important}
+.field input,.field textarea,.field select{background:#fff!important;color:#102033!important;border-color:#dbe5ef!important}
+.field input::placeholder,.field textarea::placeholder{color:#8a99aa!important}
+.file-note,.comment small{color:#718096!important}
+.btn{background:#f7f9fc!important;color:#334155!important;border-color:#dbe5ef!important}
+.btn.primary{background:#0b72e7!important;color:#fff!important;border-color:#0b72e7!important}
+.comment{background:#f8fafc!important;border-color:#e2e8f0!important}
+.toast{background:#102033!important;color:#fff!important}
+
 </style>
 </head>
 <body>
