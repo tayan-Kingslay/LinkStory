@@ -22,6 +22,61 @@ $$;
 revoke all on function private.can_interact_with_user(uuid) from public;
 grant execute on function private.can_interact_with_user(uuid) to anon, authenticated;
 
+-- SECURITY DEFINER membership predicates avoid recursive RLS when one table's
+-- policy needs to inspect another table that has its own row policies.
+create or replace function private.is_conversation_creator(p_conversation_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = pg_catalog, public, auth
+as $
+  select auth.uid() is not null
+     and exists (
+       select 1 from public.conversations c
+       where c.id = p_conversation_id and c.created_by = auth.uid()
+     );
+$;
+
+create or replace function private.is_conversation_member(p_conversation_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = pg_catalog, public, auth
+as $
+  select auth.uid() is not null
+     and exists (
+       select 1 from public.conversation_members cm
+       where cm.conversation_id = p_conversation_id
+         and cm.user_id = auth.uid()
+         and cm.status = 'accepted'
+     );
+$;
+
+create or replace function private.conversation_has_blocked_participant(p_conversation_id uuid)
+returns boolean
+language sql
+stable
+security definer
+set search_path = pg_catalog, public, auth, private
+as $
+  select auth.uid() is not null
+     and exists (
+       select 1 from public.conversation_members cm
+       where cm.conversation_id = p_conversation_id
+         and cm.user_id <> auth.uid()
+         and not private.can_interact_with_user(cm.user_id)
+     );
+$;
+
+revoke all on function private.is_conversation_creator(uuid) from public;
+revoke all on function private.is_conversation_member(uuid) from public;
+revoke all on function private.conversation_has_blocked_participant(uuid) from public;
+grant execute on function private.is_conversation_creator(uuid) to authenticated;
+grant execute on function private.is_conversation_member(uuid) to authenticated;
+grant execute on function private.conversation_has_blocked_participant(uuid) to authenticated;
+
 -- Posts are not visible to either side of a block, and private profiles do not
 -- leak posts through a separate public table.
 drop policy if exists posts_public_read on public.posts;
@@ -170,18 +225,8 @@ drop policy if exists conversation_member_read on public.conversations;
 create policy conversation_member_read
   on public.conversations for select to authenticated
   using (
-    exists (
-      select 1 from public.conversation_members cm
-      where cm.conversation_id = conversations.id
-        and cm.user_id = auth.uid()
-        and cm.status = 'accepted'
-    )
-    and not exists (
-      select 1 from public.conversation_members cm
-      where cm.conversation_id = conversations.id
-        and cm.user_id <> auth.uid()
-        and not private.can_interact_with_user(cm.user_id)
-    )
+    private.is_conversation_member(id)
+    and not private.conversation_has_blocked_participant(id)
   );
 
 drop policy if exists members_insert_self on public.conversation_members;
@@ -189,24 +234,13 @@ create policy members_insert_self
   on public.conversation_members for insert to authenticated
   with check (
     user_id = auth.uid()
-    and exists (
-      select 1 from public.conversations c
-      where c.id = conversation_members.conversation_id
-        and c.created_by = auth.uid()
-    )
+    and private.is_conversation_creator(conversation_id)
   );
 
 drop policy if exists members_read_own on public.conversation_members;
 create policy members_read_own
   on public.conversation_members for select to authenticated
-  using (
-    user_id = auth.uid()
-    or exists (
-      select 1 from public.conversations c
-      where c.id = conversation_members.conversation_id
-        and c.created_by = auth.uid()
-    )
-  );
+  using (user_id = auth.uid());
 
 create or replace function public.invite_linkstory_conversation_member(
   p_conversation_id uuid,
@@ -224,10 +258,7 @@ begin
   if p_user_id is null or p_user_id = auth.uid() then
     raise exception 'Destinatário inválido' using errcode = '22023';
   end if;
-  if not exists (
-    select 1 from public.conversations c
-    where c.id = p_conversation_id and c.created_by = auth.uid()
-  ) then
+  if not private.is_conversation_creator(p_conversation_id) then
     raise exception 'Somente o criador pode convidar participantes' using errcode = '42501';
   end if;
   if not exists (select 1 from public.profiles p where p.id = p_user_id) then
@@ -277,42 +308,24 @@ grant execute on function public.accept_linkstory_conversation_invite(uuid) to a
 revoke all on table public.conversations, public.conversation_members, public.messages
   from public, anon, authenticated;
 grant select, insert on table public.conversations to authenticated;
-grant select, insert on table public.conversation_members to authenticated;
-grant select, insert on table public.messages to authenticated;
+grant select on table public.conversation_members to authenticated;
+grant insert (conversation_id, user_id) on table public.conversation_members to authenticated;
+grant select on table public.messages to authenticated;
+grant insert (conversation_id, sender_id, body) on table public.messages to authenticated;
 
 drop policy if exists messages_member_insert on public.messages;
 create policy messages_member_insert
   on public.messages for insert to authenticated
   with check (
     auth.uid() = sender_id
-    and exists (
-      select 1 from public.conversation_members cm
-      where cm.conversation_id = messages.conversation_id
-        and cm.user_id = auth.uid()
-        and cm.status = 'accepted'
-    )
-    and not exists (
-      select 1 from public.conversation_members cm
-      where cm.conversation_id = messages.conversation_id
-        and cm.user_id <> auth.uid()
-        and not private.can_interact_with_user(cm.user_id)
-    )
+    and private.is_conversation_member(conversation_id)
+    and not private.conversation_has_blocked_participant(conversation_id)
   );
 
 drop policy if exists messages_member_read on public.messages;
 create policy messages_member_read
   on public.messages for select to authenticated
   using (
-    exists (
-      select 1 from public.conversation_members cm
-      where cm.conversation_id = messages.conversation_id
-        and cm.user_id = auth.uid()
-        and cm.status = 'accepted'
-    )
-    and not exists (
-      select 1 from public.conversation_members cm
-      where cm.conversation_id = messages.conversation_id
-        and cm.user_id <> auth.uid()
-        and not private.can_interact_with_user(cm.user_id)
-    )
+    private.is_conversation_member(conversation_id)
+    and not private.conversation_has_blocked_participant(conversation_id)
   );
