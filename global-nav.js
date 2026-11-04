@@ -43,7 +43,42 @@ html[data-ls-theme="dark"] #lsBottomNav{background:rgba(19,24,31,.98);border-top
 html[data-ls-theme="dark"] #lsBottomNav a{color:#aab5c3}
 html[data-ls-theme="dark"] #lsBottomNav a.active{color:#69b2ff}
 html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
-        body{padding-bottom:82px!important}.desktop-nav{display:none!important}
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+    .ls-menu-dialog,.menu-dialog{width:min(430px,100%);height:100dvh;max-height:none;margin:0 0 0 auto;padding:0;border:0;border-radius:26px 0 0 26px;background:#f8faff;color:#14243a;box-shadow:-18px 0 55px rgba(18,39,67,.16);overflow:hidden}
+    .ls-menu-dialog[open],.menu-dialog[open]{animation:lsDrawerIn .24s cubic-bezier(.2,.8,.2,1)}
+    @keyframes lsDrawerIn{from{transform:translateX(28px);opacity:.6}to{transform:translateX(0);opacity:1}}
+    .ls-menu-wrap{height:100%;overflow:auto;padding:26px 22px 34px;font-family:Manrope,'DM Sans',sans-serif}
+    .ls-menu-head{display:flex;align-items:center;justify-content:space-between;padding:5px 2px 24px;border-bottom:1px solid #e4eaf2}
+    .ls-menu-brand{display:flex;flex-direction:column;gap:5px}
+    .ls-menu-brand strong{font:800 17px/1 Manrope,sans-serif;letter-spacing:2.5px;color:#14243a}
+    .ls-menu-brand span{font:600 10px/1.3 Manrope,sans-serif;letter-spacing:1.5px;text-transform:uppercase;color:#8493a7}
+    .ls-menu-close{width:40px;height:40px;border:1px solid #e1e8f1;border-radius:13px;background:#fff;color:#53657b;font:400 27px/1 Manrope,sans-serif;cursor:pointer}
+    .ls-menu-intro{padding:24px 3px 20px}
+    .ls-menu-intro strong{display:block;font:800 24px/1.2 Manrope,sans-serif;letter-spacing:-.8px;color:#14243a}
+    .ls-menu-intro p{margin:7px 0 0;font:500 12px/1.6 Manrope,sans-serif;color:#8190a3}
+    .ls-menu-group{margin-top:17px}
+    .ls-menu-label{display:block;padding:0 4px 9px;font:800 10px/1 Manrope,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:#8a98aa}
+    .ls-menu-links{display:grid;gap:7px}
+    .ls-menu-links a{display:flex;align-items:center;gap:13px;min-height:58px;padding:9px 12px;border:1px solid #e8edf4;border-radius:15px;background:#fff;text-decoration:none;color:#25374d;font:700 13px/1.2 Manrope,sans-serif;transition:background .16s ease,border-color .16s ease,transform .16s ease}
+    .ls-menu-links a:hover{background:#f1f7ff;border-color:#cfe2fb;transform:translateX(2px)}
+    .ls-menu-icon{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;border-radius:11px;background:#f0f6fd;color:#1676dc}
+    .ls-menu-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+    .ls-menu-copy{display:flex;flex-direction:column;gap:3px;min-width:0}
+    .ls-menu-copy small{font:500 10px/1.3 Manrope,sans-serif;color:#8997a8}
+    .ls-menu-arrow{margin-left:auto;color:#a0adbc;font:500 20px/1 Manrope,sans-serif}
+    .ls-menu-footer{margin-top:22px;padding:16px 4px 0;border-top:1px solid #e4eaf2;color:#9aa6b5;font:600 10px/1.5 Manrope,sans-serif;letter-spacing:.4px}
+    .ls-menu-dialog::backdrop,.menu-dialog::backdrop{background:rgba(13,25,42,.38);backdrop-filter:blur(3px)}
+    html[data-ls-theme="dark"] .ls-menu-dialog,html[data-ls-theme="dark"] .menu-dialog{background:#141c27;color:#edf3fb}
+    html[data-ls-theme="dark"] .ls-menu-head{border-color:#303d4d}
+    html[data-ls-theme="dark"] .ls-menu-brand strong,html[data-ls-theme="dark"] .ls-menu-intro strong{color:#edf3fb}
+    html[data-ls-theme="dark"] .ls-menu-brand span,html[data-ls-theme="dark"] .ls-menu-intro p,html[data-ls-theme="dark"] .ls-menu-label{color:#91a1b5}
+    html[data-ls-theme="dark"] .ls-menu-close,html[data-ls-theme="dark"] .ls-menu-links a{background:#1c2735;border-color:#303d4d;color:#edf3fb}
+    html[data-ls-theme="dark"] .ls-menu-links a:hover{background:#22354a;border-color:#38516d}
+    html[data-ls-theme="dark"] .ls-menu-icon{background:#22354a;color:#79baff}
+    html[data-ls-theme="dark"] .ls-menu-copy small,html[data-ls-theme="dark"] .ls-menu-arrow,html[data-ls-theme="dark"] .ls-menu-footer{color:#91a1b5}
+    @media(min-width:801px) and (pointer:fine){.ls-menu-dialog,.menu-dialog{height:calc(100dvh - 32px);max-height:calc(100dvh - 32px);margin:16px;border-radius:24px}}
+    @media(max-width:560px),(pointer:coarse){.ls-menu-dialog,.menu-dialog{width:min(430px,100%);height:100dvh;max-height:100dvh;border-radius:22px 0 0 22px}.ls-menu-wrap{padding:22px 18px 30px}}
+    body{padding-bottom:82px!important}.desktop-nav{display:none!important}
     .ls-global-menu-btn{width:46px;height:46px;border:1px solid #dbe5ef;border-radius:50%;background:#fff;color:#102033;display:flex;align-items:center;justify-content:center;padding:0;font-size:21px;line-height:1;margin-left:auto;box-shadow:0 5px 18px rgba(16,32,51,.05)}
     .ls-global-menu-btn:hover{border-color:#0b72e7;color:#0b72e7}
     .ls-menu-dialog{width:min(100%,520px);height:100dvh;max-height:none;margin:0 0 0 auto;border:0;padding:0;background:#fff;color:#102033}.ls-menu-wrap{height:100%;padding:24px 20px;overflow:auto}.ls-menu-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid #dbe5ef}.ls-menu-head strong{color:#102033;letter-spacing:2.5px;font:800 17px/1 'DM Sans',sans-serif}.ls-menu-close{border:0;background:none;font-size:38px;line-height:1;color:#102033}.ls-menu-links{display:grid;margin-top:4px}.ls-menu-links a{display:flex;align-items:center;justify-content:space-between;padding:21px 2px;border-bottom:1px solid #dbe5ef;text-decoration:none;color:#102033;font:700 18px/1.2 'DM Sans',sans-serif}.ls-menu-links span{color:#7a8da0;font-size:27px}
@@ -65,10 +100,32 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     nav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.5 10 8.5-7 8.5 7v10.5h-17z"/><path d="M9 20.5v-6h6v6"/></svg></span><span>Início</span></a><a href="fy.html" class="${active==='fy'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/><path d="m19 16 .9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9z"/></svg></span><span>Pra você</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/><path d="M4 18.5a2 2 0 0 1 2-2h13M8 8h7M8 11.5h7"/></svg></span><span>Biblioteca</span></a><a href="profile.html" class="${active==='profile'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Perfil</span></a>`;
     document.body.appendChild(nav);
   }
-  let menu=document.getElementById('menuDialog');let opener=document.getElementById('openMenu');
-  if(menu){menu.querySelectorAll('a[href="index.html"],a[href="explore.html"],a[href="library.html"]').forEach(a=>a.remove());const list=menu.querySelector('.menu-links,.menu-list');if(list&&!list.querySelector('a'))list.innerHTML='<a href="fy.html">FY <strong>›</strong></a><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a>';else if(list&&!list.querySelector('a[href="fy.html"]'))list.insertAdjacentHTML('afterbegin','<a href="fy.html">FY <strong>›</strong></a>')}
-  else{menu=document.createElement('dialog');menu.id='lsMenu';menu.className='ls-menu-dialog';menu.innerHTML=`<div class="ls-menu-wrap"><div class="ls-menu-head"><strong>LINKSTORY</strong><button class="ls-menu-close" aria-label="Fechar">×</button></div><nav class="ls-menu-links"><a href="fy.html">FY <span>›</span></a><a href="profile.html">Perfil <span>›</span></a><a href="studio.html">Meu Estúdio <span>›</span></a><a href="publish.html">Publicar mangá <span>›</span></a><a href="settings.html">Configurações <span>›</span></a><a href="login.html">Entrar <span>›</span></a></nav></div>`;document.body.appendChild(menu);opener=document.createElement('button');opener.id='lsGlobalMenuButton';opener.className='ls-global-menu-btn';opener.setAttribute('aria-label','Abrir menu');opener.innerHTML='☰';const header=document.querySelector('.topbar,.top,.header');if(header)header.appendChild(opener);else{opener.style.position='fixed';opener.style.top='14px';opener.style.right='14px';opener.style.zIndex='1001';document.body.appendChild(opener)}}
+  let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');let opener=document.getElementById('openMenu');
+  const menuMarkup=`<div class="ls-menu-wrap">
+    <div class="ls-menu-head"><div class="ls-menu-brand"><strong>LINKSTORY</strong><span>Seu universo de histórias</span></div><button class="ls-menu-close" aria-label="Fechar menu">×</button></div>
+    <div class="ls-menu-intro"><strong>Explore mais.</strong><p>Atalhos para descobrir, criar e organizar sua experiência.</p></div>
+    <section class="ls-menu-group"><span class="ls-menu-label">Descobrir</span><nav class="ls-menu-links">
+      <a href="explore.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5M10.8 7.5v6.6M7.5 10.8h6.6"/></svg></span><span class="ls-menu-copy">Explorar<small>Encontre novas histórias e criadores</small></span><span class="ls-menu-arrow">›</span></a>
+    </nav></section>
+    <section class="ls-menu-group"><span class="ls-menu-label">Criar</span><nav class="ls-menu-links">
+      <a href="studio.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5 5.5 14 16.8 2.7a2.1 2.1 0 0 1 3 3L8.5 17z"/><path d="m14.8 4.7 4.5 4.5M4 22h16"/></svg></span><span class="ls-menu-copy">Meu Estúdio<small>Gerencie suas obras e capítulos</small></span><span class="ls-menu-arrow">›</span></a>
+      <a href="publish.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5"/><path d="M4 14v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></span><span class="ls-menu-copy">Publicar mangá<small>Comece uma nova publicação</small></span><span class="ls-menu-arrow">›</span></a>
+    </nav></section>
+    <section class="ls-menu-group"><span class="ls-menu-label">Preferências</span><nav class="ls-menu-links">
+      <a href="settings.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1 1.4 1.1-1.4 2.4-1.7-.7a8 8 0 0 1-1.7 1l-.3 1.8h-2.8l-.3-1.8a8 8 0 0 1-1.7-1l-1.7.7-1.4-2.4L5.3 15a8 8 0 0 1 0-2l-1.4-1.1 1.4-2.4 1.7.7a8 8 0 0 1 1.7-1L9 7.4h2.8l.3 1.8a8 8 0 0 1 1.7 1l1.7-.7 1.4 2.4-1.4 1.1a8 8 0 0 1-.1 2z"/></svg></span><span class="ls-menu-copy">Configurações<small>Privacidade, conta e preferências</small></span><span class="ls-menu-arrow">›</span></a>
+    </nav></section>
+    <section class="ls-menu-group"><span class="ls-menu-label">Sobre o LinkStory</span><nav class="ls-menu-links">
+      <a href="regras.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M12 3 20 6v5c0 5-3.4 8.2-8 10-4.6-1.8-8-5-8-10V6z"/><path d="m8.5 12 2.2 2.2 4.8-4.8"/></svg></span><span class="ls-menu-copy">Regras da comunidade<small>Convivência e segurança</small></span><span class="ls-menu-arrow">›</span></a>
+      <a href="privacidade.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3m-4 4v3"/></svg></span><span class="ls-menu-copy">Privacidade<small>Como seus dados são tratados</small></span><span class="ls-menu-arrow">›</span></a>
+      <a href="termos.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg></span><span class="ls-menu-copy">Termos de uso<small>Condições para usar a plataforma</small></span><span class="ls-menu-arrow">›</span></a>
+      <a href="login.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/></svg></span><span class="ls-menu-copy">Entrar em outra conta<small>Acesso e autenticação</small></span><span class="ls-menu-arrow">›</span></a>
+    </nav></section>
+    <div class="ls-menu-footer">LINKSTORY · Histórias que conectam.</div>
+  </div>`;
+  if(!menu){menu=document.createElement('dialog');menu.id='lsMenu';document.body.appendChild(menu)}
+  menu.classList.add('ls-menu-dialog');menu.innerHTML=menuMarkup;
+  if(!opener){opener=document.createElement('button');opener.id='lsGlobalMenuButton';opener.className='ls-global-menu-btn';opener.setAttribute('aria-label','Abrir menu');opener.innerHTML='☰';const header=document.querySelector('.topbar,.top,.header');if(header)header.appendChild(opener);else{opener.style.position='fixed';opener.style.top='14px';opener.style.right='14px';opener.style.zIndex='1001';document.body.appendChild(opener)}}
   if(opener&&!opener.dataset.lsBound){opener.dataset.lsBound='1';opener.addEventListener('click',()=>menu.showModal())}
-  const close=menu.querySelector('.ls-menu-close,.dialog-close,.close');if(close&&!close.dataset.lsBound){close.dataset.lsBound='1';close.addEventListener('click',()=>menu.close())}
+  const close=menu.querySelector('.ls-menu-close');if(close&&!close.dataset.lsBound){close.dataset.lsBound='1';close.addEventListener('click',()=>menu.close())}
   if(!menu.dataset.lsBound){menu.dataset.lsBound='1';menu.addEventListener('click',e=>{if(e.target===menu)menu.close()})}
 })();
