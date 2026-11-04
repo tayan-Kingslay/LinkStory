@@ -140,7 +140,12 @@ drop policy if exists mangas_public_test_update on public.mangas;
 drop policy if exists manga_chapters_public_test_insert on public.manga_chapters;
 drop policy if exists manga_pages_public_test_insert on public.manga_pages;
 
--- Replace read policies with a shared server-side visibility decision.
+-- Replace every legacy public-read policy with a shared server-side visibility decision.
+-- PostgreSQL permissive policies are OR-combined, so leaving the old `*_public_read`
+-- policies in place would silently bypass the age gate.
+drop policy if exists mangas_public_read on public.mangas;
+drop policy if exists manga_chapters_public_read on public.manga_chapters;
+drop policy if exists manga_pages_public_read on public.manga_pages;
 drop policy if exists mangas_age_gated_read on public.mangas;
 create policy mangas_age_gated_read on public.mangas
   for select to anon, authenticated
