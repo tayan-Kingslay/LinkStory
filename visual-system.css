@@ -1,0 +1,11 @@
+/* LinkStory Visual System — shared foundation */
+:root{--ls-brand:#0877ed;--ls-brand-strong:#0563c7;--ls-ink:#17263a;--ls-muted:#78879a;--ls-line:#e5ebf2;--ls-surface:#fff;--ls-soft:#f6f8fb;--ls-radius-sm:10px;--ls-radius-md:15px;--ls-radius-lg:21px;--ls-shadow-card:0 8px 26px rgba(18,39,67,.055);--ls-shadow-float:0 16px 44px rgba(18,39,67,.12)}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+button,a,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button{transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,transform .18s ease}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--ls-brand,#0877ed);outline-offset:3px}
+::selection{background:rgba(8,119,237,.18);color:inherit}
+img{max-width:100%}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+html[data-ls-theme="dark"]{color-scheme:dark}
