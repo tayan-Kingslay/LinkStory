@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080d16">
+<title>FY — LinkStory</title>
+<link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
+<style>
+:root{color-scheme:dark;--bg:#080d16;--panel:rgba(17,25,40,.88);--line:rgba(190,211,245,.15);--text:#f5f7fb;--muted:#9aa8bc;--blue:#a9c8ff;--glow:rgba(123,166,255,.18)}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{background-image:radial-gradient(rgba(180,205,255,.09) .65px,transparent .65px),linear-gradient(135deg,#070b13 0%,#0a1020 52%,#111020 100%);background-size:8px 8px,100% 100%;padding-bottom:110px}
+a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit}button{cursor:pointer}
+.topbar{position:sticky;top:8px;z-index:50;width:calc(100% - 20px);max-width:760px;height:60px;margin:8px auto 0;padding:0 14px;display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:18px;background:rgba(8,12,22,.82);backdrop-filter:blur(20px);box-shadow:0 10px 28px #0004}
+.brand{font-size:22px;font-weight:950;letter-spacing:-1.2px}.brand b{color:var(--blue)}.top-actions{margin-left:auto;display:flex;gap:8px}.icon-btn{width:40px;height:40px;border:1px solid var(--line);border-radius:13px;background:#111827;color:#eef4ff}
+main{width:min(760px,100%);margin:0 auto;padding:18px 0 36px}
+.tabs{position:sticky;top:76px;z-index:30;display:flex;gap:8px;padding:12px 14px;background:rgba(8,12,22,.82);backdrop-filter:blur(18px);border-bottom:1px solid var(--line)}
+.tab{flex:1;min-height:40px;border:1px solid var(--line);border-radius:999px;background:#ffffff08;color:#8998ad;font-weight:850;font-size:12px}.tab.active{background:linear-gradient(180deg,#dce8ff,#a9c5ed);border-color:#c7dbff;color:#101725;box-shadow:0 5px 20px var(--glow)}
+.composer{margin:14px 14px 16px;padding:15px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(120deg,rgba(21,30,46,.94),rgba(12,17,28,.94));box-shadow:0 12px 35px #0004}
+.composer-row{display:flex;gap:11px;align-items:center}.avatar{width:42px;height:42px;flex:0 0 42px;border:1px solid #c5d8ff55;border-radius:50%;background:#1a2940;display:grid;place-items:center;overflow:hidden;font-weight:900;color:#eef4ff}.avatar img{width:100%;height:100%;object-fit:cover}.compose-open{flex:1;min-width:0;text-align:left;border:1px solid var(--line);border-radius:14px;background:#ffffff08;color:#aab7c9;padding:13px 14px;font-size:13px}.compose-actions{display:flex;gap:8px;margin:12px 0 0 53px}.chip{border:1px solid var(--line);border-radius:999px;background:#ffffff08;color:#aab7c9;padding:8px 12px;font-size:11px;font-weight:800}
+.post{margin:0 12px 15px;padding:15px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,rgba(17,24,38,.97),rgba(8,12,20,.97));box-shadow:0 15px 40px #0005}
+.post-head{display:flex;align-items:center;gap:10px}.author{min-width:0;flex:1}.author strong{display:block;font-size:13px}.author small{display:block;color:#8492a7;font-size:10px;margin-top:3px}.kind{display:inline-flex;margin-top:6px;padding:4px 8px;border:1px solid var(--line);border-radius:999px;color:#a9c8ff;font-size:9px;font-weight:900;letter-spacing:.4px}
+.more{border:0;background:transparent;color:#91a0b6;font-size:22px;padding:4px 8px}.body{white-space:pre-wrap;overflow-wrap:anywhere;color:#e5eaf3;font-size:14px;line-height:1.55;margin:13px 2px}
+.idea-title{font-size:17px;font-weight:900;margin:12px 2px 4px}.media{display:block;width:100%;max-height:680px;object-fit:contain;border:1px solid var(--line);border-radius:15px;background:#02050a;margin-top:12px}.post-stats{display:flex;justify-content:space-between;color:#7f8da2;font-size:10px;padding:10px 2px 7px}.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;border-top:1px solid #ffffff12;padding-top:9px}.action{min-height:38px;border:0;border-radius:11px;background:transparent;color:#91a0b6;font-size:11px;font-weight:800}.action:hover{background:#ffffff0b;color:#fff}.action.liked{color:#ff8da9}
+.empty,.loading{margin:10px 14px;padding:28px 18px;text-align:center;border:1px dashed var(--line);border-radius:16px;color:var(--muted);font-size:13px;line-height:1.5}.empty strong{display:block;color:#f5f7fb;margin-bottom:5px}.load-more{display:block;margin:14px auto;border:1px solid var(--line);border-radius:999px;background:#ffffff08;color:#dce8ff;padding:11px 20px;font-weight:800}
+dialog{width:min(620px,calc(100% - 20px));max-height:90dvh;border:1px solid var(--line);border-radius:20px;padding:0;background:#0e1522;color:var(--text);box-shadow:0 25px 90px #000a}dialog::backdrop{background:#000a;backdrop-filter:blur(7px)}.modal-head{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid var(--line)}.modal-head strong{font-size:15px}.close{width:34px;height:34px;border:0;border-radius:50%;background:#ffffff12;color:#fff;font-size:22px}.modal-body{padding:17px;overflow:auto;max-height:calc(90dvh - 65px)}.field{display:grid;gap:7px;margin-bottom:13px}.field label{font-size:11px;color:#aab7c9;font-weight:850}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:12px;background:#080e19;color:#f5f7fb;padding:12px;outline:none}.field textarea{min-height:130px;resize:vertical}.field input:focus,.field textarea:focus,.field select:focus{border-color:#a9c8ff88}.file-note{color:#8391a6;font-size:10px;line-height:1.5}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}.btn{min-height:42px;border:1px solid var(--line);border-radius:11px;padding:0 16px;background:#ffffff08;color:#dce8ff;font-weight:850}.btn.primary{background:#c5d9ff;color:#101725;border-color:#c5d9ff}.btn:disabled{opacity:.55;cursor:wait}
+.comment-list{display:grid;gap:10px;margin-bottom:14px}.comment{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#ffffff06}.comment b{font-size:11px}.comment p{margin:5px 0 0;font-size:12px;line-height:1.45;color:#dce3ee;white-space:pre-wrap}.comment small{color:#8391a6;font-size:9px}.toast{position:fixed;left:50%;bottom:100px;transform:translate(-50%,15px);opacity:0;pointer-events:none;z-index:9999;background:#e4edff;color:#111827;padding:11px 15px;border-radius:12px;font-size:12px;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:760px){main{padding-top:24px}.topbar{top:12px}.tabs{top:84px;border:1px solid var(--line);border-radius:16px;margin:0 12px}.post{margin-left:12px;margin-right:12px}}
+@media(max-width:430px){.tabs{padding:10px 10px}.tab{font-size:11px}.composer{margin-left:10px;margin-right:10px}.post{margin-left:9px;margin-right:9px;padding:13px}.actions{grid-template-columns:repeat(4,minmax(0,1fr))}.action{font-size:10px}}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="index.html">Link<b>Story</b></a><div class="top-actions"><a class="icon-btn" href="index.html" aria-label="Início" style="display:grid;place-items:center">⌂</a><button class="icon-btn" id="openMenu" aria-label="Abrir menu">☰</button></div></header>
+<main>
+<nav class="tabs" aria-label="Feed"><button class="tab active" data-feed="for-you">Para você</button><button class="tab" data-feed="following">Seguindo</button><button class="tab" data-feed="ideas">Ideias</button></nav>
+<section class="composer" id="composer">
+ <div class="composer-row"><div class="avatar" id="myAvatar">LS</div><button class="compose-open" id="openComposer">Compartilhe algo com a comunidade…</button></div>
+ <div class="compose-actions"><button class="chip" id="quickPost">＋ Publicação</button><button class="chip" id="quickIdea">✦ Ideia</button><button class="chip" id="quickVideo">▶ Vídeo</button></div>
+</section>
+<div id="feedStatus" class="loading">Carregando o FY…</div><section id="feedList" aria-live="polite"></section><button class="load-more" id="loadMore" hidden>Carregar mais</button>
+</main>
+<dialog id="composeDialog"><div class="modal-head"><strong>Nova publicação</strong><button class="close" data-close="composeDialog" aria-label="Fechar">×</button></div><form class="modal-body" id="composeForm">
+ <div class="field"><label for="postType">TIPO DE CONTEÚDO</label><select id="postType"><option value="post">Publicação</option><option value="idea">Ideia procurando criador</option><option value="video">Vídeo</option></select></div>
+ <div class="field" id="ideaTitleField" hidden><label for="ideaTitle">TÍTULO DA IDEIA</label><input id="ideaTitle" maxlength="120" placeholder="Qual é a ideia da sua história?"></div>
+ <div class="field"><label for="postBody">TEXTO</label><textarea id="postBody" maxlength="2000" placeholder="Escreva algo para a comunidade…"></textarea></div>
+ <div class="field"><label for="postMedia">IMAGEM OU VÍDEO (OPCIONAL)</label><input id="postMedia" type="file" accept="image/*,video/mp4,video/webm,video/quicktime"><span class="file-note">Até 25 MB. Imagens e vídeos curtos. Não publicamos Stories nesta versão.</span><div id="mediaPreview"></div></div>
+ <div class="modal-actions"><button type="button" class="btn" data-close="composeDialog">Cancelar</button><button type="submit" class="btn primary" id="publishPost">Publicar</button></div>
+</form></dialog>
+<dialog id="commentsDialog"><div class="modal-head"><strong>Comentários</strong><button class="close" data-close="commentsDialog" aria-label="Fechar">×</button></div><div class="modal-body"><div id="commentList" class="comment-list"></div><form id="commentForm"><div class="field"><label for="commentBody">SEU COMENTÁRIO</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva um comentário…"></textarea></div><div class="modal-actions"><button class="btn primary" type="submit" id="sendComment">Comentar</button></div></form></div></dialog>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script src="guard.js"></script>
+<script src="fy.js"></script>
+<script src="global-nav.js"></script>
+</body></html>
