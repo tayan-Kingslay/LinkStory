@@ -74,7 +74,7 @@ h2{letter-spacing:-.8px}
   if(display_name.length<1||display_name.length>80)return setStatus('O nome público deve ter entre 1 e 80 caracteres.');
   if(!/^[A-Za-z0-9_]{3,30}$/.test(username))return setStatus('Use de 3 a 30 letras, números ou underline no usuário.');
   const save=$('saveProfile');save.disabled=true;save.textContent='Salvando…';setStatus('');
-  const result=await db.from('profiles').update({display_name,username,avatar_url,bio,updated_at:new Date().toISOString()}).eq('id',user.id).select('id,username,display_name,role,bio,avatar_url,kx_mail').single();
+  const result=await db.from('profiles').update({display_name,username,avatar_url,bio,updated_at:new Date().toISOString()}).eq('id',user.id).select('id,username,display_name,role,bio,avatar_url,k_code').single();
   save.disabled=false;save.textContent='Salvar alterações';
   if(result.error){setStatus(result.error.code==='23505'?'Esse nome de usuário já está em uso.':result.error.message||'Não foi possível salvar.');return}
   profile=result.data;renderProfile(profile);$('editModal').close();
