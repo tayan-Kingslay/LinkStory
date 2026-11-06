@@ -169,6 +169,9 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   const menuMarkup=`<div class="ls-menu-wrap">
     <div class="ls-menu-head"><div class="ls-menu-brand"><strong>LINKSTORY</strong><span>Seu universo de histórias</span></div><button class="ls-menu-close" aria-label="Fechar menu">×</button></div>
     <div class="ls-menu-intro"><strong>O que vamos explorar?</strong><p>Encontre histórias, acompanhe suas leituras e cuide do seu espaço.</p></div>
+    <section class="ls-menu-group"><span class="ls-menu-label">Comunicação</span><nav class="ls-menu-links">
+      <a href="kx-mail.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span><span class="ls-menu-copy">KX Mail<small>Sua caixa de mensagens @kx.mail</small></span><span class="ls-menu-arrow">›</span></a>
+    </nav></section>
     <section class="ls-menu-group"><span class="ls-menu-label">Navegar</span><nav class="ls-menu-links">
       <a href="index.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="m3.5 10 8.5-7 8.5 7v10.5h-17z"/><path d="M9 20.5v-6h6v6"/></svg></span><span class="ls-menu-copy">Início<small>Volte para a página principal</small></span><span class="ls-menu-arrow">›</span></a>
       <a href="fy.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="m12 2 1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/></svg></span><span class="ls-menu-copy">Pra você<small>Descubra recomendações e novidades</small></span><span class="ls-menu-arrow">›</span></a>
