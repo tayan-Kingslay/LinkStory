@@ -171,6 +171,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     <div class="ls-menu-intro"><strong>O que vamos explorar?</strong><p>Encontre histórias, acompanhe suas leituras e cuide do seu espaço.</p></div>
     <section class="ls-menu-group"><span class="ls-menu-label">Comunicação</span><nav class="ls-menu-links">
       <a href="kx-mail.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span><span class="ls-menu-copy">KX Mail<small>Sua caixa de mensagens @kx.mail</small></span><span class="ls-menu-arrow">›</span></a>
+      <a href="friends.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0M17 8a3 3 0 0 1 0 6m1 2a5 5 0 0 1 3 4"/></svg></span><span class="ls-menu-copy">Amigos e mensagens<small>Adicione amigos e converse em particular</small></span><span class="ls-menu-arrow">›</span></a>
     </nav></section>
     <section class="ls-menu-group"><span class="ls-menu-label">Navegar</span><nav class="ls-menu-links">
       <a href="index.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="m3.5 10 8.5-7 8.5 7v10.5h-17z"/><path d="M9 20.5v-6h6v6"/></svg></span><span class="ls-menu-copy">Início<small>Volte para a página principal</small></span><span class="ls-menu-arrow">›</span></a>
