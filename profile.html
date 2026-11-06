@@ -42,7 +42,7 @@ h2{letter-spacing:-.8px}
 @media(max-width:600px){.profile-actions{display:grid;grid-template-columns:1fr 1fr}.profile-action{padding:10px 8px}.edit-modal{padding:17px}}
 </style><link rel="stylesheet" href="visual-system.css?v=3">
 <link rel="stylesheet" href="visual-refresh.css?v=1">
-</head><body><header class="top"><a class="back" href="index.html">‹</a><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div><div class="account-meta" id="accountMeta" hidden><span class="account-pill"><strong id="roleLabel">Leitor</strong></span><span class="account-pill"><strong>KX.Mail</strong> <span id="kxMail">—</span></span></div></div></section>
+</head><body><header class="top"><a class="back" href="index.html">‹</a><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div><div class="account-meta" id="accountMeta" hidden><span class="account-pill"><strong id="roleLabel">Leitor</strong></span><span class="account-pill"><strong>K-Code</strong> <span id="kCode">—</span></span></div></div></section>
 <div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button><a class="profile-action" href="friends.html">Amigos e mensagens</a><a class="profile-action" href="settings.html">Configurações</a></div>
 <section class="section"><div class="head"><div><span class="ey">PUBLICAÇÕES</span><h2>Minhas obras</h2></div></div><div id="empty" class="empty"><strong>Nenhuma obra publicada.</strong>Quando você publicar, ela aparecerá aqui.</div><div id="works" class="works"></div></section></main>
 <dialog class="edit-modal" id="editModal"><form id="profileForm"><h2>Editar perfil</h2><p>Atualize as informações que outras pessoas veem no LinkStory.</p>
@@ -60,7 +60,7 @@ h2{letter-spacing:-.8px}
   $('name').textContent=p?.display_name||'Usuário';
   $('handle').textContent=p?.username?'@'+p.username:'';
   $('bio').textContent=p?.bio||'';
-  $('kxMail').textContent=p?.kx_mail||'—';
+  $('kCode').textContent=p?.k_code||'—';
   $('roleLabel').textContent=p?.role==='criador'?'Criador':'Leitor';
   $('accountMeta').hidden=!p;
   const avatar=$('profileAvatar');avatar.replaceChildren();
