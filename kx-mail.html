@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#0b72e7"><title>KX Mail — LinkStory</title>
+<link rel="stylesheet" href="visual-system.css?v=3"><link rel="stylesheet" href="visual-refresh.css?v=1">
+<style>
+:root{--blue:#0b72e7;--ink:#17263a;--muted:#7b8a9d;--line:#e5ebf2;--soft:#f5f8fc}
+*{box-sizing:border-box}body{margin:0;background:#f6f8fb;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.topbar{height:68px;display:flex;align-items:center;gap:14px;padding:0 18px;background:rgba(255,255,255,.9);border-bottom:1px solid var(--line);backdrop-filter:blur(18px);position:sticky;top:0;z-index:10}
+.logo{font-size:23px;font-weight:950;letter-spacing:-1.4px;text-decoration:none;color:var(--ink)}.logo b{color:var(--blue)}.menu-btn{margin-left:auto;width:42px;height:42px;border:1px solid var(--line);border-radius:12px;background:#fff;position:relative}
+.menu-btn:before{content:"";position:absolute;left:11px;top:13px;width:18px;height:14px;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink)}.menu-btn:after{content:"";position:absolute;left:11px;top:20px;width:18px;border-top:2px solid var(--ink)}
+.shell{max-width:1120px;margin:30px auto;padding:0 18px}.heading{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:18px}.eyebrow{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--blue)}h1{font-size:clamp(32px,6vw,46px);letter-spacing:-2px;margin:7px 0 4px}.address{font-size:13px;color:var(--muted)}
+.compose{border:0;background:var(--blue);color:white;border-radius:12px;padding:13px 18px;font-weight:850;font-size:13px;min-height:46px}
+.mail-layout{display:grid;grid-template-columns:205px minmax(0,1fr);gap:16px}.folders,.panel{background:white;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 26px #10203308}.folders{padding:12px;height:max-content}.folder{width:100%;border:0;background:transparent;text-align:left;padding:13px 12px;border-radius:11px;color:#53647a;font-weight:750;font-size:13px;display:flex;justify-content:space-between;align-items:center}.folder.active{background:#edf5ff;color:var(--blue)}.count{font-size:11px;color:var(--muted)}
+.panel{min-height:470px;overflow:hidden}.toolbar{display:flex;gap:10px;padding:14px;border-bottom:1px solid var(--line)}.search{width:100%;height:42px;border:1px solid var(--line);border-radius:10px;padding:0 13px;font:inherit;outline:none}.refresh{border:1px solid var(--line);background:white;border-radius:10px;padding:0 14px;font-weight:750;color:#52647a}
+.mail-list{padding:6px}.mail-row{width:100%;display:grid;grid-template-columns:34px minmax(0,1fr) auto;gap:12px;align-items:center;text-align:left;border:0;border-bottom:1px solid #f0f3f7;background:white;padding:15px 12px;cursor:pointer}.mail-row:last-child{border-bottom:0}.mail-row.unread{background:#f8fbff}.avatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#eaf3ff;color:var(--blue);font-weight:900;font-size:12px}.mail-copy{min-width:0}.mail-top{display:flex;justify-content:space-between;gap:10px}.mail-name{font-size:13px;font-weight:850;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mail-date{font-size:10px;color:var(--muted);white-space:nowrap}.mail-subject{font-size:12px;font-weight:750;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mail-preview{font-size:11px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.star{font-size:17px;color:#a3afbd}
+.empty{padding:70px 20px;text-align:center;color:var(--muted);font-size:13px}.empty strong{display:block;color:var(--ink);font-size:18px;margin-bottom:7px}
+.detail{padding:22px}.back{border:0;background:transparent;color:var(--blue);font-weight:850;padding:6px 0 18px}.detail h2{font-size:24px;letter-spacing:-.8px;margin:0 0 12px;overflow-wrap:anywhere}.meta{font-size:12px;color:var(--muted);line-height:1.7;border-bottom:1px solid var(--line);padding-bottom:16px}.body-text{font-size:14px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere;padding:22px 0;min-height:150px}.actions{display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:14px}.action{border:1px solid var(--line);background:#fff;border-radius:9px;padding:10px 13px;font-size:12px;font-weight:800;color:#53647a}
+.compose-box{position:fixed;inset:0;background:#0b1c2e66;z-index:100;display:none;align-items:center;justify-content:center;padding:16px}.compose-box.open{display:flex}.compose-card{width:min(560px,100%);background:white;border-radius:20px;padding:22px;box-shadow:0 25px 80px #07182b44}.compose-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.compose-head h2{margin:0;font-size:22px}.close{border:0;background:transparent;font-size:28px;color:#718096}.field{display:block;margin:13px 0}.field span{display:block;font-size:11px;font-weight:850;margin-bottom:7px}.field input,.field textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;outline:none}.field textarea{height:180px;resize:vertical}.send{width:100%;height:46px;background:var(--blue);color:white;border:0;border-radius:10px;font-weight:900}.status{padding:12px 14px;font-size:12px;color:var(--muted)}.error{color:#b42318}
+@media(max-width:680px){.shell{margin:20px auto;padding:0 12px}.mail-layout{grid-template-columns:1fr;gap:10px}.folders{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;padding:6px}.folder{justify-content:center;text-align:center;padding:12px 4px;font-size:11px}.count{display:none}.panel{min-height:420px}.heading{align-items:center}.heading h1{font-size:34px}.compose{padding:11px 13px}.mail-row{padding:13px 8px;gap:9px}.detail{padding:16px}}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="logo" href="index.html">Link<b>Story</b></a><button class="menu-btn" id="openMenu" aria-label="Abrir menu"></button></header>
+<main class="shell">
+ <div class="heading"><div><span class="eyebrow">CORREIO DO LINKSTORY</span><h1>KX Mail.</h1><div class="address" id="accountAddress">Carregando sua caixa postal…</div></div><button class="compose" id="composeButton">＋ Escrever</button></div>
+ <div class="mail-layout">
+  <nav class="folders" aria-label="Pastas do KX Mail">
+   <button class="folder active" data-folder="inbox">Entrada <span class="count" id="unreadCount"></span></button>
+   <button class="folder" data-folder="sent">Enviados</button>
+   <button class="folder" data-folder="starred">Com estrela</button>
+   <button class="folder" data-folder="trash">Lixeira</button>
+  </nav>
+  <section class="panel" id="mailPanel">
+   <div id="listView"><div class="toolbar"><input class="search" id="searchMail" placeholder="Pesquisar mensagens"><button class="refresh" id="refreshMail">Atualizar</button></div><div class="mail-list" id="mailList"><div class="status">Carregando mensagens…</div></div></div>
+   <div class="detail" id="detailView" hidden></div>
+  </section>
+ </div>
+</main>
+<div class="compose-box" id="composeBox" role="dialog" aria-modal="true" aria-labelledby="composeTitle">
+ <form class="compose-card" id="composeForm"><div class="compose-head"><h2 id="composeTitle">Nova mensagem</h2><button class="close" id="closeCompose" type="button" aria-label="Fechar">×</button></div>
+  <label class="field"><span>Para · KX.Mail</span><input id="toAddress" required placeholder="usuario@kx.mail" autocomplete="off"></label>
+  <label class="field"><span>Assunto</span><input id="mailSubject" maxlength="180" placeholder="Assunto da mensagem"></label>
+  <label class="field"><span>Mensagem</span><textarea id="mailBody" maxlength="12000" required placeholder="Escreva sua mensagem…"></textarea></label>
+  <div id="composeStatus" class="status" role="status"></div><button class="send" type="submit">Enviar mensagem</button>
+ </form>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="global-nav.js"></script>
+<script>
+(()=> {
+ const $=id=>document.getElementById(id), db=linkstorySupabase;
+ let user=null,profile=null,folder='inbox',messages=[],profiles={},current=null;
+ const dateLabel=value=>new Date(value).toLocaleString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+ const initials=value=>(String(value||'?').trim()[0]||'?').toUpperCase();
+ function setStatus(text,error=false){$('composeStatus').textContent=text;$('composeStatus').className='status'+(error?' error':'')}
+ function showList(){ $('detailView').hidden=true;$('listView').hidden=false;current=null }
+ function showDetail(){ $('listView').hidden=true;$('detailView').hidden=false }
+ async function load(){
+  $('mailList').innerHTML='<div class="status">Carregando mensagens…</div>';
+  let q1,q2,data=[];
+  if(folder==='inbox'){const r=await db.from('kx_mail_messages').select('*').eq('recipient_id',user.id).is('recipient_deleted_at',null).order('created_at',{ascending:false});if(r.error)throw r.error;data=r.data||[]}
+  if(folder==='sent'){const r=await db.from('kx_mail_messages').select('*').eq('sender_id',user.id).is('sender_deleted_at',null).order('created_at',{ascending:false});if(r.error)throw r.error;data=r.data||[]}
+  if(folder==='starred'){
+   [q1,q2]=await Promise.all([db.from('kx_mail_messages').select('*').eq('recipient_id',user.id).eq('recipient_starred',true).is('recipient_deleted_at',null),db.from('kx_mail_messages').select('*').eq('sender_id',user.id).eq('sender_starred',true).is('sender_deleted_at',null)]);
+   if(q1.error||q2.error)throw q1.error||q2.error;data=[...(q1.data||[]),...(q2.data||[])].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  }
+  if(folder==='trash'){
+   [q1,q2]=await Promise.all([db.from('kx_mail_messages').select('*').eq('recipient_id',user.id).not('recipient_deleted_at','is',null),db.from('kx_mail_messages').select('*').eq('sender_id',user.id).not('sender_deleted_at','is',null)]);
+   if(q1.error||q2.error)throw q1.error||q2.error;data=[...(q1.data||[]),...(q2.data||[])].sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  }
+  messages=data;
+  const ids=[...new Set(data.map(m=>m.sender_id===user.id?m.recipient_id:m.sender_id))];
+  profiles={};
+  if(ids.length){const p=await db.from('profiles').select('id,username,display_name').in('id',ids);if(!p.error)(p.data||[]).forEach(x=>profiles[x.id]=x)}
+  renderList();
+  const unread=await db.from('kx_mail_messages').select('id',{count:'exact',head:true}).eq('recipient_id',user.id).is('read_at',null).is('recipient_deleted_at',null);
+  $('unreadCount').textContent=unread.count?String(unread.count):'';
+ }
+ function renderList(){
+  const query=$('searchMail').value.trim().toLowerCase();
+  const rows=messages.filter(m=>{const p=profiles[m.sender_id===user.id?m.recipient_id:m.sender_id]||{};return [p.username,p.display_name,m.subject,m.body].join(' ').toLowerCase().includes(query)});
+  const list=$('mailList');list.replaceChildren();
+  if(!rows.length){const empty=document.createElement('div');empty.className='empty';const strong=document.createElement('strong');strong.textContent=folder==='inbox'?'Sua caixa está tranquila':folder==='sent'?'Nenhuma mensagem enviada':folder==='trash'?'Lixeira vazia':'Nada por aqui';empty.append(strong,document.createTextNode(folder==='inbox'?'Quando alguém do LinkStory escrever para você, a mensagem aparecerá aqui.':'As mensagens desta pasta aparecerão aqui.'));list.append(empty);return}
+  rows.forEach(m=>{
+   const p=profiles[m.sender_id===user.id?m.recipient_id:m.sender_id]||{};
+   const row=document.createElement('button');row.className='mail-row'+(m.recipient_id===user.id&&!m.read_at?' unread':'');row.type='button';
+   const avatar=document.createElement('span');avatar.className='avatar';avatar.textContent=initials(p.display_name||p.username);
+   const copy=document.createElement('span');copy.className='mail-copy';
+   const top=document.createElement('span');top.className='mail-top';
+   const name=document.createElement('span');name.className='mail-name';name.textContent=(m.sender_id===user.id?'Para: ':'De: ')+(p.display_name||p.username||'Conta LinkStory');
+   const date=document.createElement('span');date.className='mail-date';date.textContent=dateLabel(m.created_at);top.append(name,date);
+   const subject=document.createElement('span');subject.className='mail-subject';subject.textContent=m.subject||'(Sem assunto)';
+   const preview=document.createElement('span');preview.className='mail-preview';preview.textContent=m.body;
+   copy.append(top,subject,preview);
+   const star=document.createElement('span');star.className='star';star.textContent=(m.sender_id===user.id?m.sender_starred:m.recipient_starred)?'★':'☆';
+   row.append(avatar,copy,star);row.onclick=()=>openMessage(m);list.append(row);
+  });
+ }
+ async function openMessage(m){
+  current=m;
+  if(m.recipient_id===user.id&&!m.read_at){const r=await db.from('kx_mail_messages').update({read_at:new Date().toISOString()}).eq('id',m.id);if(r.error){console.warn(r.error)}else m.read_at=new Date().toISOString()}
+  const p=profiles[m.sender_id===user.id?m.recipient_id:m.sender_id]||{};
+  const d=$('detailView');d.replaceChildren();
+  const back=document.createElement('button');back.className='back';back.textContent='← Voltar para mensagens';back.onclick=()=>{showList();load().catch(showLoadError)};
+  const title=document.createElement('h2');title.textContent=m.subject||'(Sem assunto)';
+  const meta=document.createElement('div');meta.className='meta';meta.textContent=(m.sender_id===user.id?'Para: ':'De: ')+(p.display_name||p.username||'Conta LinkStory')+' · '+(p.username?'@'+p.username+'@kx.mail':'')+' · '+dateLabel(m.created_at);
+  const body=document.createElement('div');body.className='body-text';body.textContent=m.body;
+  const actions=document.createElement('div');actions.className='actions';
+  const starred=m.sender_id===user.id?m.sender_starred:m.recipient_starred;
+  const star=document.createElement('button');star.className='action';star.textContent=starred?'★ Remover estrela':'☆ Marcar com estrela';star.onclick=()=>toggleStar(m);
+  const trash=document.createElement('button');trash.className='action';trash.textContent=folder==='trash'?'Restaurar':'Mover para lixeira';trash.onclick=()=>toggleTrash(m);
+  actions.append(star,trash);
+  if(m.sender_id!==user.id){const reply=document.createElement('button');reply.className='action';reply.textContent='Responder';reply.onclick=()=>{ $('toAddress').value=(p.username||'')+'@kx.mail';$('mailSubject').value='Re: '+(m.subject||'');$('mailBody').value='';$('composeBox').classList.add('open')};actions.append(reply)}
+  d.append(back,title,meta,body,actions);showDetail();
+ }
+ async function toggleStar(m){const sender=m.sender_id===user.id;const field=sender?'sender_starred':'recipient_starred';const r=await db.from('kx_mail_messages').update({[field]:!m[field]}).eq('id',m.id);if(r.error)return showLoadError(r.error);m[field]=!m[field];await load();if(current)openMessage(m)}
+ async function toggleTrash(m){const sender=m.sender_id===user.id;const field=sender?'sender_deleted_at':'recipient_deleted_at';const value=folder==='trash'?null:new Date().toISOString();const r=await db.from('kx_mail_messages').update({[field]:value}).eq('id',m.id);if(r.error)return showLoadError(r.error);showList();await load()}
+ function showLoadError(e){$('mailList').innerHTML='<div class="status error">Não foi possível carregar o KX Mail. '+(e?.message||'Verifique sua conexão e tente novamente.')+'</div>'}
+ $('searchMail').addEventListener('input',renderList);
+ $('refreshMail').onclick=()=>load().catch(showLoadError);
+ document.querySelectorAll('[data-folder]').forEach(b=>b.onclick=()=>{folder=b.dataset.folder;document.querySelectorAll('[data-folder]').forEach(x=>x.classList.toggle('active',x===b));showList();load().catch(showLoadError)});
+ $('composeButton').onclick=()=>{$('composeForm').reset();setStatus('');$('composeBox').classList.add('open')};
+ $('closeCompose').onclick=()=>$('composeBox').classList.remove('open');
+ $('composeBox').addEventListener('click',e=>{if(e.target===$('composeBox'))$('composeBox').classList.remove('open')});
+ $('composeForm').onsubmit=async e=>{
+  e.preventDefault();const raw=$('toAddress').value.trim().toLowerCase();const username=raw.replace(/^@/,'').replace(/@kx\.mail$/,'');const subject=$('mailSubject').value.trim();const body=$('mailBody').value.trim();
+  if(!/^[a-z0-9_]{3,30}$/.test(username))return setStatus('Digite um KX.Mail válido, como usuario@kx.mail.',true);
+  if(!body)return setStatus('Escreva uma mensagem antes de enviar.',true);
+  setStatus('Procurando destinatário…');
+  const target=await db.from('profiles').select('id,username').eq('username',username).maybeSingle();
+  if(target.error||!target.data)return setStatus('Não encontramos esse usuário do LinkStory.',true);
+  if(target.data.id===user.id)return setStatus('Você não pode enviar uma mensagem para si mesmo.',true);
+  setStatus('Enviando…');
+  const sent=await db.from('kx_mail_messages').insert({sender_id:user.id,recipient_id:target.data.id,subject,body});
+  if(sent.error)return setStatus('Não foi possível enviar: '+sent.error.message,true);
+  $('composeBox').classList.remove('open');folder='sent';document.querySelectorAll('[data-folder]').forEach(x=>x.classList.toggle('active',x.dataset.folder===folder));await load();
+ };
+ async function init(){
+  const session=await getLinkStorySession();if(!session.data.session){location.href='login.html?next=kx-mail.html';return}
+  user=session.data.session.user;
+  const p=await db.from('profiles').select('username,display_name,kx_mail').eq('id',user.id).maybeSingle();
+  if(p.error)throw p.error;profile=p.data||{};
+  $('accountAddress').textContent=(profile.kx_mail||((profile.username||'usuario')+'@kx.mail'))+' · Caixa interna do LinkStory';
+  await load();
+ }
+ init().catch(showLoadError);
+})();
+</script>
+</body></html>
