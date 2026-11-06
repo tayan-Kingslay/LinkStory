@@ -19,7 +19,7 @@ html[data-ls-theme="dark"] body{background:#111!important;color:#f5f7fa!importan
 <div class="grid">
 <section class="card"><div class="card-head"><h2>Encontrar pessoas</h2><p>Use o nome de usuário ou KX.Mail.</p></div><div class="add"><form id="addForm"><input id="friendName" required maxlength="80" placeholder="usuario ou usuario@kx.mail" autocomplete="off"><button class="primary" type="submit">Adicionar</button></form><div class="status" id="addStatus" role="status"></div></div>
 <div class="card-head"><h2>Solicitações recebidas</h2></div><div class="list" id="incoming"><div class="empty">Carregando…</div></div>
-<div class="card-head"><h2>Meus amigos</h2></div><div class="list" id="friendList"><div class="empty">Carregando…</div></div>
+<div class="card-head"><h2>Solicitações enviadas</h2></div><div class="list" id="sentRequests"><div class="empty">Nenhuma solicitação enviada.</div></div><div class="card-head"><h2>Meus amigos</h2></div><div class="list" id="friendList"><div class="empty">Carregando…</div></div>
 </section>
 <section class="card chat"><div class="chat-head"><div class="avatar" id="chatAvatar">LS</div><div><strong id="chatName">Suas conversas</strong><small id="chatHint">Escolha um amigo para começar.</small></div></div><div class="chat-body" id="chatBody"><div class="empty">Suas conversas com amigos aparecerão aqui.</div></div><form class="chat-compose" id="chatForm"><textarea id="chatInput" maxlength="5000" rows="1" placeholder="Escreva uma mensagem…" disabled></textarea><button class="primary" id="sendButton" disabled>Enviar</button></form><div class="status" id="chatStatus" style="padding:0 14px 8px"></div></section>
 </div></main>
@@ -32,21 +32,23 @@ html[data-ls-theme="dark"] body{background:#111!important;color:#f5f7fa!importan
  const date=v=>new Date(v).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
  function avatar(node,p){node.replaceChildren();if(p?.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='';node.append(img)}else node.textContent=initials(p?.display_name||p?.username)}
  async function loadPeople(){
-  const [incoming,outA,outB,fa,fb]=await Promise.all([
+  const [incoming,outgoing,fa,fb]=await Promise.all([
    db.from('friend_requests').select('id,sender_id,created_at').eq('recipient_id',user.id).eq('status','pending').order('created_at',{ascending:false}),
-   db.from('friend_requests').select('id,recipient_id,created_at').eq('sender_id',user.id).eq('status','pending'),
-   db.from('friend_requests').select('id,sender_id,created_at').eq('recipient_id',user.id).eq('status','pending'),
+   db.from('friend_requests').select('id,recipient_id,created_at').eq('sender_id',user.id).eq('status','pending').order('created_at',{ascending:false}),
    db.from('friendships').select('user_a,user_b').eq('user_a',user.id),
    db.from('friendships').select('user_a,user_b').eq('user_b',user.id)
   ]);
-  for(const r of [incoming,outA,outB,fa,fb])if(r.error)throw r.error;
-  const requests=incoming.data||[],friendships=[...(fa.data||[]),...(fb.data||[])];
-  const ids=[...new Set([...requests.map(x=>x.sender_id),...friendships.map(x=>x.user_a===user.id?x.user_b:x.user_a)])];
+  for(const r of [incoming,outgoing,fa,fb])if(r.error)throw r.error;
+  const requests=incoming.data||[],sentRequests=outgoing.data||[],friendships=[...(fa.data||[]),...(fb.data||[])];
+  const ids=[...new Set([...requests.map(x=>x.sender_id),...sentRequests.map(x=>x.recipient_id),...friendships.map(x=>x.user_a===user.id?x.user_b:x.user_a)])];
   const p=ids.length?await db.from('profiles').select('id,username,display_name,avatar_url').in('id',ids):{data:[],error:null};
   if(p.error)throw p.error;const people=Object.fromEntries((p.data||[]).map(x=>[x.id,x]));
   const incomingBox=$('incoming');incomingBox.replaceChildren();
   if(!requests.length)incomingBox.innerHTML='<div class="empty">Nenhuma solicitação pendente.</div>';
   requests.forEach(req=>{const person=people[req.sender_id]||{};const row=makePerson(person);const actions=document.createElement('div');actions.className='actions';const accept=document.createElement('button');accept.className='small accept';accept.textContent='Aceitar';accept.onclick=()=>respond(req.id,true);const reject=document.createElement('button');reject.className='small';reject.textContent='Recusar';reject.onclick=()=>respond(req.id,false);actions.append(accept,reject);row.append(actions);incomingBox.append(row)});
+  const sentBox=$('sentRequests');sentBox.replaceChildren();
+  if(!sentRequests.length)sentBox.innerHTML='<div class="empty">Nenhuma solicitação enviada.</div>';
+  sentRequests.forEach(req=>{const person=people[req.recipient_id]||{};const row=makePerson(person);const pending=document.createElement('span');pending.className='small';pending.textContent='Pendente';row.append(pending);sentBox.append(row)});
   const friendBox=$('friendList');friendBox.replaceChildren();
   if(!friendships.length)friendBox.innerHTML='<div class="empty">Seus amigos aparecerão aqui.</div>';
   friendships.forEach(f=>{const id=f.user_a===user.id?f.user_b:f.user_a;const person=people[id]||{};const row=makePerson(person);const open=document.createElement('button');open.className='small accept';open.textContent='Conversar';open.onclick=()=>openChat(person);row.append(open);friendBox.append(row)});
