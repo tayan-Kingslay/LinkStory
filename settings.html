@@ -42,8 +42,7 @@ async function loadAccount(){
  const session=await db.auth.getSession();currentUser=session.data.session?.user;
  if(!currentUser){location.href='login.html?next=settings.html';return}
  const result=await getLinkStoryProfile();if(result.error)throw result.error;currentProfile=result.data||{};
- const privateResult=await db.from('profiles').select('preferences').eq('id',currentUser.id).single();
- if(privateResult.error)throw privateResult.error;preferences=privateResult.data?.preferences||{};
+ preferences=currentProfile.preferences||{};
  const p=currentProfile;
  document.getElementById('settingsName').textContent=p.display_name||'Usuário';
  document.getElementById('settingsHandle').textContent=p.username?'@'+p.username:'';
