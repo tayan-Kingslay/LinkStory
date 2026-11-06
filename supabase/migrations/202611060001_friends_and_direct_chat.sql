@@ -75,3 +75,49 @@ end; $$;
 grant execute on function public.send_friend_request(text) to authenticated;
 grant execute on function public.respond_friend_request(uuid,boolean) to authenticated;
 grant execute on function public.create_or_get_direct_conversation(uuid) to authenticated;
+
+
+-- Account privacy settings used by settings.html and guard.js.
+
+create table if not exists public.linkstory_safety_settings (
+ user_id uuid primary key references public.profiles(id) on delete cascade,
+ birth_date date,
+ profile_visibility text not null default 'public' check (profile_visibility in ('public','private')),
+ show_library boolean not null default false,
+ adult_content_enabled boolean not null default false,
+ updated_at timestamptz not null default now()
+);
+alter table public.linkstory_safety_settings enable row level security;
+drop policy if exists safety_settings_read_own on public.linkstory_safety_settings;
+create policy safety_settings_read_own on public.linkstory_safety_settings for select to authenticated using (auth.uid()=user_id);
+drop policy if exists safety_settings_insert_own on public.linkstory_safety_settings;
+create policy safety_settings_insert_own on public.linkstory_safety_settings for insert to authenticated with check (auth.uid()=user_id);
+drop policy if exists safety_settings_update_own on public.linkstory_safety_settings;
+create policy safety_settings_update_own on public.linkstory_safety_settings for update to authenticated using (auth.uid()=user_id) with check (auth.uid()=user_id);
+
+create or replace function public.get_linkstory_safety_settings()
+returns table(birth_date date,profile_visibility text,show_library boolean,adult_content_enabled boolean)
+language plpgsql stable security definer set search_path=public as $$
+begin
+ if auth.uid() is null then raise exception 'Entre na sua conta.'; end if;
+ return query
+ select s.birth_date,s.profile_visibility,s.show_library,s.adult_content_enabled
+ from public.linkstory_safety_settings s where s.user_id=auth.uid();
+ if not found then
+  return query select null::date,'public'::text,false,false;
+ end if;
+end; $$;
+
+create or replace function public.set_linkstory_safety_settings(
+ p_birth_date date,p_profile_visibility text,p_show_library boolean,p_adult_content_enabled boolean
+) returns void language plpgsql security definer set search_path=public as $$
+begin
+ if auth.uid() is null then raise exception 'Entre na sua conta.'; end if;
+ if p_profile_visibility not in ('public','private') then raise exception 'Visibilidade inválida.'; end if;
+ insert into public.linkstory_safety_settings(user_id,birth_date,profile_visibility,show_library,adult_content_enabled,updated_at)
+ values(auth.uid(),p_birth_date,p_profile_visibility,coalesce(p_show_library,false),coalesce(p_adult_content_enabled,false),now())
+ on conflict(user_id) do update set birth_date=excluded.birth_date,profile_visibility=excluded.profile_visibility,
+ show_library=excluded.show_library,adult_content_enabled=excluded.adult_content_enabled,updated_at=now();
+end; $$;
+grant execute on function public.get_linkstory_safety_settings() to authenticated;
+grant execute on function public.set_linkstory_safety_settings(date,text,boolean,boolean) to authenticated;
