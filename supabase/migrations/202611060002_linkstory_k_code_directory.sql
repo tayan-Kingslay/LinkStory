@@ -53,3 +53,7 @@ begin
 end; $$;
 grant execute on function public.search_linkstory_people(text) to authenticated;
 grant execute on function public.send_friend_request(text) to authenticated;
+revoke all on function public.search_linkstory_people(text) from public, anon;
+revoke all on function public.send_friend_request(text) from public, anon;
+grant execute on function public.search_linkstory_people(text) to authenticated;
+grant execute on function public.send_friend_request(text) to authenticated;
