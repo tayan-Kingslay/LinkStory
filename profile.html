@@ -85,7 +85,7 @@ h2{letter-spacing:-.8px}
    ]);
    if(error)throw error;if(previousError)throw previousError;
    const rows=data||[];podium.replaceChildren();
-   if(!rows.length){const empty=document.createElement('div');empty.className='reader-month-status';empty.textContent='O ranking ainda está começando. Leia capítulos durante este mês para conquistar seu emblema.';podium.append(empty);return}
+   if(!rows.length){const empty=document.createElement('div');empty.className='reader-month-status';empty.textContent='O ranking ainda está começando. Leia capítulos durante este mês para conquistar seu emblema.';podium.append(empty);const previousWinner=(previousRows||[]).find(person=>person.rank_position===1);if(previousWinner?.reader_id===user?.id){const previousName=new Intl.DateTimeFormat('pt-BR',{month:'long'}).format(previousDate);own.hidden=false;own.textContent='🏆 Você conquistou o emblema Leitor do mês de '+previousName+'!'}return}
    const medals=['🥇','🥈','🥉'];
    rows.slice(0,3).forEach((person,index)=>{
     const card=document.createElement('div');card.className='reader-rank'+(person.reader_id===user?.id?' me':'');
