@@ -222,7 +222,7 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 <section class="shelf" id="recentShelf"><div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div><div class="track" id="recentTrack"></div></section>
 <section class="shelf" id="allShelf"><div class="shelf-head"><h2 class="shelf-title">Mais histórias</h2></div><div class="track" id="allTrack"></div></section>
 </div>
-<section class="creator"><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
+<section class="creator" id="creatorHomeCta" hidden><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
 <nav class="ls-bottom-nav" aria-label="Navegação principal">
   <a class="bottom-nav-item active" href="index.html" aria-current="page"><span class="bottom-nav-icon">⌂</span><strong>Início</strong></a>
@@ -250,6 +250,7 @@ searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLow
 })();
 const menu=document.getElementById('menuDialog'),search=document.getElementById('searchDialog');
 document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
+(async()=>{const box=document.getElementById('creatorHomeCta');try{const {data:{user}}=await linkstorySupabase.auth.getUser();if(!user)return;const {data:p,error}=await linkstorySupabase.from('profiles').select('role').eq('id',user.id).maybeSingle();if(!error&&p?.role==='criador')box.hidden=false}catch{box.hidden=true}})();
 </script>
 
 
