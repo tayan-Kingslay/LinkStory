@@ -213,23 +213,30 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   if(!opener){opener=document.createElement('button');opener.id='lsGlobalMenuButton';opener.className='ls-global-menu-btn';opener.setAttribute('aria-label','Abrir menu');opener.innerHTML='☰';const header=document.querySelector('.topbar,.top,.header');if(header)header.appendChild(opener);else{opener.style.position='fixed';opener.style.top='14px';opener.style.right='14px';opener.style.zIndex='1001';document.body.appendChild(opener)}}
   if(opener&&!opener.dataset.lsBound){opener.dataset.lsBound='1';opener.addEventListener('click',()=>{if(typeof menu.showModal==='function'){if(!menu.open)menu.showModal()}else menu.setAttribute('open','')})}
   {
+    const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
+    const showNotifications=page==='index.html'||page==='messages.html';
     const headerActions=document.querySelector('.header-actions,.top-actions,.reader-right,.header .actions');
-    const notificationSelector='a[href="notifications.html"],a[href$="/notifications.html"],[aria-label*="notifica" i],[title*="notifica" i],[data-notifications]';
     const notificationContainer=headerActions||document.querySelector('.header,.topbar,.top');
-    const existing=notificationContainer?[...notificationContainer.querySelectorAll(notificationSelector)]:[];
-    const unique=[...new Set(existing)];
-    const keep=unique[0]||null;
-    unique.slice(1).forEach(el=>el.remove());
+    const notificationSelector='a[href="notifications.html"],a[href$="/notifications.html"],[aria-label*="notifica" i],[title*="notifica" i],[data-notifications],#lsNotificationShortcut';
     const injected=document.getElementById('lsNotificationShortcut');
-    if(keep&&injected&&keep!==injected)injected.remove();
-    if(!keep&&!injected){
-      const notify=document.createElement('a');notify.id='lsNotificationShortcut';notify.href='notifications.html';notify.setAttribute('aria-label','Notificações');notify.title='Notificações';
-      notify.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
-      notify.style.cssText='position:relative;flex:0 0 42px;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;margin-left:auto;border:1px solid #dbe5ef;border-radius:14px;background:#fff;color:#1676dc;box-shadow:0 3px 10px #1020330c;text-decoration:none;z-index:2';
-      notify.querySelector('svg').style.cssText='width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round';
-      if(headerActions){headerActions.insertBefore(notify,opener&&opener.parentElement===headerActions?opener:null)}
-      else if(opener&&opener.parentElement){opener.parentElement.insertBefore(notify,opener)}
-      else {notify.style.position='fixed';notify.style.top='14px';notify.style.right='68px';document.body.appendChild(notify)}
+    if(!showNotifications){
+      if(notificationContainer)notificationContainer.querySelectorAll(notificationSelector).forEach(el=>el.remove());
+      if(injected)injected.remove();
+    }else{
+      const existing=notificationContainer?[...notificationContainer.querySelectorAll(notificationSelector)]:[];
+      const unique=[...new Set(existing)];
+      const keep=unique[0]||null;
+      unique.slice(1).forEach(el=>el.remove());
+      if(keep&&injected&&keep!==injected)injected.remove();
+      if(!keep&&!injected){
+        const notify=document.createElement('a');notify.id='lsNotificationShortcut';notify.href='notifications.html';notify.setAttribute('aria-label','Notificações');notify.title='Notificações';
+        notify.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
+        notify.style.cssText='position:relative;flex:0 0 42px;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;margin-left:auto;border:1px solid #dbe5ef;border-radius:14px;background:#fff;color:#1676dc;box-shadow:0 3px 10px #1020330c;text-decoration:none;z-index:2';
+        notify.querySelector('svg').style.cssText='width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round';
+        if(headerActions){headerActions.insertBefore(notify,opener&&opener.parentElement===headerActions?opener:null)}
+        else if(opener&&opener.parentElement){opener.parentElement.insertBefore(notify,opener)}
+        else {notify.style.position='fixed';notify.style.top='14px';notify.style.right='68px';document.body.appendChild(notify)}
+      }
     }
   }
   const close=menu.querySelector('.ls-menu-close');if(close&&!close.dataset.lsBound){close.dataset.lsBound='1';close.addEventListener('click',()=>{if(typeof menu.close==='function')menu.close();else menu.removeAttribute('open')})}
