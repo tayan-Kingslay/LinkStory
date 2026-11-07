@@ -253,5 +253,23 @@ document.getElementById('openMenu').onclick=()=>menu.showModal();document.getEle
 </script>
 
 
+<script>
+(async()=>{
+  const creatorLinks=[...document.querySelectorAll('a[href="publish.html"],a[href="studio.html"]')];
+  const creatorPanel=document.querySelector('.creator');
+  try{
+    const session=await LinkStoryManga.session();
+    if(!session){creatorLinks.forEach(a=>a.hidden=true);if(creatorPanel)creatorPanel.hidden=true;return}
+    const profile=await LinkStoryManga.currentProfile();
+    const isCreator=profile?.role==='criador';
+    creatorLinks.forEach(a=>{a.hidden=!isCreator});
+    if(creatorPanel)creatorPanel.hidden=!isCreator;
+  }catch(error){
+    console.error('LinkStory creator access:',error);
+    creatorLinks.forEach(a=>a.hidden=true);
+    if(creatorPanel)creatorPanel.hidden=true;
+  }
+})();
+</script>
 </body>
 </html>
