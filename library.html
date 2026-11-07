@@ -8,7 +8,7 @@
 :root{--blue:#0877ed;--ink:#17263a;--muted:#78879a;--line:#e5ebf2;--surface:#fff;--wash:#f6f8fb}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f7f9fc;color:var(--ink);font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}
 .topbar{height:62px;display:flex;align-items:center;gap:12px;padding:0 15px;background:rgba(255,255,255,.86);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.back,.menu-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;display:grid;place-items:center;flex:none;color:#40536b}.back{font-size:25px;line-height:1}.logo{display:flex;align-items:center}.logo img{width:120px;height:40px;object-fit:contain}.menu-btn{margin-left:auto;font-size:0}.menu-btn:before{content:"";width:16px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.menu-btn:after{content:"";position:absolute;width:16px;border-top:2px solid currentColor}
+.back,.menu-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;display:grid;place-items:center;flex:none;color:#40536b}.back{font-size:25px;line-height:1}.logo{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center}.logo img{width:120px;height:40px;object-fit:contain}.menu-btn{margin-left:auto;font-size:0}.menu-btn:before{content:"";width:16px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.menu-btn:after{content:"";position:absolute;width:16px;border-top:2px solid currentColor}
 main{width:min(980px,calc(100% - 32px));margin:0 auto;padding:34px 0 112px}
 .library-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:25px}.eyebrow{display:block;margin-bottom:8px;color:var(--blue);font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.library-heading h1{margin:0;font-size:clamp(29px,5vw,39px);line-height:1.05;letter-spacing:-1.4px;font-weight:800}.library-heading p{margin:9px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
 .heading-mark{width:52px;height:52px;border:1px solid #dce9f8;border-radius:17px;background:#edf5ff;color:var(--blue);display:grid;place-items:center;flex:none}.heading-mark svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -22,7 +22,7 @@ html[data-ls-theme="dark"] body{background:#101720;color:#edf3fb}html[data-ls-th
 </style>  <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
 <body>
-<header class="topbar"><a class="back" href="index.html" aria-label="Voltar">‹</a><a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" aria-label="Abrir menu"></button></header>
+<header class="topbar"><a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" aria-label="Abrir menu"></button></header>
 <main>
   <section class="library-heading"><div><span class="eyebrow">Seu espaço pessoal</span><h1>Biblioteca</h1><p>Suas histórias favoritas, leituras e descobertas em um só lugar.</p></div><div class="heading-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8M8 10h8"/></svg></div></section>
   <nav class="tabs" aria-label="Seções da biblioteca"><button class="active" data-tab="reading">Continuar lendo</button><button data-tab="saved">Salvos</button><button data-tab="history">Histórico</button></nav>
@@ -77,4 +77,4 @@ html[data-ls-theme="dark"] body{background:#101720;color:#edf3fb}html[data-ls-th
  }
 })();
 </script>
-</body></html>
+<script src="global-nav.js"></script></body></html>

@@ -84,13 +84,15 @@ html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!
 }
 .header .logo{flex:0 0 auto;display:flex;align-items:center}
 .header .logo img{width:124px;height:40px;object-fit:contain}
-.header-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:12px}
 .header .circle{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.52);border-color:rgba(207,225,242,.95);box-shadow:0 4px 14px rgba(16,32,51,.05)}
+.header .home-shortcut svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:420px){.header-actions{gap:8px}.header .circle{width:36px;height:36px}.header .logo img{width:104px;height:34px}}
 @media(max-width:720px){
   .header{width:calc(100% - 20px);height:58px;margin-top:9px;padding:0 9px;border-radius:18px;top:8px}
   .header .logo img{width:112px;height:36px}
   .header .circle{width:40px;height:40px;border-radius:13px}
-  .header-actions{gap:6px}
+  .header-actions{gap:9px}
   main{padding-top:2px}
 }
 @media(max-width:420px){.header .search{display:flex!important}.header .logo img{width:112px;height:36px}.header .circle{width:38px;height:38px}}
@@ -138,7 +140,7 @@ html[data-ls-theme="dark"] .inspex-body p,.inspex-kicker{color:#aab3be}
 
 /* Navegação inferior — mesmo vidro do cabeçalho superior */
 .ls-bottom-nav{
-  display:none!important;
+  display:flex!important;
   position:fixed;
   left:50%;
   bottom:10px;
@@ -191,13 +193,15 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 
 
 </style>
-  <link rel="stylesheet" href="visual-system.css?v=1">
+  <link rel="stylesheet" href="visual-system.css?v=3">
+<link rel="stylesheet" href="visual-refresh.css?v=1">
 </head>
 <body>
 <header class="header">
 <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
 <div class="header-actions">
 <button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
+<a class="circle home-shortcut" href="notifications.html" aria-label="Notificações" title="Notificações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a>
 <button class="circle menu" id="openMenu" aria-label="Abrir menu"></button>
 <a class="login" href="login.html">Entrar</a>
 </div>
@@ -221,10 +225,12 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 <section class="shelf" id="recentShelf"><div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div><div class="track" id="recentTrack"></div></section>
 <section class="shelf" id="allShelf"><div class="shelf-head"><h2 class="shelf-title">Mais histórias</h2></div><div class="track" id="allTrack"></div></section>
 </div>
-<section class="creator"><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
+<section class="creator" id="creatorHomeCta" hidden><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
 <nav class="ls-bottom-nav" aria-label="Navegação principal">
   <a class="bottom-nav-item active" href="index.html" aria-current="page"><span class="bottom-nav-icon">⌂</span><strong>Início</strong></a>
+  <a class="bottom-nav-item" href="messages.html"><span class="bottom-nav-icon">▤</span><strong>Mensagens</strong></a>
+  <a class="bottom-nav-item" href="notifications.html"><span class="bottom-nav-icon">♧</span><strong>Atividades</strong></a>
   <a class="bottom-nav-item" href="library.html"><span class="bottom-nav-icon">□</span><strong>Biblioteca</strong></a>
   <a class="bottom-nav-item" href="profile.html"><span class="bottom-nav-icon">●</span><strong>Perfil</strong></a>
 </nav>
@@ -249,8 +255,27 @@ searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLow
 })();
 const menu=document.getElementById('menuDialog'),search=document.getElementById('searchDialog');
 document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
+(async()=>{const box=document.getElementById('creatorHomeCta');try{const {data:{user}}=await linkstorySupabase.auth.getUser();if(!user)return;const {data:p,error}=await linkstorySupabase.from('profiles').select('role').eq('id',user.id).maybeSingle();if(!error&&p?.role==='criador')box.hidden=false}catch{box.hidden=true}})();
 </script>
 
 
+<script>
+(async()=>{
+  const creatorLinks=[...document.querySelectorAll('a[href="publish.html"],a[href="studio.html"]')];
+  const creatorPanel=document.querySelector('.creator');
+  try{
+    const session=await LinkStoryManga.session();
+    if(!session){creatorLinks.forEach(a=>a.hidden=true);if(creatorPanel)creatorPanel.hidden=true;return}
+    const profile=await LinkStoryManga.currentProfile();
+    const isCreator=profile?.role==='criador';
+    creatorLinks.forEach(a=>{a.hidden=!isCreator});
+    if(creatorPanel)creatorPanel.hidden=!isCreator;
+  }catch(error){
+    console.error('LinkStory creator access:',error);
+    creatorLinks.forEach(a=>a.hidden=true);
+    if(creatorPanel)creatorPanel.hidden=true;
+  }
+})();
+</script>
 </body>
 </html>
