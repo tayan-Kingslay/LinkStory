@@ -40,10 +40,13 @@ h2{letter-spacing:-.8px}
 .edit-field input,.edit-field textarea{width:100%;border:1px solid var(--l);border-radius:10px;padding:12px;font:inherit}.edit-field textarea{min-height:100px;resize:vertical}
 .edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.edit-status{font-size:12px;color:var(--m);min-height:18px}
 @media(max-width:600px){.profile-actions{display:grid;grid-template-columns:1fr 1fr}.profile-action{padding:10px 8px}.edit-modal{padding:17px}}
+
+.reader-month-sub{margin:6px 0 0;color:#718198;font-size:12px}.reader-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.reader-rank{min-width:0;padding:15px 10px;border:1px solid #e2eaf3;border-radius:16px;background:linear-gradient(160deg,#fff,#f5f9ff);text-align:center}.reader-rank .medal{font-size:25px;display:block;margin-bottom:7px}.reader-rank strong{display:block;font-size:12px;overflow-wrap:anywhere}.reader-rank small{display:block;margin-top:5px;color:#718198;font-size:10px}.reader-rank .rank-no{display:block;margin-bottom:5px;color:#0b72e7;font-size:9px;font-weight:900;letter-spacing:1.4px}.reader-own-badge{margin-top:10px;padding:12px 14px;border:1px solid #cfe2f8;border-radius:13px;background:#edf6ff;color:#135da9;font-size:12px;font-weight:800}.reader-month-status{grid-column:1/-1;padding:23px 16px;border:1px dashed #dbe5ef;border-radius:15px;text-align:center;color:#718198;font-size:12px;line-height:1.55}.reader-rank.me{border-color:#a9cff8;box-shadow:0 5px 18px #0b72e714}@media(max-width:430px){.reader-podium{gap:6px}.reader-rank{padding:12px 6px}.reader-rank strong{font-size:10px}.reader-rank small{font-size:9px}}
 </style><link rel="stylesheet" href="visual-system.css?v=3">
 <link rel="stylesheet" href="visual-refresh.css?v=1">
 </head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div><div class="account-meta" id="accountMeta" hidden><span class="account-pill"><strong id="roleLabel">Leitor</strong></span><span class="account-pill"><strong>K-Code</strong> <span id="kCode">—</span></span></div></div></section>
 <div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button><a class="profile-action" href="friends.html">Amigos e mensagens</a><a class="profile-action" href="settings.html">Configurações</a></div>
+<section class="section reader-month" id="readerMonth"><div class="head"><div><span class="ey">CONQUISTAS DA COMUNIDADE</span><h2>Leitor do mês</h2><p class="reader-month-sub" id="readerMonthSubtitle">O ranking mensal acompanha os capítulos lidos.</p></div></div><div class="reader-podium" id="readerPodium"><div class="reader-month-status" id="readerMonthStatus">Carregando emblemas…</div></div><div class="reader-own-badge" id="readerOwnBadge" hidden></div></section>
 <section class="section"><div class="head"><div><span class="ey">PUBLICAÇÕES</span><h2>Minhas obras</h2></div></div><div id="empty" class="empty"><strong>Nenhuma obra publicada.</strong>Quando você publicar, ela aparecerá aqui.</div><div id="works" class="works"></div></section></main>
 <dialog class="edit-modal" id="editModal"><form id="profileForm"><h2>Editar perfil</h2><p>Atualize as informações que outras pessoas veem no LinkStory.</p>
 <label class="edit-field"><span>Nome público</span><input id="editDisplayName" maxlength="80" required></label>
@@ -66,6 +69,29 @@ h2{letter-spacing:-.8px}
   const avatar=$('profileAvatar');avatar.replaceChildren();
   if(p?.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de perfil';img.onerror=()=>{avatar.textContent=(p.display_name||'U').slice(0,1).toUpperCase()};avatar.append(img)}
   else avatar.textContent=(p?.display_name||'U').slice(0,1).toUpperCase();
+ }
+
+ async function loadReaderBadges(){
+  const status=$('readerMonthStatus'),podium=$('readerPodium'),own=$('readerOwnBadge');
+  const now=new Date(),monthName=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(now);
+  $('readerMonthSubtitle').textContent='Ranking parcial de '+monthName+'. O emblema definitivo é fechado no último dia do mês.';
+  try{
+   const {data,error}=await db.rpc('get_monthly_reader_leaderboard');if(error)throw error;
+   const rows=data||[];podium.replaceChildren();
+   if(!rows.length){const empty=document.createElement('div');empty.className='reader-month-status';empty.textContent='O ranking ainda está começando. Leia capítulos durante este mês para conquistar seu emblema.';podium.append(empty);return}
+   const medals=['🥇','🥈','🥉'];
+   rows.slice(0,3).forEach((person,index)=>{
+    const card=document.createElement('div');card.className='reader-rank'+(person.reader_id===user?.id?' me':'');
+    const medal=document.createElement('span');medal.className='medal';medal.textContent=medals[index]||'🏅';
+    const rank=document.createElement('span');rank.className='rank-no';rank.textContent=(index+1)+'º LUGAR';
+    const name=document.createElement('strong');name.textContent=person.display_name||person.username||'Leitor';
+    const count=document.createElement('small');count.textContent=person.chapters_read+' capítulo(s) lido(s)';
+    card.append(medal,rank,name,count);podium.append(card);
+   });
+   const mine=rows.find(person=>person.reader_id===user?.id);
+   own.hidden=!mine;
+   if(mine){own.textContent=mine.rank_position===1?'🏆 Você está em 1º lugar no ranking parcial — emblema Leitor do mês!':mine.rank_position<=3?'🏅 Você está entre os 3 leitores em destaque deste mês.':'Você está em '+mine.rank_position+'º lugar. Continue lendo para subir no ranking.'}
+  }catch(error){status.textContent='Não foi possível carregar os emblemas agora.';console.warn('Reader of month:',error)}
  }
  function openEditor(){ $('editDisplayName').value=profile?.display_name||'';$('editAvatarFile').value='';$('avatarFileHint').textContent=profile?.avatar_url?'Foto atual mantida. Escolha outra para substituir.':'Escolha uma foto da galeria do celular.';$('editUsername').value=profile?.username||'';$('editBio').value=profile?.bio||'';setStatus('');$('editModal').showModal() }
  $('editProfile').onclick=openEditor;$('cancelEdit').onclick=()=>$('editModal').close();
@@ -94,7 +120,7 @@ h2{letter-spacing:-.8px}
   const session=await db.auth.getSession();user=session.data.session?.user;
   if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';return}
   const result=await getLinkStoryProfile();if(result.error)throw result.error;profile=result.data;
-  renderProfile(profile);$('editProfile').hidden=false;
+  renderProfile(profile);$('editProfile').hidden=false;await loadReaderBadges();
   if(location.hash==='#edit')openEditor();
   const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===user.id);
   if(works.length){$('empty').style.display='none';const container=$('works');works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));works.forEach((m,index)=>{
