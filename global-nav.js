@@ -181,7 +181,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
       <a href="library.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M4 4.5h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/><path d="M4 18.5a2 2 0 0 1 2-2h13M8 8h7"/></svg></span><span class="ls-menu-copy">Biblioteca<small>Continue lendo e veja seus mangás salvos</small></span><span class="ls-menu-arrow">›</span></a>
       <a href="profile.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span class="ls-menu-copy">Meu perfil<small>Veja sua página e suas publicações</small></span><span class="ls-menu-arrow">›</span></a>
     </nav></section>
-    <section class="ls-menu-group"><span class="ls-menu-label">Área do criador</span><nav class="ls-menu-links">
+    <section class="ls-menu-group" id="lsCreatorMenu" hidden><span class="ls-menu-label">Área do criador</span><nav class="ls-menu-links">
       <a href="studio.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5 5.5 14 16.8 2.7a2.1 2.1 0 0 1 3 3L8.5 17z"/><path d="m14.8 4.7 4.5 4.5M4 22h16"/></svg></span><span class="ls-menu-copy">Meu Estúdio<small>Organize suas obras e capítulos</small></span><span class="ls-menu-arrow">›</span></a>
       <a href="publish.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5"/><path d="M4 14v6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-6"/></svg></span><span class="ls-menu-copy">Publicar mangá<small>Traga uma nova história para o LinkStory</small></span><span class="ls-menu-arrow">›</span></a>
     </nav></section>
@@ -198,6 +198,18 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   </div>`
   if(!menu){menu=document.createElement('dialog');menu.id='lsMenu';document.body.appendChild(menu)}
   menu.classList.add('ls-menu-dialog');menu.innerHTML=menuMarkup;
+  (async()=>{
+    const creatorSection=menu.querySelector('#lsCreatorMenu');
+    if(!creatorSection)return;
+    try{
+      const client=window.linkstorySupabase;
+      if(!client){creatorSection.hidden=true;return}
+      const {data:{user}}=await client.auth.getUser();
+      if(!user){creatorSection.hidden=true;return}
+      const {data:profile,error}=await client.from('profiles').select('role').eq('id',user.id).maybeSingle();
+      creatorSection.hidden=!!error||profile?.role!=='criador';
+    }catch{creatorSection.hidden=true}
+  })();
   if(!opener){opener=document.createElement('button');opener.id='lsGlobalMenuButton';opener.className='ls-global-menu-btn';opener.setAttribute('aria-label','Abrir menu');opener.innerHTML='☰';const header=document.querySelector('.topbar,.top,.header');if(header)header.appendChild(opener);else{opener.style.position='fixed';opener.style.top='14px';opener.style.right='14px';opener.style.zIndex='1001';document.body.appendChild(opener)}}
   if(opener&&!opener.dataset.lsBound){opener.dataset.lsBound='1';opener.addEventListener('click',()=>{if(typeof menu.showModal==='function'){if(!menu.open)menu.showModal()}else menu.setAttribute('open','')})}
   const close=menu.querySelector('.ls-menu-close');if(close&&!close.dataset.lsBound){close.dataset.lsBound='1';close.addEventListener('click',()=>{if(typeof menu.close==='function')menu.close();else menu.removeAttribute('open')})}
