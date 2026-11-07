@@ -139,8 +139,11 @@
  async function init(){
   const session=await getLinkStorySession();if(!session.data.session){location.href='login.html?next=kx-mail.html';return}
   user=session.data.session.user;
-  const p=await db.from('profiles').select('username,display_name,kx_mail').eq('id',user.id).maybeSingle();
+  const p=await db.from('profiles').select('username,display_name').eq('id',user.id).maybeSingle();
   if(p.error)throw p.error;profile=p.data||{};
+  const privateProfile=await db.rpc('get_my_linkstory_private_profile');
+  if(privateProfile.error)throw privateProfile.error;
+  profile={...profile,...(privateProfile.data||{})};
   $('accountAddress').textContent=(profile.kx_mail||((profile.username||'usuario')+'@kx.mail'))+' · Caixa interna do LinkStory';
   await load();
  }
