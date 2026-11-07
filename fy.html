@@ -62,13 +62,67 @@ dialog::backdrop{background:rgba(16,32,51,.38)!important}
 .comment{background:#f8fafc!important;border-color:#e2e8f0!important}
 .toast{background:#102033!important;color:#fff!important}
 
+
+/* Interações sociais: régua de ações, menus e comentários */
+.post-head{gap:10px}
+.author{flex:1}
+.follow-btn{flex:none;min-height:34px;padding:0 13px;border:1px solid #b9d8fb;border-radius:999px;background:#eaf4ff;color:#0758b5;font-size:11px;font-weight:900}
+.follow-btn.following{background:#f7f9fc;border-color:#dbe5ef;color:#52657a}
+.post-menu-btn{width:36px;height:36px;border:1px solid var(--line);border-radius:12px;background:#f7f9fc;color:#52657a;font-size:20px}
+.post-stats{padding:10px 2px 8px}
+.actions,.post.own .actions{display:flex;align-items:center;justify-content:space-around;gap:6px;border-top:1px solid #e8edf3;padding-top:9px}
+.action{flex:1;min-width:0;min-height:43px;display:flex;align-items:center;justify-content:center;gap:7px;padding:0 7px;border:1px solid transparent;border-radius:13px;background:transparent;color:#52657a;font-size:11px;font-weight:850}
+.action svg{width:19px;height:19px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.action .action-count{font-size:11px;font-variant-numeric:tabular-nums}
+.action.liked{color:#e23e68;background:#fff2f5}
+.action:active,.follow-btn:active,.post-menu-btn:active{transform:scale(.96)}
+.comment-list{gap:12px}
+.comment{position:relative;display:flex;align-items:flex-start;gap:9px;padding:11px;border-radius:15px;background:#f8fafc;border-color:#e5ebf2;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.comment-avatar{width:34px;height:34px;flex:0 0 34px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#eaf4ff;color:#0b72e7;font-size:11px;font-weight:900}
+.comment-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-content{min-width:0;flex:1}
+.comment-content b{font-size:12px}
+.comment-content p{margin:5px 0 7px;font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+.comment-meta{display:flex;align-items:center;gap:9px;color:#7c8b9d;font-size:10px}
+.comment-meta button{border:0;background:transparent;color:#0b72e7;font-size:10px;font-weight:850;padding:2px}
+.comment-children{display:grid;gap:8px;margin:8px 0 0 27px;padding-left:11px;border-left:2px solid #dceafa}
+.comment.is-reply{padding:9px;background:#fff}
+.comment-action-dialog,.report-dialog{width:min(360px,calc(100% - 28px));border:1px solid #dbe5ef;border-radius:22px;padding:0;background:#fff;color:#102033;box-shadow:0 22px 70px rgba(16,32,51,.22)}
+.comment-action-dialog .modal-head,.report-dialog .modal-head{padding:15px 17px}
+.comment-action-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;padding:14px}
+.comment-action{min-height:76px;border:1px solid #e2eaf3;border-radius:15px;background:#f8fafc;color:#24384e;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;font-size:11px;font-weight:850}
+.comment-action svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.comment-action.danger{color:#bd3448;background:#fff7f8;border-color:#f5d9df}
+.report-dialog{width:min(440px,calc(100% - 24px))}
+.report-dialog .modal-body{max-height:75dvh}
+.report-options{display:grid;gap:8px}
+.report-option{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e4ebf3;border-radius:12px;background:#f9fbfd;font-size:12px;font-weight:700}
+.report-option input{accent-color:#0b72e7}
+.replying-to{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 11px;margin-bottom:10px;border-radius:11px;background:#eaf4ff;color:#0758b5;font-size:11px;font-weight:800}
+.replying-to button{border:0;background:transparent;color:#0758b5;font-size:18px}
+#feedList.video-feed{display:grid;gap:14px;scroll-snap-type:y mandatory;scroll-padding-top:10px}
+.video-post{min-height:calc(100svh - 180px);scroll-snap-align:start;display:flex;flex-direction:column;justify-content:space-between}
+.video-post .media{width:100%;height:min(58svh,620px);max-height:none;object-fit:cover;margin-top:10px;border-radius:16px;background:#080d16}
+.video-post .body{margin-top:9px}
+.video-post .post-stats{margin-top:auto}
+.video-post .actions{flex-shrink:0}
+.video-hint{font-size:10px;color:#8290a2;margin:6px 2px 0}
+@media(max-width:430px){
+ .post-head{gap:7px}.follow-btn{min-height:32px;padding:0 10px;font-size:10px}
+ .action{gap:5px;min-height:42px;padding:0 3px;font-size:10px}
+ .action svg{width:18px;height:18px}
+ .video-post{min-height:calc(100svh - 166px)}
+ .video-post .media{height:54svh}
+ .comment-children{margin-left:17px;padding-left:8px}
+}
+
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
 <body>
 <header class="topbar"><a class="brand" href="index.html">Link<b>Story</b></a></header>
 <main>
-<nav class="tabs" aria-label="Feed"><button class="tab active" data-feed="for-you">Para você</button><button class="tab" data-feed="following">Seguindo</button><button class="tab" data-feed="ideas">Ideias</button></nav>
+<nav class="tabs" aria-label="Feed"><button class="tab active" data-feed="for-you">Para você</button><button class="tab" data-feed="following">Seguindo</button><button class="tab" data-feed="ideas">Ideias</button><button class="tab" data-feed="videos">Vídeos</button></nav>
 <section class="composer" id="composer">
  <div class="composer-row"><div class="avatar" id="myAvatar">LS</div><button class="compose-open" id="openComposer">Compartilhe algo com a comunidade…</button></div>
  <div class="compose-actions"><button class="chip" id="quickPost">＋ Publicação</button><button class="chip" id="quickIdea">✦ Ideia</button><button class="chip" id="quickVideo">▶ Vídeo</button></div>
@@ -83,6 +137,29 @@ dialog::backdrop{background:rgba(16,32,51,.38)!important}
  <div class="modal-actions"><button type="button" class="btn" data-close="composeDialog">Cancelar</button><button type="submit" class="btn primary" id="publishPost">Publicar</button></div>
 </form></dialog>
 <dialog id="commentsDialog"><div class="modal-head"><strong>Comentários</strong><button class="close" data-close="commentsDialog" aria-label="Fechar">×</button></div><div class="modal-body"><div id="commentList" class="comment-list"></div><form id="commentForm"><div class="field"><label for="commentBody">SEU COMENTÁRIO</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva um comentário…"></textarea></div><div class="modal-actions"><button class="btn primary" type="submit" id="sendComment">Comentar</button></div></form></div></dialog>
+<dialog id="commentActionsDialog" class="comment-action-dialog"><div class="modal-head"><strong>Ações do comentário</strong><button class="close" data-close="commentActionsDialog" aria-label="Fechar">×</button></div><div class="comment-action-list">
+<button class="comment-action" data-comment-action="like"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.7 4.7 0 0 1 8.8-2.1 4.7 4.7 0 0 1 8.8 2.1Z"/></svg><span>Curtir</span></button>
+<button class="comment-action" data-comment-action="reply"><svg viewBox="0 0 24 24"><path d="M9 17 4 12l5-5"/><path d="M4 12h9a7 7 0 0 1 7 7"/></svg><span>Responder</span></button>
+<button class="comment-action" data-comment-action="share"><svg viewBox="0 0 24 24"><path d="M12 16V3m-5 5 5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg><span>Compartilhar</span></button>
+<button class="comment-action danger" data-comment-action="report"><svg viewBox="0 0 24 24"><path d="M12 9v4m0 4h.01"/><path d="M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg><span>Denunciar</span></button>
+</div></dialog>
+<dialog id="reportDialog" class="report-dialog"><div class="modal-head"><strong>Denunciar conteúdo</strong><button class="close" data-close="reportDialog" aria-label="Fechar">×</button></div><form class="modal-body" id="reportForm">
+<p style="margin:0 0 13px;color:#64758a;font-size:12px">Selecione o motivo que melhor descreve o problema. A denúncia será enviada em particular para análise.</p>
+<div class="report-options">
+<label class="report-option"><input type="radio" name="reportReason" value="spam" required> Spam ou conteúdo enganoso</label>
+<label class="report-option"><input type="radio" name="reportReason" value="harassment"> Assédio ou intimidação</label>
+<label class="report-option"><input type="radio" name="reportReason" value="hate"> Discurso de ódio</label>
+<label class="report-option"><input type="radio" name="reportReason" value="sexual_content"> Conteúdo sexual</label>
+<label class="report-option"><input type="radio" name="reportReason" value="minor_safety"> Segurança de menores</label>
+<label class="report-option"><input type="radio" name="reportReason" value="violence"> Violência</label>
+<label class="report-option"><input type="radio" name="reportReason" value="self_harm"> Automutilação</label>
+<label class="report-option"><input type="radio" name="reportReason" value="copyright"> Direitos autorais</label>
+<label class="report-option"><input type="radio" name="reportReason" value="privacy"> Privacidade</label>
+<label class="report-option"><input type="radio" name="reportReason" value="other"> Outro motivo</label>
+</div>
+<div class="field" style="margin-top:12px"><label for="reportDetails">DETALHES (OPCIONAL)</label><textarea id="reportDetails" maxlength="500" placeholder="Conte um pouco mais, se necessário…" style="min-height:78px"></textarea></div>
+<div class="modal-actions"><button type="button" class="btn" data-close="reportDialog">Cancelar</button><button type="submit" class="btn primary" id="sendReport">Enviar denúncia</button></div>
+</form></dialog>
 <div class="toast" id="toast"></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
