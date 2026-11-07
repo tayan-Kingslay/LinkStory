@@ -51,7 +51,7 @@ h2{letter-spacing:-.8px}
 <label class="edit-field"><span>Foto do perfil</span><input id="editAvatarFile" type="file" accept="image/*"><small id="avatarFileHint">Escolha uma foto da galeria ou tire uma nova.</small></label>
 <label class="edit-field"><span>Biografia</span><textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você…"></textarea></label>
 <div class="edit-status" id="editStatus" role="status"></div><div class="edit-actions"><button type="button" class="profile-action" id="cancelEdit">Cancelar</button><button type="submit" class="profile-action primary" id="saveProfile">Salvar alterações</button></div></form></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="global-nav.js"></script><script src="manga-db.js"></script><script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="manga-db.js"></script><script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase;
  let user=null,profile=null;
@@ -108,4 +108,4 @@ h2{letter-spacing:-.8px}
   })}
  }catch(e){console.error(e);$('handle').textContent=e.message||'Não foi possível carregar o perfil.'}
 })();
-</script></body></html>
+</script><dialog id="profileMenu" style="border:1px solid #dbe5ef;border-radius:18px;padding:18px;max-width:320px;width:calc(100% - 32px);box-shadow:0 20px 60px #10203333"><strong style="display:block;margin-bottom:12px">LinkStory</strong><nav style="display:grid;gap:12px"><a href="index.html">Início</a><a href="fy.html">Pra você</a><a href="friends.html">Mensagens e amigos</a><a href="library.html">Biblioteca</a><a href="profile.html">Perfil</a></nav><button type="button" id="closeProfileMenu" style="margin-top:16px;padding:9px 14px;border:1px solid #dbe5ef;border-radius:10px;background:#fff;color:#0b72e7">Fechar</button></dialog><script>document.getElementById('openMenu')?.addEventListener('click',()=>document.getElementById('profileMenu')?.showModal());document.getElementById('closeProfileMenu')?.addEventListener('click',()=>document.getElementById('profileMenu')?.close());document.getElementById('profileMenu')?.addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()})</script></body></html>
