@@ -48,7 +48,7 @@ h2{letter-spacing:-.8px}
 <dialog class="edit-modal" id="editModal"><form id="profileForm"><h2>Editar perfil</h2><p>Atualize as informações que outras pessoas veem no LinkStory.</p>
 <label class="edit-field"><span>Nome público</span><input id="editDisplayName" maxlength="80" required></label>
 <label class="edit-field"><span>Nome de usuário</span><input id="editUsername" minlength="3" maxlength="30" pattern="[A-Za-z0-9_]{3,30}" required></label>
-<label class="edit-field"><span>Foto do perfil · URL da imagem</span><input id="editAvatar" type="url" maxlength="500" placeholder="https://…"></label>
+<label class="edit-field"><span>Foto do perfil</span><input id="editAvatarFile" type="file" accept="image/*"><small id="avatarFileHint">Escolha uma foto da galeria do celular.</small></label>
 <label class="edit-field"><span>Biografia</span><textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você…"></textarea></label>
 <div class="edit-status" id="editStatus" role="status"></div><div class="edit-actions"><button type="button" class="profile-action" id="cancelEdit">Cancelar</button><button type="submit" class="profile-action primary" id="saveProfile">Salvar alterações</button></div></form></dialog>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="manga-db.js"></script><script>
@@ -67,13 +67,24 @@ h2{letter-spacing:-.8px}
   if(p?.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de perfil';img.onerror=()=>{avatar.textContent=(p.display_name||'U').slice(0,1).toUpperCase()};avatar.append(img)}
   else avatar.textContent=(p?.display_name||'U').slice(0,1).toUpperCase();
  }
- function openEditor(){ $('editDisplayName').value=profile?.display_name||'';$('editUsername').value=profile?.username||'';$('editAvatar').value=profile?.avatar_url||'';$('editBio').value=profile?.bio||'';setStatus('');$('editModal').showModal() }
+ function openEditor(){ $('editDisplayName').value=profile?.display_name||'';$('editAvatarFile').value='';$('avatarFileHint').textContent=profile?.avatar_url?'Foto atual mantida. Escolha outra para substituir.':'Escolha uma foto da galeria do celular.';$('editUsername').value=profile?.username||'';$('editBio').value=profile?.bio||'';setStatus('');$('editModal').showModal() }
  $('editProfile').onclick=openEditor;$('cancelEdit').onclick=()=>$('editModal').close();
  $('profileForm').onsubmit=async e=>{
-  e.preventDefault();const display_name=$('editDisplayName').value.trim(),username=$('editUsername').value.trim(),avatar_url=$('editAvatar').value.trim()||null,bio=$('editBio').value.trim();
+  e.preventDefault();const display_name=$('editDisplayName').value.trim(),username=$('editUsername').value.trim(),bio=$('editBio').value.trim();let avatar_url=profile?.avatar_url||null;const avatarFile=$('editAvatarFile').files?.[0]||null;
   if(display_name.length<1||display_name.length>80)return setStatus('O nome público deve ter entre 1 e 80 caracteres.');
   if(!/^[A-Za-z0-9_]{3,30}$/.test(username))return setStatus('Use de 3 a 30 letras, números ou underline no usuário.');
   const save=$('saveProfile');save.disabled=true;save.textContent='Salvando…';setStatus('');
+  try{
+   if(avatarFile){
+    if(!avatarFile.type.startsWith('image/'))throw new Error('Escolha um arquivo de imagem.');
+    if(avatarFile.size>5*1024*1024)throw new Error('A foto deve ter no máximo 5 MB.');
+    const ext=(avatarFile.type.split('/')[1]||'jpg').replace('jpeg','jpg');
+    const path='avatars/'+user.id+'/profile-'+Date.now()+'.'+ext;
+    const upload=await db.storage.from('linkstory-media').upload(path,avatarFile,{contentType:avatarFile.type,upsert:true});
+    if(upload.error)throw upload.error;
+    avatar_url=db.storage.from('linkstory-media').getPublicUrl(path).data.publicUrl;
+   }
+  }catch(error){save.disabled=false;save.textContent='Salvar alterações';setStatus(error.message||'Não foi possível enviar a foto.');return}
   const result=await db.from('profiles').update({display_name,username,avatar_url,bio,updated_at:new Date().toISOString()}).eq('id',user.id).select('id,username,display_name,role,bio,avatar_url,k_code').single();
   save.disabled=false;save.textContent='Salvar alterações';
   if(result.error){setStatus(result.error.code==='23505'?'Esse nome de usuário já está em uso.':result.error.message||'Não foi possível salvar.');return}
