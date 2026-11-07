@@ -215,7 +215,8 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   {
     const headerActions=document.querySelector('.header-actions,.top-actions,.reader-right,.header .actions');
     const notificationSelector='a[href="notifications.html"],a[href$="/notifications.html"],[aria-label*="notifica" i],[title*="notifica" i],[data-notifications]';
-    const existing=[...(headerActions||document.querySelectorAll('.header,.topbar,.top'))?.querySelectorAll?.(notificationSelector)||[]];
+    const notificationContainer=headerActions||document.querySelector('.header,.topbar,.top');
+    const existing=notificationContainer?[...notificationContainer.querySelectorAll(notificationSelector)]:[];
     const unique=[...new Set(existing)];
     const keep=unique[0]||null;
     unique.slice(1).forEach(el=>el.remove());
