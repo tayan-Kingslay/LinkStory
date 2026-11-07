@@ -76,7 +76,14 @@ h2{letter-spacing:-.8px}
   const now=new Date(),monthName=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(now);
   $('readerMonthSubtitle').textContent='Ranking parcial de '+monthName+'. O emblema definitivo é fechado no último dia do mês.';
   try{
-   const {data,error}=await db.rpc('get_monthly_reader_leaderboard');if(error)throw error;
+   const monthStart=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-01';
+   const previousDate=new Date(now.getFullYear(),now.getMonth()-1,1);
+   const previousStart=previousDate.getFullYear()+'-'+String(previousDate.getMonth()+1).padStart(2,'0')+'-01';
+   const [{data,error},{data:previousRows,error:previousError}]=await Promise.all([
+    db.rpc('get_monthly_reader_leaderboard',{p_month:monthStart}),
+    db.rpc('get_monthly_reader_leaderboard',{p_month:previousStart})
+   ]);
+   if(error)throw error;if(previousError)throw previousError;
    const rows=data||[];podium.replaceChildren();
    if(!rows.length){const empty=document.createElement('div');empty.className='reader-month-status';empty.textContent='O ranking ainda está começando. Leia capítulos durante este mês para conquistar seu emblema.';podium.append(empty);return}
    const medals=['🥇','🥈','🥉'];
@@ -89,8 +96,14 @@ h2{letter-spacing:-.8px}
     card.append(medal,rank,name,count);podium.append(card);
    });
    const mine=rows.find(person=>person.reader_id===user?.id);
-   own.hidden=!mine;
-   if(mine){own.textContent=mine.rank_position===1?'🏆 Você está em 1º lugar no ranking parcial — emblema Leitor do mês!':mine.rank_position<=3?'🏅 Você está entre os 3 leitores em destaque deste mês.':'Você está em '+mine.rank_position+'º lugar. Continue lendo para subir no ranking.'}
+   const previousWinner=(previousRows||[]).find(person=>person.rank_position===1);
+   own.hidden=!mine&&previousWinner?.reader_id!==user?.id;
+   if(previousWinner?.reader_id===user?.id){
+    const previousName=new Intl.DateTimeFormat('pt-BR',{month:'long'}).format(previousDate);
+    own.textContent='🏆 Você conquistou o emblema Leitor do mês de '+previousName+'!';
+   }else if(mine){
+    own.textContent=mine.rank_position===1?'🏆 Você está em 1º lugar no ranking parcial — emblema Leitor do mês!':mine.rank_position<=3?'🏅 Você está entre os 3 leitores em destaque deste mês.':'Você está em '+mine.rank_position+'º lugar. Continue lendo para subir no ranking.';
+   }
   }catch(error){status.textContent='Não foi possível carregar os emblemas agora.';console.warn('Reader of month:',error)}
  }
  function openEditor(){ $('editDisplayName').value=profile?.display_name||'';$('editAvatarFile').value='';$('avatarFileHint').textContent=profile?.avatar_url?'Foto atual mantida. Escolha outra para substituir.':'Escolha uma foto da galeria do celular.';$('editUsername').value=profile?.username||'';$('editBio').value=profile?.bio||'';setStatus('');$('editModal').showModal() }
@@ -118,7 +131,7 @@ h2{letter-spacing:-.8px}
  };
  try{
   const session=await db.auth.getSession();user=session.data.session?.user;
-  if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';return}
+  if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';$('readerMonthStatus').textContent='Entre na sua conta para acompanhar o ranking e conquistar emblemas.';return}
   const result=await getLinkStoryProfile();if(result.error)throw result.error;profile=result.data;
   renderProfile(profile);$('editProfile').hidden=false;await loadReaderBadges();
   if(location.hash==='#edit')openEditor();
