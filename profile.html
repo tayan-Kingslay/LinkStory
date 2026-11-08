@@ -45,7 +45,13 @@ h2{letter-spacing:-.8px}
 </style><link rel="stylesheet" href="visual-system.css?v=3">
 <link rel="stylesheet" href="visual-refresh.css?v=1">
 </head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div><div class="account-meta" id="accountMeta" hidden><span class="account-pill"><strong id="roleLabel">Leitor</strong></span><span class="account-pill"><strong>K-Code</strong> <span id="kCode">—</span></span></div></div></section>
-<div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button><a class="profile-action" href="friends.html">Amigos e mensagens</a><a class="profile-action" href="settings.html">Configurações</a></div>
+<style>
+.verification-area{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
+.verification-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ead49a;background:#fff8e5;color:#815b08;border-radius:999px;font-size:11px;font-weight:900}
+.verification-chip img{width:24px;height:24px;object-fit:contain}
+.verification-action{border:1px solid #d9b65c;background:#fff8e5;color:#815b08;border-radius:10px;padding:9px 12px;font-size:11px;font-weight:850}
+#verificationStatus{font-size:11px;color:#718198}
+</style><div class="verification-area" id="verificationArea" hidden><div id="verificationChip" class="verification-chip" hidden></div><button id="requestVerification" class="verification-action" hidden>Solicitar selo de influenciador</button><span id="verificationStatus"></span></div><div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button><a class="profile-action" href="friends.html">Amigos e mensagens</a><a class="profile-action" href="settings.html">Configurações</a></div>
 <section class="section reader-month" id="readerMonth"><div class="head"><div><span class="ey">CONQUISTAS DA COMUNIDADE</span><h2>Leitor do mês</h2><p class="reader-month-sub" id="readerMonthSubtitle">O ranking mensal acompanha os capítulos lidos.</p></div></div><div class="reader-podium" id="readerPodium"><div class="reader-month-status" id="readerMonthStatus">Carregando emblemas…</div></div><div class="reader-own-badge" id="readerOwnBadge" hidden></div></section>
 <section class="section"><div class="head"><div><span class="ey">PUBLICAÇÕES</span><h2>Minhas obras</h2></div></div><div id="empty" class="empty"><strong>Nenhuma obra publicada.</strong>Quando você publicar, ela aparecerá aqui.</div><div id="works" class="works"></div></section></main>
 <dialog class="edit-modal" id="editModal"><form id="profileForm"><h2>Editar perfil</h2><p>Atualize as informações que outras pessoas veem no LinkStory.</p>
@@ -59,7 +65,32 @@ h2{letter-spacing:-.8px}
  const $=id=>document.getElementById(id),db=linkstorySupabase;
  let user=null,profile=null;
  const setStatus=(msg)=>$('editStatus').textContent=msg;
- function renderProfile(p){
+ async function loadVerification(){
+ const area=$('verificationArea'),chip=$('verificationChip'),button=$('requestVerification'),status=$('verificationStatus');
+ area.hidden=false;chip.hidden=true;button.hidden=true;
+ try{
+  const [{data:badge,error:badgeError},{count,error:followError}]=await Promise.all([
+   db.from('verified_badges').select('badge_type').eq('user_id',user.id).maybeSingle(),
+   db.from('follows').select('follower_id',{count:'exact',head:true}).eq('following_id',user.id)
+  ]);
+  if(badgeError)throw badgeError;if(followError)throw followError;
+  if(badge){
+   const isKairox=badge.badge_type==='kairox',src=isKairox?'assets/badges/topeira-kairox.webp':'assets/badges/topeira-influencer.webp';
+   const img=document.createElement('img');img.src=src;img.alt=isKairox?'Selo oficial Kairox':'Selo de influenciador';img.onerror=()=>{img.remove();chip.textContent=isKairox?'♛ Membro oficial Kairox':'✦ Influenciador verificado'};
+   chip.append(img,document.createTextNode(isKairox?'Membro oficial Kairox':'Influenciador verificado'));chip.hidden=false;return;
+  }
+  if((count||0)>=10000){button.hidden=false;status.textContent='Você tem '+Number(count).toLocaleString('pt-BR')+' seguidores. Pode solicitar a análise.'}
+  else status.textContent=Number(count||0).toLocaleString('pt-BR')+' / 10.000 seguidores para solicitar o selo.';
+ }catch(e){status.textContent='Não foi possível consultar sua verificação.';console.warn('Verification badge:',e)}
+}
+$('requestVerification').onclick=async()=>{
+ const button=$('requestVerification'),status=$('verificationStatus');button.disabled=true;button.textContent='Enviando…';
+ const r=await db.rpc('request_influencer_verification');
+ button.disabled=false;button.textContent='Solicitar selo de influenciador';
+ if(r.error){status.textContent=r.error.message||'Não foi possível solicitar.';return}
+ button.hidden=true;status.textContent='Solicitação enviada. A equipe LinkStory vai analisar sua conta.';
+};
+function renderProfile(p){
   $('name').textContent=p?.display_name||'Usuário';
   $('handle').textContent=p?.username?'@'+p.username:'';
   $('bio').textContent=p?.bio||'';
@@ -133,7 +164,7 @@ h2{letter-spacing:-.8px}
   const session=await db.auth.getSession();user=session.data.session?.user;
   if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';$('readerMonthStatus').textContent='Entre na sua conta para acompanhar o ranking e conquistar emblemas.';return}
   const result=await getLinkStoryProfile();if(result.error)throw result.error;profile=result.data;
-  renderProfile(profile);$('editProfile').hidden=false;await loadReaderBadges();
+  renderProfile(profile);$('editProfile').hidden=false;await Promise.all([loadReaderBadges(),loadVerification()]);
   if(location.hash==='#edit')openEditor();
   const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===user.id);
   if(works.length){$('empty').style.display='none';const container=$('works');works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));works.forEach((m,index)=>{
