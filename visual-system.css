@@ -173,14 +173,14 @@ body:has(.reader-title) .top{
   button.back,a.back,button.more,button.close,
   button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
 ) svg{display:block;width:20px!important;height:20px!important;max-width:20px!important;max-height:20px!important;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-:where(.bottom-nav-icon,#lsBottomNav .ls-icon,.ls-menu-icon){
+:where(.bottom-nav-icon,#lsBottomNav .ls-icon){
   width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
   flex:0 0 38px!important;display:grid!important;place-items:center!important;
   border:1px solid #dce6f1!important;border-radius:12px!important;
   background:linear-gradient(145deg,#fff,#f1f6fc)!important;
   color:#49627f!important;box-shadow:0 3px 9px rgba(25,55,92,.055)!important;
 }
-:where(.bottom-nav-icon,#lsBottomNav .ls-icon,.ls-menu-icon) svg{
+:where(.bottom-nav-icon,#lsBottomNav .ls-icon) svg{
   display:block;width:19px!important;height:19px!important;max-width:19px!important;max-height:19px!important;
   fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round
 }
@@ -204,7 +204,7 @@ html[data-ls-theme="dark"] :where(
   button.back,a.back,button.more,button.close,
   button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
 ):hover{background:linear-gradient(145deg,#293c54,#1b2c42)!important;border-color:#49617d!important;color:#e3efff!important}
-html[data-ls-theme="dark"] :where(.bottom-nav-icon,#lsBottomNav .ls-icon,.ls-menu-icon){
+html[data-ls-theme="dark"] :where(.bottom-nav-icon,#lsBottomNav .ls-icon){
   background:linear-gradient(145deg,#202e40,#152234)!important;border-color:#34465d!important;color:#c5d7ef!important;box-shadow:0 3px 10px #0003!important
 }
 html[data-ls-theme="dark"] :where(.bottom-nav-item.active,#lsBottomNav a.active) .bottom-nav-icon,
