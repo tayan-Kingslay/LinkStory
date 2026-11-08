@@ -136,3 +136,83 @@ body:has(.reader-title) .top{
   border-color:rgba(255,255,255,.09)!important;
   box-shadow:0 12px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)!important;
 }
+
+
+/* LINKSTORY — unified icon tiles across the app.
+   The three-line menu trigger is deliberately excluded. */
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+){
+  width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
+  padding:0!important;flex:0 0 44px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  border:1px solid #dce6f1!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#fff,#f1f6fc)!important;
+  color:#49627f!important;
+  box-shadow:0 3px 10px rgba(25,55,92,.07),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease!important;
+}
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+):hover{
+  background:linear-gradient(145deg,#f7fbff,#eaf3fd)!important;
+  border-color:#c5d9ef!important;color:#1769d2!important;
+  box-shadow:0 5px 14px rgba(25,90,160,.12)!important;
+}
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+):active{transform:scale(.95)}
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+) svg{display:block;width:20px!important;height:20px!important;max-width:20px!important;max-height:20px!important;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+:where(.bottom-nav-icon,#lsBottomNav .ls-icon,.ls-menu-icon){
+  width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+  flex:0 0 38px!important;display:grid!important;place-items:center!important;
+  border:1px solid #dce6f1!important;border-radius:12px!important;
+  background:linear-gradient(145deg,#fff,#f1f6fc)!important;
+  color:#49627f!important;box-shadow:0 3px 9px rgba(25,55,92,.055)!important;
+}
+:where(.bottom-nav-icon,#lsBottomNav .ls-icon,.ls-menu-icon) svg{
+  display:block;width:19px!important;height:19px!important;max-width:19px!important;max-height:19px!important;
+  fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round
+}
+:where(.bottom-nav-item,.bottom-nav a,#lsBottomNav a){gap:5px!important}
+:where(.bottom-nav-item.active,#lsBottomNav a.active) .bottom-nav-icon,
+#lsBottomNav a.active .ls-icon{
+  background:linear-gradient(145deg,#edf6ff,#dcecff)!important;
+  border-color:#bfd9f5!important;color:#0877ed!important;
+}
+html[data-ls-theme="dark"] :where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+){
+  background:linear-gradient(145deg,#202e40,#152234)!important;
+  border-color:#34465d!important;color:#c5d7ef!important;
+  box-shadow:0 3px 10px #0003,inset 0 1px 0 #ffffff0a!important;
+}
+html[data-ls-theme="dark"] :where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+):hover{background:linear-gradient(145deg,#293c54,#1b2c42)!important;border-color:#49617d!important;color:#e3efff!important}
+html[data-ls-theme="dark"] :where(.bottom-nav-icon,#lsBottomNav .ls-icon,.ls-menu-icon){
+  background:linear-gradient(145deg,#202e40,#152234)!important;border-color:#34465d!important;color:#c5d7ef!important;box-shadow:0 3px 10px #0003!important
+}
+html[data-ls-theme="dark"] :where(.bottom-nav-item.active,#lsBottomNav a.active) .bottom-nav-icon,
+html[data-ls-theme="dark"] #lsBottomNav a.active .ls-icon{
+  background:linear-gradient(145deg,#1d3855,#18304a)!important;border-color:#365d83!important;color:#79baff!important
+}
+@media(max-width:600px){
+ :where(button.circle:not(.menu),a.circle:not(.menu),button.back,a.back,button.more,button.close,button.icon-btn,a.icon-btn,button.icon-button,a.icon-button){
+  width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;flex-basis:42px!important;border-radius:13px!important
+ }
+}
