@@ -267,6 +267,67 @@ html[data-ls-theme="dark"] #commentsDialog #commentBody::placeholder{color:#91a1
   #commentsDialog #commentBody{min-height:92px;font-size:14px}
 }
 
+
+/* Full-page, X-inspired conversation screen */
+#commentsDialog.comments-screen{
+ width:min(720px,100%);height:min(100dvh,900px);max-height:100dvh;
+ padding:0;border:1px solid var(--line);border-radius:20px;
+ display:none;flex-direction:column;overflow:hidden;
+ background:#fff;color:#172033;
+}
+#commentsDialog.comments-screen[open]{display:flex}
+#commentsDialog.comments-screen::backdrop{background:rgba(5,12,24,.68);backdrop-filter:blur(5px)}
+.comments-screen-head{height:60px;flex:0 0 60px;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;padding:0 14px;border-bottom:1px solid #e7edf4;background:#fff}
+.comments-screen-head strong{text-align:center;font-size:15px}
+.comments-back{width:40px;height:40px;border:0;border-radius:50%;background:transparent;color:#172033;font-size:32px;line-height:1;cursor:pointer}
+.comment-post-context{flex:0 0 auto;padding:18px 20px;border-bottom:1px solid #e7edf4}
+.comment-post-author{display:flex;align-items:center;gap:10px}
+.comment-post-author .avatar,.comment-compose-avatar,.comment-avatar{width:40px;height:40px;flex:0 0 40px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#e9f1fc;color:#29476b;font-size:12px;font-weight:800}
+.comment-post-author .avatar img,.comment-compose-avatar img,.comment-avatar img{width:100%;height:100%;object-fit:cover}
+.comment-post-author strong{display:block;font-size:13px}
+.comment-post-author small{display:block;margin-top:3px;color:#8290a2;font-size:11px}
+.comment-post-context h3{margin:14px 0 0;font-size:16px}
+.comment-post-context>p{margin:12px 0 0;font-size:14px;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.comment-post-context>img,.comment-post-context>video{display:block;max-width:100%;max-height:280px;object-fit:contain;margin:13px auto 0;border-radius:13px}
+#commentsDialog .comment-list{display:flex;flex:1 1 auto;flex-direction:column;gap:0;min-height:80px;overflow-y:auto;overscroll-behavior:contain;margin:0;padding:0}
+#commentsDialog .comment{display:flex;gap:11px;padding:16px 20px;border:0;border-bottom:1px solid #edf1f6;border-radius:0;background:#fff}
+#commentsDialog .comment-avatar{width:38px;height:38px;flex-basis:38px}
+#commentsDialog .comment-content{min-width:0;flex:1}
+#commentsDialog .comment-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#commentsDialog .comment-meta strong{font-size:13px;color:#182638}
+#commentsDialog .comment-meta small{font-size:11px;color:#8492a4}
+#commentsDialog .comment-content p{margin:6px 0 0;font-size:14px;line-height:1.55;color:#344459;white-space:pre-wrap;overflow-wrap:anywhere}
+.comments-empty{margin:auto;padding:36px 20px;text-align:center;display:grid;gap:7px;color:#758397}
+.comments-empty strong{font-size:15px;color:#27384d}
+.comments-empty span{font-size:12px}
+#commentsDialog .comment-composer{display:flex;align-items:flex-start;gap:11px;flex:0 0 auto;padding:13px 16px calc(13px + env(safe-area-inset-bottom));border-top:1px solid #e5ebf2;background:#fff}
+.comment-compose-avatar{width:38px;height:38px;flex-basis:38px}
+.comment-compose-field{min-width:0;flex:1}
+#commentsDialog #commentBody{display:block;width:100%;min-height:54px;max-height:150px;resize:vertical;padding:11px 13px;border:1px solid #dce5ef;border-radius:15px;background:#f7f9fc;color:#172033;font:inherit;font-size:14px;line-height:1.45}
+#commentsDialog #commentBody:focus{outline:none;border-color:#83b4eb;box-shadow:0 0 0 3px #3185df18}
+.comment-compose-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px}
+.comment-compose-actions small{font-size:10px;color:#8492a4}
+#commentsDialog #sendComment{min-height:38px;padding:0 18px;border:0;border-radius:20px;background:#1877d2;color:#fff;font-size:12px;font-weight:800}
+#commentsDialog #sendComment:disabled{opacity:.55}
+html[data-ls-theme="dark"] #commentsDialog.comments-screen{background:#101b2a;color:#edf4fc;border-color:#33445a}
+html[data-ls-theme="dark"] .comments-screen-head,html[data-ls-theme="dark"] #commentsDialog .comment-composer{background:#101b2a;border-color:#33445a}
+html[data-ls-theme="dark"] .comments-back{color:#edf4fc}
+html[data-ls-theme="dark"] .comment-post-context,html[data-ls-theme="dark"] #commentsDialog .comment{border-color:#2a3b50}
+html[data-ls-theme="dark"] .comment-post-author .avatar,html[data-ls-theme="dark"] .comment-compose-avatar,html[data-ls-theme="dark"] .comment-avatar{background:#26384e;color:#e5effb}
+html[data-ls-theme="dark"] .comment-post-author strong,html[data-ls-theme="dark"] .comment-post-context h3,html[data-ls-theme="dark"] .comment-meta strong,html[data-ls-theme="dark"] .comments-empty strong{color:#edf4fc}
+html[data-ls-theme="dark"] .comment-post-context>p,html[data-ls-theme="dark"] #commentsDialog .comment-content p{color:#c8d4e3}
+html[data-ls-theme="dark"] #commentsDialog .comment{background:#101b2a}
+html[data-ls-theme="dark"] #commentsDialog #commentBody{background:#1a293b;color:#edf4fc;border-color:#3a4d64}
+html[data-ls-theme="dark"] #commentsDialog #commentBody::placeholder{color:#9cacc0}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+@media(max-width:560px){
+ #commentsDialog.comments-screen{width:100%;height:100dvh;max-height:100dvh;border:0;border-radius:0}
+ .comments-screen-head{padding-top:env(safe-area-inset-top);height:calc(56px + env(safe-area-inset-top));flex-basis:calc(56px + env(safe-area-inset-top))}
+ .comment-post-context{padding:15px 16px}
+ #commentsDialog .comment{padding:14px 16px}
+ #commentsDialog .comment-composer{padding-left:13px;padding-right:13px}
+}
+
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
@@ -287,7 +348,7 @@ html[data-ls-theme="dark"] #commentsDialog #commentBody::placeholder{color:#91a1
  <div class="field"><label for="postMedia">IMAGEM OU VÍDEO (OPCIONAL)</label><input id="postMedia" type="file" accept="image/*,video/mp4,video/webm,video/quicktime"><span class="file-note">Até 25 MB. Imagens e vídeos curtos. Não publicamos Stories nesta versão.</span><div id="mediaPreview"></div></div>
  <div class="modal-actions"><button type="button" class="btn" data-close="composeDialog">Cancelar</button><button type="submit" class="btn primary" id="publishPost">Publicar</button></div>
 </form></dialog>
-<dialog id="commentsDialog"><div class="modal-head"><strong>Comentários</strong><button class="close" data-close="commentsDialog" aria-label="Fechar">×</button></div><div class="modal-body"><div id="commentList" class="comment-list"></div><form id="commentForm"><div class="field"><label for="commentBody">SEU COMENTÁRIO</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva um comentário…"></textarea></div><div class="modal-actions"><button class="btn primary" type="submit" id="sendComment">Comentar</button></div></form></div></dialog>
+<dialog id="commentsDialog" class="comments-screen"><div class="comments-screen-head"><button class="comments-back" type="button" data-close="commentsDialog" aria-label="Voltar">‹</button><strong>Publicação</strong><span></span></div><section id="commentPostContext" class="comment-post-context"></section><div id="commentList" class="comment-list" aria-live="polite"></div><form id="commentForm" class="comment-composer"><div class="comment-compose-avatar">avatar(state.profile)</div><div class="comment-compose-field"><label class="sr-only" for="commentBody">Escreva sua resposta</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva sua resposta…" aria-label="Escreva sua resposta"></textarea><div class="comment-compose-actions"><small>Até 1.000 caracteres</small><button type="submit" id="sendComment">Responder</button></div></div></form></dialog>
 <dialog id="commentActionsDialog" class="comment-action-dialog"><div class="modal-head"><strong>Ações do comentário</strong><button class="close" data-close="commentActionsDialog" aria-label="Fechar">×</button></div><div class="comment-action-list">
 <button class="comment-action" data-comment-action="like"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.7 4.7 0 0 1 8.8-2.1 4.7 4.7 0 0 1 8.8 2.1Z"/></svg><span>Curtir</span></button>
 <button class="comment-action" data-comment-action="reply"><svg viewBox="0 0 24 24"><path d="M9 17 4 12l5-5"/><path d="M4 12h9a7 7 0 0 1 7 7"/></svg><span>Responder</span></button>
