@@ -116,6 +116,19 @@ dialog::backdrop{background:rgba(16,32,51,.38)!important}
  .comment-children{margin-left:17px;padding-left:8px}
 }
 
+
+/* FY follows the user's selected appearance instead of forcing one palette. */
+html[data-ls-theme="light"]{color-scheme:light}
+html[data-ls-theme="light"] body:has(.post){--bg:#f4f7fc;--panel:#fff;--panel2:#fff;--line:#dce6f1;--text:#17263a;--muted:#78879a;--blue:#1769d2;--glow:rgba(23,105,210,.12);background:#f4f7fc!important;background-image:none!important;color:#17263a!important}
+html[data-ls-theme="light"] body:has(.post) .topbar,html[data-ls-theme="light"] body:has(.post) .tabs{background:rgba(255,255,255,.94)!important;border-color:#dce6f1!important}
+html[data-ls-theme="light"] body:has(.post) .post,html[data-ls-theme="light"] body:has(.post) .composer,html[data-ls-theme="light"] body:has(.post) .empty,html[data-ls-theme="light"] body:has(.post) .loading{background:#fff!important;border-color:#dce6f1!important;color:#17263a!important}
+html[data-ls-theme="light"] body:has(.post) .body,html[data-ls-theme="light"] body:has(.post) .idea-title,html[data-ls-theme="light"] body:has(.post) .post-head strong{color:#17263a!important}
+html[data-ls-theme="light"] body:has(.post) .post-stats,html[data-ls-theme="light"] body:has(.post) .author small,html[data-ls-theme="light"] body:has(.post) .muted{color:#78879a!important}
+html[data-ls-theme="light"] body:has(.post) .tab{background:#fff!important;color:#52657b!important;border-color:#dce6f1!important}
+html[data-ls-theme="light"] body:has(.post) .tab.active{background:#1769d2!important;color:#fff!important;border-color:#1769d2!important}
+html[data-ls-theme="light"] body:has(.post) .compose-open,html[data-ls-theme="light"] body:has(.post) .chip,html[data-ls-theme="light"] body:has(.post) .action{background:#f7faff!important;color:#52657b!important;border-color:#dce6f1!important}
+html[data-ls-theme="light"] body:has(.post) .field input,html[data-ls-theme="light"] body:has(.post) .field textarea,html[data-ls-theme="light"] body:has(.post) .field select{background:#fff!important;color:#17263a!important;border-color:#dce6f1!important}
+
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
