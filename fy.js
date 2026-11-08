@@ -106,7 +106,7 @@ async function openComments(postId){
  $('commentComposeAvatar').innerHTML=avatar(state.profile);
  const post=state.posts.find(x=>x.id===postId);
  const context=$('commentPostContext');
- context.innerHTML=post?'<div class="comment-post-author"><div class="avatar">'+avatar(post.profiles)+'</div><div><strong>'+esc(post.profiles?.display_name||post.profiles?.username||'Usuário')+'</strong><small>'+esc(post.profiles?.username?'@'+post.profiles.username:'LinkStory')+' · '+date(post.created_at)+'</small></div></div>'+(post.idea_title?'<h3>'+esc(post.idea_title)+'</h3>':'')+(post.body?'<p>'+esc(post.body)+'</p>':'')+(post.media_url?(post.media_type==='video'?'<video controls playsinline preload="metadata" src="'+esc(post.media_url)+'"></video>':'<img src="'+esc(post.media_url)+'" alt="Mídia da publicação">'):''):'';
+ context.innerHTML=post?'<div class="comment-post-author"><div class="avatar">'+avatar(post.profiles)+'</div><div><strong>'+esc(post.profiles?.display_name||post.profiles?.username||'Usuário')+'</strong><small>'+esc(post.profiles?.username?'@'+post.profiles.username:'LinkStory')+' · '+date(post.created_at)+'</small></div></div>'+(post.idea_title?'<h3>'+esc(post.idea_title)+'</h3>':'')+(post.body?postBodyMarkup(post.body):'')+(post.media_url?(post.media_type==='video'?'<video controls playsinline preload="metadata" src="'+esc(post.media_url)+'"></video>':'<img src="'+esc(post.media_url)+'" alt="Mídia da publicação">'):''):'';
  const box=$('commentList');box.textContent='Carregando comentários…';
  $('commentBody').value='';lockCommentsBackground();$('commentsDialog').showModal();
  try{
@@ -153,6 +153,16 @@ $('commentsDialog').addEventListener('close',unlockCommentsBackground);
 
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
 $('loadMore').onclick=()=>loadFeed(false);
+$('commentPostContext').addEventListener('click',e=>{
+ const expand=e.target.closest('[data-expand-post]');
+ if(!expand)return;
+ const body=expand.previousElementSibling;
+ if(!body?.classList.contains('post-body'))return;
+ const expanded=body.classList.toggle('is-expanded');
+ body.classList.toggle('is-collapsed',!expanded);
+ expand.textContent=expanded?'Mostrar menos':'Ler tudo';
+ expand.setAttribute('aria-expanded',String(expanded));
+});
 $('feedList').addEventListener('click',async e=>{
  const expand=e.target.closest('[data-expand-post]');
  if(expand){const card=expand.closest('.post'),body=card?.querySelector('.post-body');if(!body)return;const expanded=body.classList.toggle('is-expanded');body.classList.toggle('is-collapsed',!expanded);expand.textContent=expanded?'Mostrar menos':'Ler tudo';expand.setAttribute('aria-expanded',String(expanded));return}
