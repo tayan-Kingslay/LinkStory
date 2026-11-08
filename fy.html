@@ -392,6 +392,45 @@ body.comments-open{
  touch-action:auto;
 }
 
+/* Conversation-first comment layout, inspired by classic threaded social feeds */
+#commentsDialog .comment-list{display:block;padding:0;margin:0;gap:0}
+#commentsDialog .comment-thread{position:relative;width:100%;min-width:0;padding:0}
+#commentsDialog .comment-thread>.comment{
+ display:flex;align-items:flex-start;gap:10px;
+ margin:0;padding:15px 16px;border:0;border-bottom:1px solid #e7edf4;
+ border-radius:0;background:transparent;
+}
+#commentsDialog .comment-avatar{width:38px;height:38px;flex:0 0 38px}
+#commentsDialog .comment-content{min-width:0;flex:1}
+#commentsDialog .comment-meta{display:flex;flex-wrap:wrap;align-items:baseline;gap:7px;font-size:12px;line-height:1.35}
+#commentsDialog .comment-meta strong{font-size:14px;font-weight:800;color:#17283e}
+#commentsDialog .comment-meta small{font-size:11px;color:#8493a7}
+#commentsDialog .comment-content p{margin:5px 0 2px;font-size:14px;line-height:1.45;color:#26384e;white-space:pre-wrap;overflow-wrap:anywhere}
+#commentsDialog .comment-reply-button{
+ display:inline-flex;align-items:center;min-height:28px;margin:2px 0 0;padding:0;
+ border:0;background:transparent;color:#71839a;font-size:12px;font-weight:750;cursor:pointer;
+}
+#commentsDialog .comment-replies{position:relative;margin:0;padding:0 0 0 42px;border:0}
+#commentsDialog .comment-thread.has-replies::before{
+ content:"";position:absolute;z-index:1;left:34px;top:51px;bottom:0;width:2px;
+ border-radius:2px;background:#d7e1ed;pointer-events:none;
+}
+#commentsDialog .comment-replies>.comment-thread>.comment{padding-left:0}
+#commentsDialog .comment-thread.has-replies>.comment{border-bottom:0}
+#commentsDialog .comment-replies .comment-thread>.comment{padding-top:9px;padding-bottom:9px}
+#commentsDialog .comments-empty{margin:16px;padding:22px;text-align:center}
+html[data-ls-theme="dark"] #commentsDialog .comment-thread>.comment{border-bottom-color:#304157;background:transparent}
+html[data-ls-theme="dark"] #commentsDialog .comment-meta strong{color:#edf4fc}
+html[data-ls-theme="dark"] #commentsDialog .comment-content p{color:#d7e2f0}
+html[data-ls-theme="dark"] #commentsDialog .comment-thread.has-replies::before{background:#40536b}
+html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
+@media(max-width:560px){
+ #commentsDialog .comment-thread>.comment{padding:13px 14px}
+ #commentsDialog .comment-replies{padding-left:35px}
+ #commentsDialog .comment-thread.has-replies::before{left:31px;top:48px}
+ #commentsDialog .comment-avatar{width:36px;height:36px;flex-basis:36px}
+}
+
 /* Threaded comment replies */
 #commentsDialog .comment-thread{width:100%;min-width:0}
 #commentsDialog .comment-replies{margin-left:19px;padding-left:17px;border-left:2px solid #dce5ef}
@@ -458,6 +497,6 @@ html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-c
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 <script src="guard.js"></script>
-<script src="fy.js?v=20261108-6"></script>
+<script src="fy.js?v=20261108-7"></script>
 <script src="global-nav.js"></script>
 </body></html>
