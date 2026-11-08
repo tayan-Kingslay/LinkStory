@@ -177,6 +177,96 @@ html[data-ls-theme="dark"] .actions .action.liked .action-icon{background:#38202
 html[data-ls-theme="dark"] .actions .action.delete-action{color:#ff9ca8!important}
 html[data-ls-theme="dark"] .actions .action.delete-action .action-icon{background:#321e27;border-color:#69404b;color:#ff9ca8}
 
+
+/* Comments window — clearer reading area and a comfortable writing space */
+#commentsDialog{
+  display:none;
+  flex-direction:column;
+  width:min(620px,calc(100% - 20px));
+  max-height:min(88dvh,820px);
+  overflow:hidden;
+  border:1px solid #dbe5ef;
+  border-radius:24px;
+  background:#fff;
+  color:#102033;
+  box-shadow:0 26px 90px rgba(16,32,51,.24);
+}
+#commentsDialog[open]{display:flex}
+#commentsDialog .modal-head{
+  flex:0 0 auto;
+  min-height:64px;
+  padding:16px 20px;
+  background:linear-gradient(135deg,#fff,#f7faff);
+}
+#commentsDialog .modal-head strong{font-size:16px;letter-spacing:-.02em}
+#commentsDialog .modal-body{
+  display:flex;
+  flex:1 1 auto;
+  flex-direction:column;
+  min-height:0;
+  max-height:none;
+  overflow:hidden;
+  padding:16px 18px 18px;
+}
+#commentsDialog .comment-list{
+  flex:1 1 auto;
+  min-height:90px;
+  overflow:auto;
+  overscroll-behavior:contain;
+  padding:2px 3px 14px 1px;
+  margin:0 0 12px;
+}
+#commentsDialog .comment{
+  padding:12px 14px;
+  border-radius:15px;
+  background:#f7faff;
+  border-color:#e3ebf4;
+}
+#commentsDialog .comment b{font-size:12px;color:#20354d}
+#commentsDialog .comment p{font-size:13px;line-height:1.55;color:#40536a}
+#commentsDialog #commentForm{
+  flex:0 0 auto;
+  padding-top:13px;
+  border-top:1px solid #e8eef5;
+  background:#fff;
+}
+#commentsDialog #commentForm .field{gap:8px;margin:0}
+#commentsDialog #commentBody{
+  min-height:104px;
+  max-height:190px;
+  resize:vertical;
+  padding:14px 15px;
+  border-radius:15px;
+  background:#f8fbff;
+  border:1px solid #dce6f1;
+  color:#17263a;
+  font-size:14px;
+  line-height:1.5;
+}
+#commentsDialog #commentBody:focus{
+  border-color:#80b5ef;
+  box-shadow:0 0 0 4px rgba(8,119,237,.09);
+}
+#commentsDialog .modal-actions{margin-top:12px}
+#commentsDialog #sendComment{min-width:112px;min-height:44px;border-radius:13px}
+html[data-ls-theme="dark"] #commentsDialog{
+  background:#172231!important;color:#edf4fc!important;border-color:#34465d!important;
+}
+html[data-ls-theme="dark"] #commentsDialog .modal-head,
+html[data-ls-theme="dark"] #commentsDialog #commentForm{background:#172231!important;border-color:#34465d!important}
+html[data-ls-theme="dark"] #commentsDialog .comment{background:#202e40!important;border-color:#34465d!important}
+html[data-ls-theme="dark"] #commentsDialog .comment b{color:#edf4fc!important}
+html[data-ls-theme="dark"] #commentsDialog .comment p{color:#c5d3e3!important}
+html[data-ls-theme="dark"] #commentsDialog #commentBody{
+  background:#111b27!important;color:#edf4fc!important;border-color:#3b4d61!important;
+}
+html[data-ls-theme="dark"] #commentsDialog #commentBody::placeholder{color:#91a1b4!important}
+@media(max-width:560px){
+  #commentsDialog{width:calc(100% - 12px);max-height:90dvh;border-radius:22px}
+  #commentsDialog .modal-body{padding:13px 13px 15px}
+  #commentsDialog #commentBody{min-height:92px;font-size:14px}
+}
+
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
