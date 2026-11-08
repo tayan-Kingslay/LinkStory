@@ -125,7 +125,7 @@ function renderComments(){
   el.innerHTML='<div class="comment-avatar">'+avatar(comment.profiles)+'</div><div class="comment-content"><div class="comment-meta"><strong>'+esc(name)+'</strong><small>'+date(comment.created_at)+'</small></div><p>'+esc(comment.body)+'</p><button type="button" class="comment-reply-button" data-reply-comment="'+esc(comment.id)+'" data-reply-name="'+esc(name)+'">Responder</button></div>';
   wrap.appendChild(el);
   const children=byParent.get(comment.id)||[];
-  if(children.length){const replies=document.createElement('div');replies.className='comment-replies';children.forEach(child=>replies.appendChild(build(child,depth+1)));wrap.appendChild(replies)}
+  if(children.length){wrap.classList.add('has-replies');const replies=document.createElement('div');replies.className='comment-replies';children.forEach(child=>replies.appendChild(build(child,depth+1)));wrap.appendChild(replies)}
   return wrap;
  };
  (byParent.get('root')||[]).forEach(c=>box.appendChild(build(c)));
