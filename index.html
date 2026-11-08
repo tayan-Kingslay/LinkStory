@@ -201,7 +201,7 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
 <div class="header-actions">
 <button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
-<a class="circle home-shortcut" href="notifications.html" aria-label="Notificações" title="Notificações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a>
+<a class="circle home-shortcut" href="notifications.html" aria-label="Notificações" title="Notificações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a>\n<button class="circle" id="modeToggle" type="button" aria-label="Alternar modo" title="Alternar modo" hidden style="font-size:17px;font-weight:900">⇄</button>
 <button class="circle menu" id="openMenu" aria-label="Abrir menu"></button>
 <a class="login" href="login.html">Entrar</a>
 </div>
@@ -255,7 +255,7 @@ searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLow
 })();
 const menu=document.getElementById('menuDialog'),search=document.getElementById('searchDialog');
 document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
-(async()=>{const box=document.getElementById('creatorHomeCta');try{const p=await LinkStoryManga.currentProfile();box.hidden=!(p?.role==='criador'&&(localStorage.getItem('linkstory-active-mode')||'leitor')==='criador')}catch{box.hidden=true}})();
+(async()=>{const box=document.getElementById('creatorHomeCta'),toggle=document.getElementById('modeToggle');try{const p=await LinkStoryManga.currentProfile(),isCreator=p?.role==='criador',mode=localStorage.getItem('linkstory-active-mode')||'leitor';box.hidden=!(isCreator&&mode==='criador');toggle.hidden=!isCreator;if(isCreator){toggle.title=mode==='criador'?'Mudar para modo Leitor':'Mudar para modo Mangaká';toggle.onclick=()=>{localStorage.setItem('linkstory-active-mode',mode==='criador'?'leitor':'criador');location.reload()}}}catch{box.hidden=true;toggle.hidden=true}})();
 </script>
 
 
