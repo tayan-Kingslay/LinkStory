@@ -362,6 +362,10 @@ body.comments-open{
  #commentsDialog.comments-screen{inset:0;margin:0}
 }
 
+
+/* Clear divider between the original publication and its comments */
+#commentsDialog .comment-post-context{border-bottom:2px solid #d5dfeb}
+html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-color:#3a4b60}
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
@@ -410,6 +414,6 @@ body.comments-open{
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 <script src="guard.js"></script>
-<script src="fy.js?v=20261108-3"></script>
+<script src="fy.js?v=20261108-4"></script>
 <script src="global-nav.js"></script>
 </body></html>
