@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const sb=()=>linkstorySupabase,$=id=>document.getElementById(id);
-const state={user:null,profile:null,tab:'for-you',offset:0,limit:20,loading:false,more:true,posts:[],queue:[],queueCursor:0,activeCommentPost:null,reportsEnabled:false};
+const state={user:null,profile:null,tab:'for-you',offset:0,limit:20,loading:false,more:true,posts:[],queue:[],queueCursor:0,activeCommentPost:null,replyTo:null,comments:[],reportsEnabled:false};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{const d=new Date(v);return Number.isNaN(d.getTime())?'Agora':d.toLocaleString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})};
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2800)}
@@ -110,27 +110,44 @@ async function openComments(postId){
  const box=$('commentList');box.textContent='Carregando comentários…';
  $('commentBody').value='';lockCommentsBackground();$('commentsDialog').showModal();
  try{
-  const{data,error}=await sb().from('comments').select('id,body,created_at,profiles:author_id(display_name,username,avatar_url)').eq('post_id',postId).order('created_at',{ascending:true});
-  if(error)throw error;box.replaceChildren();
-  if(!data?.length){box.innerHTML='<div class="comments-empty"><strong>Comece a conversa</strong><span>Seja a primeira pessoa a comentar nesta publicação.</span></div>';return}
-  data.forEach(c=>appendComment(c));
+  const{data,error}=await sb().from('comments').select('id,body,parent_comment_id,created_at,profiles:author_id(display_name,username,avatar_url)').eq('post_id',postId).order('created_at',{ascending:true});
+  if(error)throw error;state.comments=data||[];renderComments();
  }catch(e){box.textContent='Não foi possível carregar os comentários. '+e.message}
 }
-function appendComment(c){
- const box=$('commentList');box.querySelector('.comments-empty')?.remove();
- const el=document.createElement('article');el.className='comment';
- el.innerHTML='<div class="comment-avatar">'+avatar(c.profiles)+'</div><div class="comment-content"><div class="comment-meta"><strong>'+esc(c.profiles?.display_name||c.profiles?.username||'Usuário')+'</strong><small>'+date(c.created_at)+'</small></div><p>'+esc(c.body)+'</p></div>';
- box.appendChild(el);
+function renderComments(){
+ const box=$('commentList');box.replaceChildren();
+ if(!state.comments.length){box.innerHTML='<div class="comments-empty"><strong>Comece a conversa</strong><span>Seja a primeira pessoa a comentar nesta publicação.</span></div>';return}
+ const byParent=new Map();state.comments.forEach(c=>{const key=c.parent_comment_id||'root';if(!byParent.has(key))byParent.set(key,[]);byParent.get(key).push(c)});
+ const build=(comment,depth=0)=>{
+  const wrap=document.createElement('div');wrap.className='comment-thread'+(depth?' is-reply':'');
+  const el=document.createElement('article');el.className='comment';
+  const name=comment.profiles?.display_name||comment.profiles?.username||'Usuário';
+  el.innerHTML='<div class="comment-avatar">'+avatar(comment.profiles)+'</div><div class="comment-content"><div class="comment-meta"><strong>'+esc(name)+'</strong><small>'+date(comment.created_at)+'</small></div><p>'+esc(comment.body)+'</p><button type="button" class="comment-reply-button" data-reply-comment="'+esc(comment.id)+'" data-reply-name="'+esc(name)+'">Responder</button></div>';
+  wrap.appendChild(el);
+  const children=byParent.get(comment.id)||[];
+  if(children.length){const replies=document.createElement('div');replies.className='comment-replies';children.forEach(child=>replies.appendChild(build(child,depth+1)));wrap.appendChild(replies)}
+  return wrap;
+ };
+ (byParent.get('root')||[]).forEach(c=>box.appendChild(build(c)));
+ const visible=new Set();const mark=c=>{visible.add(c.id);(byParent.get(c.id)||[]).forEach(mark)};(byParent.get('root')||[]).forEach(mark);
+ state.comments.filter(c=>!visible.has(c.id)).forEach(c=>box.appendChild(build(c)));
 }
+function setReplyTarget(id,name){
+ state.replyTo={id,name};const label=$('commentReplyingTo');
+ label.innerHTML='Respondendo a <strong>'+esc(name)+'</strong><button type="button" id="cancelCommentReply" aria-label="Cancelar resposta">×</button>';
+ label.hidden=false;$('commentBody').placeholder='Escreva sua resposta…';$('commentBody').focus();
+}
+function clearReplyTarget(){state.replyTo=null;const label=$('commentReplyingTo');label.hidden=true;label.replaceChildren();$('commentBody').placeholder='Escreva sua resposta…'}
 async function sendComment(e){
  e.preventDefault();if(!state.user)return toast('Entre na sua conta para comentar.');
  const body=$('commentBody').value.trim();if(!body)return;
  const b=$('sendComment');b.disabled=true;b.textContent='Enviando…';
  try{
-  const{error}=await sb().from('comments').insert({post_id:state.activeCommentPost,author_id:state.user.id,body});
+  const row={post_id:state.activeCommentPost,author_id:state.user.id,body,parent_comment_id:state.replyTo?.id||null};
+  const{data,error}=await sb().from('comments').insert(row).select('id,body,parent_comment_id,created_at,profiles:author_id(display_name,username,avatar_url)').single();
   if(error)throw error;
-  appendComment({body,created_at:new Date().toISOString(),profiles:state.profile});
-  $('commentBody').value='';
+  state.comments.push(data);renderComments();
+  $('commentBody').value='';clearReplyTarget();
   const post=state.posts.find(x=>x.id===state.activeCommentPost);
   if(post){post.comments=(post.comments||0)+1;const card=document.querySelector('.post[data-id="'+state.activeCommentPost+'"]');const stats=card?.querySelector('.post-stats');if(stats)stats.innerHTML='<span>'+post.likes+' curtida(s)</span><span>'+post.comments+' comentário(s)</span>'}
   $('commentList').scrollTop=$('commentList').scrollHeight;
@@ -150,6 +167,8 @@ $('postType').onchange=()=>{$('ideaTitleField').hidden=$('postType').value!=='id
 $('postMedia').onchange=()=>{const f=$('postMedia').files?.[0],box=$('mediaPreview');box.textContent=f?f.name+' · '+Math.round(f.size/1024/1024*10)/10+' MB':''};
 $('composeForm').addEventListener('submit',publishPost);$('commentForm').addEventListener('submit',sendComment);
 $('commentsDialog').addEventListener('close',unlockCommentsBackground);
+$('commentList').addEventListener('click',e=>{const b=e.target.closest('[data-reply-comment]');if(b)setReplyTarget(b.dataset.replyComment,b.dataset.replyName)});
+$('commentReplyingTo').addEventListener('click',e=>{if(e.target.closest('#cancelCommentReply'))clearReplyTarget()});
 
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
 $('loadMore').onclick=()=>loadFeed(false);
