@@ -10,6 +10,36 @@
     html[data-ls-theme="dark"] body input::placeholder,html[data-ls-theme="dark"] body textarea::placeholder{color:#9da7b2!important;opacity:1}
     html[data-ls-theme="dark"] body .topbar,html[data-ls-theme="dark"] body .top,html[data-ls-theme="dark"] body .header,html[data-ls-theme="dark"] body header{background:#151515!important}
     html[data-ls-theme="dark"] body .back,html[data-ls-theme="dark"] body .menu-btn,html[data-ls-theme="dark"] body .ls-global-menu-btn,html[data-ls-theme="dark"] body .circle{background:#151515!important;color:#fff!important}
+
+    /* Neutralize the blue hamburger bars in dark mode. */
+    html[data-ls-theme="dark"] body .menu:before,html[data-ls-theme="dark"] body .menu-btn:before,html[data-ls-theme="dark"] body .ls-global-menu-btn:before{background:linear-gradient(#c4ced9 0 2px,transparent 2px 7.5px,#c4ced9 7.5px 9.5px,transparent 9.5px 15px,#c4ced9 15px 17px)!important}
+    html[data-ls-theme="dark"] body .ls-global-menu-btn{color:#c4ced9!important}
+    /* Messages list and account profile surfaces. */
+    html[data-ls-theme="dark"] body:has(.conversation),html[data-ls-theme="dark"] body:has(.profile){background:#101720!important;color:#edf3fa!important}
+    html[data-ls-theme="dark"] body .list,html[data-ls-theme="dark"] body .conversation,html[data-ls-theme="dark"] body .request,html[data-ls-theme="dark"] body .empty{background:#182330!important;border-color:#344255!important;color:#edf3fa!important}
+    html[data-ls-theme="dark"] body .conversation:active{background:#223246!important}
+    html[data-ls-theme="dark"] body .conversation .avatar,html[data-ls-theme="dark"] body .request .avatar,html[data-ls-theme="dark"] body .avatar{background:#22364c!important;color:#b8d8ff!important;border-color:#3b526b!important}
+    html[data-ls-theme="dark"] body .conversation .preview,html[data-ls-theme="dark"] body .conversation .time,html[data-ls-theme="dark"] body .conversation small,html[data-ls-theme="dark"] body .request small{color:#a8b5c5!important}
+    html[data-ls-theme="dark"] body .head h1,html[data-ls-theme="dark"] body .profile h1,html[data-ls-theme="dark"] body .profile h2{color:#f2f6fb!important}
+    html[data-ls-theme="dark"] body .profile,html[data-ls-theme="dark"] body .section,html[data-ls-theme="dark"] body .account-pill,html[data-ls-theme="dark"] body .work,html[data-ls-theme="dark"] body .empty{background:#182330!important;border-color:#344255!important;color:#edf3fa!important}
+    html[data-ls-theme="dark"] body .profile .muted,html[data-ls-theme="dark"] body .profile .ey,html[data-ls-theme="dark"] body .account-meta{color:#a8b5c5!important}
+    html[data-ls-theme="dark"] body .work .info,html[data-ls-theme="dark"] body .work h3,html[data-ls-theme="dark"] body .work p{color:#edf3fa!important}
+    html[data-ls-theme="dark"] body .profile-action,html[data-ls-theme="dark"] body .account-pill{background:#202d3b!important;border-color:#3b4d61!important;color:#dce9f7!important}
+    html[data-ls-theme="dark"] body .profile .publish{color:#8fc2ff!important}
+    /* FY feed: ensure cards, controls and dialogs follow the selected dark theme. */
+    html[data-ls-theme="dark"] body:has(.post){background:#101720!important;background-image:radial-gradient(rgba(180,205,255,.035) .65px,transparent .65px),linear-gradient(135deg,#0c121b 0%,#101a28 52%,#151827 100%)!important;color:#edf3fa!important}
+    html[data-ls-theme="dark"] body:has(.post) .topbar,html[data-ls-theme="dark"] body:has(.post) .tabs{background:rgba(16,23,32,.94)!important;border-color:#344255!important}
+    html[data-ls-theme="dark"] body:has(.post) .post,html[data-ls-theme="dark"] body:has(.post) .composer,html[data-ls-theme="dark"] body:has(.post) .empty,html[data-ls-theme="dark"] body:has(.post) .loading{background:#182330!important;border-color:#344255!important;color:#edf3fa!important}
+    html[data-ls-theme="dark"] body:has(.post) .body,html[data-ls-theme="dark"] body:has(.post) .idea-title,html[data-ls-theme="dark"] body:has(.post) .post-head strong{color:#edf3fa!important}
+    html[data-ls-theme="dark"] body:has(.post) .post-stats,html[data-ls-theme="dark"] body:has(.post) .author small,html[data-ls-theme="dark"] body:has(.post) .muted{color:#a8b5c5!important}
+    html[data-ls-theme="dark"] body:has(.post) .tab{background:#202d3b!important;color:#c2cedb!important;border-color:#3b4d61!important}
+    html[data-ls-theme="dark"] body:has(.post) .tab.active{background:#286bb5!important;color:#fff!important;border-color:#438bd6!important}
+    html[data-ls-theme="dark"] body:has(.post) .compose-open,html[data-ls-theme="dark"] body:has(.post) .chip,html[data-ls-theme="dark"] body:has(.post) .action{background:#202d3b!important;color:#dce9f7!important;border-color:#3b4d61!important}
+    html[data-ls-theme="dark"] body:has(.post) .field input,html[data-ls-theme="dark"] body:has(.post) .field textarea,html[data-ls-theme="dark"] body:has(.post) .field select{background:#111b27!important;color:#edf3fa!important;border-color:#3b4d61!important}
+    html[data-ls-theme="dark"] body:has(.post) dialog{background:#182330!important;color:#edf3fa!important;border-color:#344255!important}
+    html[data-ls-theme="dark"] body:has(.post) dialog .modal-head{border-color:#344255!important}
+    html[data-ls-theme="dark"] body:has(.post) dialog p,html[data-ls-theme="dark"] body:has(.post) dialog label{color:#c2cedb!important}
+
     html[data-ls-theme="dark"] body .logo img,html[data-ls-theme="dark"] body .brand img,html[data-ls-theme="dark"] body .footer-logo img{filter:invert(1)!important}
     html[data-ls-theme="dark"] body .creator a,html[data-ls-theme="dark"] body .feature a,html[data-ls-theme="dark"] body .login{background:#fff!important;color:#0b72e7!important}
     html[data-ls-theme="dark"] body .feature.empty{background:#1b1b1b!important;color:#fff!important}
