@@ -28,6 +28,7 @@ async function loadFeed(reset=false){
    else{
     let q=sb().from('posts').select('id,author_id,body,post_type,idea_title,media_url,media_type,thumbnail_url,created_at,profiles:author_id(id,username,display_name,avatar_url)').neq('post_type','story').order('created_at',{ascending:false}).range(state.offset,state.offset+state.limit-1);
     if(state.tab==='ideas')q=q.eq('post_type','idea');
+    if(state.tab==='videos')q=q.eq('post_type','video');
     if(state.tab==='following')q=q.in('author_id',followedIds);
     const result=await q;if(result.error)throw result.error;data=result.data||[];rows=data;
    }
@@ -100,7 +101,7 @@ function unlockCommentsBackground(){
  document.body.style.top='';
  window.scrollTo(0,state.commentsScrollY||0);
 }
-function openComments(postId){
+async function openComments(postId){
  state.activeCommentPost=postId;
  $('commentComposeAvatar').innerHTML=avatar(state.profile);
  const post=state.posts.find(x=>x.id===postId);
