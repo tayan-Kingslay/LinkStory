@@ -86,7 +86,7 @@ html[data-ls-theme="dark"] .message-edit-controls button:last-child{background:#
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script>
 <script>
 (async()=>{
- const db=linkstorySupabase,$=id=>document.getElementById(id);let user=null,conversation=null,poll=null;
+ const db=linkstorySupabase,$=id=>document.getElementById(id);let user=null,conversation=null,poll=null,loadingMessages=false,lastMessageSignature='';
  const friendId=new URLSearchParams(location.search).get('friend');
  const clock=v=>new Date(v).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
  function setStatus(v){$('status').textContent=v}
@@ -125,11 +125,25 @@ html[data-ls-theme="dark"] .message-edit-controls button:last-child{background:#
   const save=document.createElement('button');save.type='button';save.textContent='Salvar';save.onclick=async()=>{const value=input.value.trim();if(!value)return;save.disabled=true;const r=await db.rpc('edit_direct_message',{p_message_id:m.id,p_body:value});if(r.error){setStatus(r.error.message);save.disabled=false;return}await loadMessages()};
   controls.append(cancel,save);editor.append(input,controls);wrap.insertBefore(editor,wrap.querySelector('.message-actions'));input.focus();input.setSelectionRange(input.value.length,input.value.length);
  }
- async function loadMessages(){if(!conversation)return;const r=await db.from('messages').select('id,sender_id,body,created_at,edited_at,deleted_for_all_at').eq('conversation_id',conversation).order('created_at',{ascending:true}).limit(300);if(r.error){setStatus(r.error.message);return}const box=$('chatBody'),bottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;box.replaceChildren();if(!(r.data||[]).length)box.append(inspiration());else r.data.forEach(m=>renderMessage(m,box));if(bottom)box.scrollTop=box.scrollHeight;setStatus('')}
+ async function loadMessages(){
+  if(!conversation||loadingMessages||document.visibilityState==='hidden'||document.querySelector('.message-edit,.message-actions-menu'))return;
+  loadingMessages=true;
+  try{
+   const r=await db.from('messages').select('id,sender_id,body,created_at,edited_at,deleted_for_all_at').eq('conversation_id',conversation).order('created_at',{ascending:true}).limit(300);
+   if(r.error){setStatus(r.error.message);return}
+   const rows=r.data||[],signature=JSON.stringify(rows.map(m=>[m.id,m.body,m.edited_at,m.deleted_for_all_at,m.created_at]));
+   if(signature===lastMessageSignature){setStatus('');return}
+   lastMessageSignature=signature;
+   const box=$('chatBody'),bottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;
+   box.replaceChildren();if(!rows.length)box.append(inspiration());else rows.forEach(m=>renderMessage(m,box));
+   if(bottom)box.scrollTop=box.scrollHeight;setStatus('');
+  }catch(e){setStatus(e.message||'Não foi possível atualizar as mensagens.')}
+  finally{loadingMessages=false}
+ }
  $('chatForm').onsubmit=async e=>{e.preventDefault();const body=$('chatInput').value.trim();if(!body||!conversation)return;const btn=$('sendButton');btn.disabled=true;const r=await db.from('messages').insert({conversation_id:conversation,sender_id:user.id,body});btn.disabled=false;if(r.error){setStatus(r.error.message||'Não foi possível enviar.');return}$('chatInput').value='';await loadMessages()};
  const s=await db.auth.getSession();user=s.data.session?.user;if(!user){location.href='login.html?next='+encodeURIComponent('chat.html?friend='+friendId);return}
  if(!friendId){setStatus('Escolha uma pessoa para conversar.');return}
  const p=await db.from('profiles').select('id,username,display_name,avatar_url').eq('id',friendId).maybeSingle();if(p.error)throw p.error;if(!p.data)throw new Error('Pessoa não encontrada.');$('name').textContent=p.data.display_name||p.data.username||'Conversa';$('handle').textContent='@'+(p.data.username||'LinkStory');avatar(p.data);$('peerProfileLink').href='public-profile.html?id='+encodeURIComponent(p.data.id);
- const c=await db.rpc('create_or_get_direct_conversation',{p_friend_id:friendId});if(c.error)throw c.error;conversation=c.data;$('chatInput').disabled=false;$('sendButton').disabled=false;await loadMessages();poll=setInterval(loadMessages,4000);window.addEventListener('beforeunload',()=>clearInterval(poll));
+ const c=await db.rpc('create_or_get_direct_conversation',{p_friend_id:friendId});if(c.error)throw c.error;conversation=c.data;$('chatInput').disabled=false;$('sendButton').disabled=false;await loadMessages();poll=setInterval(loadMessages,20000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')loadMessages()});window.addEventListener('beforeunload',()=>clearInterval(poll));
 })().catch(e=>{document.getElementById('status').textContent=e.message||'Não foi possível abrir a conversa.'});
 </script></body></html>
