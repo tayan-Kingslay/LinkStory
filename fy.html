@@ -446,9 +446,36 @@ html[data-ls-theme="dark"] #commentsDialog .comment-replying-to{background:#1c2c
 html[data-ls-theme="dark"] #commentsDialog .comment-replying-to button{color:#c7d6e8}
 @media(max-width:560px){#commentsDialog .comment-replies{margin-left:14px;padding-left:12px}}
 
-/* Clear divider between the original publication and its comments */
-#commentsDialog .comment-post-context{border-bottom:2px solid #d5dfeb}
-html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-color:#3a4b60}
+/* Threaded comments: one consistent connector and compact conversation rows */
+#commentsDialog .comment-list{display:block;overflow-y:auto;overscroll-behavior:contain}
+#commentsDialog .comment-thread{position:relative;width:100%;min-width:0;margin:0;padding:0}
+#commentsDialog .comment-thread>.comment{
+ display:flex;align-items:flex-start;gap:10px;margin:0;padding:13px 18px;
+ border:0;border-bottom:1px solid #e7edf4;border-radius:0;background:transparent
+}
+#commentsDialog .comment-avatar{width:36px;height:36px;flex:0 0 36px}
+#commentsDialog .comment-content{min-width:0;flex:1}
+#commentsDialog .comment-meta{display:flex;align-items:baseline;flex-wrap:wrap;gap:7px}
+#commentsDialog .comment-meta strong{font-size:13px;font-weight:800;color:#17283e}
+#commentsDialog .comment-meta small{font-size:11px;color:#8493a7}
+#commentsDialog .comment-content p{margin:5px 0 2px;font-size:14px;line-height:1.48;color:#26384e;white-space:pre-wrap;overflow-wrap:anywhere}
+#commentsDialog .comment-reply-button{display:inline-flex;align-items:center;min-height:28px;margin:3px 0 0;padding:0 5px;border:0;background:transparent;color:#71839a;font-size:11px;font-weight:800}
+#commentsDialog .comment-replies{position:relative;margin:0 0 0 18px;padding:0 0 0 20px;border:0;border-left:2px solid #d8e3ef}
+#commentsDialog .comment-replies>.comment-thread>.comment{padding:10px 12px 10px 2px;border-bottom:0}
+#commentsDialog .comment-thread.has-replies>.comment{border-bottom:0}
+#commentsDialog .comment-thread.has-replies::before{content:none!important}
+#commentsDialog .comments-empty{margin:16px;padding:22px;text-align:center}
+html[data-ls-theme="dark"] #commentsDialog .comment-thread>.comment{background:transparent;border-bottom-color:#304157}
+html[data-ls-theme="dark"] #commentsDialog .comment-meta strong{color:#edf4fc}
+html[data-ls-theme="dark"] #commentsDialog .comment-content p{color:#d7e2f0}
+html[data-ls-theme="dark"] #commentsDialog .comment-replies{border-left-color:#40536b}
+html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
+@media(max-width:560px){
+ #commentsDialog .comment-thread>.comment{padding:12px 14px}
+ #commentsDialog .comment-replies{margin-left:12px;padding-left:14px}
+ #commentsDialog .comment-replies>.comment-thread>.comment{padding:9px 8px 9px 1px}
+ #commentsDialog .comment-avatar{width:34px;height:34px;flex-basis:34px}
+}
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
