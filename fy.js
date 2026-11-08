@@ -155,6 +155,41 @@ async function sendComment(e){
  }catch(e){toast(e.message||'Não foi possível comentar.')}
  finally{b.disabled=false;b.textContent='Responder'}
 }
+async function sharePostWithFriend(postId){
+ if(!state.user)return toast('Entre na sua conta para compartilhar.');
+ let dialog=document.getElementById('sharePostDialog');
+ if(!dialog){
+  dialog=document.createElement('dialog');dialog.id='sharePostDialog';
+  dialog.style.cssText='width:min(440px,calc(100% - 24px));max-height:80dvh;border:1px solid #dbe5ef;border-radius:18px;padding:0;background:#fff;color:#17263a;box-shadow:0 24px 80px #10203355';
+  dialog.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #e2e8f0"><strong>Enviar para um amigo</strong><button type="button" data-share-close style="border:0;background:#f1f5f9;border-radius:50%;width:32px;height:32px;font-size:20px">×</button></div><div id="shareFriendList" style="padding:14px 18px;overflow:auto;max-height:55dvh"><p>Carregando amigos…</p></div><div style="padding:12px 18px;border-top:1px solid #e2e8f0;display:flex;justify-content:flex-end;gap:8px"><button type="button" data-share-close style="padding:10px 14px;border:1px solid #dbe5ef;border-radius:10px;background:#f8fafc">Cancelar</button><button type="button" id="sendSharedPost" disabled style="padding:10px 15px;border:0;border-radius:10px;background:#1769d2;color:white;font-weight:800">Enviar publicação</button></div>';
+  document.body.append(dialog);dialog.querySelectorAll('[data-share-close]').forEach(b=>b.onclick=()=>dialog.close());
+ }
+ const list=dialog.querySelector('#shareFriendList'),send=dialog.querySelector('#sendSharedPost');list.innerHTML='<p>Carregando amigos…</p>';send.disabled=true;send.onclick=null;dialog.showModal();
+ try{
+  const fr=await sb().from('friendships').select('user_a,user_b').or('user_a.eq.'+state.user.id+',user_b.eq.'+state.user.id);
+  if(fr.error)throw fr.error;
+  const ids=[...new Set((fr.data||[]).map(x=>x.user_a===state.user.id?x.user_b:x.user_a))];
+  if(!ids.length){list.innerHTML='<p style="color:#64748b;text-align:center;padding:18px 4px">Você ainda não tem amigos adicionados. Encontre pessoas na área Amigos.</p>';return}
+  const pr=await sb().from('profiles').select('id,username,display_name,avatar_url').in('id',ids).order('display_name');
+  if(pr.error)throw pr.error;
+  list.replaceChildren();let selected=null;
+  pr.data.forEach(p=>{
+   const label=document.createElement('label');label.style.cssText='display:flex;align-items:center;gap:11px;padding:10px 4px;border-bottom:1px solid #edf1f5;cursor:pointer';
+   const radio=document.createElement('input');radio.type='radio';radio.name='shareFriend';radio.value=p.id;radio.style.accentColor='#1769d2';
+   const img=document.createElement('span');img.style.cssText='width:40px;height:40px;flex:none;border-radius:50%;overflow:hidden;background:#eaf3ff;display:grid;place-items:center;color:#1769d2;font-weight:800';
+   if(p.avatar_url){const image=document.createElement('img');image.src=p.avatar_url;image.alt='';image.style.cssText='width:100%;height:100%;object-fit:cover';img.append(image)}else img.textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase();
+   const name=document.createElement('span');name.style.cssText='font-weight:750;font-size:14px';name.textContent=p.display_name||p.username||'Pessoa';const handle=document.createElement('small');handle.style.cssText='display:block;color:#718096;font-weight:400;margin-top:3px';handle.textContent='@'+(p.username||'linkstory');name.append(handle);
+   radio.onchange=()=>{selected=p.id;send.disabled=false};label.append(radio,img,name);list.append(label);
+  });
+  send.onclick=async()=>{if(!selected)return;send.disabled=true;send.textContent='Enviando…';try{
+   const c=await sb().rpc('create_or_get_direct_conversation',{p_friend_id:selected});if(c.error)throw c.error;
+   const link=location.origin+'/fy.html?post='+encodeURIComponent(postId);
+   const message='📌 Publicação compartilhada no LinkStory\n'+link;
+   const sent=await sb().from('messages').insert({conversation_id:c.data,sender_id:state.user.id,body:message});if(sent.error)throw sent.error;
+   dialog.close();toast('Publicação enviada para seu amigo!');
+  }catch(e){toast(e.message||'Não foi possível enviar.');send.disabled=false;send.textContent='Enviar publicação'}};
+ }catch(e){list.innerHTML='<p style="color:#b42332">Não foi possível carregar seus amigos: '+esc(e.message)+'</p>'}
+}
 async function followAuthor(postId,button){const p=state.posts.find(x=>x.id===postId);if(!state.user)return toast('Entre na sua conta para seguir criadores.');if(!p||p.author_id===state.user.id)return;button.disabled=true;try{const{error}=await sb().from('follows').insert({follower_id:state.user.id,following_id:p.author_id});if(error&&error.code!=='23505')throw error;button.textContent='✓ Seguindo';toast('Agora você segue este criador.')}catch(e){toast(e.message||'Não foi possível seguir.')}finally{button.disabled=false}}
 async function deletePost(postId,card,button){if(!state.user)return toast('Entre na sua conta para apagar.');const post=state.posts.find(x=>x.id===postId);if(!post||post.author_id!==state.user.id)return toast('Você só pode apagar suas próprias publicações.');if(!confirm('Apagar esta publicação permanentemente?'))return;button.disabled=true;button.textContent='Apagando…';try{const{error}=await sb().from('posts').delete().eq('id',postId).eq('author_id',state.user.id);if(error)throw error;if(post.media_url){const marker='/storage/v1/object/public/linkstory-media/';const at=post.media_url.indexOf(marker);if(at>=0){const path=decodeURIComponent(post.media_url.slice(at+marker.length));if(path.startsWith('posts/'+state.user.id+'/')){const cleanup=await sb().storage.from('linkstory-media').remove([path]);if(cleanup.error)console.warn('Mídia da publicação removida do feed, mas não do armazenamento:',cleanup.error)}}}state.posts=state.posts.filter(x=>x.id!==postId);card.remove();toast('Publicação apagada.');if(!state.posts.length)await loadFeed(true)}catch(e){button.disabled=false;button.textContent='⌫ Apagar';toast(e.message||'Não foi possível apagar a publicação.')}}
 async function reportPost(postId){if(!state.reportsEnabled)return toast('Denúncias serão ativadas junto com a proteção do banco.');if(!state.user)return toast('Entre na sua conta para denunciar.');if(!window.LinkStoryGuard)return toast('Sistema de denúncia indisponível.');const choice=prompt('Motivo da denúncia — digite o número:\n1 Spam\n2 Assédio\n3 Discurso de ódio\n4 Conteúdo sexual\n5 Segurança de menores\n6 Violência\n7 Automutilação\n8 Direitos autorais\n9 Privacidade\n10 Outro');const reasons=['spam','harassment','hate','sexual_content','minor_safety','violence','self_harm','copyright','privacy','other'];const reason=reasons[Number(choice)-1];if(!reason)return toast('Escolha um motivo válido.');try{await window.LinkStoryGuard.submitReport({target_type:'post',target_id:postId,reason,details:''});toast('Denúncia enviada para análise.')}catch(e){toast(e.message||'Não foi possível denunciar.')}}
@@ -185,6 +220,6 @@ $('commentPostContext').addEventListener('click',e=>{
 $('feedList').addEventListener('click',async e=>{
  const expand=e.target.closest('[data-expand-post]');
  if(expand){const card=expand.closest('.post'),body=card?.querySelector('.post-body');if(!body)return;const expanded=body.classList.toggle('is-expanded');body.classList.toggle('is-collapsed',!expanded);expand.textContent=expanded?'Mostrar menos':'Ler tudo';expand.setAttribute('aria-expanded',String(expanded));return}
- const b=e.target.closest('[data-action]');if(!b)return;const card=b.closest('.post'),id=card?.dataset.id;if(!id)return;switch(b.dataset.action){case'like':return toggleLike(id,b);case'comment':return openComments(id);case'share':try{await navigator.clipboard.writeText(location.origin+'/fy.html?post='+id);toast('Link da publicação copiado.')}catch{toast('Não foi possível copiar o link neste navegador.')}return;case'follow':return followAuthor(id,b);case'delete':return deletePost(id,card,b);case'report':return reportPost(id)}});
+ const b=e.target.closest('[data-action]');if(!b)return;const card=b.closest('.post'),id=card?.dataset.id;if(!id)return;switch(b.dataset.action){case'like':return toggleLike(id,b);case'comment':return openComments(id);case'share':return sharePostWithFriend(id);case'follow':return followAuthor(id,b);case'delete':return deletePost(id,card,b);case'report':return reportPost(id)}});
 init();
 })();
