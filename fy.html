@@ -363,6 +363,35 @@ body.comments-open{
 }
 
 
+/* Fixed publication header and composer; only the comments list scrolls */
+#commentsDialog .comment-post-context{
+ flex:0 0 auto;
+ max-height:55dvh;
+ overflow:hidden!important;
+ overscroll-behavior:none;
+ touch-action:none;
+}
+#commentsDialog .comment-post-context>img,
+#commentsDialog .comment-post-context>video{
+ max-height:26dvh;
+ object-fit:contain;
+}
+#commentsDialog .comment-list{
+ flex:1 1 0;
+ min-height:0;
+ overflow-x:hidden;
+ overflow-y:auto;
+ overscroll-behavior-y:contain;
+ touch-action:pan-y;
+ -webkit-overflow-scrolling:touch;
+}
+#commentsDialog .comment-composer{
+ flex:0 0 auto;
+ position:relative;
+ bottom:auto;
+ touch-action:auto;
+}
+
 /* Clear divider between the original publication and its comments */
 #commentsDialog .comment-post-context{border-bottom:2px solid #d5dfeb}
 html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-color:#3a4b60}
@@ -414,6 +443,6 @@ html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-c
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 <script src="guard.js"></script>
-<script src="fy.js?v=20261108-4"></script>
+<script src="fy.js?v=20261108-5"></script>
 <script src="global-nav.js"></script>
 </body></html>
