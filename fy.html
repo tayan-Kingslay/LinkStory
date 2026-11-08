@@ -328,6 +328,40 @@ html[data-ls-theme="dark"] #commentsDialog #commentBody::placeholder{color:#9cac
  #commentsDialog .comment-composer{padding-left:13px;padding-right:13px}
 }
 
+
+/* Long posts: compact preview with an explicit expand control */
+.post-body.is-collapsed{
+ display:-webkit-box;
+ -webkit-box-orient:vertical;
+ -webkit-line-clamp:6;
+ overflow:hidden;
+ white-space:pre-wrap;
+}
+.post-body.is-expanded{display:block;white-space:pre-wrap}
+.read-more{
+ display:inline-flex;align-items:center;min-height:36px;margin:-5px 0 8px 2px;padding:0 9px;
+ border:0;border-radius:9px;background:transparent;color:#1769d2;font-size:12px;font-weight:850;
+}
+.read-more:active{background:#eaf4ff}
+html[data-ls-theme="dark"] .read-more{color:#91c3ff}
+body.comments-open{
+ position:fixed!important;left:0;right:0;width:100%;overflow:hidden!important;
+ overscroll-behavior:none;touch-action:none;
+}
+#commentsDialog.comments-screen{
+ position:fixed;inset:0;margin:auto;overscroll-behavior:contain;touch-action:pan-y;
+}
+#commentsDialog .comment-post-context{
+ max-height:36dvh;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;
+}
+#commentsDialog .comment-list{
+ overscroll-behavior-y:contain;touch-action:pan-y;-webkit-overflow-scrolling:touch;
+}
+#commentsDialog .comment-composer{touch-action:pan-y}
+@media(max-width:560px){
+ #commentsDialog.comments-screen{inset:0;margin:0}
+}
+
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
