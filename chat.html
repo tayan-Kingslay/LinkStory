@@ -54,6 +54,31 @@ html[data-ls-theme="dark"] .compose textarea::placeholder{color:#91a1b4!importan
 html[data-ls-theme="dark"] .send{background:linear-gradient(135deg,#197ce8,#1769d2)!important;color:#fff!important}
 html[data-ls-theme="dark"] .status{color:#a8b5c5!important}
 
+
+/* Discreet per-message actions and inline editing. */
+.message-row{display:flex;flex-direction:column;align-items:flex-start;max-width:100%;gap:3px}
+.message-row.mine{align-items:flex-end}
+.message-row .bubble{max-width:min(78vw,560px)}
+.message-actions{position:relative;display:flex;justify-content:flex-start;padding:0 5px}
+.message-row.mine .message-actions{justify-content:flex-end}
+.message-options-trigger{width:30px;height:25px;border:0;border-radius:9px;background:transparent;color:#8795a7;font-size:22px;line-height:1;cursor:pointer;opacity:.72}
+.message-options-trigger:active,.message-options-trigger:focus-visible{background:#e8eef6;opacity:1;outline:none}
+.message-actions-menu{position:relative;display:flex;flex-wrap:wrap;gap:5px;margin:3px 0 7px;padding:7px;background:var(--panel);border:1px solid var(--line);border-radius:13px;box-shadow:0 8px 24px rgba(15,35,60,.13);z-index:3;max-width:min(88vw,370px)}
+.message-actions-menu button,.message-edit-controls button{min-height:36px;padding:7px 10px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink);font-size:12px;font-weight:700}
+.message-actions-menu button.danger{color:#d34b55}
+.message-edit{width:min(88vw,560px);padding:9px;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 5px 18px rgba(20,40,70,.08)}
+.message-edit textarea{width:100%;min-height:72px;resize:vertical;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;font-size:14px}
+.message-edit-controls{display:flex;justify-content:flex-end;gap:7px;margin-top:7px}
+.message-edit-controls button:last-child{background:#1769d2;color:#fff;border-color:#1769d2}
+.deleted-message{font-style:italic;opacity:.72}
+html[data-ls-theme="dark"] .message-options-trigger{color:#a8b5c5}
+html[data-ls-theme="dark"] .message-options-trigger:active,html[data-ls-theme="dark"] .message-options-trigger:focus-visible{background:#26364a}
+html[data-ls-theme="dark"] .message-actions-menu,html[data-ls-theme="dark"] .message-edit{background:#1b2735;border-color:#344255;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+html[data-ls-theme="dark"] .message-actions-menu button,html[data-ls-theme="dark"] .message-edit-controls button{background:#202d3b;border-color:#3b4d61;color:#edf3fa}
+html[data-ls-theme="dark"] .message-actions-menu button.danger{color:#ff9b9b}
+html[data-ls-theme="dark"] .message-edit textarea{background:#111b27;border-color:#3b4d61;color:#edf3fa}
+html[data-ls-theme="dark"] .message-edit-controls button:last-child{background:#1769d2;color:#fff;border-color:#1769d2}
+
 </style></head><body>
 <header class="chat-header"><a class="back" href="messages.html" aria-label="Voltar às mensagens">‹</a><a class="peer-link" id="peerProfileLink" href="#" aria-label="Ver perfil"><div class="avatar" id="avatar">L</div><span class="who"><strong id="name">Conversa</strong><small id="handle">LinkStory</small></span><span class="profile-chevron">›</span></a></header>
 <main><div class="chat-body" id="chatBody"><div class="inspiration"><div class="spark">✦</div><strong>Histórias também começam com uma conversa.</strong><p>Um incentivo simples pode mudar o dia de alguém.</p></div></div>
@@ -67,7 +92,40 @@ html[data-ls-theme="dark"] .status{color:#a8b5c5!important}
  function setStatus(v){$('status').textContent=v}
  function avatar(p){$('avatar').replaceChildren();if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='';$('avatar').append(img)}else $('avatar').textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase()}
  function inspiration(){const box=document.createElement('div');box.className='inspiration';box.innerHTML='<div class="spark">✦</div><strong>Que tal começar com algo positivo?</strong><p>Escolha uma mensagem para enviar e deixe a conversa começar com boas energias.</p><button type="button" data-text="Oi! Como está seu dia?">Perguntar como está</button><button type="button" data-text="Continue criando. Sua história merece ser vista!">Incentivar a criar</button><button type="button" data-text="Passei aqui para desejar um ótimo dia!">Desejar um bom dia</button>';box.querySelectorAll('[data-text]').forEach(b=>b.onclick=()=>{$('chatInput').value=b.dataset.text;$('chatInput').focus()});return box}
- async function loadMessages(){if(!conversation)return;const r=await db.from('messages').select('id,sender_id,body,created_at').eq('conversation_id',conversation).order('created_at',{ascending:true}).limit(300);if(r.error){setStatus(r.error.message);return}const box=$('chatBody'),bottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;box.replaceChildren();if(!(r.data||[]).length)box.append(inspiration());else r.data.forEach(m=>{const b=document.createElement('div');b.className='bubble'+(m.sender_id===user.id?' mine':'');b.append(document.createTextNode(m.body));const t=document.createElement('time');t.textContent=clock(m.created_at);b.append(t);box.append(b)});if(bottom)box.scrollTop=box.scrollHeight;setStatus('')}
+ function closeMessageMenus(except){document.querySelectorAll('.message-actions-menu').forEach(m=>{if(m!==except)m.remove()})}
+ function renderMessage(m,box){
+  const mine=m.sender_id===user.id,wrap=document.createElement('div');wrap.className='message-row'+(mine?' mine':'');
+  const b=document.createElement('div');b.className='bubble'+(mine?' mine':'');
+  if(m.deleted_for_all_at){b.classList.add('deleted-message');b.textContent='Esta mensagem foi apagada.'}
+  else b.append(document.createTextNode(m.body||''));
+  const t=document.createElement('time');t.textContent=clock(m.created_at)+(m.edited_at?' · editada':'');b.append(t);wrap.append(b);
+  if(!m.deleted_for_all_at){
+   const actions=document.createElement('div');actions.className='message-actions';
+   const trigger=document.createElement('button');trigger.type='button';trigger.className='message-options-trigger';trigger.setAttribute('aria-label','Opções da mensagem');trigger.title='Opções da mensagem';trigger.textContent='⋯';
+   trigger.onclick=()=>{
+    const existing=wrap.querySelector('.message-actions-menu');closeMessageMenus(existing);
+    if(existing){existing.remove();return}
+    const menu=document.createElement('div');menu.className='message-actions-menu';
+    const add=(label,fn,cls='')=>{const btn=document.createElement('button');btn.type='button';btn.className=cls;btn.textContent=label;btn.onclick=async()=>{menu.remove();await fn()};menu.append(btn)};
+    if(mine)add('Editar mensagem',()=>beginEdit(m,b,wrap));
+    add('Apagar para mim',()=>deleteForMe(m.id),'danger');
+    if(mine)add('Apagar para todos',()=>deleteForEveryone(m.id),'danger');
+    actions.append(menu);
+   };
+   actions.append(trigger);wrap.append(actions);
+  }
+  box.append(wrap);
+ }
+ async function deleteForMe(id){if(!confirm('Apagar esta mensagem somente para você?'))return;const r=await db.rpc('hide_direct_message_for_me',{p_message_id:id});if(r.error){setStatus(r.error.message);return}await loadMessages()}
+ async function deleteForEveryone(id){if(!confirm('Apagar esta mensagem para todos os participantes?'))return;const r=await db.rpc('delete_direct_message_for_everyone',{p_message_id:id});if(r.error){setStatus(r.error.message);return}await loadMessages()}
+ function beginEdit(m,b,wrap){
+  const editor=document.createElement('div');editor.className='message-edit';const input=document.createElement('textarea');input.maxLength=5000;input.value=m.body;input.setAttribute('aria-label','Editar mensagem');
+  const controls=document.createElement('div');controls.className='message-edit-controls';
+  const cancel=document.createElement('button');cancel.type='button';cancel.textContent='Cancelar';cancel.onclick=()=>editor.remove();
+  const save=document.createElement('button');save.type='button';save.textContent='Salvar';save.onclick=async()=>{const value=input.value.trim();if(!value)return;save.disabled=true;const r=await db.rpc('edit_direct_message',{p_message_id:m.id,p_body:value});if(r.error){setStatus(r.error.message);save.disabled=false;return}await loadMessages()};
+  controls.append(cancel,save);editor.append(input,controls);wrap.insertBefore(editor,wrap.querySelector('.message-actions'));input.focus();input.setSelectionRange(input.value.length,input.value.length);
+ }
+ async function loadMessages(){if(!conversation)return;const r=await db.from('messages').select('id,sender_id,body,created_at,edited_at,deleted_for_all_at').eq('conversation_id',conversation).order('created_at',{ascending:true}).limit(300);if(r.error){setStatus(r.error.message);return}const box=$('chatBody'),bottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;box.replaceChildren();if(!(r.data||[]).length)box.append(inspiration());else r.data.forEach(m=>renderMessage(m,box));if(bottom)box.scrollTop=box.scrollHeight;setStatus('')}
  $('chatForm').onsubmit=async e=>{e.preventDefault();const body=$('chatInput').value.trim();if(!body||!conversation)return;const btn=$('sendButton');btn.disabled=true;const r=await db.from('messages').insert({conversation_id:conversation,sender_id:user.id,body});btn.disabled=false;if(r.error){setStatus(r.error.message||'Não foi possível enviar.');return}$('chatInput').value='';await loadMessages()};
  const s=await db.auth.getSession();user=s.data.session?.user;if(!user){location.href='login.html?next='+encodeURIComponent('chat.html?friend='+friendId);return}
  if(!friendId){setStatus('Escolha uma pessoa para conversar.');return}
