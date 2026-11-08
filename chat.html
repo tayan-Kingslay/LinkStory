@@ -29,6 +29,31 @@ main{width:min(820px,100%);margin:0 auto;flex:1;min-height:0;display:flex;flex-d
 .send:disabled{opacity:.55}
 .status{min-height:17px;color:#7b8ba0;font-size:11px;padding:5px 5px}
 @media(max-width:560px){header.chat-header{height:78px;padding:0 12px}.back{width:42px;height:42px}.avatar{width:48px;height:48px}.chat-body{padding:18px 2px}.bubble{max-width:88%}.compose-wrap{padding-bottom:calc(10px + env(safe-area-inset-bottom))}.compose{gap:8px;padding:8px;border-radius:19px}.compose textarea{min-height:48px;font-size:14px;padding:12px}.send{min-width:78px;height:48px}}
+
+/* Chat: complete dark theme, matching the site's global dark palette. */
+html[data-ls-theme="dark"],html[data-ls-theme="dark"] body{background:#101720!important;color:#f2f6fb!important;color-scheme:dark}
+html[data-ls-theme="dark"] header.chat-header{background:rgba(20,28,38,.96)!important;border-bottom-color:#303b49!important;box-shadow:0 5px 22px rgba(0,0,0,.22)!important}
+html[data-ls-theme="dark"] .back{background:#1c2633!important;border-color:#344255!important;color:#edf5ff!important}
+html[data-ls-theme="dark"] .peer-link{color:#f2f6fb!important}
+html[data-ls-theme="dark"] .peer-link:active{background:#202d3c!important}
+html[data-ls-theme="dark"] .who strong{color:#f2f6fb!important}
+html[data-ls-theme="dark"] .who small,html[data-ls-theme="dark"] .profile-chevron{color:#a8b5c5!important}
+html[data-ls-theme="dark"] main{background:transparent!important}
+html[data-ls-theme="dark"] .chat-body{background:#101720!important}
+html[data-ls-theme="dark"] .bubble:not(.mine){background:#202d3b!important;color:#edf3fa!important;border-color:#344255!important;box-shadow:0 5px 18px rgba(0,0,0,.18)!important}
+html[data-ls-theme="dark"] .bubble.mine{background:linear-gradient(135deg,#197ce8,#155db8)!important;color:#fff!important}
+html[data-ls-theme="dark"] .inspiration{background:#1b2735!important;border-color:#344255!important;color:#edf3fa!important;box-shadow:0 8px 26px rgba(0,0,0,.2)!important}
+html[data-ls-theme="dark"] .inspiration strong{color:#f2f6fb!important}
+html[data-ls-theme="dark"] .inspiration p{color:#a8b5c5!important}
+html[data-ls-theme="dark"] .spark{background:#203b59!important;color:#78b7ff!important}
+html[data-ls-theme="dark"] .inspiration button{background:#223449!important;border-color:#3b536e!important;color:#91c5ff!important}
+html[data-ls-theme="dark"] .compose-wrap{background:#101720!important}
+html[data-ls-theme="dark"] .compose{background:#1b2735!important;border-color:#344255!important;box-shadow:0 8px 28px rgba(0,0,0,.22)!important}
+html[data-ls-theme="dark"] .compose textarea{background:#111b27!important;border-color:#39495c!important;color:#f2f6fb!important;caret-color:#78b7ff}
+html[data-ls-theme="dark"] .compose textarea::placeholder{color:#91a1b4!important}
+html[data-ls-theme="dark"] .send{background:linear-gradient(135deg,#197ce8,#1769d2)!important;color:#fff!important}
+html[data-ls-theme="dark"] .status{color:#a8b5c5!important}
+
 </style></head><body>
 <header class="chat-header"><a class="back" href="messages.html" aria-label="Voltar às mensagens">‹</a><a class="peer-link" id="peerProfileLink" href="#" aria-label="Ver perfil"><div class="avatar" id="avatar">L</div><span class="who"><strong id="name">Conversa</strong><small id="handle">LinkStory</small></span><span class="profile-chevron">›</span></a></header>
 <main><div class="chat-body" id="chatBody"><div class="inspiration"><div class="spark">✦</div><strong>Histórias também começam com uma conversa.</strong><p>Um incentivo simples pode mudar o dia de alguém.</p></div></div>
