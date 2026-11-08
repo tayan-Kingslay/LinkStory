@@ -44,6 +44,24 @@ h2{letter-spacing:-.8px}
 .reader-month-sub{margin:6px 0 0;color:#718198;font-size:12px}.reader-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.reader-rank{min-width:0;padding:15px 10px;border:1px solid #e2eaf3;border-radius:16px;background:linear-gradient(160deg,#fff,#f5f9ff);text-align:center}.reader-rank .medal{font-size:25px;display:block;margin-bottom:7px}.reader-rank strong{display:block;font-size:12px;overflow-wrap:anywhere}.reader-rank small{display:block;margin-top:5px;color:#718198;font-size:10px}.reader-rank .rank-no{display:block;margin-bottom:5px;color:#0b72e7;font-size:9px;font-weight:900;letter-spacing:1.4px}.reader-own-badge{margin-top:10px;padding:12px 14px;border:1px solid #cfe2f8;border-radius:13px;background:#edf6ff;color:#135da9;font-size:12px;font-weight:800}.reader-month-status{grid-column:1/-1;padding:23px 16px;border:1px dashed #dbe5ef;border-radius:15px;text-align:center;color:#718198;font-size:12px;line-height:1.55}.reader-rank.me{border-color:#a9cff8;box-shadow:0 5px 18px #0b72e714}@media(max-width:430px){.reader-podium{gap:6px}.reader-rank{padding:12px 6px}.reader-rank strong{font-size:10px}.reader-rank small{font-size:9px}}
 </style><link rel="stylesheet" href="visual-system.css?v=3">
 <link rel="stylesheet" href="visual-refresh.css?v=1">
+<style id="profile-mobile-layout-fix">
+/* Fix cards shrinking to half-width while their action row overflows. */
+#works{width:100%;min-width:0}
+#works .work{width:100%;min-width:0;max-width:100%;align-items:stretch}
+#works .work .cover{display:block;width:100%;height:auto;aspect-ratio:3/4;min-width:0;overflow:hidden}
+#works .work .cover img{display:block;width:100%;height:100%;object-fit:cover}
+#works .work .info{display:block;width:100%;min-width:0;max-width:100%}
+#works .work .info h3{white-space:normal;overflow-wrap:anywhere;line-height:1.35}
+#works .work .actions{display:grid;width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+#works .work .actions .btn{display:flex;width:100%;min-width:0;max-width:100%;min-height:46px;align-items:center;justify-content:center;text-align:center;white-space:normal;overflow-wrap:anywhere}
+#works .work .actions .btn:last-child{grid-column:1/-1;justify-self:stretch}
+@media(max-width:600px){
+ #works{grid-template-columns:minmax(0,1fr)!important;gap:14px!important}
+ #works .work{padding:10px!important}
+ main{padding-bottom:calc(132px + env(safe-area-inset-bottom))!important}
+ body:has(#works){padding-bottom:calc(82px + env(safe-area-inset-bottom))!important}
+}
+</style>
 </head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div><div class="account-meta" id="accountMeta" hidden><span class="account-pill"><strong id="roleLabel">Leitor</strong></span><span class="account-pill"><strong>K-Code</strong> <span id="kCode">—</span></span></div></div></section>
 <style>
 .verification-area{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
