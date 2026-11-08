@@ -392,6 +392,21 @@ body.comments-open{
  touch-action:auto;
 }
 
+/* Threaded comment replies */
+#commentsDialog .comment-thread{width:100%;min-width:0}
+#commentsDialog .comment-replies{margin-left:19px;padding-left:17px;border-left:2px solid #dce5ef}
+#commentsDialog .comment-replies .comment{padding-left:4px}
+#commentsDialog .comment-reply-button{display:inline-flex;align-items:center;min-height:30px;margin:5px 0 0;padding:0 7px;border:0;border-radius:7px;background:transparent;color:#63758b;font-size:11px;font-weight:750;cursor:pointer}
+#commentsDialog .comment-reply-button:active{background:#edf4fc}
+#commentsDialog .comment-replying-to{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px;padding:8px 11px;border-radius:10px;background:#eef5fd;color:#536982;font-size:11px}
+#commentsDialog .comment-replying-to[hidden]{display:none}
+#commentsDialog .comment-replying-to button{width:26px;height:26px;border:0;border-radius:50%;background:transparent;color:#60738a;font-size:20px;line-height:1;cursor:pointer}
+html[data-ls-theme="dark"] #commentsDialog .comment-replies{border-left-color:#40536b}
+html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
+html[data-ls-theme="dark"] #commentsDialog .comment-replying-to{background:#1c2c40;color:#c7d6e8}
+html[data-ls-theme="dark"] #commentsDialog .comment-replying-to button{color:#c7d6e8}
+@media(max-width:560px){#commentsDialog .comment-replies{margin-left:14px;padding-left:12px}}
+
 /* Clear divider between the original publication and its comments */
 #commentsDialog .comment-post-context{border-bottom:2px solid #d5dfeb}
 html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-color:#3a4b60}
@@ -415,7 +430,7 @@ html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-c
  <div class="field"><label for="postMedia">IMAGEM OU VÍDEO (OPCIONAL)</label><input id="postMedia" type="file" accept="image/*,video/mp4,video/webm,video/quicktime"><span class="file-note">Até 25 MB. Imagens e vídeos curtos. Não publicamos Stories nesta versão.</span><div id="mediaPreview"></div></div>
  <div class="modal-actions"><button type="button" class="btn" data-close="composeDialog">Cancelar</button><button type="submit" class="btn primary" id="publishPost">Publicar</button></div>
 </form></dialog>
-<dialog id="commentsDialog" class="comments-screen"><div class="comments-screen-head"><button class="comments-back" type="button" data-close="commentsDialog" aria-label="Voltar">‹</button><strong>Publicação</strong><span></span></div><section id="commentPostContext" class="comment-post-context"></section><div id="commentList" class="comment-list" aria-live="polite"></div><form id="commentForm" class="comment-composer"><div class="comment-compose-avatar" id="commentComposeAvatar">LS</div><div class="comment-compose-field"><label class="sr-only" for="commentBody">Escreva sua resposta</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva sua resposta…" aria-label="Escreva sua resposta"></textarea><div class="comment-compose-actions"><small>Até 1.000 caracteres</small><button type="submit" id="sendComment">Responder</button></div></div></form></dialog>
+<dialog id="commentsDialog" class="comments-screen"><div class="comments-screen-head"><button class="comments-back" type="button" data-close="commentsDialog" aria-label="Voltar">‹</button><strong>Publicação</strong><span></span></div><section id="commentPostContext" class="comment-post-context"></section><div id="commentList" class="comment-list" aria-live="polite"></div><form id="commentForm" class="comment-composer"><div class="comment-compose-avatar" id="commentComposeAvatar">LS</div><div class="comment-compose-field"><div id="commentReplyingTo" class="comment-replying-to" hidden></div><label class="sr-only" for="commentBody">Escreva sua resposta</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva sua resposta…" aria-label="Escreva sua resposta"></textarea><div class="comment-compose-actions"><small>Até 1.000 caracteres</small><button type="submit" id="sendComment">Responder</button></div></div></form></dialog>
 <dialog id="commentActionsDialog" class="comment-action-dialog"><div class="modal-head"><strong>Ações do comentário</strong><button class="close" data-close="commentActionsDialog" aria-label="Fechar">×</button></div><div class="comment-action-list">
 <button class="comment-action" data-comment-action="like"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.7 4.7 0 0 1 8.8-2.1 4.7 4.7 0 0 1 8.8 2.1Z"/></svg><span>Curtir</span></button>
 <button class="comment-action" data-comment-action="reply"><svg viewBox="0 0 24 24"><path d="M9 17 4 12l5-5"/><path d="M4 12h9a7 7 0 0 1 7 7"/></svg><span>Responder</span></button>
@@ -443,6 +458,6 @@ html[data-ls-theme="dark"] #commentsDialog .comment-post-context{border-bottom-c
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 <script src="guard.js"></script>
-<script src="fy.js?v=20261108-5"></script>
+<script src="fy.js?v=20261108-6"></script>
 <script src="global-nav.js"></script>
 </body></html>
