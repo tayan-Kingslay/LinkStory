@@ -476,6 +476,22 @@ html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
  #commentsDialog .comment-replies>.comment-thread>.comment{padding:9px 8px 9px 1px}
  #commentsDialog .comment-avatar{width:34px;height:34px;flex-basis:34px}
 }
+
+/* Comments-only screen: no poster, easy dismissal, stable iPhone keyboard layout. */
+#commentsDialog.comments-screen{height:var(--ls-visual-height,100dvh);max-height:var(--ls-visual-height,100dvh);width:min(720px,100%);margin:auto}
+#commentsDialog .comment-post-context{display:none!important}
+#commentsDialog #commentBody{font-size:16px!important;min-height:54px;max-height:140px;resize:none;touch-action:pan-y}
+#commentsDialog .comment-actions-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:8px}
+#commentsDialog .comment-actions-row button{border:0;background:transparent;padding:4px 0;color:#64748b;font-size:11px;font-weight:800}
+#commentsDialog .comment-actions-row .comment-like-button.liked{color:#df4168}
+#commentsDialog .comment-actions-row .comment-reply-button{color:#0b72e7}
+#commentsDialog .comment-actions-row .comment-edit-button{color:#64748b}
+#commentsDialog .comments-screen-head{flex:0 0 60px}
+#commentsDialog .comment-composer{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+@media(max-width:600px){
+ #commentsDialog.comments-screen{inset:0;width:100%;height:var(--ls-visual-height,100dvh);max-height:var(--ls-visual-height,100dvh);margin:0;border-radius:0;border:0}
+ #commentsDialog #commentBody{font-size:16px!important;min-height:48px;max-height:120px}
+}
 </style>
   <link rel="stylesheet" href="visual-system.css?v=1">
 </head>
@@ -496,7 +512,7 @@ html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
  <div class="field"><label for="postMedia">IMAGEM OU VÍDEO (OPCIONAL)</label><input id="postMedia" type="file" accept="image/*,video/mp4,video/webm,video/quicktime"><span class="file-note">Até 25 MB. Imagens e vídeos curtos. Não publicamos Stories nesta versão.</span><div id="mediaPreview"></div></div>
  <div class="modal-actions"><button type="button" class="btn" data-close="composeDialog">Cancelar</button><button type="submit" class="btn primary" id="publishPost">Publicar</button></div>
 </form></dialog>
-<dialog id="commentsDialog" class="comments-screen"><div class="comments-screen-head"><button class="comments-back" type="button" data-close="commentsDialog" aria-label="Voltar">‹</button><strong>Publicação</strong><span></span></div><section id="commentPostContext" class="comment-post-context"></section><div id="commentList" class="comment-list" aria-live="polite"></div><form id="commentForm" class="comment-composer"><div class="comment-compose-avatar" id="commentComposeAvatar">LS</div><div class="comment-compose-field"><div id="commentReplyingTo" class="comment-replying-to" hidden></div><label class="sr-only" for="commentBody">Escreva sua resposta</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva sua resposta…" aria-label="Escreva sua resposta"></textarea><div class="comment-compose-actions"><small>Até 1.000 caracteres</small><button type="submit" id="sendComment">Responder</button></div></div></form></dialog>
+<dialog id="commentsDialog" class="comments-screen"><div class="comments-screen-head"><button class="comments-back" type="button" data-close="commentsDialog" aria-label="Voltar">‹</button><strong>Comentários</strong><span></span></div><section id="commentPostContext" class="comment-post-context" hidden></section><div id="commentList" class="comment-list" aria-live="polite"></div><form id="commentForm" class="comment-composer"><div class="comment-compose-avatar" id="commentComposeAvatar">LS</div><div class="comment-compose-field"><div id="commentReplyingTo" class="comment-replying-to" hidden></div><label class="sr-only" for="commentBody">Escreva sua resposta</label><textarea id="commentBody" maxlength="1000" required placeholder="Escreva sua resposta…" aria-label="Escreva sua resposta"></textarea><div class="comment-compose-actions"><small>Até 1.000 caracteres</small><button type="submit" id="sendComment">Responder</button></div></div></form></dialog>
 <dialog id="commentActionsDialog" class="comment-action-dialog"><div class="modal-head"><strong>Ações do comentário</strong><button class="close" data-close="commentActionsDialog" aria-label="Fechar">×</button></div><div class="comment-action-list">
 <button class="comment-action" data-comment-action="like"><svg viewBox="0 0 24 24"><path d="M20.8 8.8c0 5.2-8.8 11-8.8 11s-8.8-5.8-8.8-11a4.7 4.7 0 0 1 8.8-2.1 4.7 4.7 0 0 1 8.8 2.1Z"/></svg><span>Curtir</span></button>
 <button class="comment-action" data-comment-action="reply"><svg viewBox="0 0 24 24"><path d="M9 17 4 12l5-5"/><path d="M4 12h9a7 7 0 0 1 7 7"/></svg><span>Responder</span></button>
