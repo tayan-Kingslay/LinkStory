@@ -183,6 +183,59 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     html[data-ls-theme="dark"] .ls-menu-icon{background:#223a52!important;color:#83bdff!important}
     html[data-ls-theme="dark"] .ls-menu-copy small,html[data-ls-theme="dark"] .ls-menu-arrow,html[data-ls-theme="dark"] .ls-menu-footer{color:#91a2b6!important}
     @media(max-width:560px),(pointer:coarse){.ls-menu-dialog{width:min(430px,100%)!important;border-radius:22px 0 0 22px!important}.ls-menu-wrap{padding:22px 18px 30px!important}}
+
+    /* Unified modern hamburger control — shared by every page using global navigation. */
+    :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn),
+    button#lsGlobalMenuButton,
+    button#openMenu{
+      position:relative!important;isolation:isolate!important;flex:0 0 44px!important;
+      width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
+      display:inline-flex!important;align-items:center!important;justify-content:center!important;
+      padding:0!important;margin-left:auto!important;border:1px solid rgba(117,145,178,.24)!important;
+      border-radius:15px!important;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(241,247,253,.92))!important;
+      color:#176fc2!important;box-shadow:0 5px 16px rgba(30,65,105,.09),inset 0 1px 0 rgba(255,255,255,.95)!important;
+      font-size:0!important;line-height:0!important;cursor:pointer!important;
+      -webkit-tap-highlight-color:transparent!important;transition:transform .18s ease,border-color .18s ease,background .18s ease,box-shadow .18s ease!important;
+    }
+    :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn)::before,
+    button#lsGlobalMenuButton::before,
+    button#openMenu::before{
+      content:""!important;position:absolute!important;left:50%!important;top:50%!important;
+      width:18px!important;height:2px!important;border:0!important;border-radius:3px!important;
+      background:currentColor!important;box-shadow:0 -6px 0 currentColor,0 6px 0 currentColor!important;
+      transform:translate(-50%,-50%)!important;opacity:1!important;
+    }
+    :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn)::after,
+    button#lsGlobalMenuButton::after,
+    button#openMenu::after{content:none!important;display:none!important}
+    :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn):hover,
+    button#lsGlobalMenuButton:hover,button#openMenu:hover{
+      transform:translateY(-1px)!important;border-color:rgba(22,119,220,.48)!important;
+      background:linear-gradient(145deg,#fff,#eaf4ff)!important;
+      box-shadow:0 8px 20px rgba(22,105,190,.14),inset 0 1px 0 #fff!important;
+    }
+    :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn):active,
+    button#lsGlobalMenuButton:active,button#openMenu:active{transform:scale(.95)!important}
+    :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn):focus-visible,
+    button#lsGlobalMenuButton:focus-visible,button#openMenu:focus-visible{
+      outline:3px solid rgba(22,119,220,.28)!important;outline-offset:3px!important
+    }
+    html[data-ls-theme="dark"] :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn),
+    html[data-ls-theme="dark"] button#lsGlobalMenuButton,
+    html[data-ls-theme="dark"] button#openMenu{
+      background:linear-gradient(145deg,#223247,#182536)!important;color:#a9d3ff!important;
+      border-color:rgba(139,177,218,.24)!important;
+      box-shadow:0 6px 18px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.045)!important
+    }
+    html[data-ls-theme="dark"] :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn):hover,
+    html[data-ls-theme="dark"] button#lsGlobalMenuButton:hover,
+    html[data-ls-theme="dark"] button#openMenu:hover{
+      background:linear-gradient(145deg,#29415d,#1d3046)!important;border-color:rgba(130,190,255,.48)!important
+    }
+    @media(prefers-reduced-motion:reduce){
+      :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn),
+      button#lsGlobalMenuButton,button#openMenu{transition:none!important}
+    }
   `;
   /* Reuse DM Sans already loaded by the site; avoid a second font-family request. */
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
