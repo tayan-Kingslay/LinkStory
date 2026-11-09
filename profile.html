@@ -62,52 +62,22 @@ h2{letter-spacing:-.8px}
  body:has(#works){padding-bottom:calc(82px + env(safe-area-inset-bottom))!important}
 }
 </style>
-<style id="profile-dark-creator-layout">
-:root{--profile-bg:#0b0d12;--profile-panel:#191d25;--profile-line:#2b303a;--profile-text:#f5f7fb;--profile-muted:#a2a9b6}
-html,body{background:var(--profile-bg)!important;color:var(--profile-text)!important}
-body{background:#0b0d12!important}
-.top,.topbar{background:#11151d!important;border-color:#292e38!important;box-shadow:none!important}
-.brand,.menu-btn,.back{color:#f5f7fb!important}
-main{max-width:900px!important}
-.profile{display:grid!important;grid-template-columns:clamp(94px,22vw,150px) minmax(0,1fr)!important;gap:clamp(14px,3vw,28px)!important;align-items:center!important;padding:24px 0 22px!important;border-bottom:1px solid var(--profile-line)!important}
-.profile .avatar{width:clamp(94px,22vw,150px)!important;height:clamp(94px,22vw,150px)!important;border:2px solid #343b48!important;background:#171c25!important;color:#9da8b8!important;box-shadow:0 0 0 4px #ffffff08!important}
-.profile .avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+<style id="profile-layout-only">
+/* Layout inspirado na referência, preservando integralmente as cores originais do LinkStory. */
+.profile{display:grid!important;grid-template-columns:clamp(88px,20vw,124px) minmax(0,1fr)!important;gap:clamp(13px,3vw,22px)!important;align-items:center!important;padding:22px 0 24px!important}
+.profile .avatar{width:clamp(88px,20vw,124px)!important;height:clamp(88px,20vw,124px)!important;flex:none!important}
 .profile>div:nth-child(2){min-width:0}
-.profile .ey{color:#7eb7ff!important;font-size:10px!important;letter-spacing:1.7px!important}
-.profile h1#name{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:7px!important;min-width:0;max-width:100%;margin:5px 0!important;color:#fff!important;font-size:clamp(24px,5.2vw,40px)!important;line-height:1.08!important;letter-spacing:-1.3px!important;overflow-wrap:anywhere}
+.profile h1#name{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:6px!important;min-width:0;max-width:100%;margin:5px 0!important;font-size:clamp(25px,5.2vw,40px)!important;line-height:1.12!important;letter-spacing:-1.4px!important;overflow-wrap:anywhere}
+.profile h1#name>span:first-child{min-width:0;overflow-wrap:anywhere}
 .profile h1#name .ls-vbadge{flex:0 0 auto!important}
-.profile .muted{color:var(--profile-muted)!important}
-.profile #bio{line-height:1.45}
-.account-meta{gap:7px!important}
-.account-pill{background:#1a202a!important;border-color:#343c49!important;color:#c5ccd7!important}
-.account-pill strong{color:#8fc2ff!important}
-.verification-area{margin-top:14px!important}
-.verification-chip{background:#20202a!important;border-color:#67552b!important;color:#ffd36b!important}
-.verification-action{background:#1c2634!important;border-color:#3a5f89!important;color:#9dccff!important}
-#verificationStatus{color:#aab4c2!important}
-.profile-actions{gap:9px!important}
-.profile-action{background:#20252e!important;border:1px solid #343b47!important;color:#f3f6fb!important;border-radius:13px!important;min-height:48px!important}
-.profile-action.primary{background:#236fdb!important;border-color:#236fdb!important;color:#fff!important}
-.section{border-top:1px solid var(--profile-line)!important;padding-top:18px!important}
-.section h2{color:#f5f7fb!important}
-.ey{color:#82baff!important}
-.reader-rank,.empty,.work,.reader-month-status,.reader-own-badge{background:#171c25!important;border-color:#303846!important;color:#c5ccd7!important;box-shadow:none!important}
-.reader-rank strong,.empty strong,.work h3{color:#f5f7fb!important}
-.reader-rank small,.reader-month-sub,.work p{color:#a2adbc!important}
-.reader-own-badge{color:#b9d9ff!important}
-.work .cover{background-color:#242b36!important}
-.work .btn{background:#202833!important;border-color:#3a4655!important;color:#c4dcf7!important}
-.work .btn.primary{background:#236fdb!important;border-color:#236fdb!important;color:#fff!important}
+.profile .muted{line-height:1.45}
 @media(max-width:430px){
- main{width:calc(100% - 30px)!important}
- .profile{grid-template-columns:104px minmax(0,1fr)!important;gap:13px!important;padding:22px 0 18px!important}
- .profile .avatar{width:104px!important;height:104px!important}
- .profile h1#name{font-size:clamp(21px,6vw,29px)!important;gap:5px!important}
- .profile .ey{font-size:8px!important;letter-spacing:1.1px!important}
- .profile-actions{display:grid!important;grid-template-columns:1fr 1fr!important}
- .profile-action{font-size:11px!important;padding:9px 6px!important}
+ main{width:calc(100% - 28px)!important}
+ .profile{grid-template-columns:96px minmax(0,1fr)!important;gap:12px!important;padding:20px 0 22px!important}
+ .profile .avatar{width:96px!important;height:96px!important}
+ .profile h1#name{font-size:clamp(22px,6vw,30px)!important;gap:5px!important}
+ .profile .ey{font-size:9px!important;letter-spacing:1.5px!important}
 }
-@media(prefers-reduced-motion:no-preference){.profile .avatar{transition:transform .25s ease,box-shadow .25s ease}.profile .avatar:active{transform:scale(.98)}}
 </style></head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div><div class="account-meta" id="accountMeta" hidden><span class="account-pill"><strong id="roleLabel">Leitor</strong></span><span class="account-pill"><strong>K-Code</strong> <span id="kCode">—</span></span></div></div></section>
 <style>
 .verification-area{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
