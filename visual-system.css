@@ -260,6 +260,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active .ls-icon{
 :where(.top,.topbar,.header):has(> .back)>:where(.back){grid-column:1;justify-self:start}
 :where(.top,.topbar,.header):has(> .back)>:where(.logo,.brand,.reader-title){grid-column:2;justify-self:center;min-width:0}
 :where(.top,.topbar,.header):has(> .back)>:where(.menu,.menu-btn,.reader-right,.header-actions){grid-column:3;justify-self:end}
+:where(.top,.topbar,.header):not(:has(> .back))>:where(.menu,.menu-btn,.header-actions){grid-column:3;justify-self:end}
 :where(.top,.topbar,.header):has(> .logo):not(:has(> .back))>:where(.logo,.brand){grid-column:2;justify-self:center}
 :where(.top,.topbar,.header):has(> .brand):not(:has(> .back))>:where(.brand){grid-column:2;justify-self:center}
 :where(.top,.topbar,.header):has(> .top-title)> .top-title{grid-column:3;justify-self:end;min-width:0;text-align:right}
@@ -283,6 +284,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active .ls-icon{
   :where(.top,.topbar,.header):has(> .brand):has(> .menu),
   :where(.top,.topbar,.header):has(> .logo):has(> .header-actions),
   :where(.top,.topbar,.header):has(> .brand):has(> .header-actions),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu-btn),
   :where(.top,.topbar):has(> .back):has(> .brand):not(:has(> .menu)):not(:has(> .menu-btn)){
     grid-template-columns:minmax(36px,1fr) minmax(0,auto) minmax(36px,1fr)!important;column-gap:7px!important;
   }
