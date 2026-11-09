@@ -78,38 +78,34 @@ h2{letter-spacing:-.8px}
 <label class="edit-field"><span>Foto do perfil</span><input id="editAvatarFile" type="file" accept="image/*"><small id="avatarFileHint">Escolha uma foto da galeria ou tire uma nova.</small></label>
 <label class="edit-field"><span>Biografia</span><textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você…"></textarea></label>
 <div class="edit-status" id="editStatus" role="status"></div><div class="edit-actions"><button type="button" class="profile-action" id="cancelEdit">Cancelar</button><button type="submit" class="profile-action primary" id="saveProfile">Salvar alterações</button></div></form></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="manga-db.js"></script><script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase;
  let user=null,profile=null;
  const setStatus=(msg)=>$('editStatus').textContent=msg;
  async function loadVerification(){
- const area=$('verificationArea'),chip=$('verificationChip'),button=$('requestVerification'),status=$('verificationStatus');
- area.hidden=false;chip.hidden=true;button.hidden=true;
- try{
-  const [{data:badge,error:badgeError},{count,error:followError}]=await Promise.all([
-   db.from('verified_badges').select('badge_type').eq('user_id',user.id).maybeSingle(),
-   db.from('follows').select('follower_id',{count:'exact',head:true}).eq('following_id',user.id)
-  ]);
-  if(badgeError)throw badgeError;if(followError)throw followError;
-  if(badge){
-   const isKairox=badge.badge_type==='kairox',src=isKairox?'assets/badges/topeira-kairox.webp':'assets/badges/topeira-influencer.webp';
-   const img=document.createElement('img');img.src=src;img.alt=isKairox?'Selo oficial Kairox':'Selo de influenciador';img.onerror=()=>{img.remove();chip.textContent=isKairox?'♛ Membro oficial Kairox':'✦ Influenciador verificado'};
-   chip.append(img,document.createTextNode(isKairox?'Membro oficial Kairox':'Influenciador verificado'));chip.hidden=false;return;
-  }
-  if((count||0)>=10000){button.hidden=false;status.textContent='Você tem '+Number(count).toLocaleString('pt-BR')+' seguidores. Pode solicitar a análise.'}
-  else status.textContent=Number(count||0).toLocaleString('pt-BR')+' / 10.000 seguidores para solicitar o selo.';
- }catch(e){status.textContent='Não foi possível consultar sua verificação.';console.warn('Verification badge:',e)}
-}
-$('requestVerification').onclick=async()=>{
- const button=$('requestVerification'),status=$('verificationStatus');button.disabled=true;button.textContent='Enviando…';
- const r=await db.rpc('request_influencer_verification');
- button.disabled=false;button.textContent='Solicitar selo de influenciador';
- if(r.error){status.textContent=r.error.message||'Não foi possível solicitar.';return}
- button.hidden=true;status.textContent='Solicitação enviada. A equipe LinkStory vai analisar sua conta.';
-};
-function renderProfile(p){
-  $('name').textContent=p?.display_name||'Usuário';
+  const area=$('verificationArea'),chip=$('verificationChip'),button=$('requestVerification'),status=$('verificationStatus'),V=window.LinkStoryVerification;
+  area.hidden=false;chip.hidden=true;button.hidden=true;status.textContent='';
+  try{
+   const{data,error}=await db.rpc('get_my_verification_status');if(error)throw error;
+   const s=Array.isArray(data)?data[0]:data;if(!s)throw new Error('Não foi possível consultar sua verificação.');
+   if(s.verification_type&&V&&V.isValid(s.verification_type)){
+    chip.replaceChildren(V.element(s.verification_type,{size:'lg'})||document.createTextNode(''),document.createTextNode(V.label(s.verification_type)));chip.hidden=false;return;
+   }
+   if(s.request_status==='pending'){status.textContent='Sua solicitação está em análise.';return}
+   if(s.request_status==='rejected')status.textContent='Sua solicitação foi recusada. Você pode solicitar novamente.';
+   const followers=Number(s.follower_count||0),required=Number(s.required_followers||10000);
+   if(followers>=required)button.hidden=false;
+   else status.textContent=(followers.toLocaleString('pt-BR'))+' / '+required.toLocaleString('pt-BR')+' seguidores';
+  }catch(e){status.textContent=e.message||'Não foi possível consultar sua verificação.';console.warn('Verification badge:',e)}
+ }
+ $('requestVerification').onclick=async()=>{
+  const button=$('requestVerification'),status=$('verificationStatus');button.disabled=true;button.textContent='Enviando…';
+  try{const{error}=await db.rpc('request_influencer_verification',{p_note:null});if(error)throw error;button.hidden=true;status.textContent='Solicitação enviada. A equipe LinkStory vai analisar sua conta.'}
+  catch(e){status.textContent=e.message||'Não foi possível solicitar.';button.disabled=false;button.textContent='Solicitar selo de influenciador'}
+ };
+ function renderProfile(p){
+  $('name').textContent=p?.display_name||'Usuário';if(window.LinkStoryVerification)LinkStoryVerification.decorate($('name'),p?.verification_type);
   $('handle').textContent=p?.username?'@'+p.username:'';
   $('bio').textContent=p?.bio||'';
   $('kCode').textContent=p?.k_code||'—';
@@ -173,7 +169,7 @@ function renderProfile(p){
     avatar_url=db.storage.from('linkstory-media').getPublicUrl(path).data.publicUrl;
    }
   }catch(error){save.disabled=false;save.textContent='Salvar alterações';setStatus(error.message||'Não foi possível enviar a foto.');return}
-  const result=await db.from('profiles').update({display_name,username,avatar_url,bio,updated_at:new Date().toISOString()}).eq('id',user.id).select('id,username,display_name,role,bio,avatar_url,k_code').single();
+  const result=await db.from('profiles').update({display_name,username,avatar_url,bio,updated_at:new Date().toISOString()}).eq('id',user.id).select('id,username,display_name,role,bio,avatar_url,k_code,verification_type').single();
   save.disabled=false;save.textContent='Salvar alterações';
   if(result.error){setStatus(result.error.code==='23505'?'Esse nome de usuário já está em uso.':result.error.message||'Não foi possível salvar.');return}
   profile=result.data;renderProfile(profile);$('editModal').close();

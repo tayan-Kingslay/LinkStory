@@ -23,15 +23,15 @@ h1{margin:5px 0;font-size:clamp(25px,5vw,38px);letter-spacing:-1.5px}.handle{col
 <header><a class="back" href="javascript:history.back()" aria-label="Voltar">‹</a><a class="brand" href="index.html">LINK<span>STORY</span></a></header>
 <main><section class="hero"><div class="avatar" id="avatar">L</div><div style="min-width:0"><div class="eyebrow">PERFIL LINKSTORY</div><h1 id="name">Carregando perfil…</h1><div class="handle" id="handle"></div><div class="bio" id="bio"></div><div class="pills" id="pills"></div></div></section>
 <section class="section"><div class="eyebrow">PUBLICAÇÕES</div><h2>Obras publicadas</h2><div id="works" class="works"><div class="empty">Carregando publicações…</div></div></section></main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="manga-db.js"></script><script src="global-nav.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script src="global-nav.js"></script>
 <script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase,id=new URLSearchParams(location.search).get('id');
  if(!id){$('name').textContent='Perfil não encontrado';$('handle').textContent='Este link não contém um perfil.';return}
- const result=await db.from('profiles').select('id,username,display_name,avatar_url,bio,role,k_code').eq('id',id).maybeSingle();
+ const result=await db.from('profiles').select('id,username,display_name,avatar_url,bio,role,k_code,verification_type').eq('id',id).maybeSingle();
  if(result.error)throw result.error;const p=result.data;
  if(!p){$('name').textContent='Perfil não encontrado';$('handle').textContent='Este perfil pode não estar disponível.';return}
- $('name').textContent=p.display_name||p.username||'Usuário';$('handle').textContent='@'+(p.username||'usuário');$('bio').textContent=p.bio||'';
+ $('name').textContent=p.display_name||p.username||'Usuário';if(window.LinkStoryVerification)LinkStoryVerification.decorate($('name'),p.verification_type);$('handle').textContent='@'+(p.username||'usuário');$('bio').textContent=p.bio||'';
  const av=$('avatar');if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de '+(p.display_name||p.username);av.replaceChildren(img)}else av.textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase();
  const role=document.createElement('span');role.className='pill';role.textContent=p.role==='criador'?'Criador':'Leitor';$('pills').append(role);
  if(p.k_code){const code=document.createElement('span');code.className='pill';code.textContent='K-Code '+p.k_code;$('pills').append(code)}
