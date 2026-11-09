@@ -176,7 +176,7 @@ async function sendComment(e){
  const b=$('sendComment');b.disabled=true;b.textContent='Enviando…';
  try{
   const row={post_id:state.activeCommentPost,author_id:state.user.id,body,parent_comment_id:state.replyTo?.id||null};
-  const{data,error}=await sb().from('comments').insert(row).select('id,body,parent_comment_id,created_at,profiles:author_id(display_name,username,avatar_url,verification_type)').single();
+  const{data,error}=await sb().from('comments').insert(row).select('id,body,parent_comment_id,created_at,profiles:author_id(id,display_name,username,avatar_url,verification_type)').single();
   if(error)throw error;
   state.comments.push(data);state.commentLikes[data.id]={count:0,liked:false};renderComments();
   $('commentBody').value='';clearReplyTarget();
