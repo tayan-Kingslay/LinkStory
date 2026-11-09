@@ -1,6 +1,6 @@
 (()=>{'use strict';
 const sb=()=>linkstorySupabase,$=id=>document.getElementById(id);
-const state={user:null,profile:null,tab:'for-you',offset:0,limit:20,loading:false,more:true,posts:[],queue:[],queueCursor:0,activeCommentPost:null,replyTo:null,comments:[],reportsEnabled:false};
+const state={user:null,profile:null,tab:'for-you',offset:0,limit:20,loading:false,more:true,posts:[],queue:[],queueCursor:0,activeCommentPost:null,replyTo:null,comments:[],commentLikes:{},activeActionComment:null,reportsEnabled:false};
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const date=v=>{const d=new Date(v);return Number.isNaN(d.getTime())?'Agora':d.toLocaleString('pt-BR',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})};
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.remove('show'),2800)}
@@ -106,12 +106,14 @@ async function openComments(postId){
  $('commentComposeAvatar').innerHTML=avatar(state.profile);
  const post=state.posts.find(x=>x.id===postId);
  const context=$('commentPostContext');
- context.innerHTML=post?'<div class="comment-post-author"><div class="avatar">'+avatar(post.profiles)+'</div><div><strong>'+esc(post.profiles?.display_name||post.profiles?.username||'Usuário')+'</strong><small>'+esc(post.profiles?.username?'@'+post.profiles.username:'LinkStory')+' · '+date(post.created_at)+'</small></div></div>'+(post.idea_title?'<h3>'+esc(post.idea_title)+'</h3>':'')+(post.body?postBodyMarkup(post.body):'')+(post.media_url?(post.media_type==='video'?'<video controls playsinline preload="metadata" src="'+esc(post.media_url)+'"></video>':'<img src="'+esc(post.media_url)+'" alt="Mídia da publicação">'):''):'';
+ context.replaceChildren();
+ state.commentLikes={};state.activeActionComment=null;
  const box=$('commentList');box.textContent='Carregando comentários…';
  $('commentBody').value='';lockCommentsBackground();$('commentsDialog').showModal();
  try{
-  const{data,error}=await sb().from('comments').select('id,body,parent_comment_id,created_at,profiles:author_id(display_name,username,avatar_url,verification_type)').eq('post_id',postId).order('created_at',{ascending:true});
-  if(error)throw error;state.comments=data||[];renderComments();
+  const{data,error}=await sb().from('comments').select('id,body,parent_comment_id,author_id,created_at,profiles:author_id(display_name,username,avatar_url,verification_type)').eq('post_id',postId).order('created_at',{ascending:true});
+  if(error)throw error;state.comments=data||[];
+  await loadCommentLikes();renderComments();
  }catch(e){box.textContent='Não foi possível carregar os comentários. '+e.message}
 }
 function renderComments(){
@@ -122,7 +124,9 @@ function renderComments(){
   const wrap=document.createElement('div');wrap.className='comment-thread'+(depth?' is-reply':'');
   const el=document.createElement('article');el.className='comment';
   const name=comment.profiles?.display_name||comment.profiles?.username||'Usuário';const badge=window.LinkStoryVerification?.html(comment.profiles?.verification_type)||'';
-  el.innerHTML='<div class="comment-avatar">'+avatar(comment.profiles)+'</div><div class="comment-content"><div class="comment-meta"><strong>'+esc(name)+'</strong><small>'+date(comment.created_at)+'</small></div><p>'+esc(comment.body)+'</p><button type="button" class="comment-reply-button" data-reply-comment="'+esc(comment.id)+'" data-reply-name="'+esc(name)+'">Responder</button></div>';
+  const likes=state.commentLikes[comment.id]||{count:0,liked:false};
+  const own=state.user?.id===comment.author_id;
+  el.innerHTML='<div class="comment-avatar">'+avatar(comment.profiles)+'</div><div class="comment-content"><div class="comment-meta"><strong>'+esc(name)+'</strong><small>'+date(comment.created_at)+'</small></div><p>'+esc(comment.body)+'</p><div class="comment-actions-row"><button type="button" class="comment-like-button'+(likes.liked?' liked':'')+'" data-comment-like="'+esc(comment.id)+'" aria-pressed="'+String(likes.liked)+'">♥ <span>'+likes.count+'</span> Curtir</button><button type="button" class="comment-reply-button" data-reply-comment="'+esc(comment.id)+'" data-reply-name="'+esc(name)+'">Responder</button>'+(own?'<button type="button" class="comment-edit-button" data-edit-comment="'+esc(comment.id)+'">Editar</button>':'')+'</div></div>';
   wrap.appendChild(el);
   const children=byParent.get(comment.id)||[];
   if(children.length){wrap.classList.add('has-replies');const replies=document.createElement('div');replies.className='comment-replies';children.forEach(child=>replies.appendChild(build(child,depth+1)));wrap.appendChild(replies)}
@@ -131,6 +135,34 @@ function renderComments(){
  (byParent.get('root')||[]).forEach(c=>box.appendChild(build(c)));
  const visible=new Set();const mark=c=>{visible.add(c.id);(byParent.get(c.id)||[]).forEach(mark)};(byParent.get('root')||[]).forEach(mark);
  state.comments.filter(c=>!visible.has(c.id)).forEach(c=>box.appendChild(build(c)));
+}
+async function loadCommentLikes(){
+ const ids=state.comments.map(c=>c.id);state.commentLikes={};
+ if(!ids.length)return;
+ const{data,error}=await sb().from('comment_likes').select('comment_id,user_id').in('comment_id',ids);
+ if(error)throw error;
+ (data||[]).forEach(row=>{const item=state.commentLikes[row.comment_id]||(state.commentLikes[row.comment_id]={count:0,liked:false});item.count++;if(row.user_id===state.user?.id)item.liked=true});
+}
+async function toggleCommentLike(id,button){
+ if(!state.user)return toast('Entre na sua conta para curtir comentários.');
+ button.disabled=true;
+ try{
+  const current=state.commentLikes[id]||{count:0,liked:false};
+  if(current.liked){const{error}=await sb().from('comment_likes').delete().eq('comment_id',id).eq('user_id',state.user.id);if(error)throw error;current.count=Math.max(0,current.count-1);current.liked=false}
+  else{const{error}=await sb().from('comment_likes').insert({comment_id:id,user_id:state.user.id});if(error&&error.code!=='23505')throw error;if(!error)current.count++;current.liked=true}
+  state.commentLikes[id]=current;button.classList.toggle('liked',current.liked);button.setAttribute('aria-pressed',String(current.liked));button.innerHTML='♥ <span>'+current.count+'</span> Curtir';
+ }catch(e){toast(e.message||'Não foi possível curtir o comentário.')}
+ finally{button.disabled=false}
+}
+async function editComment(id){
+ const comment=state.comments.find(c=>c.id===id);if(!comment||comment.author_id!==state.user?.id)return;
+ const next=prompt('Edite seu comentário:',comment.body);if(next===null)return;
+ const body=next.trim();if(!body)return toast('O comentário não pode ficar vazio.');
+ if(body===comment.body)return;
+ try{
+  const{data,error}=await sb().from('comments').update({body}).eq('id',id).eq('author_id',state.user.id).select('id,body').single();
+  if(error)throw error;comment.body=data.body;renderComments();toast('Comentário atualizado.');
+ }catch(e){toast(e.message||'Não foi possível editar o comentário.')}
 }
 function setReplyTarget(id,name){
  state.replyTo={id,name};const label=$('commentReplyingTo');
@@ -146,7 +178,7 @@ async function sendComment(e){
   const row={post_id:state.activeCommentPost,author_id:state.user.id,body,parent_comment_id:state.replyTo?.id||null};
   const{data,error}=await sb().from('comments').insert(row).select('id,body,parent_comment_id,created_at,profiles:author_id(display_name,username,avatar_url,verification_type)').single();
   if(error)throw error;
-  state.comments.push(data);renderComments();
+  state.comments.push(data);state.commentLikes[data.id]={count:0,liked:false};renderComments();
   $('commentBody').value='';clearReplyTarget();
   const post=state.posts.find(x=>x.id===state.activeCommentPost);
   if(post){post.comments=(post.comments||0)+1;const card=document.querySelector('.post[data-id="'+state.activeCommentPost+'"]');const stats=card?.querySelector('.post-stats');if(stats)stats.innerHTML='<span>'+post.likes+' curtida(s)</span><span>'+post.comments+' comentário(s)</span>'}
@@ -201,8 +233,15 @@ $('quickVideo').onclick=()=>{if(!state.user)return location.href='login.html';$(
 $('postType').onchange=()=>{$('ideaTitleField').hidden=$('postType').value!=='idea'};
 $('postMedia').onchange=()=>{const f=$('postMedia').files?.[0],box=$('mediaPreview');box.textContent=f?f.name+' · '+Math.round(f.size/1024/1024*10)/10+' MB':''};
 $('composeForm').addEventListener('submit',publishPost);$('commentForm').addEventListener('submit',sendComment);
-$('commentsDialog').addEventListener('close',unlockCommentsBackground);
-$('commentList').addEventListener('click',e=>{const b=e.target.closest('[data-reply-comment]');if(b)setReplyTarget(b.dataset.replyComment,b.dataset.replyName)});
+$('commentsDialog').addEventListener('close',()=>{clearReplyTarget();unlockCommentsBackground()});
+$('commentsDialog').addEventListener('click',e=>{if(e.target===$('commentsDialog'))$('commentsDialog').close()});
+if(window.visualViewport){const syncCommentViewport=()=>document.documentElement.style.setProperty('--ls-visual-height',window.visualViewport.height+'px');window.visualViewport.addEventListener('resize',syncCommentViewport);syncCommentViewport()}
+
+$('commentList').addEventListener('click',e=>{
+ const like=e.target.closest('[data-comment-like]');if(like)return toggleCommentLike(like.dataset.commentLike,like);
+ const edit=e.target.closest('[data-edit-comment]');if(edit)return editComment(edit.dataset.editComment);
+ const reply=e.target.closest('[data-reply-comment]');if(reply)setReplyTarget(reply.dataset.replyComment,reply.dataset.replyName);
+});
 $('commentReplyingTo').addEventListener('click',e=>{if(e.target.closest('#cancelCommentReply'))clearReplyTarget()});
 
 document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());
