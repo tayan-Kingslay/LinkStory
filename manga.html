@@ -40,7 +40,7 @@ main{width:min(900px,calc(100% - 28px));margin:auto;padding:34px 0 100px}
 .social button.active{background:var(--blue);color:#fff}
 .stars button{border:0;background:none;font-size:25px;padding:3px;cursor:pointer;color:#9aa9b8}
 .stars button.active{color:#f2b01e}
-.comment{display:flex;gap:8px;margin-top:12px}
+.creator-profile{width:min(620px,100%);display:flex;align-items:center;gap:12px;margin:22px auto 0;padding:12px 14px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);text-decoration:none;box-shadow:0 5px 18px rgba(16,32,51,.04)}.creator-profile:focus-visible{outline:2px solid #65a9ff;outline-offset:3px}.creator-avatar{width:46px;height:46px;flex:0 0 46px;display:grid;place-items:center;overflow:hidden;border-radius:50%;background:var(--soft);color:var(--blue);font-weight:900}.creator-avatar img{width:100%;height:100%;object-fit:cover}.creator-copy{min-width:0;flex:1}.creator-copy strong{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:14px}.creator-copy small{display:block;margin-top:3px;color:var(--muted);font-size:11px}.creator-arrow{color:var(--blue);font-size:12px;font-weight:850;white-space:nowrap}.manga-comment-author{display:inline-flex;align-items:center;gap:4px;color:inherit;text-decoration:none;font-weight:850}.manga-comment-author:focus-visible{outline:2px solid #65a9ff;outline-offset:3px;border-radius:4px}.comment{display:flex;gap:8px;margin-top:12px}
 .comment input{flex:1;border:1px solid var(--line);border-radius:10px;padding:11px}
 .comment button{background:var(--blue);color:#fff;border:0;border-radius:10px;padding:0 15px;font-weight:800}
 .comments{margin-top:14px}.one-comment{padding:12px 0;border-top:1px solid var(--line)}
@@ -118,6 +118,7 @@ h2{letter-spacing:-.8px}
     '<div class="actions reading">'+
       '<a class="btn primary" href="reader.html?manga_id='+m.id+'&chapter_id='+(cs[0]?.id||"")+'">Começar a ler</a>'+
     '</div>'+
+    '<a class="creator-profile" href="public-profile.html?id='+encodeURIComponent(m.creator_id)+'" aria-label="Ver perfil de '+String(m.profiles?.display_name||m.profiles?.username||'criador').replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"><span class="creator-avatar">'+(m.profiles?.avatar_url?'<img src="'+String(m.profiles.avatar_url).replace(/"/g,'&quot;')+'" alt="">':String((m.profiles?.display_name||m.profiles?.username||'C').slice(0,1)).replace(/</g,'&lt;'))+'</span><span class="creator-copy"><strong>'+String(m.profiles?.display_name||m.profiles?.username||'Criador').replace(/&/g,'&amp;').replace(/</g,'&lt;')+(window.LinkStoryVerification?.html(m.profiles?.verification_type)||'')+'</strong><small>@'+String(m.profiles?.username||'criador').replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</small></span><span class="creator-arrow">Ver perfil ›</span></a>'+
     (mine?
       '<div class="creator-label">PAINEL DO CRIADOR</div>'+
       '<div class="actions creator">'+
@@ -183,7 +184,7 @@ h2{letter-spacing:-.8px}
    if(!arr.length){box.innerHTML='<div class="empty">Ainda não há comentários.</div>';return}
    arr.forEach(c=>{
     const d=document.createElement("div");d.className="one-comment";
-    const who=document.createElement("strong");who.textContent=c.profiles?.display_name||c.profiles?.username||"Usuário";if(window.LinkStoryVerification)LinkStoryVerification.decorate(who,c.profiles?.verification_type);const body=document.createElement("p");body.textContent=c.body||"";d.append(who,body);
+    const who=document.createElement("a");who.className="manga-comment-author";who.href="public-profile.html?id="+encodeURIComponent(c.profiles?.id||c.author_id);const whoName=document.createElement("strong");whoName.textContent=c.profiles?.display_name||c.profiles?.username||"Usuário";who.append(whoName);if(window.LinkStoryVerification)LinkStoryVerification.decorate(who,c.profiles?.verification_type);const body=document.createElement("p");body.textContent=c.body||"";d.append(who,body);
     box.append(d);
     if(window.LinkStoryGuard&&c.id)window.LinkStoryGuard.mountReportButton(d,{target_type:'comment',target_id:c.id},'Denunciar comentário');
    });
