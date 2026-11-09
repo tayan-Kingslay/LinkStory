@@ -239,6 +239,56 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   `;
   /* Reuse DM Sans already loaded by the site; avoid a second font-family request. */
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
+
+    /* Header centralizado: busca | logo | notificações | menu */
+    :where(.topbar,.top,.header){
+      display:grid!important;
+      grid-template-columns:44px minmax(0,1fr) 44px 44px!important;
+      align-items:center!important;
+      column-gap:10px!important;
+    }
+    :where(.topbar,.top,.header) > .logo{
+      grid-column:2!important;grid-row:1!important;
+      justify-self:center!important;align-self:center!important;
+      margin:0!important;
+    }
+    :where(.topbar,.top,.header) > .header-actions,
+    :where(.topbar,.top,.header) > .top-actions,
+    :where(.topbar,.top,.header) > .actions{display:contents!important}
+    :where(.topbar,.top,.header) #openSearch,
+    :where(.topbar,.top,.header) #lsHeaderSearchShortcut{
+      grid-column:1!important;grid-row:1!important;justify-self:start!important;
+      margin:0!important;flex:0 0 44px!important;
+    }
+    :where(.topbar,.top,.header) #lsNotificationShortcut,
+    :where(.topbar,.top,.header) a[href="notifications.html"]{
+      grid-column:3!important;grid-row:1!important;justify-self:center!important;
+      margin:0!important;flex:0 0 44px!important;
+    }
+    :where(.topbar,.top,.header) #openMenu,
+    :where(.topbar,.top,.header) #lsGlobalMenuButton{
+      grid-column:4!important;grid-row:1!important;justify-self:end!important;
+      margin:0!important;flex:0 0 44px!important;
+    }
+    :where(.topbar,.top,.header) .login{display:none!important}
+    #lsHeaderSearchShortcut{
+      width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;
+      border:1px solid rgba(125,151,181,.24);border-radius:15px;
+      background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(241,247,253,.92));
+      color:#176fc2;box-shadow:0 5px 16px rgba(30,65,105,.09);text-decoration:none;
+    }
+    #lsHeaderSearchShortcut svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+    html[data-ls-theme="dark"] #lsHeaderSearchShortcut{background:#223247!important;color:#a9d3ff!important;border-color:#40546c!important}
+    @media(max-width:560px),(pointer:coarse){
+      :where(.topbar,.top,.header){grid-template-columns:40px minmax(0,1fr) 40px 40px!important;column-gap:7px!important}
+      :where(.topbar,.top,.header) #openSearch,
+      :where(.topbar,.top,.header) #lsHeaderSearchShortcut,
+      :where(.topbar,.top,.header) #lsNotificationShortcut,
+      :where(.topbar,.top,.header) a[href="notifications.html"],
+      :where(.topbar,.top,.header) #openMenu,
+      :where(.topbar,.top,.header) #lsGlobalMenuButton{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
+    }
+
   /* Reader has its own reading controls and must stay completely free of global navigation. */
   if(document.querySelector('.reader-title')) return;
   if(!document.getElementById('lsBottomNav')){
@@ -248,6 +298,19 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     nav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.5 10 8.5-7 8.5 7v10.5h-17z"/><path d="M9 20.5v-6h6v6"/></svg></span><span>Início</span></a><a href="fy.html" class="${active==='fy'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/><path d="m19 16 .9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9z"/></svg></span><span>Pra você</span></a><a href="messages.html" class="${path==='messages.html'||path==='chat.html'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-9.5A7.5 7.5 0 0 1 10.5 4H12a8 8 0 0 1 8 7.5Z"/><path d="M8 11h8M8 14.5h5"/></svg></span><span>Mensagens</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/><path d="M4 18.5a2 2 0 0 1 2-2h13M8 8h7M8 11.5h7"/></svg></span><span>Biblioteca</span></a><a href="profile.html" class="${active==='profile'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Perfil</span></a>`;
     document.body.appendChild(nav);
   }
+
+  {
+    const header=document.querySelector('.topbar,.top,.header');
+    const actions=header?.querySelector('.header-actions,.top-actions,.actions')||header;
+    if(header&&actions&&!document.getElementById('openSearch')&&!document.getElementById('lsHeaderSearchShortcut')){
+      const searchLink=document.createElement('a');
+      searchLink.id='lsHeaderSearchShortcut';searchLink.href='explore.html';
+      searchLink.setAttribute('aria-label','Buscar');searchLink.title='Buscar';
+      searchLink.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>';
+      actions.insertBefore(searchLink,actions.firstChild);
+    }
+  }
+
   let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');let opener=document.getElementById('openMenu');
   const menuMarkup=`<div class="ls-menu-wrap">
     <div class="ls-menu-head"><div class="ls-menu-brand"><strong>LINKSTORY</strong><span>Seu universo de histórias</span></div><button class="ls-menu-close" aria-label="Fechar menu">×</button></div>
@@ -297,7 +360,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   if(opener&&!opener.dataset.lsBound){opener.dataset.lsBound='1';opener.addEventListener('click',()=>{if(typeof menu.showModal==='function'){if(!menu.open)menu.showModal()}else menu.setAttribute('open','')})}
   {
     const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
-    const showNotifications=page==='index.html'||page==='messages.html';
+    const showNotifications=true;
     const headerActions=document.querySelector('.header-actions,.top-actions,.reader-right,.header .actions');
     const notificationContainer=headerActions||document.querySelector('.header,.topbar,.top');
     const notificationSelector='a[href="notifications.html"],a[href$="/notifications.html"],[aria-label*="notifica" i],[title*="notifica" i],[data-notifications],#lsNotificationShortcut';
