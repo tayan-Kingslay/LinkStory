@@ -44,7 +44,7 @@ html[data-ls-theme="dark"] body{background:#111!important;color:#f5f7fa!importan
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="global-nav.js"></script>
 <script>
 (()=> {
- const db=linkstorySupabase,$=id=>document.getElementById(id);let user=null,activeFriend=null,activeConversation=null,poll=null,messagesLoading=false;
+ const db=linkstorySupabase,$=id=>document.getElementById(id);let user=null,activeFriend=null,activeConversation=null,poll=null;
  const escText=v=>String(v??'');const initials=v=>(String(v||'?').trim()[0]||'?').toUpperCase();
  const show=(id,msg)=>$(id).textContent=msg;
  const date=v=>new Date(v).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
@@ -80,6 +80,6 @@ html[data-ls-theme="dark"] body{background:#111!important;color:#f5f7fa!importan
  $('chatForm').onsubmit=async e=>{e.preventDefault();const body=$('chatInput').value.trim();if(!body||!activeConversation)return;const button=$('sendButton');button.disabled=true;const r=await db.from('messages').insert({conversation_id:activeConversation,sender_id:user.id,body});button.disabled=false;if(r.error){show('chatStatus',r.error.message||'Não foi possível enviar.');return}$('chatInput').value='';await loadMessages()};
  async function init(){const s=await db.auth.getSession();if(!s.data.session){location.href='login.html?next=friends.html';return}user=s.data.session.user;await loadPeople();const friendId=new URLSearchParams(location.search).get('friend');if(friendId){const p=await db.from('profiles').select('id,username,display_name,avatar_url,k_code').eq('id',friendId).maybeSingle();if(p.error)throw p.error;if(p.data)await openChat(p.data)}}
  init().catch(e=>{show('addStatus',e.message||'Não foi possível carregar amigos.');$('incoming').innerHTML='<div class="empty">Erro ao carregar solicitações.</div>';$('friendList').innerHTML='<div class="empty">Erro ao carregar amigos.</div>'});
- window.addEventListener('beforeunload',stopMessagePolling);
+ window.addEventListener('beforeunload',()=>{if(poll)clearInterval(poll)});
 })();
 </script></body></html>
