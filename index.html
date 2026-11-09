@@ -236,9 +236,10 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 </nav>
 <dialog class="menu-dialog" id="menuDialog"><div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div><nav class="menu-list"><a href="fy.html">FY <strong>›</strong></a><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a></nav></div></dialog>
 <dialog class="menu-dialog" id="searchDialog"><div class="menu-wrap"><div class="menu-head"><strong>BUSCAR</strong><button class="close" id="closeSearch">×</button></div><input id="searchInput" placeholder="Buscar mangá, autor ou gênero" style="width:100%;height:52px;border:1px solid #dbe5ef;border-radius:12px;padding:0 15px;font:inherit;margin-top:22px"><div id="searchResults" style="margin-top:15px"></div></div></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script><script src="manga-db.js"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://qwhpikyxilzwazeneddw.supabase.co" crossorigin><script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="auth.js"></script><script defer src="manga-db.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded',()=>{
 (async()=>{
 const feature=document.getElementById('feature'),shelves=[document.getElementById('popularShelf'),document.getElementById('recentShelf'),document.getElementById('allShelf')],tracks=[document.getElementById('popularTrack'),document.getElementById('recentTrack'),document.getElementById('allTrack')];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
@@ -256,10 +257,12 @@ let searchTimer;searchInput.addEventListener('input',()=>{clearTimeout(searchTim
 const menu=document.getElementById('menuDialog'),search=document.getElementById('searchDialog');
 document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
 (async()=>{const box=document.getElementById('creatorHomeCta'),toggle=document.getElementById('modeToggle');try{const p=await LinkStoryManga.currentProfile(),isCreator=p?.role==='criador',mode=localStorage.getItem('linkstory-active-mode')||'leitor';box.hidden=!(isCreator&&mode==='criador');toggle.hidden=!isCreator;if(isCreator){toggle.title=mode==='criador'?'Mudar para modo Leitor':'Mudar para modo Mangaká';toggle.onclick=()=>{localStorage.setItem('linkstory-active-mode',mode==='criador'?'leitor':'criador');location.reload()}}}catch{box.hidden=true;toggle.hidden=true}})();
+});
 </script>
 
 
 <script>
+document.addEventListener('DOMContentLoaded',()=>{
 (async()=>{
  const links=[...document.querySelectorAll('a[href="publish.html"],a[href="studio.html"]')];
  try{
@@ -268,6 +271,7 @@ document.getElementById('openMenu').onclick=()=>menu.showModal();document.getEle
   links.forEach(a=>{a.hidden=!enabled});
  }catch(e){console.error('LinkStory creator access:',e);links.forEach(a=>{a.hidden=true})}
 })();
+});
 </script>
 </body>
 </html>
