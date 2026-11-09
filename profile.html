@@ -89,9 +89,7 @@ h2{letter-spacing:-.8px}
   try{
    const{data,error}=await db.rpc('get_my_verification_status');if(error)throw error;
    const s=Array.isArray(data)?data[0]:data;if(!s)throw new Error('Não foi possível consultar sua verificação.');
-   if(s.verification_type&&V&&V.isValid(s.verification_type)){
-    chip.replaceChildren(V.element(s.verification_type,{size:'lg'})||document.createTextNode(''),document.createTextNode(V.label(s.verification_type)));chip.hidden=false;return;
-   }
+   if(s.verification_type&&V&&V.isValid(s.verification_type)){area.hidden=true;return;}
    if(s.request_status==='pending'){status.textContent='Sua solicitação está em análise.';return}
    if(s.request_status==='rejected')status.textContent='Sua solicitação foi recusada. Você pode solicitar novamente.';
    const followers=Number(s.follower_count||0),required=Number(s.required_followers||10000);
