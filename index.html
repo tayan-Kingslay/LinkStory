@@ -156,6 +156,47 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 \n/* Skeletons de catálogo: reservam espaço e evitam saltos de layout. */\n.book-skeleton{position:relative;flex:0 0 184px;height:275px;overflow:hidden;border-radius:8px;background:#edf3f8}\n.book-skeleton:after{content:'';position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);animation:ls-skeleton 1.35s infinite}\n@keyframes ls-skeleton{to{transform:translateX(100%)}}\n@media(max-width:720px){.book-skeleton{flex-basis:166px;height:252px}}\n@media(max-width:420px){.book-skeleton{flex-basis:154px;height:235px}}\n@media(prefers-reduced-motion:reduce){.book-skeleton:after{animation:none;transform:none;opacity:.35}}\n</style>
   <link rel="stylesheet" href="visual-system.css?v=3">
 <link rel="stylesheet" href="visual-refresh.css?v=1">
+<style>
+/* Exceção da página inicial: logo à esquerda e ações à direita, sem sobreposição. */
+body > header.header{
+  justify-content:space-between!important;
+}
+body > header.header > .logo{
+  position:relative!important;
+  left:auto!important;
+  top:auto!important;
+  transform:none!important;
+  z-index:2!important;
+  flex:0 1 auto!important;
+  max-width:none!important;
+  margin:0!important;
+}
+body > header.header > .logo img{
+  width:124px!important;
+  max-width:100%!important;
+  height:40px!important;
+  max-height:40px!important;
+}
+body > header.header > .header-actions{
+  position:relative!important;
+  z-index:3!important;
+  display:flex!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  margin-left:auto!important;
+  gap:8px!important;
+}
+@media(max-width:600px){
+  body > header.header > .logo img{width:108px!important;height:36px!important}
+  body > header.header > .header-actions{gap:6px!important}
+  body > header.header > .header-actions .circle{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;flex-basis:40px!important}
+}
+@media(max-width:380px){
+  body > header.header > .logo img{width:96px!important;height:34px!important}
+  body > header.header > .header-actions{gap:4px!important}
+  body > header.header > .header-actions .circle{width:36px!important;height:36px!important;min-width:36px!important;min-height:36px!important;flex-basis:36px!important}
+}
+</style>
 </head>
 <body>
 <header class="header">
