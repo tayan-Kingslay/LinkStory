@@ -101,7 +101,7 @@ h2{letter-spacing:-.8px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="auth.js"></script>
 <script src="guard.js"></script>
-<script src="manga-db.js"></script>
+<script src="verification.js?v=1"></script><script src="manga-db.js"></script>
 <script>
 (async()=>{
  const $=id=>document.getElementById(id),q=new URLSearchParams(location.search);
@@ -183,7 +183,7 @@ h2{letter-spacing:-.8px}
    if(!arr.length){box.innerHTML='<div class="empty">Ainda não há comentários.</div>';return}
    arr.forEach(c=>{
     const d=document.createElement("div");d.className="one-comment";
-    d.innerHTML="<strong>"+(c.profiles?.display_name||c.profiles?.username||"Usuário")+"</strong><p>"+c.body+"</p>";
+    const who=document.createElement("strong");who.textContent=c.profiles?.display_name||c.profiles?.username||"Usuário";if(window.LinkStoryVerification)LinkStoryVerification.decorate(who,c.profiles?.verification_type);const body=document.createElement("p");body.textContent=c.body||"";d.append(who,body);
     box.append(d);
     if(window.LinkStoryGuard&&c.id)window.LinkStoryGuard.mountReportButton(d,{target_type:'comment',target_id:c.id},'Denunciar comentário');
    });
