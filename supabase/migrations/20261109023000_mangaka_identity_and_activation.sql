@@ -21,8 +21,11 @@ create policy mangaka_profiles_public_read
 revoke all on public.mangaka_profiles from anon, authenticated;
 grant select on public.mangaka_profiles to anon, authenticated;
 
--- Prevent clients from directly assigning themselves the creator role.
-revoke insert (role), update (role) on public.profiles from anon, authenticated;
+-- Profile rows are created by the auth trigger. Clients may edit only ordinary profile fields;
+-- account role, KX identifiers, and verification fields stay server-managed.
+revoke insert, update, delete, truncate on table public.profiles from anon, authenticated;
+grant update (username, display_name, bio, avatar_url, preferences, updated_at, recovery_email)
+  on table public.profiles to authenticated;
 
 -- The role guard permits promotion only after the trusted activation function creates the identity row.
 create or replace function public.guard_creator_role_change()
