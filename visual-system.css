@@ -244,12 +244,16 @@ html[data-ls-theme="dark"] #lsBottomNav a.active .ls-icon{
 /* Balanced headers use three columns: left control, centered brand/title, right control. */
 :where(.top,.topbar,.header):has(> .back):has(> .menu),
 :where(.top,.topbar,.header):has(> .back):has(> .menu-btn),
+:where(.top,.topbar,.header):has(> .back):has(> .logo):not(:has(> .menu)):not(:has(> .menu-btn)),
+:where(.top,.topbar,.header):has(> .brand):has(> .menu-btn),
 :where(.top,.topbar,.header):has(> .back):has(> .reader-right),
 :where(.top,.topbar,.header):has(> .logo):has(> .menu-btn),
 :where(.top,.topbar,.header):has(> .brand):has(> .menu),
 :where(.top,.topbar,.header):has(> .logo):has(> .header-actions),
 :where(.top,.topbar,.header):has(> .brand):has(> .header-actions),
-:where(.top,.topbar):has(> .back):has(> .brand):not(:has(> .menu)):not(:has(> .menu-btn)){
+:where(.top,.topbar):has(> .back):has(> .brand):not(:has(> .menu)):not(:has(> .menu-btn)),
+  :where(.top,.topbar,.header):has(> .back):has(> .logo):not(:has(> .menu)):not(:has(> .menu-btn)),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu-btn){
   display:grid!important;grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(40px,1fr)!important;
   column-gap:clamp(8px,2vw,18px)!important;
 }
