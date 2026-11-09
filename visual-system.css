@@ -216,3 +216,75 @@ html[data-ls-theme="dark"] #lsBottomNav a.active .ls-icon{
   width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;flex-basis:42px!important;border-radius:13px!important
  }
 }
+
+
+/* LINKSTORY — alinhamento central e consistente dos cabeçalhos em todas as páginas */
+:where(.header,.top,.topbar,body>header){
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  isolation:isolate;
+}
+:where(.header,.top,.topbar,body>header)>:where(.logo,.brand){
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:1;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  max-width:min(48%,260px);
+  white-space:nowrap;
+}
+:where(.header,.top,.topbar,body>header)>:where(.logo,.brand) img{
+  display:block!important;
+  width:auto!important;
+  max-width:100%!important;
+  max-height:44px!important;
+  height:auto!important;
+  object-fit:contain!important;
+}
+:where(.header,.top,.topbar,body>header)>:where(.back,.circle.back){
+  position:relative!important;
+  z-index:2;
+  margin:0!important;
+  flex:0 0 auto!important;
+}
+:where(.header,.top,.topbar,body>header)>:where(.menu,.menu-btn,.menu-button,.icon-btn),
+:where(.header,.top,.topbar,body>header)>.header-actions,
+:where(.header,.top,.topbar,body>header)>.top-actions,
+:where(.header,.top,.topbar,body>header)>.reader-right{
+  position:relative!important;
+  z-index:2;
+  margin-left:auto!important;
+  flex:0 0 auto!important;
+}
+:where(.header,.top,.topbar,body>header)>.reader-title,
+:where(.header,.top,.topbar,body>header)>.top-title{
+  position:absolute!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  z-index:1;
+  max-width:calc(100% - 150px);
+  text-align:center!important;
+  margin:0!important;
+}
+:where(.header,.top,.topbar,body>header) :where(.circle,.back,.menu,.menu-btn,.menu-button,.icon-btn){
+  align-self:center!important;
+}
+@media(max-width:600px){
+  :where(.header,.top,.topbar,body>header)>:where(.logo,.brand) img{
+    max-height:38px!important;
+  }
+  :where(.header,.top,.topbar,body>header)>:where(.logo,.brand){
+    max-width:46%;
+  }
+  :where(.header,.top,.topbar,body>header)>.reader-title,
+  :where(.header,.top,.topbar,body>header)>.top-title{
+    max-width:calc(100% - 128px);
+  }
+}
