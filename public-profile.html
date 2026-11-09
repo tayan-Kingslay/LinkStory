@@ -33,7 +33,16 @@ h1{margin:5px 0;font-size:clamp(25px,5vw,38px);letter-spacing:-1.5px}.handle{col
  if(!p){$('name').textContent='Perfil não encontrado';$('handle').textContent='Este perfil pode não estar disponível.';return}
  $('name').textContent=p.display_name||p.username||'Usuário';if(window.LinkStoryVerification)LinkStoryVerification.decorate($('name'),p.verification_type);$('handle').textContent='@'+(p.username||'usuário');$('bio').textContent=p.bio||'';
  const av=$('avatar');if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de '+(p.display_name||p.username);av.replaceChildren(img)}else av.textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase();
- const role=document.createElement('span');role.className='pill';role.textContent=p.role==='criador'?'Criador':'Leitor';$('pills').append(role);
+ const readerTitle=document.createElement('span');readerTitle.className='pill';readerTitle.textContent='Leitor';$('pills').append(readerTitle);
+ if(p.role==='criador'){
+  const mangakaTitle=document.createElement('span');mangakaTitle.className='pill';mangakaTitle.textContent='Mangaká';$('pills').append(mangakaTitle);
+  const identity=await db.from('mangaka_profiles').select('pen_name,handle').eq('user_id',p.id).maybeSingle();
+  if(identity.error)throw identity.error;
+  if(identity.data){
+   const artist=document.createElement('span');artist.className='pill';artist.textContent='Nome artístico: '+identity.data.pen_name;$('pills').append(artist);
+   const handlePill=document.createElement('span');handlePill.className='pill';handlePill.textContent=identity.data.handle;$('pills').append(handlePill);
+  }
+ }
  if(p.k_code){const code=document.createElement('span');code.className='pill';code.textContent='K-Code '+p.k_code;$('pills').append(code)}
  const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===p.id),box=$('works');box.replaceChildren();
  if(!works.length){const empty=document.createElement('div');empty.className='empty';empty.innerHTML='<strong>Nenhuma obra publicada ainda.</strong>Quando este perfil publicar uma obra, ela aparecerá aqui.';box.append(empty);return}
