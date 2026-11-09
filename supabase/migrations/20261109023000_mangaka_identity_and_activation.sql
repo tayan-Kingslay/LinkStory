@@ -24,6 +24,31 @@ grant select on public.mangaka_profiles to anon, authenticated;
 -- Prevent clients from directly assigning themselves the creator role.
 revoke insert (role), update (role) on public.profiles from anon, authenticated;
 
+-- The role guard permits promotion only after the trusted activation function creates the identity row.
+create or replace function public.guard_creator_role_change()
+returns trigger
+language plpgsql
+security definer
+set search_path to 'public', 'pg_temp'
+as $function$
+begin
+  if new.role = 'criador' and (tg_op = 'INSERT' or new.role is distinct from old.role) then
+    if coalesce(current_setting('request.jwt.claim.role', true), '') <> 'service_role'
+       and not exists (
+         select 1 from public.creator_applications a
+         where a.user_id = new.id and a.status = 'approved'
+       )
+       and not exists (
+         select 1 from public.mangaka_profiles m
+         where m.user_id = new.id
+       ) then
+      raise exception 'Sua solicitação para ser mangaká ainda não foi aprovada.';
+    end if;
+  end if;
+  return new;
+end;
+$function$;
+
 create or replace function public.activate_my_mangaka_profile(p_pen_name text, p_handle text)
 returns jsonb
 language plpgsql
