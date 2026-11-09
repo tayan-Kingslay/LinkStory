@@ -218,73 +218,77 @@ html[data-ls-theme="dark"] #lsBottomNav a.active .ls-icon{
 }
 
 
-/* LINKSTORY — alinhamento central e consistente dos cabeçalhos em todas as páginas */
-:where(.header,.top,.topbar,body>header){
-  position:relative!important;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:space-between!important;
-  isolation:isolate;
+/* Header layout system: stable flow first, true centering only when the
+   header has balanced left/right controls. Avoid absolute-position overlap. */
+:where(.header,.top,.topbar,body>header:not(.chat-header)){
+  position:relative!important;display:flex!important;align-items:center!important;
+  justify-content:space-between!important;isolation:isolate;
 }
-:where(.header,.top,.topbar,body>header)>:where(.logo,.brand){
-  position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  transform:translate(-50%,-50%)!important;
-  z-index:1;
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  margin:0!important;
-  max-width:min(48%,260px);
-  white-space:nowrap;
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.logo,.brand){
+  position:static!important;left:auto!important;top:auto!important;transform:none!important;
+  display:inline-flex!important;align-items:center!important;min-width:0;max-width:100%;
+  margin:0!important;white-space:nowrap;line-height:1;
 }
-:where(.header,.top,.topbar,body>header)>:where(.logo,.brand) img{
-  display:block!important;
-  width:auto!important;
-  max-width:100%!important;
-  max-height:44px!important;
-  height:auto!important;
-  object-fit:contain!important;
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.logo,.brand) img{
+  display:block!important;width:auto!important;height:auto!important;max-width:100%!important;
+  max-height:42px!important;object-fit:contain!important;
 }
-:where(.header,.top,.topbar,body>header)>:where(.back,.circle.back){
-  position:relative!important;
-  z-index:2;
-  margin:0!important;
-  flex:0 0 auto!important;
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.header-actions,.top-actions,.reader-right){
+  display:flex!important;align-items:center!important;gap:10px;margin-left:auto!important;
+  min-width:0;flex:0 0 auto!important;
 }
-:where(.header,.top,.topbar,body>header)>:where(.menu,.menu-btn,.menu-button,.icon-btn),
-:where(.header,.top,.topbar,body>header)>.header-actions,
-:where(.header,.top,.topbar,body>header)>.top-actions,
-:where(.header,.top,.topbar,body>header)>.reader-right{
-  position:relative!important;
-  z-index:2;
-  margin-left:auto!important;
-  flex:0 0 auto!important;
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.back,.circle.back){
+  position:relative!important;z-index:2;flex:0 0 auto!important;margin:0!important;
 }
-:where(.header,.top,.topbar,body>header)>.reader-title,
-:where(.header,.top,.topbar,body>header)>.top-title{
-  position:absolute!important;
-  left:50%!important;
-  top:50%!important;
-  transform:translate(-50%,-50%)!important;
-  z-index:1;
-  max-width:calc(100% - 150px);
-  text-align:center!important;
-  margin:0!important;
+
+/* Balanced headers use three columns: left control, centered brand/title, right control. */
+:where(.top,.topbar,.header):has(> .back):has(> .menu),
+:where(.top,.topbar,.header):has(> .back):has(> .menu-btn),
+:where(.top,.topbar,.header):has(> .back):has(> .logo):not(:has(> .menu)):not(:has(> .menu-btn)),
+:where(.top,.topbar,.header):has(> .brand):has(> .menu-btn),
+:where(.top,.topbar,.header):has(> .back):has(> .reader-right),
+:where(.top,.topbar,.header):has(> .logo):has(> .menu-btn),
+:where(.top,.topbar,.header):has(> .brand):has(> .menu),
+:where(.top,.topbar,.header):has(> .logo):has(> .header-actions),
+:where(.top,.topbar,.header):has(> .brand):has(> .header-actions),
+:where(.top,.topbar):has(> .back):has(> .brand):not(:has(> .menu)):not(:has(> .menu-btn)),
+  :where(.top,.topbar,.header):has(> .back):has(> .logo):not(:has(> .menu)):not(:has(> .menu-btn)),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu-btn){
+  display:grid!important;grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(40px,1fr)!important;
+  column-gap:clamp(8px,2vw,18px)!important;
 }
-:where(.header,.top,.topbar,body>header) :where(.circle,.back,.menu,.menu-btn,.menu-button,.icon-btn){
-  align-self:center!important;
-}
+:where(.top,.topbar,.header):has(> .back)>:where(.back){grid-column:1;justify-self:start}
+:where(.top,.topbar,.header):has(> .back)>:where(.logo,.brand,.reader-title){grid-column:2;justify-self:center;min-width:0}
+:where(.top,.topbar,.header):has(> .back)>:where(.menu,.menu-btn,.reader-right,.header-actions){grid-column:3;justify-self:end}
+:where(.top,.topbar,.header):not(:has(> .back))>:where(.menu,.menu-btn,.header-actions){grid-column:3;justify-self:end}
+:where(.top,.topbar,.header):has(> .logo):not(:has(> .back))>:where(.logo,.brand){grid-column:2;justify-self:center}
+:where(.top,.topbar,.header):has(> .brand):not(:has(> .back))>:where(.brand){grid-column:2;justify-self:center}
+:where(.top,.topbar,.header):has(> .top-title)> .top-title{grid-column:3;justify-self:end;min-width:0;text-align:right}
+:where(.top,.topbar,.header):has(> .reader-right)> .reader-title{grid-column:2;justify-self:center;min-width:0;max-width:100%;text-align:center}
+
+/* Single-logo pages center the logo; homepage keeps it left of its action cluster. */
+:where(.top,.topbar,body>header):has(> .logo:only-child),
+:where(.top,.topbar,body>header):has(> .brand:only-child){justify-content:center!important}
+.header.home-header{display:flex!important;justify-content:space-between!important}
+.header.home-header>.logo{grid-column:auto!important;justify-self:auto!important}
+.header.home-header>.header-actions{grid-column:auto!important;justify-self:end!important;margin-left:auto!important;gap:clamp(5px,1.6vw,10px)!important}
+.header.home-header>.logo img{width:clamp(96px,30vw,124px)!important;max-height:40px!important}
 @media(max-width:600px){
-  :where(.header,.top,.topbar,body>header)>:where(.logo,.brand) img{
-    max-height:38px!important;
+  :where(.header,.top,.topbar,body>header:not(.chat-header)){gap:8px!important}
+  :where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.logo,.brand) img{max-height:38px!important}
+  :where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.header-actions,.top-actions,.reader-right){gap:7px!important}
+  :where(.top,.topbar,.header):has(> .back):has(> .menu),
+  :where(.top,.topbar,.header):has(> .back):has(> .menu-btn),
+  :where(.top,.topbar,.header):has(> .back):has(> .reader-right),
+  :where(.top,.topbar,.header):has(> .logo):has(> .menu-btn),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu),
+  :where(.top,.topbar,.header):has(> .logo):has(> .header-actions),
+  :where(.top,.topbar,.header):has(> .brand):has(> .header-actions),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu-btn),
+  :where(.top,.topbar):has(> .back):has(> .brand):not(:has(> .menu)):not(:has(> .menu-btn)){
+    grid-template-columns:minmax(36px,1fr) minmax(0,auto) minmax(36px,1fr)!important;column-gap:7px!important;
   }
-  :where(.header,.top,.topbar,body>header)>:where(.logo,.brand){
-    max-width:46%;
-  }
-  :where(.header,.top,.topbar,body>header)>.reader-title,
-  :where(.header,.top,.topbar,body>header)>.top-title{
-    max-width:calc(100% - 128px);
-  }
+  .header.home-header{width:calc(100% - 18px)!important;padding-inline:9px!important}
+  .header.home-header>.logo img{width:clamp(92px,28vw,112px)!important}
+  .header.home-header>.header-actions{gap:6px!important}
 }
