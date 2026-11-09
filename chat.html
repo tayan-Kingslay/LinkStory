@@ -28,7 +28,7 @@ main{width:min(820px,100%);margin:0 auto;flex:1;min-height:0;display:flex;flex-d
 .send{height:48px;min-width:88px;border:0;border-radius:15px;background:linear-gradient(135deg,#197ce8,#1769d2);color:#fff;font-weight:850;box-shadow:0 5px 13px rgba(23,105,210,.2)}
 .send:disabled{opacity:.55}
 .status{min-height:17px;color:#7b8ba0;font-size:11px;padding:5px 5px}
-@media(max-width:560px){header.chat-header{height:78px;padding:0 12px}.back{width:42px;height:42px}.avatar{width:48px;height:48px}.chat-body{padding:18px 2px}.bubble{max-width:88%}.compose-wrap{padding-bottom:calc(10px + env(safe-area-inset-bottom))}.compose{gap:8px;padding:8px;border-radius:19px}.compose textarea{min-height:48px;font-size:14px;padding:12px}.send{min-width:78px;height:48px}}
+@media(max-width:560px){header.chat-header{height:78px;padding:0 12px}.back{width:42px;height:42px}.avatar{width:48px;height:48px}.chat-body{padding:18px 2px}.bubble{max-width:88%}.compose-wrap{padding-bottom:calc(10px + env(safe-area-inset-bottom))}.compose{gap:8px;padding:8px;border-radius:19px}.compose textarea{min-height:48px;font-size:16px;padding:12px}.send{min-width:78px;height:48px}}
 
 /* Chat: complete dark theme, matching the site's global dark palette. */
 html[data-ls-theme="dark"],html[data-ls-theme="dark"] body{background:#101720!important;color:#f2f6fb!important;color-scheme:dark}
@@ -79,6 +79,18 @@ html[data-ls-theme="dark"] .message-actions-menu button.danger{color:#ff9b9b}
 html[data-ls-theme="dark"] .message-edit textarea{background:#111b27;border-color:#3b4d61;color:#edf3fa}
 html[data-ls-theme="dark"] .message-edit-controls button:last-child{background:#1769d2;color:#fff;border-color:#1769d2}
 
+
+/* iPhone/Safari: keep the conversation and composer inside the visible area
+   when the software keyboard opens; prevent automatic input zoom. */
+:root{--chat-vh:100dvh}
+html,body{height:100%;min-height:0;overflow:hidden}
+body{height:var(--chat-vh,100dvh);min-height:0}
+main{min-height:0;overflow:hidden}
+.chat-body{min-height:0;overscroll-behavior:contain}
+.compose-wrap{flex:none;position:relative;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+.compose textarea{font-size:16px!important;line-height:1.35;touch-action:manipulation}
+@media(max-width:560px){.compose textarea{font-size:16px!important}}
+
 </style></head><body>
 <header class="chat-header"><a class="back" href="messages.html" aria-label="Voltar às mensagens">‹</a><a class="peer-link" id="peerProfileLink" href="#" aria-label="Ver perfil"><div class="avatar" id="avatar">L</div><span class="who"><strong id="name">Conversa</strong><small id="handle">LinkStory</small></span><span class="profile-chevron">›</span></a></header>
 <main><div class="chat-body" id="chatBody"><div class="inspiration"><div class="spark">✦</div><strong>Histórias também começam com uma conversa.</strong><p>Um incentivo simples pode mudar o dia de alguém.</p></div></div>
@@ -87,6 +99,10 @@ html[data-ls-theme="dark"] .message-edit-controls button:last-child{background:#
 <script>
 (async()=>{
  const db=linkstorySupabase,$=id=>document.getElementById(id);let user=null,conversation=null,poll=null,loadingMessages=false,lastMessageSignature='';
+ const vv=window.visualViewport;
+ const syncChatViewport=()=>document.documentElement.style.setProperty('--chat-vh',Math.round(vv?.height||window.innerHeight)+'px');
+ syncChatViewport();vv?.addEventListener('resize',syncChatViewport);vv?.addEventListener('scroll',syncChatViewport);window.addEventListener('resize',syncChatViewport);
+ $('chatInput').addEventListener('focus',syncChatViewport);
  const friendId=new URLSearchParams(location.search).get('friend');
  const clock=v=>new Date(v).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
  function setStatus(v){$('status').textContent=v}
