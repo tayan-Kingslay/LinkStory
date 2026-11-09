@@ -240,54 +240,29 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   /* Reuse DM Sans already loaded by the site; avoid a second font-family request. */
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
 
-    /* Header centralizado: busca | logo | notificações | menu */
-    :where(.topbar,.top,.header){
-      display:grid!important;
-      grid-template-columns:44px minmax(0,1fr) 44px 44px!important;
-      align-items:center!important;
-      column-gap:10px!important;
-    }
-    :where(.topbar,.top,.header) > .logo{
-      grid-column:2!important;grid-row:1!important;
-      justify-self:center!important;align-self:center!important;
-      margin:0!important;
-    }
-    :where(.topbar,.top,.header) > .header-actions,
-    :where(.topbar,.top,.header) > .top-actions,
-    :where(.topbar,.top,.header) > .actions{display:contents!important}
-    :where(.topbar,.top,.header) #openSearch,
-    :where(.topbar,.top,.header) #lsHeaderSearchShortcut{
-      grid-column:1!important;grid-row:1!important;justify-self:start!important;
-      margin:0!important;flex:0 0 44px!important;
-    }
-    :where(.topbar,.top,.header) #lsNotificationShortcut,
-    :where(.topbar,.top,.header) a[href="notifications.html"]{
-      grid-column:3!important;grid-row:1!important;justify-self:center!important;
-      margin:0!important;flex:0 0 44px!important;
-    }
-    :where(.topbar,.top,.header) #openMenu,
-    :where(.topbar,.top,.header) #lsGlobalMenuButton{
-      grid-column:4!important;grid-row:1!important;justify-self:end!important;
-      margin:0!important;flex:0 0 44px!important;
-    }
+  /* Layout do cabeçalho: busca | logo centralizada | notificações | menu. */
+  const headerLayoutCss = `
+    :where(.topbar,.top,.header){display:grid!important;grid-template-columns:44px minmax(0,1fr) 44px 44px!important;align-items:center!important;column-gap:10px!important}
+    :where(.topbar,.top,.header) > .logo{grid-column:2!important;grid-row:1!important;justify-self:center!important;align-self:center!important;margin:0!important}
+    :where(.topbar,.top,.header) > .header-actions,:where(.topbar,.top,.header) > .top-actions,:where(.topbar,.top,.header) > .actions{display:contents!important}
+    :where(.topbar,.top,.header) #openSearch,:where(.topbar,.top,.header) #lsHeaderSearchShortcut{grid-column:1!important;grid-row:1!important;justify-self:start!important;margin:0!important;flex:0 0 44px!important}
+    :where(.topbar,.top,.header) #lsNotificationShortcut,:where(.topbar,.top,.header) a[href="notifications.html"]{grid-column:3!important;grid-row:1!important;justify-self:center!important;margin:0!important;flex:0 0 44px!important}
+    :where(.topbar,.top,.header) #openMenu,:where(.topbar,.top,.header) #lsGlobalMenuButton{grid-column:4!important;grid-row:1!important;justify-self:end!important;margin:0!important;flex:0 0 44px!important}
     :where(.topbar,.top,.header) .login{display:none!important}
-    #lsHeaderSearchShortcut{
-      width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;
-      border:1px solid rgba(125,151,181,.24);border-radius:15px;
-      background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(241,247,253,.92));
-      color:#176fc2;box-shadow:0 5px 16px rgba(30,65,105,.09);text-decoration:none;
-    }
+    #lsHeaderSearchShortcut{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(125,151,181,.24);border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(241,247,253,.92));color:#176fc2;box-shadow:0 5px 16px rgba(30,65,105,.09);text-decoration:none}
     #lsHeaderSearchShortcut svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
     html[data-ls-theme="dark"] #lsHeaderSearchShortcut{background:#223247!important;color:#a9d3ff!important;border-color:#40546c!important}
     @media(max-width:560px),(pointer:coarse){
       :where(.topbar,.top,.header){grid-template-columns:40px minmax(0,1fr) 40px 40px!important;column-gap:7px!important}
-      :where(.topbar,.top,.header) #openSearch,
-      :where(.topbar,.top,.header) #lsHeaderSearchShortcut,
-      :where(.topbar,.top,.header) #lsNotificationShortcut,
-      :where(.topbar,.top,.header) a[href="notifications.html"],
-      :where(.topbar,.top,.header) #openMenu,
-      :where(.topbar,.top,.header) #lsGlobalMenuButton{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
+      :where(.topbar,.top,.header) #openSearch,:where(.topbar,.top,.header) #lsHeaderSearchShortcut,:where(.topbar,.top,.header) #lsNotificationShortcut,:where(.topbar,.top,.header) a[href="notifications.html"],:where(.topbar,.top,.header) #openMenu,:where(.topbar,.top,.header) #lsGlobalMenuButton{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
     }
+  `;
+  if(!document.getElementById('lsHeaderLayoutStyle')){
+    const layoutStyle=document.createElement('style');
+    layoutStyle.id='lsHeaderLayoutStyle';
+    layoutStyle.textContent=headerLayoutCss;
+    document.head.appendChild(layoutStyle);
+  }
 
   /* Reader has its own reading controls and must stay completely free of global navigation. */
   if(document.querySelector('.reader-title')) return;
