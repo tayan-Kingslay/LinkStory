@@ -264,8 +264,9 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     document.head.appendChild(layoutStyle);
   }
 
-  /* Reader has its own reading controls and must stay completely free of global navigation. */
-  if(document.querySelector('.reader-title')) return;
+  /* Reader and direct conversation have dedicated layouts; do not inject global navigation/menu. */
+  const currentPage=location.pathname.split('/').filter(Boolean).pop()||'index.html';
+  if(document.querySelector('.reader-title')||currentPage==='chat.html') return;
   if(!document.getElementById('lsBottomNav')){
     const path=location.pathname.split('/').pop()||'index.html';
     const active=path==='fy.html'?'fy':path==='library.html'?'library':path==='profile.html'?'profile':'home';
