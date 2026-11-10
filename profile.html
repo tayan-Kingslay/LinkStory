@@ -79,6 +79,11 @@ h2{letter-spacing:-.8px}
  .profile .ey{font-size:9px!important;letter-spacing:1.5px!important}
 }
 </style></head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div></div></section>
+<section class="social-panel" aria-label="Seguidores e seguindo" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0;padding:18px;border:1px solid #dce8f7;border-radius:18px;background:linear-gradient(135deg,#fff,#f3f8ff);box-shadow:0 8px 24px rgba(24,65,112,.06)">
+ <div style="grid-column:1/-1;color:#71839a;font-size:10px;font-weight:900;letter-spacing:1.3px">COMUNIDADE</div>
+ <div style="padding:12px;border:1px solid #e2ebf6;border-radius:13px;background:#fff;color:#71839a;font-size:12px"> <strong id="myFollowersCount" style="display:block;color:#172f4d;font-size:24px">—</strong> seguidores</div>
+ <div style="padding:12px;border:1px solid #e2ebf6;border-radius:13px;background:#fff;color:#71839a;font-size:12px"><strong id="myFollowingCount" style="display:block;color:#172f4d;font-size:24px">—</strong> seguindo</div>
+</section>
 <style id="public-profile-cleanup">
 /* Public profile: clear identity area + separate, bounded biography area. */
 .profile{display:grid!important;grid-template-columns:88px minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;column-gap:20px!important;row-gap:18px!important;align-items:center!important;padding:26px!important;margin:0 0 30px!important;border:1px solid var(--ls-line)!important;border-radius:24px!important;background:rgba(255,255,255,.96)!important;box-shadow:0 12px 34px rgba(16,32,51,.055)!important}
@@ -208,7 +213,15 @@ h2{letter-spacing:-.8px}
   const session=await db.auth.getSession();user=session.data.session?.user;
   if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';$('readerMonthStatus').textContent='Entre na sua conta para acompanhar o ranking e conquistar emblemas.';return}
   const result=await getLinkStoryProfile();if(result.error)throw result.error;profile=result.data;
-  renderProfile(profile);$('editProfile').hidden=false;await Promise.all([loadReaderBadges(),loadVerification()]);
+  renderProfile(profile);$('editProfile').hidden=false;
+  const [myFollowers,myFollowing]=await Promise.all([
+   db.from('follows').select('follower_id',{count:'exact',head:true}).eq('following_id',user.id),
+   db.from('follows').select('following_id',{count:'exact',head:true}).eq('follower_id',user.id)
+  ]);
+  if(myFollowers.error)throw myFollowers.error;if(myFollowing.error)throw myFollowing.error;
+  $('myFollowersCount').textContent=Number(myFollowers.count||0).toLocaleString('pt-BR');
+  $('myFollowingCount').textContent=Number(myFollowing.count||0).toLocaleString('pt-BR');
+  await Promise.all([loadReaderBadges(),loadVerification()]);
   if(location.hash==='#edit')openEditor();
   const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===user.id);
   if(works.length){$('empty').style.display='none';const container=$('works');works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));works.forEach((m,index)=>{
