@@ -81,8 +81,8 @@ h2{letter-spacing:-.8px}
 </style></head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div></div></section>
 <section class="social-panel" aria-label="Seguidores e seguindo" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0;padding:18px;border:1px solid #dce8f7;border-radius:18px;background:linear-gradient(135deg,#fff,#f3f8ff);box-shadow:0 8px 24px rgba(24,65,112,.06)">
  <div style="grid-column:1/-1;color:#71839a;font-size:10px;font-weight:900;letter-spacing:1.3px">COMUNIDADE</div>
- <div style="padding:12px;border:1px solid #e2ebf6;border-radius:13px;background:#fff;color:#71839a;font-size:12px"> <strong id="myFollowersCount" style="display:block;color:#172f4d;font-size:24px">—</strong> seguidores</div>
- <div style="padding:12px;border:1px solid #e2ebf6;border-radius:13px;background:#fff;color:#71839a;font-size:12px"><strong id="myFollowingCount" style="display:block;color:#172f4d;font-size:24px">—</strong> seguindo</div>
+ <button type="button" id="openMyFollowers" class="my-network-count" style="padding:12px;border:1px solid #e2ebf6;border-radius:13px;background:#fff;color:#71839a;font-size:12px;text-align:left;cursor:pointer;font-family:inherit"><strong id="myFollowersCount" style="display:block;color:#172f4d;font-size:24px">—</strong> seguidores <small style="display:block;margin-top:5px;color:#1769d2;font-weight:800">Ver lista ›</small></button>
+ <button type="button" id="openMyFollowing" class="my-network-count" style="padding:12px;border:1px solid #e2ebf6;border-radius:13px;background:#fff;color:#71839a;font-size:12px;text-align:left;cursor:pointer;font-family:inherit"><strong id="myFollowingCount" style="display:block;color:#172f4d;font-size:24px">—</strong> seguindo <small style="display:block;margin-top:5px;color:#1769d2;font-weight:800">Ver lista ›</small></button>
 </section>
 <style id="public-profile-cleanup">
 /* Public profile: clear identity area + separate, bounded biography area. */
@@ -111,6 +111,8 @@ h2{letter-spacing:-.8px}
 </style><div class="verification-area" id="verificationArea" hidden><div id="verificationChip" class="verification-chip" hidden></div><button id="requestVerification" class="verification-action" hidden>Solicitar selo de influenciador</button><span id="verificationStatus"></span></div><div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button><a class="profile-action" href="friends.html">Amigos e mensagens</a><a class="profile-action" href="settings.html">Configurações</a></div>
 <section class="section reader-month" id="readerMonth"><div class="head"><div><span class="ey">CONQUISTAS DA COMUNIDADE</span><h2>Leitor do mês</h2><p class="reader-month-sub" id="readerMonthSubtitle">O ranking mensal acompanha os capítulos lidos.</p></div></div><div class="reader-podium" id="readerPodium"><div class="reader-month-status" id="readerMonthStatus">Carregando emblemas…</div></div><div class="reader-own-badge" id="readerOwnBadge" hidden></div></section>
 <section class="section"><div class="head"><div><span class="ey">PUBLICAÇÕES</span><h2>Minhas obras</h2></div></div><div id="empty" class="empty"><strong>Nenhuma obra publicada.</strong>Quando você publicar, ela aparecerá aqui.</div><div id="works" class="works"></div></section></main>
+<dialog id="myNetworkDialog" style="width:min(460px,calc(100% - 24px));max-height:80vh;border:1px solid #dce8f7;border-radius:20px;padding:0;box-shadow:0 24px 70px #102d501f"><div style="display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #e8edf4"><h2 id="myNetworkTitle" style="margin:0;font-size:18px">Seguidores</h2><button type="button" id="closeMyNetwork" aria-label="Fechar" style="width:36px;height:36px;border:0;border-radius:10px;background:#f1f5fa;font-size:22px">×</button></div><div id="myNetworkList" style="display:grid;gap:8px;padding:13px;overflow:auto;max-height:65vh"><div style="padding:28px 16px;text-align:center;color:#78889d;font-size:13px">Carregando…</div></div></dialog>
+<style>#myNetworkDialog::backdrop{background:#10203380;backdrop-filter:blur(3px)}.my-network-person{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e5edf6;border-radius:13px;text-decoration:none;color:inherit}.my-network-person img,.my-network-avatar{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;background:#eaf3ff;display:grid;place-items:center;color:#1769d2;font-weight:900}.my-network-person span{min-width:0}.my-network-person strong,.my-network-person small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.my-network-person small{margin-top:3px;color:#78889d;font-size:11px}.my-network-empty{padding:28px 16px;text-align:center;color:#78889d;font-size:13px}</style>
 <dialog class="edit-modal" id="editModal"><form id="profileForm"><h2>Editar perfil</h2><p>Atualize as informações que outras pessoas veem no LinkStory.</p>
 <label class="edit-field"><span>Nome público</span><input id="editDisplayName" maxlength="80" required></label>
 <label class="edit-field"><span>Nome de usuário</span><input id="editUsername" minlength="3" maxlength="30" pattern="[A-Za-z0-9_]{3,30}" required></label>
@@ -221,6 +223,32 @@ h2{letter-spacing:-.8px}
   if(myFollowers.error)throw myFollowers.error;if(myFollowing.error)throw myFollowing.error;
   $('myFollowersCount').textContent=Number(myFollowers.count||0).toLocaleString('pt-BR');
   $('myFollowingCount').textContent=Number(myFollowing.count||0).toLocaleString('pt-BR');
+  const networkDialog=$('myNetworkDialog');
+  $('closeMyNetwork').onclick=()=>networkDialog.close();
+  networkDialog.addEventListener('click',event=>{if(event.target===networkDialog)networkDialog.close()});
+  async function openMyNetwork(kind){
+   const list=$('myNetworkList'),title=kind==='followers'?'Seguidores':'Pessoas que você segue';
+   $('myNetworkTitle').textContent=title;list.innerHTML='<div class="my-network-empty">Carregando pessoas…</div>';networkDialog.showModal();
+   try{
+    const field=kind==='followers'?'follower_id':'following_id';
+    const rel=await db.from('follows').select(field).eq(kind==='followers'?'following_id':'follower_id',user.id);
+    if(rel.error)throw rel.error;
+    const ids=(rel.data||[]).map(item=>item[field]).filter(Boolean);
+    if(!ids.length){list.innerHTML='<div class="my-network-empty">Ainda não há pessoas nesta lista.</div>';return}
+    const people=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',ids);
+    if(people.error)throw people.error;
+    list.replaceChildren();
+    (people.data||[]).forEach(person=>{
+     const link=document.createElement('a');link.className='my-network-person';link.href='public-profile.html?id='+encodeURIComponent(person.id);
+     const avatar=person.avatar_url?document.createElement('img'):document.createElement('div');
+     if(person.avatar_url){avatar.src=person.avatar_url;avatar.alt=''}else{avatar.className='my-network-avatar';avatar.textContent=(person.display_name||person.username||'U').slice(0,1).toUpperCase()}
+     const copy=document.createElement('span'),name=document.createElement('strong'),handle=document.createElement('small');
+     name.textContent=person.display_name||person.username||'Usuário';handle.textContent='@'+(person.username||'usuário');copy.append(name,handle);link.append(avatar,copy);list.append(link);
+    });
+   }catch(error){list.innerHTML='<div class="my-network-empty">Não foi possível carregar a lista: '+String(error.message||'tente novamente').replace(/[<>]/g,'')+'</div>'}
+  }
+  $('openMyFollowers').onclick=()=>openMyNetwork('followers');
+  $('openMyFollowing').onclick=()=>openMyNetwork('following');
   await Promise.all([loadReaderBadges(),loadVerification()]);
   if(location.hash==='#edit')openEditor();
   const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===user.id);
