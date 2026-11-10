@@ -85,7 +85,7 @@ h2{letter-spacing:-.8px}
   .theme-preview{height:112px!important}
   .menu-dialog{border-radius:0!important}
 }
-.credit-list{display:grid;gap:9px}.credit-person{display:flex;align-items:center;gap:11px;padding:11px 13px;background:#fff;border:1px solid var(--line);border-radius:13px}.credit-person img,.credit-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:var(--soft);color:var(--blue);font-weight:900;flex:none}.credit-person a{font-weight:850;font-size:13px}.credit-person small{display:block;color:var(--muted);font-size:11px;margin-top:3px}</style>
+.credit-list{display:grid;gap:9px}.credit-person{display:flex;align-items:center;gap:11px;padding:11px 13px;background:#fff;border:1px solid var(--line);border-radius:13px}.credit-person img,.credit-avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;display:grid;place-items:center;background:var(--soft);color:var(--blue);font-weight:900;flex:none}.credit-person a{font-weight:850;font-size:13px}.credit-person small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.creator-follow{min-height:40px;padding:0 15px;border:1px solid #0b72e7;border-radius:11px;background:#0b72e7;color:#fff;font-weight:850;font-size:12px;cursor:pointer}.creator-follow.following{background:#fff;color:#0b72e7}.creator-follow:disabled{opacity:.6}.creator-follow-wrap{width:min(620px,100%);display:flex;justify-content:flex-end;margin:-12px auto 0}.credit-person{flex-wrap:wrap}.credit-person .creator-follow{margin-left:auto}</style>
 <link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
 </head>
@@ -141,7 +141,25 @@ h2{letter-spacing:-.8px}
     '<div class="comments" id="comments"></div>'+
   '</section>';
 
-  const credits=await LinkStoryManga.collaboratorsForManga(m.id);if(credits.length){const section=document.createElement('section');section.className='block';const eyebrow=document.createElement('span');eyebrow.className='ey';eyebrow.textContent='PRODUÇÃO';const heading=document.createElement('h2');heading.textContent='Colaboradores';const list=document.createElement('div');list.className='credit-list';credits.forEach(person=>{const row=document.createElement('div');row.className='credit-person';const avatar=person.profiles?.avatar_url?document.createElement('img'):document.createElement('div');if(person.profiles?.avatar_url){avatar.src=person.profiles.avatar_url;avatar.alt=''}else{avatar.className='credit-avatar';avatar.textContent=(person.profiles?.display_name||person.profiles?.username||'U').slice(0,1).toUpperCase()}const copy=document.createElement('div'),link=document.createElement('a'),role=document.createElement('small');link.href='public-profile.html?id='+encodeURIComponent(person.user_id);link.textContent=person.profiles?.display_name||person.profiles?.username||'Colaborador';role.textContent=person.role;copy.append(link,role);row.append(avatar,copy);list.append(row)});section.append(eyebrow,heading,list);document.querySelector('.stats').before(section)}
+  async function mountFollowButton(targetId,anchor){
+   if(!targetId||!anchor)return;
+   if(me?.user?.id===targetId)return;
+   const button=document.createElement('button');button.type='button';button.className='creator-follow';button.textContent='Seguir';
+   if(!me?.user?.id){button.textContent='Entrar para seguir';button.onclick=()=>location.href='login.html';}
+   else{
+    const viewer=me.user.id,existing=await linkstorySupabase.from('follows').select('follower_id').eq('follower_id',viewer).eq('following_id',targetId).maybeSingle();
+    if(existing.error){button.textContent='Indisponível';button.disabled=true}
+    else{
+     let following=!!existing.data;
+     const paint=()=>{button.textContent=following?'Seguindo':'Seguir';button.classList.toggle('following',following);button.setAttribute('aria-pressed',String(following))};paint();
+     button.onclick=async()=>{button.disabled=true;try{if(following){const r=await linkstorySupabase.from('follows').delete().eq('follower_id',viewer).eq('following_id',targetId);if(r.error)throw r.error;following=false}else{const r=await linkstorySupabase.from('follows').insert({follower_id:viewer,following_id:targetId});if(r.error)throw r.error;following=true}paint()}catch(error){alert(error.message||'Não foi possível atualizar o acompanhamento.')}finally{button.disabled=false}};
+    }
+   }
+   anchor.insertAdjacentElement('afterend',button);
+  }
+  const creatorAnchor=document.querySelector('.creator-profile');
+  if(creatorAnchor)await mountFollowButton(m.creator_id,creatorAnchor);
+  const credits=await LinkStoryManga.collaboratorsForManga(m.id);if(credits.length){const section=document.createElement('section');section.className='block';const eyebrow=document.createElement('span');eyebrow.className='ey';eyebrow.textContent='PRODUÇÃO';const heading=document.createElement('h2');heading.textContent='Colaboradores';const list=document.createElement('div');list.className='credit-list';credits.forEach(person=>{const row=document.createElement('div');row.className='credit-person';const avatar=person.profiles?.avatar_url?document.createElement('img'):document.createElement('div');if(person.profiles?.avatar_url){avatar.src=person.profiles.avatar_url;avatar.alt=''}else{avatar.className='credit-avatar';avatar.textContent=(person.profiles?.display_name||person.profiles?.username||'U').slice(0,1).toUpperCase()}const copy=document.createElement('div'),link=document.createElement('a'),role=document.createElement('small');link.href='public-profile.html?id='+encodeURIComponent(person.user_id);link.textContent=person.profiles?.display_name||person.profiles?.username||'Colaborador';role.textContent=person.role;copy.append(link,role);row.append(avatar,copy);await mountFollowButton(person.user_id,row.querySelector("a"));list.append(row)});section.append(eyebrow,heading,list);document.querySelector('.stats').before(section)}
   if(window.LinkStoryGuard){const reportArea=document.querySelector('.social');window.LinkStoryGuard.mountReportButton(reportArea,{target_type:'manga',target_id:m.id});window.LinkStoryGuard.mountBlockButton(reportArea,m.creator_id,'Bloquear criador');}
 
   if(m.cover_url)$("cover").style.backgroundImage='url("'+m.cover_url.replace(/"/g,'&quot;')+'")';
