@@ -496,11 +496,13 @@ html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
 
 /* Feed category tabs belong to normal page flow; never float over posts while scrolling. */
 .tabs{position:static!important;top:auto!important;z-index:auto!important;}
+
+.top-switch{display:flex;align-items:center;gap:5px;margin-left:12px;padding:4px;border:1px solid var(--line);border-radius:999px;background:#f5f8fc}.top-switch a{padding:8px 13px;border-radius:999px;color:#718096;font-size:12px;font-weight:850;white-space:nowrap}.top-switch a.top-switch-active{background:#eaf4ff;color:#0758b5}.top-create{margin-left:auto;width:40px;height:40px;border:0;border-radius:13px;background:#0b72e7;color:#fff;font-size:25px;line-height:1;font-weight:500}.topbar .top-create{flex:0 0 40px}.topbar .top-switch{margin-left:auto}.topbar .top-create{margin-left:0}@media(max-width:430px){.topbar{gap:7px;padding:0 9px}.brand{font-size:19px}.top-switch{margin-left:auto!important}.top-switch a{padding:8px 10px;font-size:11px}.top-create{width:36px;height:36px;flex-basis:36px}}
 </style>
   <link rel="stylesheet" href="visual-system.css?v=4">
 </head>
 <body>
-<header class="topbar"><a class="brand" href="index.html">Link<b>Story</b></a></header>
+<header class="topbar"><a class="brand" href="index.html">Link<b>Story</b></a><nav class="top-switch" aria-label="Seção"><a class="top-switch-active" href="fy.html">Pra você</a><a href="fy-videos.html">Fy</a></nav><button class="top-create" id="openFyComposer" type="button" aria-label="Criar publicação">＋</button></header>
 <main>
 <nav class="tabs" aria-label="Feed"><button class="tab active" data-feed="for-you">Para você</button><button class="tab" data-feed="following">Seguindo</button><button class="tab" data-feed="ideas">Ideias</button><button class="tab" data-feed="videos">Vídeos</button></nav>
 <section class="composer" id="composer">
