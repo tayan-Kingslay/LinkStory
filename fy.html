@@ -493,6 +493,9 @@ html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
  #commentsDialog.comments-screen{inset:0;width:100%;height:var(--ls-visual-height,100dvh);max-height:var(--ls-visual-height,100dvh);margin:0;border-radius:0;border:0}
  #commentsDialog #commentBody{font-size:16px!important;min-height:48px;max-height:120px}
 }
+
+/* Feed category tabs belong to normal page flow; never float over posts while scrolling. */
+.tabs{position:static!important;top:auto!important;z-index:auto!important;}
 </style>
   <link rel="stylesheet" href="visual-system.css?v=4">
 </head>
