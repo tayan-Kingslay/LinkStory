@@ -3,7 +3,7 @@
 <link rel="stylesheet" href="visual-system.css?v=4"><link rel="stylesheet" href="visual-refresh.css?v=2">
 <style>
 :root{--bg:#f3f6fb;--panel:#fff;--line:#e1e9f2;--ink:#17263a;--muted:#7b8ba0;--blue:#1769d2}
-*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;flex-direction:column}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;flex-direction:column}html body.chat-page{padding:0!important;margin:0!important;overflow:hidden!important}html body.chat-page #lsBottomNav,html body.chat-page #lsGlobalMenuButton,html body.chat-page #lsMenu{display:none!important}
 header.chat-header{height:82px;flex:none;display:flex;align-items:center;gap:13px;padding:0 18px;background:rgba(255,255,255,.94);border-bottom:1px solid #e3eaf3;box-shadow:0 5px 22px rgba(20,48,82,.06);z-index:2}
 .back{width:44px;height:44px;display:grid;place-items:center;border:1px solid #e1e9f2;border-radius:15px;color:#1769d2;background:#f7faff;text-decoration:none;font-size:27px;flex:none}
 .peer-link{display:flex;align-items:center;gap:12px;min-width:0;flex:1;text-decoration:none;color:inherit;border-radius:16px;padding:5px 8px;transition:background .18s}
@@ -91,7 +91,7 @@ main{min-height:0;overflow:hidden}
 .compose textarea{font-size:16px!important;line-height:1.35;touch-action:manipulation}
 @media(max-width:560px){.compose textarea{font-size:16px!important}}
 
-</style></head><body>
+</style></head><body class="chat-page">
 <header class="chat-header"><a class="back" href="messages.html" aria-label="Voltar às mensagens">‹</a><a class="peer-link" id="peerProfileLink" href="#" aria-label="Ver perfil"><div class="avatar" id="avatar">L</div><span class="who"><strong id="name">Conversa</strong><small id="handle">LinkStory</small></span><span class="profile-chevron">›</span></a></header>
 <main><div class="chat-body" id="chatBody"><div class="inspiration"><div class="spark">✦</div><strong>Histórias também começam com uma conversa.</strong><p>Um incentivo simples pode mudar o dia de alguém.</p></div></div>
 <div class="compose-wrap"><form class="compose" id="chatForm"><textarea id="chatInput" rows="1" maxlength="5000" placeholder="Escreva uma mensagem…" disabled></textarea><button class="send" id="sendButton" disabled>Enviar</button></form><div class="status" id="status" role="status"></div></div></main>
