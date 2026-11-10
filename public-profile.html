@@ -33,6 +33,7 @@ h1{margin:0 0 7px;font-size:clamp(25px,5vw,38px);line-height:1.12;letter-spacing
  const result=await db.from('profiles').select('id,username,display_name,avatar_url,bio,verification_type').eq('id',id).maybeSingle();
  if(result.error)throw result.error;const p=result.data;
  if(!p){$('name').textContent='Perfil não encontrado';$('handle').textContent='Este perfil pode não estar disponível.';return}
+ $('profileFeedTab').href='public-profile.html?id='+encodeURIComponent(p.id);$('profileFyTab').href='fy-videos.html?profile='+encodeURIComponent(p.id);
  $('name').textContent=p.display_name||p.username||'Usuário';if(window.LinkStoryVerification)LinkStoryVerification.decorate($('name'),p.verification_type);$('handle').textContent='@'+(p.username||'usuário');$('bio').textContent=p.bio||'';
  const av=$('avatar');if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de '+(p.display_name||p.username);av.replaceChildren(img)}else av.textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase();
  const session=await LinkStoryManga.session(),viewer=session?.user?.id||null,followButton=$('followButton'),followStatus=$('followStatus');
