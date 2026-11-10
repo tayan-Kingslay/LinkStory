@@ -78,7 +78,23 @@ h2{letter-spacing:-.8px}
  .profile h1#name{font-size:clamp(22px,6vw,30px)!important;gap:5px!important}
  .profile .ey{font-size:9px!important;letter-spacing:1.5px!important}
 }
-</style></head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div><div class="account-meta" id="accountMeta" hidden><span class="account-pill"><strong id="roleLabel">Leitor</strong></span><span class="account-pill" id="mangakaTitlePill" hidden><strong>Mangaká</strong></span><span class="account-pill" id="mangakaHandlePill" hidden></span><span class="account-pill"><strong>K-Code</strong> <span id="kCode">—</span></span></div></div></section>
+</style></head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div></div></section>
+<style id="public-profile-cleanup">
+/* Public profile: show identity chosen for display, never internal account identifiers. */
+.profile{display:grid!important;grid-template-columns:clamp(76px,19vw,112px) minmax(0,1fr)!important;gap:clamp(14px,3vw,24px)!important;align-items:center!important;padding:clamp(18px,4vw,28px)!important;margin:0 0 28px!important;border:1px solid var(--ls-line)!important;border-radius:22px!important;background:rgba(255,255,255,.92)!important;box-shadow:0 10px 32px rgba(16,32,51,.06)!important}
+.profile .avatar{width:clamp(76px,19vw,112px)!important;height:clamp(76px,19vw,112px)!important;overflow:hidden!important}
+.profile>div:nth-child(2){min-width:0!important}
+.profile h1#name{font-size:clamp(24px,5vw,38px)!important;line-height:1.12!important;letter-spacing:-1.2px!important;margin:4px 0!important}
+.profile #handle{font-size:14px!important;overflow-wrap:anywhere}
+.profile #bio{font-size:14px!important;line-height:1.55!important;color:#52657b!important;overflow-wrap:anywhere}
+#accountMeta,.account-meta,.account-pill,#mangakaTitlePill,#mangakaHandlePill,#kCode{display:none!important}
+@media(max-width:430px){
+ .profile{grid-template-columns:82px minmax(0,1fr)!important;gap:12px!important;padding:16px!important;border-radius:18px!important}
+ .profile .avatar{width:82px!important;height:82px!important}
+ .profile h1#name{font-size:clamp(21px,6vw,29px)!important}
+ .profile #bio{font-size:13px!important}
+}
+</style>
 <style>
 .verification-area{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
 .verification-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border:1px solid #ead49a;background:#fff8e5;color:#815b08;border-radius:999px;font-size:11px;font-weight:900}
@@ -118,21 +134,11 @@ h2{letter-spacing:-.8px}
   try{const{error}=await db.rpc('request_influencer_verification',{p_note:null});if(error)throw error;button.hidden=true;status.textContent='Solicitação enviada. A equipe LinkStory vai analisar sua conta.'}
   catch(e){status.textContent=e.message||'Não foi possível solicitar.';button.disabled=false;button.textContent='Solicitar selo de influenciador'}
  };
- async function loadMangakaIdentity(){
-  const title=$('mangakaTitlePill'),handle=$('mangakaHandlePill');
-  title.hidden=true;handle.hidden=true;
-  if(!user)return;
-  const result=await db.from('mangaka_profiles').select('handle').eq('user_id',user.id).maybeSingle();
-  if(result.error)throw result.error;
-  if(result.data){title.hidden=false;handle.hidden=false;handle.textContent=result.data.handle}
- }
+
  function renderProfile(p){
   const profileName=$('name');profileName.replaceChildren();const profileNameText=document.createElement('span');profileNameText.textContent=p?.display_name||'Usuário';profileNameText.style.cssText='min-width:0;overflow-wrap:anywhere';profileName.append(profileNameText);if(window.LinkStoryVerification)LinkStoryVerification.decorate(profileName,p?.verification_type);
   $('handle').textContent=p?.username?'@'+p.username:'';
   $('bio').textContent=p?.bio||'';
-  $('kCode').textContent=p?.k_code||'—';
-  $('roleLabel').textContent='Leitor';
-  $('accountMeta').hidden=!p;
   const avatar=$('profileAvatar');avatar.replaceChildren();
   if(p?.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de perfil';img.onerror=()=>{avatar.textContent=(p.display_name||'U').slice(0,1).toUpperCase()};avatar.append(img)}
   else avatar.textContent=(p?.display_name||'U').slice(0,1).toUpperCase();
@@ -200,7 +206,7 @@ h2{letter-spacing:-.8px}
   const session=await db.auth.getSession();user=session.data.session?.user;
   if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';$('readerMonthStatus').textContent='Entre na sua conta para acompanhar o ranking e conquistar emblemas.';return}
   const result=await getLinkStoryProfile();if(result.error)throw result.error;profile=result.data;
-  renderProfile(profile);$('editProfile').hidden=false;await Promise.all([loadReaderBadges(),loadVerification(),loadMangakaIdentity()]);
+  renderProfile(profile);$('editProfile').hidden=false;await Promise.all([loadReaderBadges(),loadVerification()]);
   if(location.hash==='#edit')openEditor();
   const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===user.id);
   if(works.length){$('empty').style.display='none';const container=$('works');works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));works.forEach((m,index)=>{
