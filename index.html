@@ -153,16 +153,44 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item{color:#aab3be}
 html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 
 
-\n/* Skeletons de catálogo: reservam espaço e evitam saltos de layout. */\n.book-skeleton{position:relative;flex:0 0 184px;height:275px;overflow:hidden;border-radius:8px;background:#edf3f8}\n.book-skeleton:after{content:'';position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);animation:ls-skeleton 1.35s infinite}\n@keyframes ls-skeleton{to{transform:translateX(100%)}}\n@media(max-width:720px){.book-skeleton{flex-basis:166px;height:252px}}\n@media(max-width:420px){.book-skeleton{flex-basis:154px;height:235px}}\n@media(prefers-reduced-motion:reduce){.book-skeleton:after{animation:none;transform:none;opacity:.35}}\n</style>
+
+/* Skeletons de catálogo: reservam espaço e evitam saltos de layout. */
+.book-skeleton{position:relative;flex:0 0 184px;height:275px;overflow:hidden;border-radius:8px;background:#edf3f8}
+.book-skeleton:after{content:'';position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);animation:ls-skeleton 1.35s infinite}
+@keyframes ls-skeleton{to{transform:translateX(100%)}}
+@media(max-width:720px){.book-skeleton{flex-basis:166px;height:252px}}
+@media(max-width:420px){.book-skeleton{flex-basis:154px;height:235px}}
+@media(prefers-reduced-motion:reduce){.book-skeleton:after{animation:none;transform:none;opacity:.35}}
+</style>
   <link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
+
+<style>
+/* Home header: search left, centered brand, actions right. */
+.header.home-header{
+  display:grid!important;
+  grid-template-columns:minmax(40px,1fr) auto minmax(40px,1fr)!important;
+  justify-content:initial!important;
+  align-items:center!important;
+}
+.header.home-header>.search{grid-column:1;justify-self:start;margin:0}
+.header.home-header>.logo{grid-column:2;justify-self:center}
+.header.home-header>.header-actions{
+  grid-column:3;justify-self:end;margin:0!important;
+  display:flex;align-items:center;gap:clamp(5px,1.2vw,9px)!important;
+}
+@media(max-width:600px){
+  .header.home-header{grid-template-columns:minmax(38px,1fr) auto minmax(38px,1fr)!important}
+  .header.home-header>.header-actions{gap:5px!important}
+}
+</style>
 
 </head>
 <body>
 <header class="header home-header">
+<button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
 <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
 <div class="header-actions">
-<button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
 <a class="circle home-shortcut" href="notifications.html" aria-label="Notificações" title="Notificações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a>
 <button class="circle menu" id="openMenu" aria-label="Abrir menu"></button>
 <a class="login" href="login.html">Entrar</a>
