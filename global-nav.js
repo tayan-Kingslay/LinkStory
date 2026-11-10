@@ -220,6 +220,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     button#lsGlobalMenuButton:focus-visible,button#openMenu:focus-visible{
       outline:3px solid rgba(22,119,220,.28)!important;outline-offset:3px!important
     }
+    body>.ls-global-menu-fallback{position:fixed!important;top:max(14px,env(safe-area-inset-top))!important;right:14px!important;bottom:auto!important;left:auto!important;z-index:1001!important}
     html[data-ls-theme="dark"] :where(.topbar,.top,.header,header) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn),
     html[data-ls-theme="dark"] button#lsGlobalMenuButton,
     html[data-ls-theme="dark"] button#openMenu{
@@ -292,7 +293,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     }
   }
 
-  let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');let opener=document.getElementById('openMenu');
+  let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');const header=document.querySelector('.topbar,.top,.header,body>header:not(.chat-header)');let opener=document.getElementById('openMenu')||(header&&header.querySelector('.menu-btn,.menu,.menu-button,.ls-global-menu-btn'));
   const menuMarkup=`<div class="ls-menu-wrap">
     <div class="ls-menu-head"><div class="ls-menu-brand"><strong>LINKSTORY</strong><span>Seu universo de histórias</span></div><button class="ls-menu-close" aria-label="Fechar menu">×</button></div>
     <div class="ls-menu-intro"><strong>O que vamos explorar?</strong><p>Encontre histórias, acompanhe suas leituras e cuide do seu espaço.</p></div>
@@ -337,7 +338,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
       creatorSection.hidden=!!error||profile?.role!=='criador';
     }catch{creatorSection.hidden=true}
   })();
-  if(!opener){opener=document.createElement('button');opener.id='lsGlobalMenuButton';opener.className='ls-global-menu-btn';opener.setAttribute('aria-label','Abrir menu');opener.innerHTML='☰';const header=document.querySelector('.topbar,.top,.header');if(header)header.appendChild(opener);else{opener.style.position='fixed';opener.style.top='14px';opener.style.right='14px';opener.style.zIndex='1001';document.body.appendChild(opener)}}
+  if(!opener){opener=document.createElement('button');opener.id='lsGlobalMenuButton';opener.className='ls-global-menu-btn';opener.setAttribute('aria-label','Abrir menu');opener.innerHTML='☰';if(header){header.appendChild(opener)}else{opener.classList.add('ls-global-menu-fallback');document.body.appendChild(opener)}}
   if(opener&&!opener.dataset.lsBound){opener.dataset.lsBound='1';opener.addEventListener('click',()=>{if(typeof menu.showModal==='function'){if(!menu.open)menu.showModal()}else menu.setAttribute('open','')})}
   {
     const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
