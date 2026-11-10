@@ -262,5 +262,5 @@ $('feedList').addEventListener('click',async e=>{
  const expand=e.target.closest('[data-expand-post]');
  if(expand){const card=expand.closest('.post'),body=card?.querySelector('.post-body');if(!body)return;const expanded=body.classList.toggle('is-expanded');body.classList.toggle('is-collapsed',!expanded);expand.textContent=expanded?'Mostrar menos':'Ler tudo';expand.setAttribute('aria-expanded',String(expanded));return}
  const b=e.target.closest('[data-action]');if(!b)return;const card=b.closest('.post'),id=card?.dataset.id;if(!id)return;switch(b.dataset.action){case'like':return toggleLike(id,b);case'comment':return openComments(id);case'share':return sharePostWithFriend(id);case'follow':return followAuthor(id,b);case'delete':return deletePost(id,card,b);case'report':return reportPost(id)}});
-init();
+init().then(()=>{const params=new URLSearchParams(location.search);if(params.get('create')==='video')$('quickVideo').click()});
 })();
