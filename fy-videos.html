@@ -14,7 +14,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script>
 <script>
 (()=>{'use strict';
-const db=()=>window.linkstorySupabase,feed=document.getElementById('feed'),status=document.getElementById('status'),more=document.getElementById('loadMore'),params=new URLSearchParams(location.search),toastBox=document.getElementById('toast');
+const db=()=>linkstorySupabase,feed=document.getElementById('feed'),status=document.getElementById('status'),more=document.getElementById('loadMore'),params=new URLSearchParams(location.search),toastBox=document.getElementById('toast');
 let offset=0,loading=false,done=false,observer=null,profileId=params.get('profile')||null,user=null,activePost=null,scrollBeforeComments=0;
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(message){toastBox.textContent=message;toastBox.classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>toastBox.classList.remove('show'),2600)}
