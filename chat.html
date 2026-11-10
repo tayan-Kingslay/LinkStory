@@ -82,10 +82,14 @@ html[data-ls-theme="dark"] .message-edit-controls button:last-child{background:#
 
 /* iPhone/Safari: keep the conversation and composer inside the visible area
    when the software keyboard opens; prevent automatic input zoom. */
-:root{--chat-vh:100dvh}
+:root{--chat-vh:100dvh;--chat-vv-top:0px}
 html,body{height:100%;min-height:0;overflow:hidden}
-body{height:var(--chat-vh,100dvh);min-height:0}
-main{min-height:0;overflow:hidden}
+body.chat-page{position:fixed!important;left:0;right:0;top:var(--chat-vv-top,0px);width:100%;height:var(--chat-vh,100dvh);min-height:0;overflow:hidden!important;display:flex;flex-direction:column;overscroll-behavior:none}
+body.chat-page>header{flex:0 0 82px}
+body.chat-page>main{flex:1 1 auto;min-height:0;height:0;overflow:hidden}
+body.chat-page .chat-body{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch}
+body.chat-page .compose-wrap{flex:0 0 auto;position:relative;z-index:4}
+@media(max-width:560px){body.chat-page>header{flex-basis:78px}}
 .chat-body{min-height:0;overscroll-behavior:contain}
 .compose-wrap{flex:none;position:relative;padding-bottom:calc(8px + env(safe-area-inset-bottom))}
 .compose textarea{font-size:16px!important;line-height:1.35;touch-action:manipulation}
@@ -100,8 +104,8 @@ main{min-height:0;overflow:hidden}
 (async()=>{
  const db=linkstorySupabase,$=id=>document.getElementById(id);let user=null,conversation=null,poll=null,loadingMessages=false,lastMessageSignature='';
  const vv=window.visualViewport;
- const syncChatViewport=()=>document.documentElement.style.setProperty('--chat-vh',Math.round(vv?.height||window.innerHeight)+'px');
- syncChatViewport();vv?.addEventListener('resize',syncChatViewport);vv?.addEventListener('scroll',syncChatViewport);window.addEventListener('resize',syncChatViewport);
+ const syncChatViewport=()=>{const height=vv?.height||window.innerHeight,top=vv?.offsetTop||0;document.documentElement.style.setProperty('--chat-vh',Math.round(height)+'px');document.documentElement.style.setProperty('--chat-vv-top',Math.round(top)+'px')};
+ syncChatViewport();vv?.addEventListener('resize',syncChatViewport);vv?.addEventListener('scroll',syncChatViewport);window.addEventListener('resize',syncChatViewport);window.addEventListener('orientationchange',()=>setTimeout(syncChatViewport,150));
  $('chatInput').addEventListener('focus',syncChatViewport);
  const friendId=new URLSearchParams(location.search).get('friend');
  const clock=v=>new Date(v).toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
