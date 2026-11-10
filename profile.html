@@ -80,19 +80,21 @@ h2{letter-spacing:-.8px}
 }
 </style></head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div><div class="muted" id="bio" style="margin-top:7px;max-width:520px"></div></div></section>
 <style id="public-profile-cleanup">
-/* Public profile: show identity chosen for display, never internal account identifiers. */
-.profile{display:grid!important;grid-template-columns:clamp(76px,19vw,112px) minmax(0,1fr)!important;gap:clamp(14px,3vw,24px)!important;align-items:center!important;padding:clamp(18px,4vw,28px)!important;margin:0 0 28px!important;border:1px solid var(--ls-line)!important;border-radius:22px!important;background:rgba(255,255,255,.92)!important;box-shadow:0 10px 32px rgba(16,32,51,.06)!important}
-.profile .avatar{width:clamp(76px,19vw,112px)!important;height:clamp(76px,19vw,112px)!important;overflow:hidden!important}
-.profile>div:nth-child(2){min-width:0!important}
-.profile h1#name{font-size:clamp(24px,5vw,38px)!important;line-height:1.12!important;letter-spacing:-1.2px!important;margin:4px 0!important}
-.profile #handle{font-size:14px!important;overflow-wrap:anywhere}
-.profile #bio{font-size:14px!important;line-height:1.55!important;color:#52657b!important;overflow-wrap:anywhere}
+/* Public profile: clear identity area + separate, bounded biography area. */
+.profile{display:grid!important;grid-template-columns:88px minmax(0,1fr)!important;grid-template-rows:auto auto!important;column-gap:20px!important;row-gap:18px!important;align-items:center!important;padding:26px!important;margin:0 0 30px!important;border:1px solid var(--ls-line)!important;border-radius:24px!important;background:rgba(255,255,255,.96)!important;box-shadow:0 12px 34px rgba(16,32,51,.055)!important}
+.profile .avatar{grid-column:1!important;grid-row:1!important;width:88px!important;height:88px!important;overflow:hidden!important;margin:0!important}
+.profile>div:nth-child(2){display:contents!important}
+.profile .ey{display:none!important}
+.profile h1#name{grid-column:2!important;grid-row:1!important;align-self:end!important;min-width:0!important;font-size:clamp(23px,5vw,36px)!important;line-height:1.12!important;letter-spacing:-1px!important;margin:0 0 5px!important;overflow-wrap:anywhere}
+.profile #handle{grid-column:2!important;grid-row:1!important;align-self:end!important;min-width:0!important;margin:0 0 -22px!important;font-size:14px!important;line-height:1.4!important;color:#8190a5!important;overflow-wrap:anywhere}
+.profile #bio{grid-column:1/-1!important;grid-row:2!important;display:block!important;width:100%!important;max-width:100%!important;min-width:0!important;box-sizing:border-box!important;margin:0!important;padding:16px 0 0!important;border-top:1px solid #e8edf4!important;font-size:15px!important;line-height:1.65!important;color:#52657b!important;overflow-wrap:anywhere;white-space:pre-wrap}
 #accountMeta,.account-meta,.account-pill,#mangakaTitlePill,#mangakaHandlePill,#kCode{display:none!important}
 @media(max-width:430px){
- .profile{grid-template-columns:82px minmax(0,1fr)!important;gap:12px!important;padding:16px!important;border-radius:18px!important}
- .profile .avatar{width:82px!important;height:82px!important}
- .profile h1#name{font-size:clamp(21px,6vw,29px)!important}
- .profile #bio{font-size:13px!important}
+ .profile{grid-template-columns:76px minmax(0,1fr)!important;column-gap:15px!important;row-gap:16px!important;padding:19px!important;border-radius:20px!important}
+ .profile .avatar{width:76px!important;height:76px!important}
+ .profile h1#name{font-size:clamp(21px,6vw,28px)!important}
+ .profile #handle{font-size:13px!important;margin-bottom:-20px!important}
+ .profile #bio{font-size:14px!important;line-height:1.6!important;padding-top:14px!important}
 }
 </style>
 <style>
