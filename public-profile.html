@@ -21,9 +21,9 @@ h1{margin:0 0 7px;font-size:clamp(25px,5vw,38px);line-height:1.12;letter-spacing
 .cover img{width:100%;height:100%;object-fit:cover}.work h3{font-size:14px;margin:9px 3px 4px;overflow-wrap:anywhere}.work p{font-size:11px;color:#8291a4;margin:0 3px 4px}
 .empty{background:#fff;border:1px dashed #d7e2ef;border-radius:18px;padding:34px 18px;text-align:center;color:#7b8ba0;line-height:1.6}.empty strong{display:block;color:#20334b;margin-bottom:5px}
 @media(max-width:560px){header{height:70px;padding:0 13px}.hero{grid-template-columns:72px minmax(0,1fr);padding:18px;column-gap:14px;row-gap:15px;border-radius:19px}.avatar{width:72px;height:72px}.bio{font-size:13px;padding-top:14px}.works{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.work{padding:7px}main{margin-top:18px}}
-.invite-list{display:grid;gap:10px}.invite-card{display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid #e2eaf3;border-radius:15px}.invite-card img,.invite-cover{width:54px;height:68px;object-fit:cover;border-radius:8px;background:#edf4fc;display:grid;place-items:center;flex:none}.invite-info{min-width:0;flex:1}.invite-info strong,.invite-info small{display:block}.invite-info strong{font-size:13px}.invite-info small{font-size:11px;color:#78889d;margin-top:4px}.invite-actions{display:flex;gap:6px;flex-wrap:wrap}.invite-actions button{border:1px solid #dce6f1;border-radius:9px;padding:9px 11px;background:#fff;font-weight:800;font-size:11px}.invite-actions .accept{background:#1769d2;border-color:#1769d2;color:#fff}@media(max-width:560px){.invite-card{align-items:flex-start;flex-wrap:wrap}.invite-actions{width:100%}.invite-actions button{flex:1;min-height:42px}}</style></head><body>
+.invite-list{display:grid;gap:10px}.invite-card{display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid #e2eaf3;border-radius:15px}.invite-card img,.invite-cover{width:54px;height:68px;object-fit:cover;border-radius:8px;background:#edf4fc;display:grid;place-items:center;flex:none}.invite-info{min-width:0;flex:1}.invite-info strong,.invite-info small{display:block}.invite-info strong{font-size:13px}.invite-info small{font-size:11px;color:#78889d;margin-top:4px}.invite-actions{display:flex;gap:6px;flex-wrap:wrap}.invite-actions button{border:1px solid #dce6f1;border-radius:9px;padding:9px 11px;background:#fff;font-weight:800;font-size:11px}.invite-actions .accept{background:#1769d2;border-color:#1769d2;color:#fff}@media(max-width:560px){.invite-card{align-items:flex-start;flex-wrap:wrap}.invite-actions{width:100%}.invite-actions button{flex:1;min-height:42px}}.social-panel{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:14px;padding:15px 18px;background:#fff;border:1px solid #e2eaf3;border-radius:17px;box-shadow:0 5px 18px rgba(24,53,87,.04)}.social-counts{display:flex;gap:18px;flex-wrap:wrap}.social-count{font-size:13px;color:#78889d}.social-count strong{color:#17263a;font-size:16px;margin-right:4px}.follow-button{min-width:112px;min-height:44px;padding:0 17px;border:1px solid #1769d2;border-radius:12px;background:#1769d2;color:#fff;font-weight:850;font-size:13px}.follow-button.following{background:#fff;color:#1769d2}.follow-button:disabled{opacity:.6}.follow-status{width:100%;font-size:11px;color:#78889d;margin-top:7px}@media(max-width:430px){.social-panel{align-items:flex-start;flex-direction:column}.follow-button{width:100%}}</style></head><body>
 <header><a class="back" href="javascript:history.back()" aria-label="Voltar">‹</a><a class="brand" href="index.html">LINK<span>STORY</span></a></header>
-<main><section class="hero"><div class="avatar" id="avatar">L</div><div class="identity"><h1 id="name">Carregando perfil…</h1><div class="handle" id="handle"></div></div><div class="bio" id="bio"></div></section>
+<main><section class="hero"><div class="avatar" id="avatar">L</div><div class="identity"><h1 id="name">Carregando perfil…</h1><div class="handle" id="handle"></div></div><div class="bio" id="bio"></div></section><section class="social-panel" aria-label="Seguidores e seguindo"><div class="social-counts"><span class="social-count"><strong id="followersCount">—</strong> seguidores</span><span class="social-count"><strong id="followingCount">—</strong> seguindo</span></div><button class="follow-button" id="followButton" type="button" hidden>Seguir</button><div class="follow-status" id="followStatus" role="status" aria-live="polite"></div></section>
 <section class="section"><div class="eyebrow">PUBLICAÇÕES</div><h2>Obras criadas</h2><div id="works" class="works"><div class="empty">Carregando publicações…</div></div></section><section class="section" id="collabSection" hidden><div class="eyebrow">PARTICIPAÇÕES</div><h2>Mangás em que colaborou</h2><div id="collaborations" class="works"></div></section><section class="section" id="invitesSection" hidden><div class="eyebrow">CONVITES</div><h2>Convites de colaboração</h2><div id="invites" class="invite-list"></div></section></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script src="global-nav.js?v=20261110-2"></script>
 <script>
@@ -35,6 +35,36 @@ h1{margin:0 0 7px;font-size:clamp(25px,5vw,38px);line-height:1.12;letter-spacing
  if(!p){$('name').textContent='Perfil não encontrado';$('handle').textContent='Este perfil pode não estar disponível.';return}
  $('name').textContent=p.display_name||p.username||'Usuário';if(window.LinkStoryVerification)LinkStoryVerification.decorate($('name'),p.verification_type);$('handle').textContent='@'+(p.username||'usuário');$('bio').textContent=p.bio||'';
  const av=$('avatar');if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de '+(p.display_name||p.username);av.replaceChildren(img)}else av.textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase();
+ const session=await LinkStoryManga.session(),viewer=session?.user?.id||null,followButton=$('followButton'),followStatus=$('followStatus');
+ async function refreshSocial(){
+  const [followers,following]=await Promise.all([
+   db.from('follows').select('follower_id',{count:'exact',head:true}).eq('following_id',p.id),
+   db.from('follows').select('following_id',{count:'exact',head:true}).eq('follower_id',p.id)
+  ]);
+  if(followers.error)throw followers.error;if(following.error)throw following.error;
+  $('followersCount').textContent=Number(followers.count||0).toLocaleString('pt-BR');
+  $('followingCount').textContent=Number(following.count||0).toLocaleString('pt-BR');
+ }
+ await refreshSocial();
+ if(viewer&&viewer!==p.id){
+  followButton.hidden=false;
+  const existing=await db.from('follows').select('follower_id').eq('follower_id',viewer).eq('following_id',p.id).maybeSingle();
+  if(existing.error)throw existing.error;
+  let isFollowing=!!existing.data;
+  const paint=()=>{followButton.textContent=isFollowing?'Seguindo':'Seguir';followButton.classList.toggle('following',isFollowing);followButton.setAttribute('aria-pressed',String(isFollowing))};
+  paint();
+  followButton.addEventListener('click',async()=>{
+   followButton.disabled=true;followStatus.textContent=isFollowing?'Atualizando…':'Salvando…';
+   try{
+    if(isFollowing){const result=await db.from('follows').delete().eq('follower_id',viewer).eq('following_id',p.id);if(result.error)throw result.error;isFollowing=false}
+    else{const result=await db.from('follows').insert({follower_id:viewer,following_id:p.id});if(result.error)throw result.error;isFollowing=true}
+    paint();await refreshSocial();followStatus.textContent=isFollowing?'Você está seguindo este perfil.':'Você deixou de seguir este perfil.';
+   }catch(error){followStatus.textContent=error.message||'Não foi possível atualizar o acompanhamento.'}
+   finally{followButton.disabled=false}
+  });
+ }else if(!viewer){followButton.hidden=false;followButton.textContent='Entrar para seguir';followButton.onclick=()=>location.href='login.html'}
+ else{followStatus.textContent='Este é o seu perfil.'}
+
  function cardFor(m,role){const card=document.createElement('article');card.className='work';const link=document.createElement('a');link.href='manga.html?id='+encodeURIComponent(m.id);link.style.color='inherit';link.style.textDecoration='none';const cover=document.createElement('div');cover.className='cover';if(m.cover_url){const img=document.createElement('img');img.src=m.cover_url;img.alt='Capa de '+(m.title||'mangá');img.loading='lazy';cover.append(img)}else cover.textContent=m.title||'Mangá';const title=document.createElement('h3');title.textContent=m.title||'Sem título';const meta=document.createElement('p');meta.textContent=role||((m.genres||'Mangá').replaceAll(',',' · '));link.append(cover,title,meta);card.append(link);return card}
  const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===p.id),box=$('works');box.replaceChildren();
  if(!works.length){const empty=document.createElement('div');empty.className='empty';empty.innerHTML='<strong>Nenhuma obra criada ainda.</strong>Quando este perfil publicar uma obra, ela aparecerá aqui.';box.append(empty)}
