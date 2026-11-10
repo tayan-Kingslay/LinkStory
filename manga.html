@@ -150,7 +150,7 @@ h2{letter-spacing:-.8px}
   cs.forEach(c=>{
    const a=document.createElement("a");
    a.className="chapter";
-   a.href="reader.html?manga_id="+m.id+"&chapter_id="+c.id;
+   a.href="reader.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(c.id)+"&chapter_number="+encodeURIComponent(c.chapter_number);
    a.innerHTML='<div class="chapter-num">'+String(c.chapter_number).padStart(3,"0")+'</div>'+
      '<div class="chapter-info"><strong>'+c.title+'</strong><small>Capítulo '+String(c.chapter_number).padStart(3,"0")+'</small></div>'+
      '<span class="chev">›</span>';
