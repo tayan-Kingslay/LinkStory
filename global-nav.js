@@ -275,9 +275,14 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   }
 
   {
+    const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
+    const isHomePage=page==='index.html';
     const header=document.querySelector('.topbar,.top,.header');
     const actions=header?.querySelector('.header-actions,.top-actions,.actions')||header;
-    if(header&&actions&&!document.getElementById('openSearch')&&!document.getElementById('lsHeaderSearchShortcut')){
+    const searchSelector='#openSearch,#lsHeaderSearchShortcut,.search,[aria-label="Buscar"],[title="Buscar"]';
+    if(!isHomePage){
+      if(header)header.querySelectorAll(searchSelector).forEach(el=>el.remove());
+    }else if(header&&actions&&!document.getElementById('openSearch')&&!document.getElementById('lsHeaderSearchShortcut')){
       const searchLink=document.createElement('a');
       searchLink.id='lsHeaderSearchShortcut';searchLink.href='explore.html';
       searchLink.setAttribute('aria-label','Buscar');searchLink.title='Buscar';
@@ -335,7 +340,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   if(opener&&!opener.dataset.lsBound){opener.dataset.lsBound='1';opener.addEventListener('click',()=>{if(typeof menu.showModal==='function'){if(!menu.open)menu.showModal()}else menu.setAttribute('open','')})}
   {
     const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
-    const showNotifications=true;
+    const showNotifications=page==='index.html';
     const headerActions=document.querySelector('.header-actions,.top-actions,.reader-right,.header .actions');
     const notificationContainer=headerActions||document.querySelector('.header,.topbar,.top');
     const notificationSelector='a[href="notifications.html"],a[href$="/notifications.html"],[aria-label*="notifica" i],[title*="notifica" i],[data-notifications],#lsNotificationShortcut';
