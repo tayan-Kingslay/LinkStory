@@ -691,3 +691,25 @@ main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!im
 <script src="fy.js?v=20261110-fy-tabs"></script>
 <script src="global-nav.js"></script>
 </body></html>
+/* iOS Safari: keep the comment composer attached to the visible area above the keyboard. */
+@media(max-width:600px){
+ #commentsDialog.comments-screen{
+  position:fixed!important;
+  top:var(--ls-visual-top,0px)!important;
+  right:0!important;bottom:auto!important;left:0!important;
+  width:100%!important;
+  height:var(--ls-visual-height,100dvh)!important;
+  max-height:var(--ls-visual-height,100dvh)!important;
+  margin:0!important;
+  display:none;
+ }
+ #commentsDialog.comments-screen[open]{display:flex}
+ #commentsDialog .comment-list{flex:1 1 0!important;min-height:0!important}
+ #commentsDialog .comment-composer{
+  position:sticky!important;bottom:0!important;z-index:3;
+  flex:0 0 auto!important;
+  padding-bottom:calc(12px + env(safe-area-inset-bottom))!important;
+  background:#fff!important;
+ }
+ html[data-ls-theme="dark"] #commentsDialog .comment-composer{background:#101b2a!important}
+}
