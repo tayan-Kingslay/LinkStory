@@ -554,9 +554,21 @@ main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!im
 
 </style>
   <link rel="stylesheet" href="visual-system.css?v=4">
+<style id="fy-reference-layout-fix">
+.topbar:has(> .ls-global-menu-btn){display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;grid-template-columns:none!important;position:relative!important;inset:auto!important;transform:none!important;width:100%!important;max-width:760px!important;height:auto!important;min-height:0!important;margin:0 auto!important;padding:12px 14px 10px!important;gap:12px!important;border:0!important;border-bottom:1px solid #dce5f0!important;border-radius:0!important;background:rgba(247,249,253,.97)!important;box-shadow:none!important}
+.topbar .ls-global-menu-btn{display:none!important}
+.topbar .brand{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:76px!important;margin:0!important;grid-column:auto!important}
+.topbar .brand img{display:block!important;width:210px!important;height:68px!important;max-height:68px!important;object-fit:contain!important;filter:none!important}
+.topbar .top-switch{order:2!important;display:flex!important;align-items:center!important;justify-content:center!important;width:min(370px,100%)!important;margin:0 auto!important;padding:5px!important;gap:4px!important;border:1px solid #d7e1ef!important;border-radius:999px!important;background:#e8eef8!important;box-shadow:inset 0 1px 2px rgba(32,57,91,.05)!important}
+.topbar .top-switch :is(a,button){flex:1!important;text-align:center!important;padding:12px 15px!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#263449!important;font-size:15px!important;font-weight:750!important}
+.topbar .top-switch :is(a,button).top-switch-active,.topbar .top-switch button.active{background:#fff!important;color:#111827!important;box-shadow:0 2px 8px rgba(22,43,72,.09)!important}
+main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!important}
+.tabs{display:none!important}
+@media(max-width:430px){.topbar{padding:10px 12px 11px!important;gap:9px!important}.topbar .brand{height:66px!important}.topbar .brand img{width:190px!important;height:62px!important}.topbar .top-switch{width:min(370px,calc(100% - 12px))!important}.topbar .top-switch :is(a,button){padding:11px 12px!important;font-size:14px!important}}
+</style>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><nav class="top-switch" aria-label="Seção"><a class="top-switch-active" href="fy.html">Para você</a><button type="button" data-feed="following">Seguindo</button></nav><button class="top-create" id="openFyComposer" type="button" aria-label="Criar publicação">＋</button></header>
+<header class="topbar"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><nav class="top-switch" aria-label="Seção"><a class="top-switch-active" href="fy.html">Para você</a><button type="button" data-feed="following">Seguindo</button></nav></header>
 <main>
 <nav class="tabs" aria-label="Feed"><button class="tab active" data-feed="for-you">Para você</button><button class="tab" data-feed="following">Seguindo</button><button class="tab" data-feed="ideas">Ideias</button><button class="tab" data-feed="videos">Vídeos</button></nav>
 <section class="composer" id="composer">
