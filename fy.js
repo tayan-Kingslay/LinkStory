@@ -239,7 +239,7 @@ $('postMedia').onchange=()=>{const f=$('postMedia').files?.[0],box=$('mediaPrevi
 $('composeForm').addEventListener('submit',publishPost);$('commentForm').addEventListener('submit',sendComment);
 $('commentsDialog').addEventListener('close',()=>{clearReplyTarget();unlockCommentsBackground()});
 $('commentsDialog').addEventListener('click',e=>{if(e.target===$('commentsDialog'))$('commentsDialog').close()});
-if(window.visualViewport){const syncCommentViewport=()=>document.documentElement.style.setProperty('--ls-visual-height',window.visualViewport.height+'px');window.visualViewport.addEventListener('resize',syncCommentViewport);syncCommentViewport()}
+if(window.visualViewport){const syncCommentViewport=()=>{const vv=window.visualViewport;document.documentElement.style.setProperty('--ls-visual-height',vv.height+'px');document.documentElement.style.setProperty('--ls-visual-top',vv.offsetTop+'px')};window.visualViewport.addEventListener('resize',syncCommentViewport);window.visualViewport.addEventListener('scroll',syncCommentViewport);syncCommentViewport()}
 
 $('commentList').addEventListener('click',e=>{
  const like=e.target.closest('[data-comment-like]');if(like)return toggleCommentLike(like.dataset.commentLike,like);
