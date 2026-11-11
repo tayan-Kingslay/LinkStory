@@ -1,0 +1,67 @@
+/* LinkStory AT3 — camada visual compartilhada. Somente aparência; sem alterar fluxos ou dados. */
+:root{
+ --at3-ink:#303943;--at3-muted:#77818d;--at3-glass:rgba(255,255,255,.66);
+ --at3-border:rgba(255,255,255,.88);--at3-shadow:0 14px 38px rgba(67,77,90,.10);
+ --at3-radius:22px;
+}
+html:not([data-ls-theme="dark"]){background:#f4f2ef!important}
+body:not(:has(.reader-title)){
+ background-color:#f4f2ef!important;
+ background-image:radial-gradient(ellipse at 12% 8%,rgba(255,255,255,.96),transparent 34%),radial-gradient(ellipse at 86% 26%,rgba(214,219,225,.42),transparent 38%),radial-gradient(ellipse at 42% 82%,rgba(225,221,214,.46),transparent 42%),linear-gradient(128deg,#f8f7f5,#eeece8 48%,#f8f7f5)!important;
+ color:var(--at3-ink)!important;
+}
+:where(.header,.top,.topbar,.chat-header,.library-heading,.login-box,.form,.panel,.card,.profile,.intro,.social-panel,.settings-menu,.menu-wrap,.menu-dialog,.comments-screen,.modal,.sheet,.compose-wrap,.message-card,.conversation,.suggestion-item,.library-card,.legal-card,.stat,.metric,.account-pill){
+ border-color:rgba(255,255,255,.82)!important;
+ box-shadow:var(--at3-shadow)!important;
+}
+:where(.header,.top,.topbar,.chat-header,.library-heading,.login-box,.form,.panel,.card,.profile,.intro,.social-panel,.settings-menu,.menu-wrap,.comments-screen,.modal,.sheet,.compose-wrap,.message-card,.conversation,.suggestion-item,.library-card,.legal-card,.stat,.metric,.account-pill){
+ border-radius:var(--at3-radius)!important;
+}
+:where(.header,.top,.topbar,.chat-header){
+ background:rgba(255,255,255,.65)!important;
+ border:1px solid var(--at3-border)!important;
+ backdrop-filter:blur(22px) saturate(145%)!important;
+ -webkit-backdrop-filter:blur(22px) saturate(145%)!important;
+}
+:where(.panel,.card,.form,.login-box,.settings-menu,.message-card,.conversation,.library-card,.suggestion-item,.stat,.metric,.account-pill){
+ background:rgba(255,255,255,.63)!important;
+ backdrop-filter:blur(18px) saturate(130%);
+ -webkit-backdrop-filter:blur(18px) saturate(130%);
+}
+:where(input,textarea,select){
+ background:rgba(255,255,255,.76)!important;
+ border-color:rgba(255,255,255,.95)!important;
+ border-radius:14px!important;
+ box-shadow:inset 0 1px 2px rgba(65,75,88,.035)!important;
+}
+:where(button,.btn,.primary,.secondary,.tab,.tabs button){
+ border-radius:14px!important;
+}
+:where(.avatar,.cover-shell,.cover-preview,.preview,.mock-cover,.book){
+ box-shadow:0 10px 26px rgba(60,70,82,.13)!important;
+}
+:where(.bottom-nav,.ls-bottom-nav,#lsBottomNav){
+ background:rgba(255,255,255,.68)!important;
+ border:1px solid rgba(255,255,255,.9)!important;
+ box-shadow:0 12px 36px rgba(62,72,85,.12)!important;
+ backdrop-filter:blur(24px) saturate(150%)!important;
+ -webkit-backdrop-filter:blur(24px) saturate(150%)!important;
+}
+:where(.menu-dialog,.menu-wrap,dialog){
+ backdrop-filter:blur(22px) saturate(140%);
+}
+:where(h1,h2,h3,.section-title,.shelf-title){letter-spacing:-.035em}
+:where(.muted,.subtitle,.desc,.meta,.detail-meta){color:#7b8793}
+html[data-ls-theme="dark"] body:not(:has(.reader-title)){
+ background-image:radial-gradient(ellipse at 15% 8%,rgba(104,117,133,.16),transparent 36%),linear-gradient(135deg,#171a1f,#20252c 55%,#171a1f)!important;
+ color:#eef1f4!important;
+}
+html[data-ls-theme="dark"] :where(.header,.top,.topbar,.chat-header,.library-heading,.login-box,.form,.panel,.card,.profile,.intro,.social-panel,.settings-menu,.menu-wrap,.comments-screen,.modal,.sheet,.compose-wrap,.message-card,.conversation,.suggestion-item,.library-card,.legal-card,.stat,.metric,.account-pill){
+ background:rgba(30,35,42,.72)!important;border-color:rgba(255,255,255,.10)!important;color:#eef1f4!important;
+}
+html[data-ls-theme="dark"] :where(input,textarea,select){background:rgba(30,37,46,.88)!important;border-color:rgba(255,255,255,.14)!important;color:#eef1f4!important}
+html[data-ls-theme="dark"] :where(.muted,.subtitle,.desc,.meta,.detail-meta){color:#b9c2cc!important}
+html[data-ls-theme="dark"] :where(.bottom-nav,.ls-bottom-nav,#lsBottomNav){background:rgba(25,30,37,.78)!important;border-color:rgba(255,255,255,.10)!important}
+@media(max-width:640px){
+ :where(.panel,.card,.form,.login-box,.profile,.intro,.social-panel,.settings-menu){border-radius:19px!important}
+}
