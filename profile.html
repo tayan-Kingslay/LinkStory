@@ -39,9 +39,8 @@ h2{letter-spacing:-.8px}
 .edit-field{display:block;margin:12px 0}.edit-field span{display:block;font-size:11px;font-weight:850;margin-bottom:6px}
 .edit-field input,.edit-field textarea{width:100%;border:1px solid var(--l);border-radius:10px;padding:12px;font:inherit}.edit-field textarea{min-height:100px;resize:vertical}
 .edit-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.edit-status{font-size:12px;color:var(--m);min-height:18px}
-@media(max-width:600px){.profile-actions{display:grid;grid-template-columns:1fr 1fr}.profile-action{padding:10px 8px}.edit-modal{padding:17px}}
+@media(max-width:600px){.profile-action{padding:10px 8px}.edit-modal{padding:17px}}
 
-.reader-month-sub{margin:6px 0 0;color:#718198;font-size:12px}.reader-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.reader-rank{min-width:0;padding:15px 10px;border:1px solid #e2eaf3;border-radius:16px;background:linear-gradient(160deg,#fff,#f5f9ff);text-align:center}.reader-rank .medal{font-size:25px;display:block;margin-bottom:7px}.reader-rank strong{display:block;font-size:12px;overflow-wrap:anywhere}.reader-rank small{display:block;margin-top:5px;color:#718198;font-size:10px}.reader-rank .rank-no{display:block;margin-bottom:5px;color:#0b72e7;font-size:9px;font-weight:900;letter-spacing:1.4px}.reader-own-badge{margin-top:10px;padding:12px 14px;border:1px solid #cfe2f8;border-radius:13px;background:#edf6ff;color:#135da9;font-size:12px;font-weight:800}.reader-month-status{grid-column:1/-1;padding:23px 16px;border:1px dashed #dbe5ef;border-radius:15px;text-align:center;color:#718198;font-size:12px;line-height:1.55}.reader-rank.me{border-color:#a9cff8;box-shadow:0 5px 18px #0b72e714}@media(max-width:430px){.reader-podium{gap:6px}.reader-rank{padding:12px 6px}.reader-rank strong{font-size:10px}.reader-rank small{font-size:9px}}
 </style><link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="at3-global.css?v=2">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
@@ -104,8 +103,7 @@ h2{letter-spacing:-.8px}
 .verification-chip img{width:24px;height:24px;object-fit:contain}
 .verification-action{border:1px solid #d9b65c;background:#fff8e5;color:#815b08;border-radius:10px;padding:9px 12px;font-size:11px;font-weight:850}
 #verificationStatus{font-size:11px;color:#718198}
-</style><div class="verification-area" id="verificationArea" hidden><div id="verificationChip" class="verification-chip" hidden></div><button id="requestVerification" class="verification-action" hidden>Solicitar selo de influenciador</button><span id="verificationStatus"></span></div><div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button><a class="profile-action" href="friends.html">Amigos e mensagens</a><a class="profile-action" href="settings.html">Configurações</a></div>
-<section class="section reader-month" id="readerMonth"><div class="head"><div><span class="ey">CONQUISTAS DA COMUNIDADE</span><h2>Leitor do mês</h2><p class="reader-month-sub" id="readerMonthSubtitle">O ranking mensal acompanha os capítulos lidos.</p></div></div><div class="reader-podium" id="readerPodium"><div class="reader-month-status" id="readerMonthStatus">Carregando emblemas…</div></div><div class="reader-own-badge" id="readerOwnBadge" hidden></div></section>
+</style><div class="verification-area" id="verificationArea" hidden><div id="verificationChip" class="verification-chip" hidden></div><button id="requestVerification" class="verification-action" hidden>Solicitar selo de influenciador</button><span id="verificationStatus"></span></div><div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button></div>
 <section class="section"><div class="head"><div><span class="ey">PUBLICAÇÕES</span><h2>Minhas obras</h2></div></div><div id="empty" class="empty"><strong>Nenhuma obra publicada.</strong>Quando você publicar, ela aparecerá aqui.</div><div id="works" class="works"></div></section><section class="section" id="myPhotosSection" hidden><div class="head"><div><span class="ey">FEED</span><h2>Fotos</h2></div></div><div id="myPhotos" class="profile-photo-grid"></div></section><style>.profile-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.profile-photo-grid a{display:block;aspect-ratio:1;overflow:hidden;border-radius:13px;background:#edf3fa}.profile-photo-grid img{width:100%;height:100%;object-fit:cover;display:block}@media(max-width:560px){.profile-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style></main>
 <dialog id="myNetworkDialog" style="width:min(460px,calc(100% - 24px));max-height:80vh;border:1px solid #dce8f7;border-radius:20px;padding:0;box-shadow:0 24px 70px #102d501f"><div style="display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #e8edf4"><h2 id="myNetworkTitle" style="margin:0;font-size:18px">Seguidores</h2><button type="button" id="closeMyNetwork" aria-label="Fechar" style="width:36px;height:36px;border:0;border-radius:10px;background:#f1f5fa;font-size:22px">×</button></div><div id="myNetworkList" style="display:grid;gap:8px;padding:13px;overflow:auto;max-height:65vh"><div style="padding:28px 16px;text-align:center;color:#78889d;font-size:13px">Carregando…</div></div></dialog>
 <style>#myNetworkDialog::backdrop{background:#10203380;backdrop-filter:blur(3px)}.my-network-person{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e5edf6;border-radius:13px;text-decoration:none;color:inherit}.my-network-person img,.my-network-avatar{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;background:#eaf3ff;display:grid;place-items:center;color:#1769d2;font-weight:900}.my-network-person span{min-width:0}.my-network-person strong,.my-network-person small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.my-network-person small{margin-top:3px;color:#78889d;font-size:11px}.my-network-empty{padding:28px 16px;text-align:center;color:#78889d;font-size:13px}</style>
@@ -149,41 +147,7 @@ h2{letter-spacing:-.8px}
   else avatar.textContent=(p?.display_name||'U').slice(0,1).toUpperCase();
  }
 
- async function loadReaderBadges(){
-  const status=$('readerMonthStatus'),podium=$('readerPodium'),own=$('readerOwnBadge');
-  const now=new Date(),monthName=new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(now);
-  $('readerMonthSubtitle').textContent='Ranking parcial de '+monthName+'. O emblema definitivo é fechado no último dia do mês.';
-  try{
-   const monthStart=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-01';
-   const previousDate=new Date(now.getFullYear(),now.getMonth()-1,1);
-   const previousStart=previousDate.getFullYear()+'-'+String(previousDate.getMonth()+1).padStart(2,'0')+'-01';
-   const [{data,error},{data:previousRows,error:previousError}]=await Promise.all([
-    db.rpc('get_monthly_reader_leaderboard',{p_month:monthStart}),
-    db.rpc('get_monthly_reader_leaderboard',{p_month:previousStart})
-   ]);
-   if(error)throw error;if(previousError)throw previousError;
-   const rows=data||[];podium.replaceChildren();
-   if(!rows.length){const empty=document.createElement('div');empty.className='reader-month-status';empty.textContent='O ranking ainda está começando. Leia capítulos durante este mês para conquistar seu emblema.';podium.append(empty);const previousWinner=(previousRows||[]).find(person=>person.rank_position===1);if(previousWinner?.reader_id===user?.id){const previousName=new Intl.DateTimeFormat('pt-BR',{month:'long'}).format(previousDate);own.hidden=false;own.textContent='🏆 Você conquistou o emblema Leitor do mês de '+previousName+'!'}return}
-   const medals=['🥇','🥈','🥉'];
-   rows.slice(0,3).forEach((person,index)=>{
-    const card=document.createElement('div');card.className='reader-rank'+(person.reader_id===user?.id?' me':'');
-    const medal=document.createElement('span');medal.className='medal';medal.textContent=medals[index]||'🏅';
-    const rank=document.createElement('span');rank.className='rank-no';rank.textContent=(index+1)+'º LUGAR';
-    const name=document.createElement('strong');name.textContent=person.display_name||person.username||'Leitor';
-    const count=document.createElement('small');count.textContent=person.chapters_read+' capítulo(s) lido(s)';
-    card.append(medal,rank,name,count);podium.append(card);
-   });
-   const mine=rows.find(person=>person.reader_id===user?.id);
-   const previousWinner=(previousRows||[]).find(person=>person.rank_position===1);
-   own.hidden=!mine&&previousWinner?.reader_id!==user?.id;
-   if(previousWinner?.reader_id===user?.id){
-    const previousName=new Intl.DateTimeFormat('pt-BR',{month:'long'}).format(previousDate);
-    own.textContent='🏆 Você conquistou o emblema Leitor do mês de '+previousName+'!';
-   }else if(mine){
-    own.textContent=mine.rank_position===1?'🏆 Você está em 1º lugar no ranking parcial — emblema Leitor do mês!':mine.rank_position<=3?'🏅 Você está entre os 3 leitores em destaque deste mês.':'Você está em '+mine.rank_position+'º lugar. Continue lendo para subir no ranking.';
-   }
-  }catch(error){status.textContent='Não foi possível carregar os emblemas agora.';console.warn('Reader of month:',error)}
- }
+
  function openEditor(){ $('editDisplayName').value=profile?.display_name||'';$('editAvatarFile').value='';$('avatarFileHint').textContent=profile?.avatar_url?'Foto atual mantida. Escolha outra para substituir.':'Escolha uma foto da galeria do celular.';$('editUsername').value=profile?.username||'';$('editBio').value=profile?.bio||'';setStatus('');$('editModal').showModal() }
  $('editProfile').onclick=openEditor;$('cancelEdit').onclick=()=>$('editModal').close();
  $('profileForm').onsubmit=async e=>{
@@ -209,7 +173,7 @@ h2{letter-spacing:-.8px}
  };
  try{
   const session=await db.auth.getSession();user=session.data.session?.user;
-  if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';$('readerMonthStatus').textContent='Entre na sua conta para acompanhar o ranking e conquistar emblemas.';return}
+  if(!user){$('name').textContent='Visitante';$('handle').textContent='Entre para editar seu perfil.';return}
   const result=await getLinkStoryProfile();if(result.error)throw result.error;profile=result.data;
   renderProfile(profile);$('editProfile').hidden=false;
   const [myFollowers,myFollowing]=await Promise.all([
@@ -245,7 +209,7 @@ h2{letter-spacing:-.8px}
   }
   $('openMyFollowers').onclick=()=>openMyNetwork('followers');
   $('openMyFollowing').onclick=()=>openMyNetwork('following');
-  await Promise.all([loadReaderBadges(),loadVerification()]);
+  await loadVerification();
   if(location.hash==='#edit')openEditor();
   const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===user.id);
   if(works.length){$('empty').style.display='none';const container=$('works');works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));works.forEach((m,index)=>{
