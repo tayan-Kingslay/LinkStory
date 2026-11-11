@@ -40,7 +40,10 @@ async function loadFeed(reset=false){
     sb().from('comments').select('post_id').in('post_id',ids),
     state.user?sb().from('post_likes').select('post_id').eq('user_id',state.user.id).in('post_id',ids):Promise.resolve({data:[],error:null})
    ]);
-   if(l.error)throw l.error;if(c.error)throw c.error;if(m.error)throw m.error;likes=l.data||[];comments=c.data||[];mine=m.data||[];
+   if(l.error)console.warn("FY likes count unavailable:",l.error);
+   if(c.error)console.warn("FY comments count unavailable:",c.error);
+   if(m.error)console.warn("FY own likes unavailable:",m.error);
+   likes=l.error?[]:(l.data||[]);comments=c.error?[]:(c.data||[]);mine=m.error?[]:(m.data||[]);
   }
   const counts=arr=>arr.reduce((a,x)=>(a[x.post_id]=(a[x.post_id]||0)+1,a),{});
   const lc=counts(likes),cc=counts(comments),liked=new Set(mine.map(x=>x.post_id));
