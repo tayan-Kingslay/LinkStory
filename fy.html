@@ -498,11 +498,65 @@ html[data-ls-theme="dark"] #commentsDialog .comment-reply-button{color:#a8bdd5}
 .tabs{position:static!important;top:auto!important;z-index:auto!important;}
 
 .top-switch{display:flex;align-items:center;gap:5px;margin-left:12px;padding:4px;border:1px solid var(--line);border-radius:999px;background:#f5f8fc}.top-switch a{padding:8px 13px;border-radius:999px;color:#718096;font-size:12px;font-weight:850;white-space:nowrap}.top-switch a.top-switch-active{background:#eaf4ff;color:#0758b5}.top-create{margin-left:auto;width:40px;height:40px;border:0;border-radius:13px;background:#0b72e7;color:#fff;font-size:25px;line-height:1;font-weight:500}.topbar .top-create{flex:0 0 40px}.topbar .top-switch{margin-left:auto}.topbar .top-create{margin-left:0}@media(max-width:430px){.topbar{gap:7px;padding:0 9px}.brand{font-size:19px}.top-switch{margin-left:auto!important}.top-switch a{padding:8px 10px;font-size:11px}.top-create{width:36px;height:36px;flex-basis:36px}}
+
+/* Réplica da referência enviada: página Pra você — mobile first */
+.topbar{
+ position:relative!important;top:0!important;width:100%!important;max-width:760px!important;
+ height:auto!important;min-height:0!important;margin:0 auto!important;padding:12px 14px 10px!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;gap:12px!important;
+ border:0!important;border-bottom:1px solid #dce5f0!important;border-radius:0!important;
+ background:rgba(247,249,253,.97)!important;box-shadow:none!important;backdrop-filter:none!important;
+}
+.topbar .brand{display:flex!important;align-items:center!important;justify-content:center!important;width:100%;height:76px;font-size:0!important;line-height:0}
+.topbar .brand img{display:block!important;width:210px!important;height:68px!important;max-height:68px!important;object-fit:contain!important}
+.topbar .top-switch{
+ order:2!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ width:min(370px,100%)!important;margin:0 auto!important;padding:5px!important;gap:4px!important;
+ border:1px solid #d7e1ef!important;border-radius:999px!important;background:#e8eef8!important;
+ box-shadow:inset 0 1px 2px rgba(32,57,91,.05)!important;
+}
+.topbar .top-switch a{flex:1!important;text-align:center!important;padding:12px 15px!important;border-radius:999px!important;color:#263449!important;font-size:15px!important;font-weight:750!important}
+.topbar .top-switch a.top-switch-active{background:#fff!important;color:#111827!important;box-shadow:0 2px 8px rgba(22,43,72,.09)!important}
+.topbar .top-create{position:absolute!important;right:14px!important;top:25px!important;width:38px!important;height:38px!important;min-height:38px!important;border-radius:50%!important}
+main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!important}
+.tabs{display:none!important}
+.composer{margin:22px 14px 16px!important;padding:18px!important;border:1px solid #dce5f0!important;border-radius:22px!important;background:#fff!important;box-shadow:0 8px 24px rgba(27,55,91,.055)!important}
+.composer-row{gap:13px!important}
+.composer .avatar{width:58px!important;height:58px!important;flex-basis:58px!important;border:2px solid #dce6f2!important}
+.compose-open{min-height:58px!important;padding:14px 17px!important;border:1px solid #dce5f0!important;border-radius:23px!important;background:#f7f9fc!important;color:#536276!important;font-size:15px!important}
+.compose-actions{display:flex!important;justify-content:center!important;flex-wrap:wrap!important;gap:9px!important;margin:14px 0 0 0!important}
+.chip{min-height:44px!important;padding:0 16px!important;border:1px solid #dce5f0!important;border-radius:999px!important;background:#f7f9fc!important;color:#526176!important;font-size:13px!important;font-weight:800!important}
+.post{position:relative!important;margin:0 14px 17px!important;padding:18px!important;border:1px solid #dce5f0!important;border-radius:23px!important;background:#fff!important;box-shadow:0 8px 24px rgba(27,55,91,.055)!important}
+.post-head{gap:12px!important}
+.post-head .avatar{width:54px!important;height:54px!important;flex-basis:54px!important}
+.author strong{font-size:15px!important;color:#17263a!important}
+.author small{font-size:12px!important;color:#7b899b!important}
+.kind{font-size:11px!important;padding:5px 10px!important}
+.body,.post-body{color:#17263a!important;font-size:15px!important;line-height:1.55!important}
+.post .media{border-radius:17px!important;border-color:#e2e9f2!important}
+.post-stats{font-size:11px!important;color:#718096!important}
+.actions .action{min-height:58px!important}
+@media(max-width:430px){
+ .topbar{padding:10px 12px 11px!important;gap:9px!important}
+ .topbar .brand{height:66px!important}
+ .topbar .brand img{width:190px!important;height:62px!important}
+ .topbar .top-switch{width:min(370px,calc(100% - 12px))!important}
+ .topbar .top-switch a{padding:11px 12px!important;font-size:14px!important}
+ .topbar .top-create{right:10px!important;top:20px!important;width:34px!important;height:34px!important}
+ .composer{margin:18px 10px 15px!important;padding:15px!important}
+ .composer .avatar{width:52px!important;height:52px!important;flex-basis:52px!important}
+ .compose-open{min-height:52px!important;font-size:14px!important;padding:12px 14px!important}
+ .compose-actions{gap:7px!important}
+ .chip{min-height:42px!important;padding:0 13px!important;font-size:12px!important}
+ .post{margin:0 10px 14px!important;padding:15px!important}
+ .post-head .avatar{width:48px!important;height:48px!important;flex-basis:48px!important}
+}
+
 </style>
   <link rel="stylesheet" href="visual-system.css?v=4">
 </head>
 <body>
-<header class="topbar"><a class="brand" href="index.html">Link<b>Story</b></a><nav class="top-switch" aria-label="Seção"><a class="top-switch-active" href="fy.html">Pra você</a><a href="fy-videos.html">Fy</a></nav><button class="top-create" id="openFyComposer" type="button" aria-label="Criar publicação">＋</button></header>
+<header class="topbar"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><nav class="top-switch" aria-label="Seção"><a class="top-switch-active" href="fy.html">Para você</a><a href="fy-videos.html">Seguindo</a></nav><button class="top-create" id="openFyComposer" type="button" aria-label="Criar publicação">＋</button></header>
 <main>
 <nav class="tabs" aria-label="Feed"><button class="tab active" data-feed="for-you">Para você</button><button class="tab" data-feed="following">Seguindo</button><button class="tab" data-feed="ideas">Ideias</button><button class="tab" data-feed="videos">Vídeos</button></nav>
 <section class="composer" id="composer">
