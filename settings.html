@@ -30,6 +30,107 @@ h2{letter-spacing:-.8px}
 </style><link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="at3-global.css?v=2">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
+
+<style id="at3-settings-finish">
+/* AT3 — Configurações: acabamento Liquid Glass, sem alterar controles ou fluxos */
+html,body{background-color:#f2f6fb!important;background-image:radial-gradient(ellipse at 8% 0%,rgba(255,255,255,.98),transparent 38%),radial-gradient(ellipse at 95% 18%,rgba(208,228,250,.42),transparent 42%),linear-gradient(155deg,#f8fafd 0%,#eff4fa 62%,#f7f9fc 100%)!important}
+.topbar{height:68px!important;max-width:1120px!important;margin:9px auto 0!important;width:calc(100% - 24px)!important;padding:0 14px!important;gap:14px!important;border:1px solid rgba(255,255,255,.96)!important;border-radius:19px!important;background:rgba(255,255,255,.78)!important;box-shadow:0 10px 30px rgba(24,48,78,.075),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(22px) saturate(160%)!important;backdrop-filter:blur(22px) saturate(160%)!important}
+.topbar .back{width:40px!important;height:40px!important;border:1px solid #dce7f2!important;border-radius:13px!important;background:rgba(255,255,255,.82)!important;color:#526b86!important;font-size:25px!important;box-shadow:0 3px 11px rgba(24,48,78,.055)!important}
+.topbar .logo{font-size:22px!important;letter-spacing:-1.25px!important;color:#23364d!important}
+main{width:min(980px,calc(100% - 36px))!important;padding:36px 0 80px!important}
+.intro{padding:0 2px!important}
+.eyebrow{font-size:10px!important;letter-spacing:2.5px!important;color:#397fca!important}
+h1{font-size:clamp(35px,5vw,48px)!important;letter-spacing:-2.5px!important;color:#1b2e45!important;margin:9px 0 11px!important}
+.intro p{font-size:14px!important;line-height:1.65!important;color:#75869a!important}
+.layout{gap:17px!important;margin-top:26px!important;grid-template-columns:205px minmax(0,1fr)!important}
+.settings-menu{padding:7px!important;border:1px solid rgba(255,255,255,.96)!important;border-radius:17px!important;background:rgba(255,255,255,.72)!important;box-shadow:0 9px 26px rgba(24,48,78,.055),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(18px)!important;backdrop-filter:blur(18px)!important}
+.settings-menu button{padding:12px 11px!important;border-radius:11px!important;font-size:12px!important;font-weight:800!important;color:#71839a!important;transition:background .18s ease,color .18s ease,transform .18s ease!important}
+.settings-menu button:hover{background:rgba(231,241,252,.75)!important;color:#2869ad!important}
+.settings-menu button.active{background:linear-gradient(135deg,rgba(225,240,255,.96),rgba(241,247,255,.9))!important;color:#1768bd!important;box-shadow:inset 0 0 0 1px rgba(161,201,242,.36)!important}
+.panel{gap:13px!important}
+.card{padding:21px!important;border:1px solid rgba(255,255,255,.98)!important;border-radius:19px!important;background:rgba(255,255,255,.84)!important;box-shadow:0 10px 28px rgba(24,48,78,.065),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(16px)!important;backdrop-filter:blur(16px)!important;scroll-margin-top:95px!important}
+.card h2{font-size:17px!important;letter-spacing:-.45px!important;color:#263b53!important}
+.card-head{margin-bottom:15px!important}
+.card-head p{font-size:12px!important;line-height:1.5!important;color:#8796a8!important}
+.profile{gap:13px!important;border-color:#e9eff5!important;padding-bottom:16px!important}
+.avatar{width:54px!important;height:54px!important;background:linear-gradient(145deg,#e7f2ff,#cfe4fb)!important;color:#2675c9!important;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)!important}
+.profile strong{font-size:14px!important;color:#2a3e55!important}
+.edit{border:1px solid #d4e5f6!important;background:rgba(244,249,255,.92)!important;color:#216bb6!important;border-radius:11px!important;padding:10px 13px!important;font-size:12px!important;font-weight:850!important;box-shadow:0 3px 10px rgba(32,91,150,.045)!important;transition:transform .18s ease,box-shadow .18s ease,background .18s ease!important}
+.edit:hover{transform:translateY(-1px)!important;background:#fff!important;box-shadow:0 7px 16px rgba(32,91,150,.09)!important}
+.row{min-height:57px!important;gap:13px!important;border-color:#edf1f6!important}
+.row strong{font-size:13px!important;color:#354a62!important}
+.row p{font-size:11px!important;line-height:1.45!important;color:#8998aa!important}
+.chevron{color:#9aacc0!important}
+.switch{flex:0 0 auto!important;width:46px!important;height:27px!important;background:#dce5ee!important;box-shadow:inset 0 1px 2px rgba(20,43,68,.08)!important;transition:background .18s ease!important}
+.switch:after{width:21px!important;height:21px!important;box-shadow:0 2px 6px rgba(15,34,55,.18)!important}
+.switch.on{background:#3287df!important}
+.switch.on:after{transform:translateX(19px)!important}
+.appearance-options{gap:12px!important;margin-bottom:18px!important}
+.theme-option{border:1px solid #e1eaf3!important;border-radius:15px!important;background:rgba(255,255,255,.76)!important;padding:12px!important;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease!important}
+.theme-option:hover{transform:translateY(-2px)!important;box-shadow:0 9px 20px rgba(24,48,78,.08)!important}
+.theme-option.selected{border:2px solid #6eafea!important;padding:11px!important;box-shadow:0 0 0 4px rgba(60,139,220,.09)!important}
+.theme-preview{border-radius:11px!important;box-shadow:inset 0 0 0 1px rgba(120,150,180,.12)!important}
+.theme-option strong{font-size:13px!important;color:#3c5068!important}
+.radio{width:17px!important;height:17px!important}
+.danger{border-color:rgba(231,190,190,.7)!important;background:rgba(255,251,251,.88)!important}
+.danger h2{color:#a34a4a!important}
+.danger button:not(.edit){border-radius:11px!important}
+#passwordForm input,#mangakaActivationForm input{background:rgba(255,255,255,.9)!important;border-color:#dfe8f1!important;border-radius:11px!important;min-height:44px!important;font-size:13px!important;outline:none!important;transition:border-color .18s ease,box-shadow .18s ease!important}
+#passwordForm input:focus,#mangakaActivationForm input:focus{border-color:#8bbbe9!important;box-shadow:0 0 0 4px rgba(45,128,211,.09)!important}
+#guardBirthDate{background:rgba(255,255,255,.9)!important;border-color:#dfe8f1!important;border-radius:10px!important;min-height:40px!important;color:#43566c!important}
+#creatorModeArea [data-active-mode]{min-height:130px!important}
+#creatorModeArea [data-active-mode].selected{border-color:#78b5ed!important}
+@media(max-width:760px){
+ .topbar{height:62px!important;margin:8px 9px 0!important;width:calc(100% - 18px)!important;border-radius:16px!important;padding:0 11px!important}
+ .topbar .back{width:38px!important;height:38px!important;border-radius:12px!important}
+ .topbar .logo{font-size:21px!important}
+ main{width:calc(100% - 28px)!important;padding:25px 0 65px!important}
+ .layout{grid-template-columns:minmax(0,1fr)!important;gap:12px!important;margin-top:21px!important}
+ .settings-menu{position:static!important;display:flex!important;overflow-x:auto!important;overscroll-behavior-x:contain!important;gap:4px!important;padding:5px!important;border-radius:14px!important;scrollbar-width:none!important}
+ .settings-menu::-webkit-scrollbar{display:none!important}
+ .settings-menu button{flex:0 0 auto!important;min-width:max-content!important;padding:10px 12px!important;font-size:11px!important}
+ .card{padding:17px!important;border-radius:17px!important}
+ .panel{gap:11px!important}
+ .appearance-options{gap:9px!important}
+ .theme-preview{height:116px!important}
+}
+@media(max-width:430px){
+ main{width:calc(100% - 24px)!important;padding-top:22px!important}
+ h1{font-size:36px!important;letter-spacing:-2px!important}
+ .intro p{font-size:13px!important}
+ .card{padding:15px!important}
+ .profile{gap:10px!important;flex-wrap:wrap!important}
+ .profile .edit{margin-left:auto!important}
+ .avatar{width:48px!important;height:48px!important}
+ .row{min-height:55px!important;gap:9px!important}
+ .row strong{font-size:12px!important}
+ .row p{font-size:10px!important}
+ .edit{padding:9px 10px!important;font-size:11px!important}
+ .theme-preview{height:100px!important}
+ .theme-option{padding:9px!important}
+ .theme-option.selected{padding:8px!important}
+ #creatorModeArea [data-active-mode]{min-height:118px!important;padding:10px!important}
+}
+@media(prefers-reduced-motion:reduce){.settings-menu button,.edit,.theme-option,.switch{transition:none!important}.theme-option:hover,.edit:hover{transform:none!important}}
+html[data-ls-theme="dark"] body{background-image:radial-gradient(ellipse at 8% 0%,rgba(98,132,174,.16),transparent 38%),linear-gradient(155deg,#121b28 0%,#192536 62%,#131e2c 100%)!important;color:#edf4fc!important}
+html[data-ls-theme="dark"] .topbar{background:rgba(23,34,49,.88)!important;border-color:rgba(150,177,210,.2)!important}
+html[data-ls-theme="dark"] .topbar .back{background:rgba(34,49,68,.9)!important;border-color:#3b5068!important;color:#dceaff!important}
+html[data-ls-theme="dark"] .topbar .logo{color:#e8f1fc!important}
+html[data-ls-theme="dark"] h1,html[data-ls-theme="dark"] .card h2,html[data-ls-theme="dark"] .profile strong,html[data-ls-theme="dark"] .row strong{color:#e7f0fb!important}
+html[data-ls-theme="dark"] .intro p,html[data-ls-theme="dark"] .card-head p,html[data-ls-theme="dark"] .row p{color:#a6b7ca!important}
+html[data-ls-theme="dark"] .settings-menu,html[data-ls-theme="dark"] .card{background:rgba(28,42,59,.88)!important;border-color:rgba(151,177,208,.19)!important;box-shadow:0 10px 28px rgba(0,0,0,.2)!important}
+html[data-ls-theme="dark"] .settings-menu button{color:#a8bad0!important}
+html[data-ls-theme="dark"] .settings-menu button.active{background:rgba(49,103,160,.28)!important;color:#9dccfb!important;box-shadow:inset 0 0 0 1px rgba(115,171,226,.22)!important}
+html[data-ls-theme="dark"] .row,html[data-ls-theme="dark"] .profile{border-color:#35485d!important}
+html[data-ls-theme="dark"] .edit{background:rgba(40,62,86,.86)!important;border-color:#46617f!important;color:#acd4ff!important}
+html[data-ls-theme="dark"] .avatar{background:linear-gradient(145deg,#29496d,#203a58)!important;color:#b8dcff!important}
+html[data-ls-theme="dark"] .theme-option{background:rgba(32,48,67,.8)!important;border-color:#40556d!important}
+html[data-ls-theme="dark"] .theme-option strong{color:#dce8f6!important}
+html[data-ls-theme="dark"] .danger{background:rgba(65,36,43,.45)!important;border-color:#69454d!important}
+html[data-ls-theme="dark"] .danger h2{color:#ffb5b5!important}
+html[data-ls-theme="dark"] #passwordForm input,html[data-ls-theme="dark"] #mangakaActivationForm input,html[data-ls-theme="dark"] #guardBirthDate{background:#1c2b3e!important;border-color:#40556d!important;color:#e8f1fc!important}
+</style>
+
 </head><body><header class="topbar"><a class="back" href="index.html">‹</a><a class="logo" href="index.html">Link<b>Story</b></a><span class="top-title">Configurações</span></header><main><section class="intro"><span class="eyebrow">LINKSTORY · CONTA</span><h1>Configurações.</h1><p>Escolha uma categoria. O conteúdo da categoria selecionada aparece aqui, sem deixar todas as outras opções empilhadas na mesma tela.</p></section><div class="layout"><aside class="settings-menu"><button class="active" data-target="conta">Conta</button><button data-target="perfil">Perfil</button><button data-target="tipo-conta">Ser um Mangaká</button><button data-target="exibir">Exibir</button><button data-target="leitura">Leitura</button><button data-target="notificacoes">Notificações</button><button data-target="privacidade">Privacidade</button><button data-target="seguranca">Segurança</button></aside><section class="panel active" id="conta"><article class="card"><div class="card-head"><h2>Minha conta</h2><p>Informações básicas da sua conta.</p></div><div class="profile"><div class="avatar" id="settingsAvatar">LS</div><div><strong id="settingsName">Carregando…</strong><div id="settingsHandle" style="color:var(--muted);font-size:13px;margin-top:4px"></div></div><a class="edit" href="profile.html#edit">Editar perfil</a></div><div class="row"><div><strong>K-Code</strong><p id="settingsKCode">Carregando…</p></div></div><div class="row"><div><strong>KX.Mail</strong><p id="settingsKxMail">Carregando…</p></div></div><div class="row"><div><strong>Conta autenticada</strong><p id="settingsEmail">Carregando…</p></div></div><div id="accountMessage" role="status" style="font-size:12px;color:var(--muted);padding-top:12px"></div></article><article class="card"><div class="card-head"><h2>Conexões</h2><p>Fale com pessoas que você adicionou.</p></div><a class="row" href="friends.html"><div><strong>Amigos e mensagens</strong><p>Gerencie solicitações e abra seus chats privados.</p></div><span class="chevron">›</span></a><a class="row" href="kx-mail.html"><div><strong>KX Mail</strong><p>Mensagens internas do LinkStory.</p></div><span class="chevron">›</span></a></article></section><section class="panel" id="perfil"><article class="card"><div class="card-head"><h2>Perfil público</h2><p>Informações que aparecem para outros leitores.</p></div><div class="row"><div><strong>Nome público</strong><p id="settingsPublicName">Carregando…</p></div></div><div class="row"><div><strong>Nome de usuário</strong><p id="settingsUsername">Carregando…</p></div></div><div class="row"><div><strong>Biografia</strong><p id="settingsBio">Nenhuma biografia adicionada.</p></div></div><a class="edit" href="profile.html#edit">Abrir edição do perfil</a></article></section><section class="panel" id="leitura"><article class="card"><div class="card-head"><h2>Preferências de leitura</h2><p>Escolha como o LinkStory deve se comportar.</p></div><div class="row"><div><strong>Continuar de onde parei</strong><p>Salvar automaticamente seu progresso.</p></div><button class="switch on" data-pref="continue_reading" data-default="true" aria-label="Continuar de onde parei"></button></div><div class="row"><div><strong>Modo de leitura contínuo</strong><p>Manter as páginas em um único fluxo vertical.</p></div><button class="switch on" data-pref="continuous_reader" data-default="true" aria-label="Leitura contínua"></button></div><div id="readingStatus" role="status" style="font-size:12px;color:var(--muted);padding-top:12px"></div></article></section><section class="panel" id="notificacoes"><article class="card"><div class="card-head"><h2>Notificações</h2><p>Controle os avisos que você recebe.</p></div><div class="row"><div><strong>Novos capítulos</strong><p>Receber avisos de mangás que você acompanha.</p></div><button class="switch on" data-pref="new_chapters" data-default="true" aria-label="Novos capítulos"></button></div><div class="row"><div><strong>Comentários e interações</strong><p>Receber avisos quando alguém interagir com você.</p></div><button class="switch" data-pref="interactions" data-default="false" aria-label="Comentários e interações"></button></div><div id="notificationStatus" role="status" style="font-size:12px;color:var(--muted);padding-top:12px"></div></article></section><section class="panel" id="privacidade"><article class="card"><div class="card-head"><h2>Privacidade e classificação</h2><p>Registre suas preferências de visibilidade e faixa etária.</p></div><div class="row"><div><strong>Perfil público</strong><p>Preferência de visibilidade do perfil.</p></div><button class="switch on" id="guardProfileVisibility" data-guard></button></div><div class="row"><div><strong>Mostrar mangás que acompanho</strong><p>Preferência para exibir sua biblioteca.</p></div><button class="switch" id="guardShowLibrary" data-guard></button></div><div class="row"><div><strong>Data de nascimento</strong><p>Usada para aplicar a classificação etária. A data é autodeclarada.</p></div><input id="guardBirthDate" type="date" style="max-width:160px;border:1px solid var(--line);border-radius:9px;padding:9px"></div><div class="row"><div><strong>Permitir conteúdo 18+</strong><p>Ativa a preferência de exibição para maiores de 18 anos.</p></div><button class="switch" id="guardAdultContent" data-guard></button></div><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:16px"><button class="edit" id="saveGuardSettings">Salvar preferências</button><span id="guardSettingsStatus" role="status" style="font-size:12px;color:var(--muted)"></span></div></article></section><section class="panel" id="tipo-conta"><article class="card"><div class="card-head"><h2>Conta de mangaká</h2><p>Ative o modo Mangaká na sua própria conta e libere a publicação de obras imediatamente.</p></div><div id="creatorApplicationArea"><form id="mangakaActivationForm">
 <label class="edit-field"><span>Nome artístico</span><input id="mangakaPenName" name="pen_name" required minlength="2" maxlength="80" placeholder="Como você assinará suas obras" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px"></label>
 <label class="edit-field"><span>Identificador KX Mangaká</span><input id="mangakaHandle" name="handle" required maxlength="100" autocapitalize="none" spellcheck="false" placeholder="tayan.kx.mangaka" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px"><small style="display:block;color:var(--muted);margin-top:5px">Sugestão automática pelo nome artístico. Você pode alterar.</small></label>
