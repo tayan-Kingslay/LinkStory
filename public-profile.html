@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#f4f7fc"><title>Perfil — LinkStory</title>
+<link rel="stylesheet" href="visual-system.css?v=4">
+<link rel="stylesheet" href="at3-global.css?v=2"><link rel="stylesheet" href="visual-refresh.css?v=2">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#17263a;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{height:76px;display:flex;align-items:center;gap:13px;padding:0 18px;background:rgba(255,255,255,.94);border-bottom:1px solid #e3eaf3;box-shadow:0 5px 22px rgba(20,48,82,.06)}
+.back{width:43px;height:43px;display:grid;place-items:center;border:1px solid #e1e9f2;border-radius:14px;color:#1769d2;background:#f7faff;text-decoration:none;font-size:25px}
+.brand{font-weight:950;letter-spacing:-1px;font-size:21px;color:#17263a}.brand span{color:#1769d2}
+main{width:min(850px,calc(100% - 28px));margin:26px auto 100px}
+/* Public profile: bounded identity and biography zones, no account labels. */
+.hero{display:grid;grid-template-columns:84px minmax(0,1fr);grid-template-rows:auto auto;align-items:center;column-gap:20px;row-gap:18px;padding:25px;background:#fff;border:1px solid #e2eaf3;border-radius:23px;box-shadow:0 8px 26px rgba(24,53,87,.05)}
+.avatar{grid-column:1;grid-row:1;width:84px;height:84px;border-radius:50%;display:grid;place-items:center;overflow:hidden;flex:none;background:#eaf3ff;color:#1769d2;font-size:32px;font-weight:900;border:3px solid white;box-shadow:0 4px 16px #18355718}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.identity{grid-column:2;grid-row:1;min-width:0}
+h1{margin:0 0 7px;font-size:clamp(25px,5vw,38px);line-height:1.12;letter-spacing:-1.2px;overflow-wrap:anywhere}.handle{color:#78889d;font-size:14px;overflow-wrap:anywhere}
+.bio{grid-column:1/-1;grid-row:2;display:block;min-width:0;width:100%;margin:0;padding:17px 0 0;border-top:1px solid #e8edf4;color:#53667d;font-size:14px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere}
+.section{margin-top:28px}.section h2{font-size:23px;letter-spacing:-.7px;margin:6px 0 14px}
+.works{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.work{background:#fff;border:1px solid #e2eaf3;border-radius:17px;padding:9px;min-width:0;box-shadow:0 5px 18px rgba(24,53,87,.04)}
+.cover{width:100%;aspect-ratio:3/4;border-radius:11px;background:#edf4fc;display:grid;place-items:center;overflow:hidden;color:#1769d2;font-weight:900}
+.cover img{width:100%;height:100%;object-fit:cover}.work h3{font-size:14px;margin:9px 3px 4px;overflow-wrap:anywhere}.work p{font-size:11px;color:#8291a4;margin:0 3px 4px}
+.empty{background:#fff;border:1px dashed #d7e2ef;border-radius:18px;padding:34px 18px;text-align:center;color:#7b8ba0;line-height:1.6}.empty strong{display:block;color:#20334b;margin-bottom:5px}
+@media(max-width:560px){header{height:70px;padding:0 13px}.hero{grid-template-columns:72px minmax(0,1fr);padding:18px;column-gap:14px;row-gap:15px;border-radius:19px}.avatar{width:72px;height:72px}.bio{font-size:13px;padding-top:14px}.works{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.work{padding:7px}main{margin-top:18px}}
+.invite-list{display:grid;gap:10px}.invite-card{display:flex;align-items:center;gap:12px;padding:12px;background:#fff;border:1px solid #e2eaf3;border-radius:15px}.invite-card img,.invite-cover{width:54px;height:68px;object-fit:cover;border-radius:8px;background:#edf4fc;display:grid;place-items:center;flex:none}.invite-info{min-width:0;flex:1}.invite-info strong,.invite-info small{display:block}.invite-info strong{font-size:13px}.invite-info small{font-size:11px;color:#78889d;margin-top:4px}.invite-actions{display:flex;gap:6px;flex-wrap:wrap}.invite-actions button{border:1px solid #dce6f1;border-radius:9px;padding:9px 11px;background:#fff;font-weight:800;font-size:11px}.invite-actions .accept{background:#1769d2;border-color:#1769d2;color:#fff}@media(max-width:560px){.invite-card{align-items:flex-start;flex-wrap:wrap}.invite-actions{width:100%}.invite-actions button{flex:1;min-height:42px}}.social-panel{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px;margin-top:16px;padding:18px;background:linear-gradient(135deg,#fff 0%,#f3f8ff 100%);border:1px solid #dce8f7;border-radius:21px;box-shadow:0 9px 26px rgba(24,65,112,.07);overflow:hidden}.social-panel:before{content:"";position:absolute;inset:0 auto 0 0;width:4px;background:linear-gradient(180deg,#1769d2,#62a5ff)}.social-heading{grid-column:1/-1;display:flex;align-items:center;gap:8px;color:#71839a;font-size:10px;font-weight:900;letter-spacing:1.35px}.social-heading:before{content:"";width:7px;height:7px;border-radius:50%;background:#2782e8;box-shadow:0 0 0 4px #dcecff}.social-counts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;min-width:0}.social-count{display:flex;flex-direction:column;gap:3px;min-width:0;padding:12px 14px;background:rgba(255,255,255,.86);border:1px solid #e2ebf6;border-radius:14px;color:#71839a;font-size:12px;font-weight:650}.social-count strong{color:#172f4d;font-size:23px;line-height:1.1;letter-spacing:-.7px;font-weight:950}.follow-button{min-width:120px;min-height:46px;padding:0 18px;border:1px solid #1769d2;border-radius:13px;background:#1769d2;color:#fff;font-weight:850;font-size:13px;box-shadow:0 5px 13px #1769d226}.follow-button.following{background:#fff;color:#1769d2;box-shadow:none}.follow-button:disabled{opacity:.6}.follow-status{grid-column:1/-1;width:100%;font-size:11px;color:#71839a;margin:0}.follow-button[hidden]{display:none}@media(max-width:430px){.social-panel{grid-template-columns:1fr;padding:15px}.social-counts{gap:8px}.social-count{padding:11px}.social-count strong{font-size:21px}.follow-button{width:100%}}.social-count{cursor:pointer;text-align:left;font-family:inherit}.social-count:hover{border-color:#b8d5f5;background:#f8fbff}.social-count .count-hint{font-size:10px;color:#1769d2;font-weight:800;margin-top:5px}.network-dialog{width:min(460px,calc(100% - 24px));max-height:80vh;border:1px solid #dce8f7;border-radius:20px;padding:0;box-shadow:0 24px 70px #102d501f}.network-dialog::backdrop{background:#10203380;backdrop-filter:blur(3px)}.network-head{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #e8edf4}.network-head h2{margin:0;font-size:18px}.network-close{width:36px;height:36px;border:0;border-radius:10px;background:#f1f5fa;font-size:22px}.network-list{display:grid;gap:8px;padding:13px;overflow:auto}.network-person{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e5edf6;border-radius:13px;text-decoration:none;color:inherit}.network-person img,.network-avatar{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;background:#eaf3ff;display:grid;place-items:center;color:#1769d2;font-weight:900}.network-person span{min-width:0}.network-person strong,.network-person small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.network-person small{margin-top:3px;color:#78889d;font-size:11px}.network-empty{padding:28px 16px;text-align:center;color:#78889d;font-size:13px}</style><style id="public-profile-social-inline-style">.hero.hero-reordered{grid-template-columns:84px minmax(0,1fr);grid-template-rows:auto auto auto;row-gap:15px}.hero-reordered>.avatar{grid-column:1;grid-row:1}.hero-reordered>.identity{grid-column:2;grid-row:1}.hero-reordered>.social-inline{grid-column:1/-1;grid-row:2;display:flex;justify-content:center;align-items:center;gap:clamp(28px,10vw,76px);width:100%;padding:12px 8px;border-top:1px solid rgba(130,150,175,.18);border-bottom:1px solid rgba(130,150,175,.18)}.hero-reordered>.bio{grid-column:1/-1;grid-row:3;margin:0;padding:14px 0 0;border-top:0}.hero-reordered .social-inline-count{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:82px;padding:0;border:0;background:transparent;color:#78889d;font:inherit;font-size:12px;cursor:pointer}.hero-reordered .social-inline-count strong{font-size:20px;line-height:1.15;font-weight:900;color:#17263a}.follow-actions{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin-top:-12px}.follow-actions .follow-status{width:100%;font-size:11px;color:#71839a}.follow-actions .follow-button[hidden]{display:none}@media(max-width:560px){.hero.hero-reordered{grid-template-columns:72px minmax(0,1fr);row-gap:13px}.hero-reordered>.social-inline{gap:34px;padding:11px 4px}.hero-reordered .social-inline-count strong{font-size:19px}.follow-actions{margin-top:-8px}}</style><style id="public-profile-identity-overlap-fix">
+.hero.hero-reordered{grid-template-columns:clamp(76px,20vw,112px) minmax(0,1fr)!important;grid-template-rows:auto auto auto!important;align-items:center!important;row-gap:16px!important}
+.hero.hero-reordered>.avatar{grid-column:1!important;grid-row:1!important}
+.hero.hero-reordered>.identity{grid-column:2!important;grid-row:1!important;display:flex!important;flex-direction:column!important;align-self:center!important;justify-content:center!important;gap:7px!important;min-width:0!important;width:100%!important;overflow:visible!important}
+.hero.hero-reordered>.identity h1{display:block!important;position:static!important;width:100%!important;max-width:100%!important;margin:0!important;line-height:1.12!important;overflow-wrap:anywhere!important;word-break:normal!important}
+.hero.hero-reordered>.identity .handle{display:block!important;position:static!important;inset:auto!important;width:100%!important;max-width:100%!important;margin:0!important;line-height:1.35!important;overflow-wrap:anywhere!important}
+.hero.hero-reordered>.social-inline{grid-column:1/-1!important;grid-row:2!important;position:static!important;clear:both!important;margin:0!important}
+.hero.hero-reordered>.bio{grid-column:1/-1!important;grid-row:3!important;position:static!important}
+@media(max-width:560px){.hero.hero-reordered{grid-template-columns:76px minmax(0,1fr)!important;column-gap:14px!important;row-gap:16px!important;padding:18px!important}.hero.hero-reordered>.identity h1{font-size:clamp(22px,6vw,30px)!important;letter-spacing:-.8px!important}.hero.hero-reordered>.identity .handle{font-size:clamp(13px,3.8vw,16px)!important}.hero.hero-reordered>.social-inline{padding:13px 4px!important}}
+</style><style id="at3-public-profile-finish">
+/* AT3 — Perfil público: Liquid Glass, somente acabamento visual */
+body{min-height:100vh;background:radial-gradient(ellipse at 82% 0%,rgba(23,105,210,.09),transparent 38%),linear-gradient(145deg,#f1f5fa,#f8faff 58%,#edf3f9)!important;color:#202a38!important}
+header{position:sticky!important;top:9px!important;z-index:40!important;width:calc(100% - 18px)!important;margin:9px 9px 0!important;height:62px!important;padding:0 15px!important;border:1px solid rgba(255,255,255,.9)!important;border-radius:17px!important;background:rgba(255,255,255,.7)!important;-webkit-backdrop-filter:blur(25px) saturate(180%)!important;backdrop-filter:blur(25px) saturate(180%)!important;box-shadow:0 10px 28px rgba(24,53,87,.07),inset 0 1px 0 #fff!important}
+.back{border-color:rgba(177,192,210,.42)!important;background:rgba(245,249,255,.76)!important;box-shadow:inset 0 1px 0 #fff}
+main{margin-top:27px!important}
+.hero,.work,.invite-card,.social-panel,.network-dialog{border:1px solid rgba(255,255,255,.92)!important;background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(255,255,255,.65))!important;box-shadow:0 13px 34px rgba(24,53,87,.065),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%)}
+.hero{border-radius:23px!important;padding:25px!important}
+.avatar{box-shadow:0 5px 18px rgba(24,53,87,.1),0 0 0 3px rgba(255,255,255,.72)!important}
+.bio{border-color:rgba(130,150,175,.2)!important;color:#5e7086!important}
+.section{margin-top:30px!important}
+.section h2{letter-spacing:-.8px!important}
+.work{padding:10px!important;border-radius:18px!important;transition:transform .18s ease,box-shadow .18s ease}
+.work:active{transform:scale(.99)}
+.cover{border-radius:12px!important;background:linear-gradient(145deg,rgba(231,240,251,.9),rgba(246,249,253,.85))!important}
+.empty{border:1px dashed rgba(145,164,187,.55)!important;border-radius:18px!important;background:rgba(255,255,255,.62)!important;color:#718096!important}
+.invite-card{border-radius:16px!important;padding:13px!important}
+.invite-actions button,.network-close{border:1px solid rgba(177,192,210,.4)!important;border-radius:11px!important;background:rgba(255,255,255,.8)!important;box-shadow:inset 0 1px 0 #fff}
+.invite-actions .accept{background:linear-gradient(135deg,#1684f5,#0865d5)!important;color:#fff!important;border-color:transparent!important}
+.social-panel{border-radius:21px!important}
+.social-count{border-color:rgba(177,192,210,.35)!important;background:rgba(255,255,255,.72)!important;border-radius:14px!important}
+.follow-button{border-radius:13px!important;box-shadow:0 6px 16px rgba(23,105,210,.18)!important}
+.follow-button.following{border-color:rgba(23,105,210,.3)!important;background:rgba(255,255,255,.76)!important;box-shadow:none!important}
+.network-dialog{overflow:hidden!important;border-radius:21px!important}
+.network-head{background:rgba(255,255,255,.62);border-color:rgba(130,150,175,.2)!important}
+.network-person{border-color:rgba(177,192,210,.3)!important;border-radius:14px!important;background:rgba(255,255,255,.55)}
+.network-dialog::backdrop{background:rgba(16,32,51,.48)!important;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+@media(max-width:560px){header{top:7px!important;margin:7px 7px 0!important;width:calc(100% - 14px)!important;height:59px!important}main{margin-top:19px!important}.hero{padding:18px!important}.work{padding:8px!important}.section{margin-top:25px!important}}
+@media(prefers-reduced-motion:reduce){.work{transition:none!important}}
+html[data-ls-theme="dark"] body{background:radial-gradient(ellipse at 82% 0%,rgba(32,126,235,.16),transparent 38%),linear-gradient(145deg,#151a22,#202733 58%,#171d26)!important;color:#f2f5f9!important}
+html[data-ls-theme="dark"] .hero,html[data-ls-theme="dark"] .work,html[data-ls-theme="dark"] .invite-card,html[data-ls-theme="dark"] .social-panel,html[data-ls-theme="dark"] .network-dialog,html[data-ls-theme="dark"] .empty{border-color:rgba(255,255,255,.13)!important;background:linear-gradient(145deg,rgba(48,58,72,.9),rgba(29,36,47,.86))!important;box-shadow:0 14px 36px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08)!important}
+html[data-ls-theme="dark"] .brand,html[data-ls-theme="dark"] h1,html[data-ls-theme="dark"] .section h2,html[data-ls-theme="dark"] .work h3,html[data-ls-theme="dark"] .social-count strong{color:#f1f5fa!important}
+html[data-ls-theme="dark"] .handle,html[data-ls-theme="dark"] .bio,html[data-ls-theme="dark"] .work p,html[data-ls-theme="dark"] .invite-info small,html[data-ls-theme="dark"] .follow-status{color:#b2bfd0!important}
+html[data-ls-theme="dark"] .bio,html[data-ls-theme="dark"] .network-head{border-color:rgba(255,255,255,.12)!important}
+html[data-ls-theme="dark"] .social-count,html[data-ls-theme="dark"] .network-person,html[data-ls-theme="dark"] .invite-actions button,html[data-ls-theme="dark"] .network-close{color:#e5ebf3!important;background:rgba(19,26,36,.68)!important;border-color:rgba(255,255,255,.13)!important}
+html[data-ls-theme="dark"] .follow-button.following{color:#b9d9ff!important;background:rgba(19,26,36,.72)!important}
+html[data-ls-theme="dark"] .network-person small,html[data-ls-theme="dark"] .network-empty{color:#a8b5c6!important}
+html[data-ls-theme="dark"] .network-person strong{color:#f1f5fa!important}
+</style>
+</head><body>
+<header><a class="back" href="javascript:history.back()" aria-label="Voltar">‹</a><a class="brand" href="index.html">LINK<span>STORY</span></a></header>
+<main><section class="hero hero-reordered"><div class="avatar" id="avatar">L</div><div class="identity"><h1 id="name">Carregando perfil…</h1><div class="handle" id="handle"></div></div><div class="social-inline" aria-label="Seguidores e seguindo"><button class="social-inline-count" id="openFollowers" type="button"><strong id="followersCount">—</strong><span>seguidores</span></button><button class="social-inline-count" id="openFollowing" type="button"><strong id="followingCount">—</strong><span>seguindo</span></button></div><div class="bio" id="bio"></div></section><div class="follow-actions"><button class="follow-button" id="followButton" type="button" hidden>Seguir</button><div class="follow-status" id="followStatus" role="status" aria-live="polite"></div></div>
+<section class="section"><div class="eyebrow">PUBLICAÇÕES</div><h2>Obras criadas</h2><div id="works" class="works"><div class="empty">Carregando publicações…</div></div></section><section class="section" id="profilePhotosSection" hidden><div class="eyebrow">FEED</div><h2>Fotos</h2><div id="profilePhotos" class="profile-photo-grid"></div></section><style>.profile-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.profile-photo-grid a{display:block;aspect-ratio:1;overflow:hidden;border-radius:13px;background:#edf3fa}.profile-photo-grid img{width:100%;height:100%;object-fit:cover;display:block}@media(max-width:560px){.profile-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><section class="section" id="collabSection" hidden><div class="eyebrow">PARTICIPAÇÕES</div><h2>Mangás em que colaborou</h2><div id="collaborations" class="works"></div></section><section class="section" id="invitesSection" hidden><div class="eyebrow">CONVITES</div><h2>Convites de colaboração</h2><div id="invites" class="invite-list"></div></section></main>
+<dialog class="network-dialog" id="networkDialog"><div class="network-head"><h2 id="networkTitle">Seguidores</h2><button class="network-close" id="closeNetwork" type="button" aria-label="Fechar">×</button></div><div class="network-list" id="networkList"><div class="network-empty">Carregando…</div></div></dialog><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script src="global-nav.js?v=20261110-2"></script>
+<script>
+(async()=>{
+ const $=id=>document.getElementById(id),db=linkstorySupabase,id=new URLSearchParams(location.search).get('id');
+ if(!id){$('name').textContent='Perfil não encontrado';$('handle').textContent='Este link não contém um perfil.';return}
+ const result=await db.from('profiles').select('id,username,display_name,avatar_url,bio,verification_type').eq('id',id).maybeSingle();
+ if(result.error)throw result.error;const p=result.data;
+ if(!p){$('name').textContent='Perfil não encontrado';$('handle').textContent='Este perfil pode não estar disponível.';return}
+ 
+ $('name').textContent=p.display_name||p.username||'Usuário';if(window.LinkStoryVerification)LinkStoryVerification.decorate($('name'),p.verification_type);$('handle').textContent='@'+(p.username||'usuário');$('bio').textContent=p.bio||'';
+ const av=$('avatar');if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='Foto de '+(p.display_name||p.username);av.replaceChildren(img)}else av.textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase();
+ const session=await LinkStoryManga.session(),viewer=session?.user?.id||null,followButton=$('followButton'),followStatus=$('followStatus');
+ async function refreshSocial(){
+  const [followers,following]=await Promise.all([
+   db.from('follows').select('follower_id',{count:'exact',head:true}).eq('following_id',p.id),
+   db.from('follows').select('following_id',{count:'exact',head:true}).eq('follower_id',p.id)
+  ]);
+  if(followers.error)throw followers.error;if(following.error)throw following.error;
+  $('followersCount').textContent=Number(followers.count||0).toLocaleString('pt-BR');
+  $('followingCount').textContent=Number(following.count||0).toLocaleString('pt-BR');
+ }
+ await refreshSocial();
+ const networkDialog=$('networkDialog');
+ $('closeNetwork').onclick=()=>networkDialog.close();
+ networkDialog.addEventListener('click',e=>{if(e.target===networkDialog)networkDialog.close()});
+ async function openNetwork(kind){
+  const list=$('networkList');$('networkTitle').textContent=kind==='followers'?'Seguidores de '+(p.display_name||p.username):'Pessoas que '+(p.display_name||p.username)+' segue';
+  list.innerHTML='<div class="network-empty">Carregando pessoas…</div>';networkDialog.showModal();
+  try{
+   const field=kind==='followers'?'follower_id':'following_id';
+   const rel=await db.from('follows').select(field).eq(kind==='followers'?'following_id':'follower_id',p.id);
+   if(rel.error)throw rel.error;
+   const ids=(rel.data||[]).map(x=>x[field]).filter(Boolean);
+   if(!ids.length){list.innerHTML='<div class="network-empty">Ainda não há pessoas nesta lista.</div>';return}
+   const people=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',ids);
+   if(people.error)throw people.error;
+   list.replaceChildren();
+   (people.data||[]).forEach(person=>{
+    const a=document.createElement('a');a.className='network-person';a.href='public-profile.html?id='+encodeURIComponent(person.id);
+    const avatar=person.avatar_url?document.createElement('img'):document.createElement('div');
+    if(person.avatar_url){avatar.src=person.avatar_url;avatar.alt=''}else{avatar.className='network-avatar';avatar.textContent=(person.display_name||person.username||'U').slice(0,1).toUpperCase()}
+    const copy=document.createElement('span'),name=document.createElement('strong'),handle=document.createElement('small');
+    name.textContent=person.display_name||person.username||'Usuário';handle.textContent='@'+(person.username||'usuário');copy.append(name,handle);a.append(avatar,copy);list.append(a);
+   });
+  }catch(err){list.innerHTML='<div class="network-empty">Não foi possível carregar a lista: '+String(err.message||'tente novamente').replace(/[<>]/g,'')+'</div>'}
+ }
+ $('openFollowers').onclick=()=>openNetwork('followers');$('openFollowing').onclick=()=>openNetwork('following');
+ if(viewer&&viewer!==p.id){
+  followButton.hidden=false;
+  const existing=await db.from('follows').select('follower_id').eq('follower_id',viewer).eq('following_id',p.id).maybeSingle();
+  if(existing.error)throw existing.error;
+  let isFollowing=!!existing.data;
+  const paint=()=>{followButton.textContent=isFollowing?'Seguindo':'Seguir';followButton.classList.toggle('following',isFollowing);followButton.setAttribute('aria-pressed',String(isFollowing))};
+  paint();
+  followButton.addEventListener('click',async()=>{
+   followButton.disabled=true;followStatus.textContent=isFollowing?'Atualizando…':'Salvando…';
+   try{
+    if(isFollowing){const result=await db.from('follows').delete().eq('follower_id',viewer).eq('following_id',p.id);if(result.error)throw result.error;isFollowing=false}
+    else{const result=await db.from('follows').insert({follower_id:viewer,following_id:p.id});if(result.error)throw result.error;isFollowing=true}
+    paint();await refreshSocial();followStatus.textContent=isFollowing?'Você está seguindo este perfil.':'Você deixou de seguir este perfil.';
+   }catch(error){followStatus.textContent=error.message||'Não foi possível atualizar o acompanhamento.'}
+   finally{followButton.disabled=false}
+  });
+ }else if(!viewer){followButton.hidden=false;followButton.textContent='Entrar para seguir';followButton.onclick=()=>location.href='login.html'}
+ else{followStatus.textContent='Este é o seu perfil.'}
+
+ function cardFor(m,role){const card=document.createElement('article');card.className='work';const link=document.createElement('a');link.href='manga.html?id='+encodeURIComponent(m.id);link.style.color='inherit';link.style.textDecoration='none';const cover=document.createElement('div');cover.className='cover';if(m.cover_url){const img=document.createElement('img');img.src=m.cover_url;img.alt='Capa de '+(m.title||'mangá');img.loading='lazy';cover.append(img)}else cover.textContent=m.title||'Mangá';const title=document.createElement('h3');title.textContent=m.title||'Sem título';const meta=document.createElement('p');meta.textContent=role||((m.genres||'Mangá').replaceAll(',',' · '));link.append(cover,title,meta);card.append(link);return card}
+ const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===p.id),box=$('works');box.replaceChildren();
+ if(!works.length){const empty=document.createElement('div');empty.className='empty';empty.innerHTML='<strong>Nenhuma obra criada ainda.</strong>Quando este perfil publicar uma obra, ela aparecerá aqui.';box.append(empty)}
+ else{works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).forEach(m=>box.append(cardFor(m,'Autor principal')))}
+ const photos=await db.from('posts').select('id,media_url,body,created_at').eq('author_id',p.id).eq('media_type','image').not('media_url','is',null).order('created_at',{ascending:false}).limit(30);
+ if(!photos.error&&(photos.data||[]).length){$('profilePhotosSection').hidden=false;const grid=$('profilePhotos');photos.data.forEach(post=>{const a=document.createElement('a');a.href='fy.html';a.setAttribute('aria-label',post.body||'Foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';a.append(img);grid.append(a)})}
+ const collaborations=await LinkStoryManga.collaborationsForUser(p.id),collabBox=$('collaborations');
+ if(collaborations.length){$('collabSection').hidden=false;collaborations.forEach(item=>{if(item.mangas)collabBox.append(cardFor(item.mangas,item.role+' · Colaborador'))})}
+ if(viewer===p.id){const invites=await LinkStoryManga.myCollaborationInvites();if(invites.length){$('invitesSection').hidden=false;const inviteBox=$('invites');invites.forEach(invite=>{const row=document.createElement('div');row.className='invite-card';const cover=invite.mangas?.cover_url?document.createElement('img'):document.createElement('div');if(invite.mangas?.cover_url){cover.src=invite.mangas.cover_url;cover.alt=''}else{cover.className='invite-cover';cover.textContent='Mangá'}const info=document.createElement('div');info.className='invite-info';const title=document.createElement('strong');title.textContent=invite.mangas?.title||'Mangá';const by=document.createElement('small');by.textContent='Convite de '+(invite.inviter?.display_name||invite.inviter?.username||'criador')+' · '+invite.role;info.append(title,by);const actions=document.createElement('div');actions.className='invite-actions';const accept=document.createElement('button');accept.className='accept';accept.textContent='Aceitar';const decline=document.createElement('button');decline.textContent='Recusar';async function respond(status,button){button.disabled=true;button.textContent='Salvando…';try{await LinkStoryManga.respondToCollaboration(invite.id,status);row.remove();if(status==='accepted'){const fresh=await LinkStoryManga.collaborationsForUser(p.id);collabBox.replaceChildren();$('collabSection').hidden=!fresh.length;fresh.forEach(item=>{if(item.mangas)collabBox.append(cardFor(item.mangas,item.role+' · Colaborador'))})}if(!inviteBox.children.length)$('invitesSection').hidden=true}catch(error){button.disabled=false;button.textContent=status==='accepted'?'Aceitar':'Recusar';alert(error.message||'Não foi possível responder ao convite.')}}accept.onclick=()=>respond('accepted',accept);decline.onclick=()=>respond('declined',decline);actions.append(accept,decline);row.append(cover,info,actions);inviteBox.append(row)})}}
+})().catch(e=>{$('name').textContent='Não foi possível carregar o perfil';$('handle').textContent=e.message||'Tente novamente.'});
+</script></body></html>

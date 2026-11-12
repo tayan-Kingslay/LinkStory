@@ -39,3 +39,256 @@ html[data-ls-theme="dark"]{color-scheme:dark}
 .reader-title strong{letter-spacing:-.035em}
 .profile{background:linear-gradient(120deg,rgba(8,119,237,.035),transparent 70%);padding:22px;border:1px solid var(--ls-line)}
 .intro{background:linear-gradient(135deg,#f5f9ff,#fff);border:1px solid var(--ls-line);padding:24px}
+
+
+/* =========================================================
+   LINKSTORY HEADER REFRESH — shared across every page
+   Logo, menu items and the existing glass blur are preserved.
+   ========================================================= */
+:where(.header,.top,.topbar){
+  min-height:72px!important;
+  height:auto!important;
+  width:min(1280px,calc(100% - 28px))!important;
+  margin:12px auto 0!important;
+  padding:10px clamp(14px,2.8vw,30px)!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:clamp(12px,2vw,22px)!important;
+  border:1px solid rgba(255,255,255,.62)!important;
+  border-radius:22px!important;
+  background:rgba(255,255,255,.78)!important;
+  box-shadow:0 12px 34px rgba(25,55,92,.09),inset 0 1px 0 rgba(255,255,255,.72)!important;
+  backdrop-filter:saturate(150%) blur(14px)!important;
+  -webkit-backdrop-filter:saturate(150%) blur(14px)!important;
+  position:sticky!important;
+  top:10px!important;
+  z-index:1000!important;
+}
+:where(.header,.top,.topbar) :where(.logo,.brand){
+  display:inline-flex!important;
+  align-items:center!important;
+  min-width:0;
+  text-decoration:none;
+  line-height:1;
+}
+:where(.header,.top,.topbar) :where(.logo,.brand) img{
+  display:block;
+  max-height:48px;
+  width:auto;
+  object-fit:contain;
+}
+:where(.header,.top,.topbar) :where(.circle,.back,.menu,.menu-btn,.menu-button,.icon-btn){
+  flex:0 0 auto;
+  min-width:44px;
+  min-height:44px;
+  border-radius:15px!important;
+  border:1px solid rgba(143,169,199,.28)!important;
+  background:rgba(255,255,255,.62)!important;
+  box-shadow:0 4px 12px rgba(25,55,92,.055)!important;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+:where(.header,.top,.topbar) :where(.header-actions,.top-actions,.reader-right){
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-left:auto;
+}
+:where(.header,.top,.topbar) :where(.login,.login-button){
+  min-height:42px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:0 17px;
+  border-radius:14px!important;
+  white-space:nowrap;
+}
+@media(max-width:600px){
+  :where(.header,.top,.topbar){
+    width:calc(100% - 18px)!important;
+    min-height:64px!important;
+    margin-top:9px!important;
+    padding:8px 12px!important;
+    border-radius:18px!important;
+    gap:10px!important;
+  }
+  :where(.header,.top,.topbar) :where(.logo,.brand) img{max-height:42px}
+  :where(.header,.top,.topbar) :where(.circle,.back,.menu,.menu-btn,.menu-button,.icon-btn){
+    min-width:40px;min-height:40px;border-radius:13px!important;
+  }
+  :where(.header,.top,.topbar) :where(.header-actions,.top-actions,.reader-right){gap:7px}
+}
+html[data-ls-theme="dark"] :where(.header,.top,.topbar){
+  background:rgba(20,28,38,.78)!important;
+  border-color:rgba(116,139,166,.25)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  backdrop-filter:saturate(150%) blur(14px)!important;
+  -webkit-backdrop-filter:saturate(150%) blur(14px)!important;
+}
+html[data-ls-theme="dark"] :where(.header,.top,.topbar) :where(.circle,.back,.menu,.menu-btn,.menu-button,.icon-btn){
+  background:rgba(30,42,57,.72)!important;
+  border-color:rgba(116,139,166,.28)!important;
+  color:#edf5ff!important;
+}
+body:has(.reader-title) .top{
+  background:rgba(9,14,23,.82)!important;
+  border-color:rgba(255,255,255,.09)!important;
+  box-shadow:0 12px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+
+
+/* LINKSTORY — unified icon tiles across the app.
+   The three-line menu trigger is deliberately excluded. */
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+){
+  width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
+  padding:0!important;flex:0 0 44px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  border:1px solid #dce6f1!important;border-radius:14px!important;
+  background:linear-gradient(145deg,#fff,#f1f6fc)!important;
+  color:#49627f!important;
+  box-shadow:0 3px 10px rgba(25,55,92,.07),inset 0 1px 0 rgba(255,255,255,.9)!important;
+  transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease!important;
+}
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+):hover{
+  background:linear-gradient(145deg,#f7fbff,#eaf3fd)!important;
+  border-color:#c5d9ef!important;color:#1769d2!important;
+  box-shadow:0 5px 14px rgba(25,90,160,.12)!important;
+}
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+):active{transform:scale(.95)}
+:where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+) svg{display:block;width:20px!important;height:20px!important;max-width:20px!important;max-height:20px!important;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+:where(.bottom-nav-icon,#lsBottomNav .ls-icon){
+  width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+  flex:0 0 38px!important;display:grid!important;place-items:center!important;
+  border:1px solid #dce6f1!important;border-radius:12px!important;
+  background:linear-gradient(145deg,#fff,#f1f6fc)!important;
+  color:#49627f!important;box-shadow:0 3px 9px rgba(25,55,92,.055)!important;
+}
+:where(.bottom-nav-icon,#lsBottomNav .ls-icon) svg{
+  display:block;width:19px!important;height:19px!important;max-width:19px!important;max-height:19px!important;
+  fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round
+}
+:where(.bottom-nav-item,.bottom-nav a,#lsBottomNav a){gap:5px!important}
+:where(.bottom-nav-item.active,#lsBottomNav a.active) .bottom-nav-icon,
+#lsBottomNav a.active .ls-icon{
+  background:linear-gradient(145deg,#edf6ff,#dcecff)!important;
+  border-color:#bfd9f5!important;color:#0877ed!important;
+}
+html[data-ls-theme="dark"] :where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+){
+  background:linear-gradient(145deg,#202e40,#152234)!important;
+  border-color:#34465d!important;color:#c5d7ef!important;
+  box-shadow:0 3px 10px #0003,inset 0 1px 0 #ffffff0a!important;
+}
+html[data-ls-theme="dark"] :where(
+  button.circle:not(.menu),a.circle:not(.menu),
+  button.back,a.back,button.more,button.close,
+  button.icon-btn,a.icon-btn,button.icon-button,a.icon-button
+):hover{background:linear-gradient(145deg,#293c54,#1b2c42)!important;border-color:#49617d!important;color:#e3efff!important}
+html[data-ls-theme="dark"] :where(.bottom-nav-icon,#lsBottomNav .ls-icon){
+  background:linear-gradient(145deg,#202e40,#152234)!important;border-color:#34465d!important;color:#c5d7ef!important;box-shadow:0 3px 10px #0003!important
+}
+html[data-ls-theme="dark"] :where(.bottom-nav-item.active,#lsBottomNav a.active) .bottom-nav-icon,
+html[data-ls-theme="dark"] #lsBottomNav a.active .ls-icon{
+  background:linear-gradient(145deg,#1d3855,#18304a)!important;border-color:#365d83!important;color:#79baff!important
+}
+@media(max-width:600px){
+ :where(button.circle:not(.menu),a.circle:not(.menu),button.back,a.back,button.more,button.close,button.icon-btn,a.icon-btn,button.icon-button,a.icon-button){
+  width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;flex-basis:42px!important;border-radius:13px!important
+ }
+}
+
+
+/* Header layout system: stable flow first, true centering only when the
+   header has balanced left/right controls. Avoid absolute-position overlap. */
+:where(.header,.top,.topbar,body>header:not(.chat-header)){
+  position:relative!important;display:flex!important;align-items:center!important;
+  justify-content:space-between!important;isolation:isolate;
+}
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.logo,.brand){
+  position:static!important;left:auto!important;top:auto!important;transform:none!important;
+  display:inline-flex!important;align-items:center!important;min-width:0;max-width:100%;
+  margin:0!important;white-space:nowrap;line-height:1;
+}
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.logo,.brand) img{
+  display:block!important;width:auto!important;height:auto!important;max-width:100%!important;
+  max-height:42px!important;object-fit:contain!important;
+}
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.header-actions,.top-actions,.reader-right){
+  display:flex!important;align-items:center!important;gap:10px;margin-left:auto!important;
+  min-width:0;flex:0 0 auto!important;
+}
+:where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.back,.circle.back){
+  position:relative!important;z-index:2;flex:0 0 auto!important;margin:0!important;
+}
+
+/* Balanced headers use three columns: left control, centered brand/title, right control. */
+:where(.top,.topbar,.header):has(> .back):has(> .menu),
+:where(.top,.topbar,.header):has(> .back):has(> .menu-btn),
+:where(.top,.topbar,.header):has(> .back):has(> .logo):not(:has(> .menu)):not(:has(> .menu-btn)),
+:where(.top,.topbar,.header):has(> .brand):has(> .menu-btn),
+:where(.top,.topbar,.header):has(> .back):has(> .reader-right),
+:where(.top,.topbar,.header):has(> .logo):has(> .menu-btn),
+:where(.top,.topbar,.header):has(> .brand):has(> .menu),
+:where(.top,.topbar,.header):has(> .logo):has(> .header-actions),
+:where(.top,.topbar,.header):has(> .brand):has(> .header-actions),
+:where(.top,.topbar):has(> .back):has(> .brand):not(:has(> .menu)):not(:has(> .menu-btn)),
+  :where(.top,.topbar,.header):has(> .back):has(> .logo):not(:has(> .menu)):not(:has(> .menu-btn)),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu-btn){
+  display:grid!important;grid-template-columns:minmax(40px,1fr) minmax(0,auto) minmax(40px,1fr)!important;
+  column-gap:clamp(8px,2vw,18px)!important;
+}
+:where(.top,.topbar,.header):has(> .back)>:where(.back){grid-column:1;justify-self:start}
+:where(.top,.topbar,.header):has(> .back)>:where(.logo,.brand,.reader-title){grid-column:2;justify-self:center;min-width:0}
+:where(.top,.topbar,.header):has(> .back)>:where(.menu,.menu-btn,.reader-right,.header-actions){grid-column:3;justify-self:end}
+:where(.top,.topbar,.header):not(:has(> .back))>:where(.menu,.menu-btn,.header-actions){grid-column:3;justify-self:end}
+:where(.top,.topbar,.header):has(> .logo):not(:has(> .back))>:where(.logo,.brand){grid-column:2;justify-self:center}
+:where(.top,.topbar,.header):has(> .brand):not(:has(> .back))>:where(.brand){grid-column:2;justify-self:center}
+:where(.top,.topbar,.header):has(> .top-title)> .top-title{grid-column:3;justify-self:end;min-width:0;text-align:right}
+:where(.top,.topbar,.header):has(> .reader-right)> .reader-title{grid-column:2;justify-self:center;min-width:0;max-width:100%;text-align:center}
+
+/* Single-logo pages center the logo; homepage keeps it left of its action cluster. */
+:where(.top,.topbar,body>header):has(> .logo:only-child),
+:where(.top,.topbar,body>header):has(> .brand:only-child){justify-content:center!important}
+.header.home-header{display:flex!important;justify-content:space-between!important}
+.header.home-header>.logo{grid-column:auto!important;justify-self:auto!important}
+.header.home-header>.header-actions{grid-column:auto!important;justify-self:end!important;margin-left:auto!important;gap:clamp(5px,1.6vw,10px)!important}
+.header.home-header>.logo img{width:clamp(96px,30vw,124px)!important;max-height:40px!important}
+@media(max-width:600px){
+  :where(.header,.top,.topbar,body>header:not(.chat-header)){gap:8px!important}
+  :where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.logo,.brand) img{max-height:38px!important}
+  :where(.header,.top,.topbar,body>header:not(.chat-header))>:where(.header-actions,.top-actions,.reader-right){gap:7px!important}
+  :where(.top,.topbar,.header):has(> .back):has(> .menu),
+  :where(.top,.topbar,.header):has(> .back):has(> .menu-btn),
+  :where(.top,.topbar,.header):has(> .back):has(> .reader-right),
+  :where(.top,.topbar,.header):has(> .logo):has(> .menu-btn),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu),
+  :where(.top,.topbar,.header):has(> .logo):has(> .header-actions),
+  :where(.top,.topbar,.header):has(> .brand):has(> .header-actions),
+  :where(.top,.topbar,.header):has(> .brand):has(> .menu-btn),
+  :where(.top,.topbar):has(> .back):has(> .brand):not(:has(> .menu)):not(:has(> .menu-btn)){
+    grid-template-columns:minmax(36px,1fr) minmax(0,auto) minmax(36px,1fr)!important;column-gap:7px!important;
+  }
+  .header.home-header{width:calc(100% - 18px)!important;padding-inline:9px!important}
+  .header.home-header>.logo img{width:clamp(92px,28vw,112px)!important}
+  .header.home-header>.header-actions{gap:6px!important}
+}

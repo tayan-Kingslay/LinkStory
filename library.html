@@ -8,7 +8,7 @@
 :root{--blue:#0877ed;--ink:#17263a;--muted:#78879a;--line:#e5ebf2;--surface:#fff;--wash:#f6f8fb}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#f7f9fc;color:var(--ink);font-family:"DM Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}a{color:inherit;text-decoration:none}
 .topbar{height:62px;display:flex;align-items:center;gap:12px;padding:0 15px;background:rgba(255,255,255,.86);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.back,.menu-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;display:grid;place-items:center;flex:none;color:#40536b}.back{font-size:25px;line-height:1}.logo{display:flex;align-items:center}.logo img{width:120px;height:40px;object-fit:contain}.menu-btn{margin-left:auto;font-size:0}.menu-btn:before{content:"";width:16px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.menu-btn:after{content:"";position:absolute;width:16px;border-top:2px solid currentColor}
+.back,.menu-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:12px;background:#fff;display:grid;place-items:center;flex:none;color:#40536b}.back{font-size:25px;line-height:1}.logo{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center}.logo img{width:120px;height:40px;object-fit:contain}.menu-btn{margin-left:auto;font-size:0}.menu-btn:before{content:"";width:16px;height:12px;border-top:2px solid currentColor;border-bottom:2px solid currentColor;position:relative}.menu-btn:after{content:"";position:absolute;width:16px;border-top:2px solid currentColor}
 main{width:min(980px,calc(100% - 32px));margin:0 auto;padding:34px 0 112px}
 .library-heading{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:25px}.eyebrow{display:block;margin-bottom:8px;color:var(--blue);font-size:10px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.library-heading h1{margin:0;font-size:clamp(29px,5vw,39px);line-height:1.05;letter-spacing:-1.4px;font-weight:800}.library-heading p{margin:9px 0 0;color:var(--muted);font-size:13px;line-height:1.55}
 .heading-mark{width:52px;height:52px;border:1px solid #dce9f8;border-radius:17px;background:#edf5ff;color:var(--blue);display:grid;place-items:center;flex:none}.heading-mark svg{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
@@ -19,10 +19,88 @@ main{width:min(980px,calc(100% - 32px));margin:0 auto;padding:34px 0 112px}
 @media(max-width:700px){main{width:calc(100% - 28px);padding:26px 0 104px}.library-heading{margin-bottom:20px}.library-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.library-info{padding:10px 10px 12px}.library-info strong{font-size:12px}.continue-card{grid-template-columns:100px minmax(0,1fr);gap:12px;padding:10px}.continue-card .library-info strong{font-size:15px}.tabs button{padding:0 12px;font-size:11px}}
 @media(max-width:370px){.continue-card{grid-template-columns:86px minmax(0,1fr)}.continue-action{min-height:34px;padding:0 10px}}
 html[data-ls-theme="dark"] body{background:#101720;color:#edf3fb}html[data-ls-theme="dark"] .topbar{background:rgba(20,29,40,.9);border-color:#303d4d}html[data-ls-theme="dark"] .back,html[data-ls-theme="dark"] .menu-btn{background:#1b2735;border-color:#354355;color:#dce7f5}html[data-ls-theme="dark"] .tabs{background:#1a2634;border-color:#303d4d}html[data-ls-theme="dark"] .tabs button{color:#aab7c7}html[data-ls-theme="dark"] .tabs button.active,html[data-ls-theme="dark"] .library-card,html[data-ls-theme="dark"] .continue-card{background:#1b2735;border-color:#303d4d;color:#edf3fb}html[data-ls-theme="dark"] .library-cover{background:#253345}html[data-ls-theme="dark"] .empty{background:#172230;border-color:#354355}html[data-ls-theme="dark"] .empty h3{color:#edf3fb}html[data-ls-theme="dark"] .empty p,html[data-ls-theme="dark"] .library-info small{color:#9cabbc}html[data-ls-theme="dark"] .heading-mark,html[data-ls-theme="dark"] .empty-icon{background:#20354d;border-color:#38516d}
-</style>  <link rel="stylesheet" href="visual-system.css?v=1">
+</style>  <link rel="stylesheet" href="visual-system.css?v=4">
+<link rel="stylesheet" href="at3-global.css?v=2">
+
+<style id="at3-library-finish">
+/* AT3 — refinamento visual da Biblioteca; estrutura e comportamento preservados. */
+.library-heading{
+  position:relative;isolation:isolate;overflow:hidden;
+  padding:clamp(20px,3.5vw,28px)!important;
+  border:1px solid rgba(255,255,255,.82)!important;
+  border-radius:24px!important;
+  background:linear-gradient(135deg,rgba(255,255,255,.82),rgba(239,246,255,.58))!important;
+  box-shadow:0 14px 34px rgba(31,54,82,.065),inset 0 1px 0 rgba(255,255,255,.96)!important;
+  -webkit-backdrop-filter:blur(24px) saturate(175%)!important;
+  backdrop-filter:blur(24px) saturate(175%)!important;
+}
+.library-heading:after{
+  content:"";position:absolute;z-index:-1;right:-42px;top:-76px;width:190px;height:190px;
+  border-radius:50%;background:radial-gradient(circle,rgba(91,164,255,.14),rgba(91,164,255,0) 70%);
+  pointer-events:none;
+}
+.library-heading>div:first-child{min-width:0}
+.heading-mark{
+  border-color:rgba(255,255,255,.9)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(221,237,255,.72))!important;
+  box-shadow:0 8px 22px rgba(49,112,184,.10),inset 0 1px 0 #fff!important;
+}
+.tabs{
+  gap:6px!important;padding:6px!important;
+  border:1px solid rgba(255,255,255,.86)!important;border-radius:18px!important;
+  background:rgba(232,239,248,.62)!important;
+  box-shadow:inset 0 1px 2px rgba(35,55,80,.035),0 8px 22px rgba(31,54,82,.045)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(170%)!important;
+  backdrop-filter:blur(20px) saturate(170%)!important;
+}
+.tabs button{border-radius:13px!important;min-height:42px!important}
+.tabs button.active{
+  border:1px solid rgba(255,255,255,.96)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(239,246,255,.9))!important;
+  color:#0877ed!important;
+  box-shadow:0 4px 13px rgba(32,75,125,.09),inset 0 1px 0 #fff!important;
+}
+.library-card,.continue-card{
+  border-color:rgba(218,229,242,.82)!important;
+  box-shadow:0 8px 24px rgba(26,48,76,.055),inset 0 1px 0 rgba(255,255,255,.82)!important;
+  transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease!important;
+}
+@media(hover:hover){
+  .library-card:hover,.continue-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(111,169,231,.55)!important;
+    box-shadow:0 14px 30px rgba(26,70,120,.10)!important;
+  }
+}
+@media(max-width:600px){
+  .library-heading{padding:19px 17px!important;border-radius:21px!important}
+  .heading-mark{width:46px;height:46px;border-radius:15px!important}
+  .tabs{margin-bottom:20px!important}
+}
+html[data-ls-theme="dark"] .library-heading{
+  background:linear-gradient(145deg,rgba(38,52,69,.88),rgba(25,37,52,.82))!important;
+  border-color:rgba(255,255,255,.12)!important;
+  box-shadow:0 14px 34px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+html[data-ls-theme="dark"] .heading-mark{
+  background:linear-gradient(145deg,rgba(47,70,96,.9),rgba(32,51,73,.86))!important;
+  border-color:rgba(255,255,255,.13)!important;
+}
+html[data-ls-theme="dark"] .tabs{
+  background:rgba(25,37,51,.82)!important;border-color:rgba(255,255,255,.10)!important;
+}
+html[data-ls-theme="dark"] .tabs button.active{
+  background:linear-gradient(145deg,rgba(55,79,106,.96),rgba(38,58,82,.96))!important;
+  color:#9bcaff!important;border-color:rgba(255,255,255,.12)!important;
+}
+html[data-ls-theme="dark"] .library-card,html[data-ls-theme="dark"] .continue-card{
+  box-shadow:0 8px 24px rgba(0,0,0,.16)!important;
+}
+</style>
+
 </head>
 <body>
-<header class="topbar"><a class="back" href="index.html" aria-label="Voltar">‹</a><a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" aria-label="Abrir menu"></button></header>
+<header class="topbar"><a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" aria-label="Abrir menu"></button></header>
 <main>
   <section class="library-heading"><div><span class="eyebrow">Seu espaço pessoal</span><h1>Biblioteca</h1><p>Suas histórias favoritas, leituras e descobertas em um só lugar.</p></div><div class="heading-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v17H6.5A2.5 2.5 0 0 1 4 17.5z"/><path d="M4 17.5A2.5 2.5 0 0 1 6.5 15H20M8 7h8M8 10h8"/></svg></div></section>
   <nav class="tabs" aria-label="Seções da biblioteca"><button class="active" data-tab="reading">Continuar lendo</button><button data-tab="saved">Salvos</button><button data-tab="history">Histórico</button></nav>
@@ -77,4 +155,4 @@ html[data-ls-theme="dark"] body{background:#101720;color:#edf3fb}html[data-ls-th
  }
 })();
 </script>
-</body></html>
+<script src="global-nav.js"></script><script src="menu-button.js?v=1"></script></body></html>

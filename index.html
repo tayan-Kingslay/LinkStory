@@ -84,61 +84,24 @@ html[data-ls-theme="dark"] .menu-dialog{background:#151515!important;color:#fff!
 }
 .header .logo{flex:0 0 auto;display:flex;align-items:center}
 .header .logo img{width:124px;height:40px;object-fit:contain}
-.header-actions{margin-left:auto;display:flex;align-items:center;gap:8px}
+.header-actions{margin-left:auto;display:flex;align-items:center;gap:12px}
 .header .circle{width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,.52);border-color:rgba(207,225,242,.95);box-shadow:0 4px 14px rgba(16,32,51,.05)}
+.header .home-shortcut svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:420px){.header-actions{gap:8px}.header .circle{width:36px;height:36px}.header .logo img{width:104px;height:34px}}
 @media(max-width:720px){
   .header{width:calc(100% - 20px);height:58px;margin-top:9px;padding:0 9px;border-radius:18px;top:8px}
   .header .logo img{width:112px;height:36px}
   .header .circle{width:40px;height:40px;border-radius:13px}
-  .header-actions{gap:6px}
+  .header-actions{flex:0 0 auto;justify-content:flex-end;gap:8px;white-space:nowrap}
   main{padding-top:2px}
 }
 @media(max-width:420px){.header .search{display:flex!important}.header .logo img{width:112px;height:36px}.header .circle{width:38px;height:38px}}
 html[data-ls-theme="dark"] .header{background:rgba(17,19,23,.72)!important;border-color:rgba(52,57,65,.9)!important;box-shadow:0 10px 30px rgba(0,0,0,.2)}
 html[data-ls-theme="dark"] .header .circle{background:rgba(24,27,32,.62)!important;border-color:#343941!important}
 
-/* INSPEX — janela de notícias */
-.inspex-window{width:min(900px,calc(100% - 32px));margin:26px auto 0;border:1px solid #dbe5ef;border-radius:18px;overflow:hidden;background:#fff;box-shadow:0 12px 30px rgba(16,32,51,.08);display:grid;grid-template-columns:44% 56%;min-height:240px}
-.inspex-media{position:relative;min-height:240px;background:#101923;overflow:hidden}
-.inspex-placeholder{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(circle at 30% 25%,#31516e 0,#182b3e 38%,#0d151e 78%);color:#fff}
-.inspex-placeholder:after{content:"";position:absolute;width:150px;height:150px;border:1px solid rgba(255,255,255,.18);border-radius:50%;box-shadow:0 0 0 28px rgba(255,255,255,.035),0 0 0 58px rgba(255,255,255,.025)}
-.inspex-placeholder span{position:relative;z-index:1;font-size:28px;letter-spacing:5px;font-weight:900}
-.inspex-tag{position:absolute;z-index:2;top:13px;left:13px;padding:6px 9px;border-radius:7px;background:#fff;color:#102033;font-size:9px;font-weight:900;letter-spacing:1.2px}
-.inspex-body{padding:24px 24px 20px;display:flex;flex-direction:column;justify-content:center}
-.inspex-kicker{display:flex;align-items:center;gap:8px;color:#66788d;font-size:9px;font-weight:900;letter-spacing:1.4px;margin-bottom:12px}
-.inspex-kicker span:first-child{color:#0b72e7}.inspex-kicker i{width:4px;height:4px;border-radius:50%;background:#b6c4d1}
-.inspex-body h1{font-size:23px;line-height:1.12;letter-spacing:-.6px;margin:0 0 10px;color:#102033}
-.inspex-body p{font-size:12px;line-height:1.5;color:#66788d;margin:0 0 17px;max-width:420px}
-.inspex-link{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;color:#0b72e7;font-size:11px;font-weight:900}
-.inspex-link span{font-size:17px;line-height:1;transition:transform .2s ease}.inspex-link:hover span{transform:translateX(3px)}
-@media(max-width:720px){
- .inspex-window{width:calc(100% - 24px);grid-template-columns:42% 58%;min-height:190px;margin-top:22px;border-radius:15px}
- .inspex-media{min-height:190px}
- .inspex-placeholder span{font-size:20px;letter-spacing:3px}
- .inspex-placeholder:after{width:100px;height:100px;box-shadow:0 0 0 20px rgba(255,255,255,.035),0 0 0 42px rgba(255,255,255,.025)}
- .inspex-tag{top:9px;left:9px;padding:5px 7px;font-size:8px}
- .inspex-body{padding:17px 15px 15px}
- .inspex-kicker{font-size:8px;margin-bottom:8px;gap:6px}
- .inspex-body h1{font-size:17px;letter-spacing:-.35px;margin-bottom:7px}
- .inspex-body p{font-size:10px;line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
- .inspex-link{font-size:10px}
-}
-@media(max-width:420px){
- .inspex-window{width:calc(100% - 20px);grid-template-columns:40% 60%;min-height:172px}
- .inspex-media{min-height:172px}
- .inspex-body{padding:14px 12px}
- .inspex-body h1{font-size:15px;line-height:1.13}
- .inspex-body p{font-size:9px;-webkit-line-clamp:2}
- .inspex-placeholder span{font-size:17px}
-}
-html[data-ls-theme="dark"] .inspex-window{background:#15181d;border-color:#30343a;box-shadow:0 12px 30px rgba(0,0,0,.18)}
-html[data-ls-theme="dark"] .inspex-body h1{color:#f5f7fa}
-html[data-ls-theme="dark"] .inspex-body p,.inspex-kicker{color:#aab3be}
-
-
 /* Navegação inferior — mesmo vidro do cabeçalho superior */
 .ls-bottom-nav{
-  display:none!important;
+  display:flex!important;
   position:fixed;
   left:50%;
   bottom:10px;
@@ -190,67 +153,196 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item{color:#aab3be}
 html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 
 
+
+/* Skeletons de catálogo: reservam espaço e evitam saltos de layout. */
+.book-skeleton{position:relative;flex:0 0 184px;height:275px;overflow:hidden;border-radius:8px;background:#edf3f8}
+.book-skeleton:after{content:'';position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),transparent);animation:ls-skeleton 1.35s infinite}
+@keyframes ls-skeleton{to{transform:translateX(100%)}}
+@media(max-width:720px){.book-skeleton{flex-basis:166px;height:252px}}
+@media(max-width:420px){.book-skeleton{flex-basis:154px;height:235px}}
+@media(prefers-reduced-motion:reduce){.book-skeleton:after{animation:none;transform:none;opacity:.35}}
 </style>
-  <link rel="stylesheet" href="visual-system.css?v=1">
+  <link rel="stylesheet" href="visual-system.css?v=4">
+<link rel="stylesheet" href="visual-refresh.css?v=2">
+<link rel="stylesheet" href="at3-home.css?v=2">
+
+<style>
+/* Home header: search left, centered brand, actions right. */
+.header.home-header{
+  display:grid!important;
+  grid-template-columns:minmax(40px,1fr) auto minmax(40px,1fr)!important;
+  justify-content:initial!important;
+  align-items:center!important;
+}
+.header.home-header>.search{grid-column:1;justify-self:start;margin:0}
+.header.home-header>.logo{grid-column:2;justify-self:center}
+.header.home-header>.header-actions{
+  grid-column:3;justify-self:end;margin:0!important;
+  display:flex;align-items:center;gap:clamp(5px,1.2vw,9px)!important;
+}
+@media(max-width:600px){
+  .header.home-header{grid-template-columns:minmax(38px,1fr) auto minmax(38px,1fr)!important}
+  .header.home-header>.header-actions{gap:5px!important}
+}
+</style>
+
+<style>
+/* Ajuste fino do cabeçalho: sino e menu ficam lado a lado, sem espaço elástico. */
+.header.home-header>.header-actions{width:max-content!important;min-width:0!important;justify-self:end!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important}
+.header.home-header>.header-actions>.home-shortcut,
+.header.home-header>.header-actions>#openMenu{flex:0 0 42px!important;margin:0!important}
+@media(max-width:720px){.header.home-header>.header-actions{gap:7px!important}}
+@media(max-width:420px){.header.home-header>.header-actions{gap:6px!important}.header.home-header>.header-actions>.home-shortcut,.header.home-header>.header-actions>#openMenu{flex-basis:38px!important}}
+/* Card Pontos corridos: fluxo abaixo do cabeçalho e composição compacta. */
+main{padding-top:16px!important}
+.ranking-entry{width:min(1080px,calc(100% - 32px));margin:0 auto 30px!important}
+.ranking-entry a{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:104px;padding:18px 20px;border:1px solid rgba(130,150,175,.22);border-radius:18px;background:rgba(255,255,255,.82);box-shadow:0 5px 18px rgba(16,32,51,.045);text-decoration:none;color:inherit}
+.ranking-entry small{display:block;font-size:9px;font-weight:850;letter-spacing:1.3px;color:#0b72e7}
+.ranking-entry strong{display:block;font-size:18px;line-height:1.2;margin:5px 0 3px;color:#102033}
+.ranking-entry em{display:block;font-style:normal;font-size:12px;line-height:1.4;color:#77869a}
+.ranking-entry b{flex:0 0 auto;white-space:nowrap;color:#0b72e7;font-size:13px;font-weight:800}
+@media(max-width:480px){main{padding-top:14px!important}.ranking-entry{width:calc(100% - 24px);margin-bottom:26px!important}.ranking-entry a{min-height:92px;padding:15px 14px;gap:10px}.ranking-entry strong{font-size:16px}.ranking-entry em{font-size:11px;max-width:220px}.ranking-entry b{font-size:12px}}
+</style>
+<style id="at3-home-finish">
+/* AT3 — acabamento da página inicial; camada exclusivamente visual */
+body{background-color:#f1f4f8!important;background-image:radial-gradient(ellipse at 12% 8%,rgba(255,255,255,.96),transparent 38%),radial-gradient(ellipse at 88% 28%,rgba(218,231,246,.48),transparent 42%),linear-gradient(155deg,#f7f9fc 0%,#eef2f7 55%,#f6f8fb 100%)!important}
+.header.home-header{border-radius:21px!important;background:linear-gradient(145deg,rgba(255,255,255,.86),rgba(255,255,255,.58))!important;border-color:rgba(255,255,255,.96)!important;box-shadow:0 13px 36px rgba(28,52,82,.09),inset 0 1px 0 #fff!important}
+.header.home-header .circle{border-radius:14px!important;background:rgba(255,255,255,.72)!important;border-color:rgba(218,230,244,.95)!important;box-shadow:0 4px 13px rgba(30,55,85,.06)!important}
+.header.home-header .login{border-radius:13px!important;background:rgba(255,255,255,.72)!important;border-color:#d6e5f5!important;min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+main{padding-top:18px!important}
+.ranking-entry{margin-bottom:31px!important}
+.ranking-entry a{position:relative;overflow:hidden;min-height:106px!important;border:1px solid rgba(255,255,255,.96)!important;border-radius:21px!important;background:linear-gradient(125deg,rgba(255,255,255,.88),rgba(239,246,255,.72))!important;box-shadow:0 10px 30px rgba(28,52,82,.065),inset 0 1px 0 #fff!important;backdrop-filter:blur(20px) saturate(160%)!important;-webkit-backdrop-filter:blur(20px) saturate(160%)!important;transition:transform .2s ease,box-shadow .2s ease!important}
+.ranking-entry a:before{content:"";position:absolute;right:-35px;top:-70px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(115,174,239,.17),transparent 68%);pointer-events:none}
+.ranking-entry a:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(28,52,82,.09),inset 0 1px 0 #fff!important}
+.ranking-entry small{letter-spacing:1.8px!important;color:#5485bc!important}
+.ranking-entry strong{font-size:19px!important;letter-spacing:-.55px!important}
+.ranking-entry em{color:#78889c!important}
+.ranking-entry b{position:relative;z-index:1;padding:10px 13px;border:1px solid #d9e8f8;border-radius:12px;background:rgba(255,255,255,.76);font-size:12px!important}
+.catalog{margin-top:0!important}
+.shelf{margin:0 0 38px!important}
+.shelf-head{padding:0 18px!important;margin-bottom:15px!important;min-height:32px}
+.shelf-title{font-size:27px!important;line-height:1.1!important;letter-spacing:-1.05px!important;color:#27384d!important}
+.track{gap:14px!important;padding:5px 18px 17px!important;scroll-padding-inline:18px}
+.book{flex-basis:184px!important;height:276px!important;border-radius:17px!important;outline:1px solid rgba(255,255,255,.82)!important;outline-offset:-1px!important;box-shadow:0 11px 26px rgba(25,48,76,.15)!important;transition:transform .22s ease,box-shadow .22s ease!important}
+.book:hover{transform:translateY(-4px)!important;box-shadow:0 17px 34px rgba(25,48,76,.2)!important}
+.book img{transition:transform .35s ease!important}
+.book:hover img{transform:scale(1.035)!important}
+.book:after{inset:35% 0 0!important;background:linear-gradient(0deg,rgba(8,17,30,.91) 0%,rgba(8,17,30,.48) 48%,transparent 100%)!important}
+.book-info{left:13px!important;right:12px!important;bottom:13px!important}
+.book-meta{font-size:9px!important;letter-spacing:.8px!important;color:rgba(255,255,255,.82)!important}
+.book-title{font-size:17px!important;line-height:1.12!important;letter-spacing:-.25px!important}
+.rank{width:43px!important;height:46px!important;border-radius:0 0 0 14px!important;background:rgba(31,54,81,.76)!important;backdrop-filter:blur(14px)!important;-webkit-backdrop-filter:blur(14px)!important;font-size:21px!important}
+.age{border-radius:8px!important;background:rgba(25,39,56,.72)!important;border:1px solid rgba(255,255,255,.18)!important;backdrop-filter:blur(12px)!important;-webkit-backdrop-filter:blur(12px)!important;font-size:9px!important}
+.book-skeleton{border-radius:17px!important;box-shadow:0 8px 22px rgba(25,48,76,.06)!important}
+.creator{margin-top:8px!important;border-radius:22px!important;padding:25px!important}
+.creator h2{font-size:24px!important;letter-spacing:-.8px!important}
+.creator a{border-radius:13px!important;min-height:43px;display:inline-flex;align-items:center;justify-content:center}
+.menu-dialog{border-radius:24px 0 0 24px!important;background:linear-gradient(145deg,rgba(255,255,255,.97),rgba(244,248,253,.96))!important;box-shadow:-18px 0 55px rgba(19,42,70,.16)!important;backdrop-filter:blur(24px)!important}
+.menu-wrap{padding:27px 24px!important}
+.menu-head{border-color:#e7edf4!important}
+.menu-head strong{letter-spacing:2.5px!important}
+.menu-list a{padding:17px 2px!important;font-size:16px!important;border-color:#e9eef4!important;transition:padding .18s ease,color .18s ease!important}
+.menu-list a:hover{padding-left:7px!important;color:#1769d2!important}
+.menu-list strong{font-size:24px!important;color:#9aabbe!important}
+#searchDialog input{border-radius:14px!important;background:rgba(255,255,255,.88)!important;min-height:50px!important}
+@media(max-width:720px){
+ main{padding-top:14px!important}
+ .ranking-entry{width:calc(100% - 24px)!important;margin-bottom:26px!important}
+ .ranking-entry a{min-height:94px!important;padding:14px 13px!important;border-radius:18px!important}
+ .ranking-entry strong{font-size:16px!important}
+ .ranking-entry em{font-size:10.5px!important}
+ .ranking-entry b{padding:9px 10px!important;font-size:11px!important}
+ .shelf{margin-bottom:30px!important}
+ .shelf-head{padding:0 13px!important;margin-bottom:12px!important}
+ .shelf-title{font-size:24px!important}
+ .track{gap:11px!important;padding:4px 13px 14px!important;scroll-padding-inline:13px}
+ .book{flex-basis:164px!important;height:248px!important;border-radius:15px!important}
+ .book-info{left:11px!important;bottom:11px!important}
+ .book-title{font-size:15px!important}
+ .creator{width:calc(100% - 24px)!important;padding:19px!important;border-radius:19px!important}
+ .menu-dialog{border-radius:21px 0 0 21px!important}
+ .menu-wrap{padding:22px 18px!important}
+}
+@media(max-width:420px){
+ .book{flex-basis:153px!important;height:232px!important}
+ .shelf-title{font-size:22px!important}
+ .ranking-entry a{gap:8px!important}
+ .ranking-entry b{font-size:10px!important}
+}
+@media(prefers-reduced-motion:reduce){.ranking-entry a,.book,.book img,.menu-list a{transition:none!important}.ranking-entry a:hover,.book:hover,.book:hover img{transform:none!important}}
+html[data-ls-theme="dark"] body{background-image:radial-gradient(ellipse at 12% 8%,rgba(100,128,164,.14),transparent 38%),linear-gradient(155deg,#141b25 0%,#1b2430 55%,#151d27 100%)!important}
+html[data-ls-theme="dark"] .header.home-header{background:linear-gradient(145deg,rgba(36,48,64,.9),rgba(24,33,45,.78))!important;border-color:rgba(255,255,255,.12)!important}
+html[data-ls-theme="dark"] .header.home-header .circle{background:rgba(35,48,65,.8)!important;border-color:#3b4d63!important;color:#eaf3ff!important}
+html[data-ls-theme="dark"] .header.home-header .login{background:rgba(35,48,65,.8)!important;border-color:#3b4d63!important;color:#9bcaff!important}
+html[data-ls-theme="dark"] .ranking-entry a{background:linear-gradient(125deg,rgba(37,51,68,.9),rgba(27,40,56,.82))!important;border-color:rgba(255,255,255,.12)!important}
+html[data-ls-theme="dark"] .ranking-entry strong{color:#f0f5fb!important}
+html[data-ls-theme="dark"] .ranking-entry em{color:#aab8c8!important}
+html[data-ls-theme="dark"] .ranking-entry b{background:rgba(29,48,68,.8)!important;border-color:#3b526c!important;color:#91c5ff!important}
+html[data-ls-theme="dark"] .shelf-title{color:#edf3fa!important}
+html[data-ls-theme="dark"] .menu-dialog{background:linear-gradient(145deg,rgba(27,37,51,.98),rgba(19,28,40,.98))!important;color:#f0f5fb!important}
+html[data-ls-theme="dark"] .menu-head,html[data-ls-theme="dark"] .menu-list a{border-color:#354457!important}
+html[data-ls-theme="dark"] .menu-list a{color:#edf3fa!important}
+html[data-ls-theme="dark"] #searchDialog input{background:#1c2938!important;color:#f0f5fb!important;border-color:#3b4d63!important}
+</style>
+
 </head>
 <body>
-<header class="header">
+<header class="header home-header">
+<button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
 <a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
 <div class="header-actions">
-<button class="circle search" id="openSearch" aria-label="Buscar">⌕</button>
+<a class="circle home-shortcut" href="notifications.html" aria-label="Notificações" title="Notificações"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></a>
 <button class="circle menu" id="openMenu" aria-label="Abrir menu"></button>
 <a class="login" href="login.html">Entrar</a>
 </div>
 </header>
 
 <main>
-<section class="inspex-window" id="inspexWindow" aria-label="Notícias do INSPEX">
-  <div class="inspex-media">
-    <div class="inspex-placeholder"><span>INSPEX</span></div>
-    <span class="inspex-tag">NOTÍCIAS</span>
-  </div>
-  <div class="inspex-body">
-    <div class="inspex-kicker"><span>INSPEX</span><i></i><span>AGORA</span></div>
-    <h1>As principais novidades do mundo dos mangás, direto do INSPEX.</h1>
-    <p>Uma pequena janela para acompanhar o que está acontecendo fora do LinkStory.</p>
-    <a href="#" class="inspex-link" id="inspexLink">Ler matéria <span>→</span></a>
-  </div>
-</section>
+<section class="ranking-entry"><a href="ranking.html"><span><small>COMUNIDADE</small><strong>Pontos corridos</strong><em>Veja quem está liderando a leitura neste mês.</em></span><b>Ver ranking&nbsp; ›</b></a></section>
 <div class="catalog">
-<section class="shelf" id="popularShelf"><div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div><div class="track" id="popularTrack"></div></section>
-<section class="shelf" id="recentShelf"><div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div><div class="track" id="recentTrack"></div></section>
-<section class="shelf" id="allShelf"><div class="shelf-head"><h2 class="shelf-title">Mais histórias</h2></div><div class="track" id="allTrack"></div></section>
+<section class="shelf" id="popularShelf"><div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div><div class="track" id="popularTrack" aria-busy="true"><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div></div></section>
+<section class="shelf" id="recentShelf"><div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div><div class="track" id="recentTrack" aria-busy="true"><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div></div></section>
+<section class="shelf" id="allShelf"><div class="shelf-head"><h2 class="shelf-title">Mais histórias</h2></div><div class="track" id="allTrack" aria-busy="true"><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div></div></section>
 </div>
-<section class="creator"><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
+<section class="creator" id="creatorHomeCta" hidden><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
-<nav class="ls-bottom-nav" aria-label="Navegação principal">
-  <a class="bottom-nav-item active" href="index.html" aria-current="page"><span class="bottom-nav-icon">⌂</span><strong>Início</strong></a>
-  <a class="bottom-nav-item" href="library.html"><span class="bottom-nav-icon">□</span><strong>Biblioteca</strong></a>
-  <a class="bottom-nav-item" href="profile.html"><span class="bottom-nav-icon">●</span><strong>Perfil</strong></a>
-</nav>
-<dialog class="menu-dialog" id="menuDialog"><div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div><nav class="menu-list"><a href="fy.html">FY <strong>›</strong></a><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a></nav></div></dialog>
+<dialog class="menu-dialog" id="menuDialog"><div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div><nav class="menu-list"><a href="fy.html">FY <strong>›</strong></a><a href="ranking.html">Pontos corridos <strong>›</strong></a><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a></nav></div></dialog>
 <dialog class="menu-dialog" id="searchDialog"><div class="menu-wrap"><div class="menu-head"><strong>BUSCAR</strong><button class="close" id="closeSearch">×</button></div><input id="searchInput" placeholder="Buscar mangá, autor ou gênero" style="width:100%;height:52px;border:1px solid #dbe5ef;border-radius:12px;padding:0 15px;font:inherit;margin-top:22px"><div id="searchResults" style="margin-top:15px"></div></div></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script><script src="manga-db.js"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin><link rel="preconnect" href="https://qwhpikyxilzwazeneddw.supabase.co" crossorigin><script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="auth.js"></script><script defer src="manga-db.js"></script>
 <script>
+document.addEventListener('DOMContentLoaded',()=>{
 (async()=>{
 const feature=document.getElementById('feature'),shelves=[document.getElementById('popularShelf'),document.getElementById('recentShelf'),document.getElementById('allShelf')],tracks=[document.getElementById('popularTrack'),document.getElementById('recentTrack'),document.getElementById('allTrack')];
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-let mangas=[];try{mangas=await LinkStoryManga.publishedMangas()}catch(e){console.error(e)}
+let mangas=[];try{mangas=await LinkStoryManga.publishedMangas(200)}catch(e){console.error(e)}
 if(!mangas.length){shelves.forEach(s=>s.style.display='none')}
-const stats=await Promise.all(mangas.map(async m=>{try{return{m,s:await LinkStoryManga.stats(m.id)}}catch{return{m,s:{likes:0,ratings:0,average:0}}}}));
+let statsById={};try{statsById=await LinkStoryManga.statsMany(mangas.slice(0,8).map(m=>m.id))}catch(e){console.warn('Estatísticas temporariamente indisponíveis:',e)}const stats=mangas.slice(0,8).map(m=>({m,s:statsById[m.id]||{likes:0,ratings:0,average:0}}));
 const popular=stats.slice().sort((a,b)=>(b.s.likes||0)-(a.s.likes||0)||(b.s.ratings||0)-(a.s.ratings||0)).map(x=>x.m),recent=mangas.slice().reverse();
-// O bloco INSPEX já nasce como componente independente; depois o conteúdo poderá vir automaticamente do portal.
-const makeBook=(m,rank)=>{const a=document.createElement('a');a.className='book';a.href='manga.html?id='+encodeURIComponent(m.id);const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');a.innerHTML=(rank?'<span class="rank">'+rank+'</span>':'')+'<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+(m.cover_url?'<img src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+'<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span></span>';return a};
-const render=(track,items,ranked)=>{track.innerHTML='';items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0)))};
-render(tracks[0],popular,true);render(tracks[1],recent,false);render(tracks[2],mangas,false);
+const makeBook=(m,rank)=>{const a=document.createElement('a');a.className='book';a.href='manga.html?id='+encodeURIComponent(m.id);const genre=Array.isArray(m.genres)?m.genres.join(' · '):String(m.genres||'Mangá');a.innerHTML=(rank?'<span class="rank">'+rank+'</span>':'')+'<span class="age">'+esc(m.age_rating||'Livre')+'</span>'+(m.cover_url?'<img loading="lazy" decoding="async" src="'+esc(m.cover_url)+'" alt="'+esc(m.title)+'">':'')+'<span class="book-info"><span class="book-meta">'+esc(genre)+'</span><span class="book-title">'+esc(m.title)+'</span></span>';return a};
+const render=(track,items,ranked)=>{track.replaceChildren();track.setAttribute('aria-busy','false');items.forEach((m,i)=>track.appendChild(makeBook(m,ranked&&i<3?i+1:0)))};
+render(tracks[0],popular,true);render(tracks[1],recent.slice(0,24),false);render(tracks[2],mangas.slice(0,24),false);
 const searchInput=document.getElementById('searchInput'),searchResults=document.getElementById('searchResults');
-searchInput.addEventListener('input',()=>{const q=searchInput.value.trim().toLowerCase(),filtered=mangas.filter(m=>((m.title||'')+' '+(Array.isArray(m.genres)?m.genres.join(' '):(m.genres||''))).toLowerCase().includes(q)).slice(0,8);searchResults.innerHTML=filtered.map(m=>'<a href="manga.html?id='+encodeURIComponent(m.id)+'" style="display:block;padding:12px 0;border-bottom:1px solid #dbe5ef;font-weight:700">'+esc(m.title)+'</a>').join('')||(q?'Nenhum resultado.':'')});
+let searchTimer;searchInput.addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{const q=searchInput.value.trim().toLocaleLowerCase('pt-BR');searchResults.replaceChildren();if(!q){searchResults.textContent='Digite o nome de um mangá, autor ou gênero.';return}const filtered=mangas.filter(m=>{const author=m.profiles||{};const fields=[m.title,m.genres,author.display_name,author.username].flatMap(v=>Array.isArray(v)?v:[v||'']);return fields.join(' ').toLocaleLowerCase('pt-BR').includes(q)}).slice(0,12);if(!filtered.length){searchResults.textContent='Nenhum resultado encontrado. Tente outro nome ou gênero.';return}filtered.forEach(m=>{const a=document.createElement('a');a.href='manga.html?id='+encodeURIComponent(m.id);a.style.cssText='display:block;padding:13px 0;border-bottom:1px solid #dbe5ef;text-decoration:none;color:inherit';const title=document.createElement('strong');title.textContent=m.title||'Sem título';title.style.cssText='display:block;font-weight:800';const author=document.createElement('small');author.textContent=(m.profiles?.display_name||m.profiles?.username||'Autor não informado')+' · '+(Array.isArray(m.genres)?m.genres.join(', '):(m.genres||'Mangá'));author.style.cssText='display:block;margin-top:4px;color:#718096';a.append(title,author);searchResults.append(a)})},180)});
 })();
 const menu=document.getElementById('menuDialog'),search=document.getElementById('searchDialog');
-document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>search.showModal();document.getElementById('closeSearch').onclick=()=>search.close();
+document.getElementById('openMenu').onclick=()=>menu.showModal();document.getElementById('closeMenu').onclick=()=>menu.close();document.getElementById('openSearch').onclick=()=>{search.showModal();const input=document.getElementById('searchInput');input.value='';document.getElementById('searchResults').textContent='Digite o nome de um mangá, autor ou gênero.';setTimeout(()=>input.focus(),80)};document.getElementById('closeSearch').onclick=()=>search.close();
+(async()=>{const box=document.getElementById('creatorHomeCta');try{const p=await LinkStoryManga.currentProfile(),mode=localStorage.getItem('linkstory-active-mode')||'leitor';box.hidden=!(p?.role==='criador'&&mode==='criador')}catch{box.hidden=true}})();
+});
 </script>
 
 
-</body>
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+(async()=>{
+ const links=[...document.querySelectorAll('a[href="publish.html"],a[href="studio.html"]')];
+ try{
+  const p=await LinkStoryManga.currentProfile();
+  const enabled=p?.role==='criador'&&(localStorage.getItem('linkstory-active-mode')||'leitor')==='criador';
+  links.forEach(a=>{a.hidden=!enabled});
+ }catch(e){console.error('LinkStory creator access:',e);links.forEach(a=>{a.hidden=true})}
+})();
+});
+</script>
+<script src="menu-button.js?v=1"></script></body>
 </html>

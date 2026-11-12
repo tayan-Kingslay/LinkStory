@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f7fc">
+<title>Pontos corridos — LinkStory</title>
+<link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
+<link rel="stylesheet" href="visual-system.css?v=4">
+<link rel="stylesheet" href="at3-global.css?v=2">
+<link rel="stylesheet" href="visual-refresh.css?v=2">
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:#f4f7fc;color:#17263a;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.topbar{height:64px;width:min(920px,calc(100% - 28px));margin:12px auto 0;padding:0 14px;display:flex;align-items:center;gap:12px;border:1px solid rgba(220,230,242,.85);border-radius:19px;background:rgba(255,255,255,.76);backdrop-filter:blur(18px) saturate(145%);-webkit-backdrop-filter:blur(18px) saturate(145%);box-shadow:0 10px 30px rgba(16,32,51,.08);position:sticky;top:10px;z-index:10}
+.back{width:38px;height:38px;display:grid;place-items:center;border:1px solid #e2eaf3;border-radius:12px;background:rgba(255,255,255,.8);font-size:23px;color:#40536b;text-decoration:none}
+.logo{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center}.logo img{width:120px;height:40px;object-fit:contain}
+main{width:min(760px,calc(100% - 28px));margin:34px auto 80px}.eyebrow{color:#1769d2;font-size:10px;font-weight:900;letter-spacing:2px;text-transform:uppercase}
+h1{margin:7px 0 5px;font-size:clamp(30px,6vw,42px);letter-spacing:-1.8px}.subtitle{margin:0;color:#78889d;font-size:13px;line-height:1.6}
+.month-label{margin:25px 0 12px;color:#78889d;font-size:11px;font-weight:800;letter-spacing:1px;text-transform:uppercase}
+.board{overflow:hidden;border:1px solid rgba(220,230,242,.9);border-radius:20px;background:rgba(255,255,255,.8);box-shadow:0 12px 34px rgba(16,32,51,.06);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.row{display:grid;grid-template-columns:52px minmax(0,1fr) 92px;align-items:center;gap:12px;padding:15px 17px;border-bottom:1px solid #e9eef5;min-height:68px}.row:last-child{border-bottom:0}
+.place{font-size:15px;font-weight:900;color:#1769d2;text-align:center}.person{min-width:0;font-size:14px;font-weight:800;overflow-wrap:anywhere}
+.points{text-align:right;font-size:14px;font-weight:900;color:#172f4d;white-space:nowrap}.points small{display:block;margin-top:3px;color:#8291a4;font-size:9px;font-weight:750;letter-spacing:.8px;text-transform:uppercase}
+.state{padding:28px 18px;text-align:center;color:#78889d;font-size:13px;line-height:1.6}.note{margin:13px 2px 0;color:#8291a4;font-size:11px;line-height:1.55}
+@media(max-width:480px){main{margin-top:26px}.row{grid-template-columns:38px minmax(0,1fr) 76px;padding:14px 12px;gap:9px}.person,.points{font-size:13px}}
+</style>
+<style id="at3-ranking-finish">
+/* AT3 — Pontos corridos: Liquid Glass, somente acabamento visual */
+body{background:radial-gradient(ellipse at 82% 0%,rgba(23,105,210,.09),transparent 38%),linear-gradient(145deg,#f1f5fa,#f8faff 58%,#edf3f9)!important;color:#202a38!important}
+.topbar{top:9px!important;border:1px solid rgba(255,255,255,.92)!important;border-radius:18px!important;background:rgba(255,255,255,.68)!important;-webkit-backdrop-filter:blur(26px) saturate(180%)!important;backdrop-filter:blur(26px) saturate(180%)!important;box-shadow:0 12px 32px rgba(16,32,51,.075),inset 0 1px 0 #fff!important}
+.back{border-color:rgba(177,192,210,.4)!important;background:rgba(255,255,255,.72)!important;box-shadow:inset 0 1px 0 #fff}
+main{margin-top:35px!important}
+h1{letter-spacing:-2px!important}
+.subtitle{max-width:560px!important;line-height:1.7!important}
+.month-label{margin-top:27px!important;color:#66788e!important}
+.board{border:1px solid rgba(255,255,255,.94)!important;border-radius:21px!important;background:linear-gradient(145deg,rgba(255,255,255,.84),rgba(255,255,255,.62))!important;box-shadow:0 14px 36px rgba(16,32,51,.065),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(22px) saturate(170%)!important;backdrop-filter:blur(22px) saturate(170%)!important}
+.board .row{min-height:72px!important;padding:16px 18px!important;border-bottom-color:rgba(130,150,175,.17)!important;transition:background .18s ease}
+.board .row:hover{background:rgba(235,244,255,.48)}
+.board .row:first-child .place{color:#0c72df}
+.place{font-variant-numeric:tabular-nums}
+.person{letter-spacing:-.15px}
+.points{font-variant-numeric:tabular-nums}
+.points small{letter-spacing:1px}
+.state{padding:34px 20px!important;line-height:1.7!important}
+.note{margin-top:15px!important;line-height:1.7!important}
+@media(max-width:480px){main{margin-top:27px!important}.topbar{top:7px!important;height:60px!important}.board{border-radius:18px!important}.board .row{min-height:66px!important;padding:14px 12px!important}}
+@media(prefers-reduced-motion:reduce){.board .row{transition:none!important}}
+html[data-ls-theme="dark"] body{background:radial-gradient(ellipse at 82% 0%,rgba(32,126,235,.16),transparent 38%),linear-gradient(145deg,#151a22,#202733 58%,#171d26)!important;color:#f2f5f9!important}
+html[data-ls-theme="dark"] .topbar,html[data-ls-theme="dark"] .board{border-color:rgba(255,255,255,.13)!important;background:linear-gradient(145deg,rgba(48,58,72,.9),rgba(29,36,47,.84))!important;box-shadow:0 14px 36px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08)!important}
+html[data-ls-theme="dark"] .back{color:#dce8f8!important;background:rgba(19,26,36,.7)!important;border-color:rgba(255,255,255,.13)!important}
+html[data-ls-theme="dark"] h1,html[data-ls-theme="dark"] .person,html[data-ls-theme="dark"] .points{color:#f1f5fa!important}
+html[data-ls-theme="dark"] .subtitle,html[data-ls-theme="dark"] .month-label,html[data-ls-theme="dark"] .note,html[data-ls-theme="dark"] .state{color:#aebccd!important}
+html[data-ls-theme="dark"] .board .row{border-bottom-color:rgba(255,255,255,.1)!important}
+html[data-ls-theme="dark"] .board .row:hover{background:rgba(95,145,205,.1)!important}
+html[data-ls-theme="dark"] .points small{color:#9eafc3!important}
+</style>
+</head>
+<body>
+<header class="topbar"><a class="back" href="index.html" aria-label="Voltar">‹</a><a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a></header>
+<main>
+ <span class="eyebrow">Comunidade LinkStory</span><h1>Pontos corridos</h1>
+ <p class="subtitle">Ranking de leitura do mês. Cada capítulo lido e registrado vale 1 ponto.</p>
+ <div class="month-label" id="monthLabel">Classificação do mês</div>
+ <section class="board" id="leaderboard" aria-live="polite"><div class="state">Carregando classificação…</div></section>
+ <p class="note">A pontuação é acumulada durante o mês. A classificação reinicia no primeiro dia do mês seguinte.</p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script>
+<script>
+(async()=>{
+ const db=linkstorySupabase,board=document.getElementById('leaderboard'),monthLabel=document.getElementById('monthLabel'),now=new Date();
+ monthLabel.textContent='Classificação de '+new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(now);
+ try{
+  const {data:{session},error:sessionError}=await db.auth.getSession();if(sessionError)throw sessionError;
+  if(!session){board.innerHTML='<div class="state">Entre na sua conta para consultar o ranking de pontos corridos.</div>';return}
+  const monthStart=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0')+'-01';
+  const {data,error}=await db.rpc('get_monthly_reader_leaderboard',{p_month:monthStart});if(error)throw error;
+  const rows=data||[];board.replaceChildren();
+  if(!rows.length){board.innerHTML='<div class="state">Ainda não há pontos registrados neste mês. Leia capítulos para entrar na classificação.</div>';return}
+  rows.forEach(person=>{
+   const row=document.createElement('div');row.className='row';
+   const place=document.createElement('div');place.className='place';place.textContent=person.rank_position+'º';
+   const name=document.createElement('div');name.className='person';name.textContent=person.display_name||person.username||'Leitor';
+   const points=document.createElement('div');points.className='points';points.append(document.createTextNode(Number(person.chapters_read||0).toLocaleString('pt-BR')+' pts'));
+   const label=document.createElement('small');label.textContent='PONTOS';points.append(label);row.append(place,name,points);board.append(row);
+  });
+ }catch(error){console.error('Pontos corridos:',error);board.innerHTML='<div class="state">Não foi possível carregar o ranking agora. Tente novamente mais tarde.</div>'}
+})();
+</script><script src="global-nav.js"></script>
+</body></html>

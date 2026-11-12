@@ -1,0 +1,20 @@
+/* LinkStory AT3 — home com material Liquid Glass. Somente apresentação. */
+:root{--at3-ink:#202631;--at3-muted:#7b8491;--at3-edge:rgba(255,255,255,.9);--at3-shadow:0 13px 34px rgba(31,41,55,.10);--at3-radius:24px}
+html,body{background-color:#f3f4f6!important;background-image:radial-gradient(ellipse at 15% 0%,rgba(255,255,255,.96),transparent 42%),radial-gradient(ellipse at 95% 35%,rgba(218,226,238,.42),transparent 38%),linear-gradient(145deg,#f7f8fa,#eef0f4 52%,#f6f7f9)!important;color:var(--at3-ink)}
+.header.home-header{background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(255,255,255,.48))!important;border:1px solid rgba(255,255,255,.94)!important;border-radius:24px!important;box-shadow:0 12px 34px rgba(31,41,55,.09),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(30px) saturate(190%)!important;backdrop-filter:blur(30px) saturate(190%)!important}
+.header.home-header .circle{background:rgba(255,255,255,.62)!important;border:1px solid rgba(255,255,255,.96)!important;box-shadow:0 5px 16px rgba(37,48,64,.07),inset 0 1px 0 #fff!important;color:#586574!important}
+.catalog{padding-top:10px}.shelf{position:relative}.shelf-head{align-items:center}.shelf-title{color:#303943!important;letter-spacing:-.7px!important}.track{padding-top:4px!important;padding-bottom:14px!important}
+.book{border-radius:18px!important;box-shadow:0 12px 28px rgba(31,41,55,.16)!important;outline:1px solid rgba(255,255,255,.72);outline-offset:-1px}
+.book:after{background:linear-gradient(0deg,rgba(22,28,36,.82),rgba(22,28,36,0) 66%)!important}
+.rank{border-radius:0 0 0 14px;background:rgba(91,105,120,.88)!important;-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
+.age{border-radius:9px!important;background:rgba(55,65,77,.78)!important;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.empty{background:linear-gradient(145deg,rgba(255,255,255,.8),rgba(255,255,255,.48))!important;border:1px solid rgba(255,255,255,.92)!important;border-radius:22px!important;box-shadow:var(--at3-shadow),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(24px) saturate(175%);backdrop-filter:blur(24px) saturate(175%)}
+.creator{border-radius:25px!important;background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(231,235,241,.55))!important;color:#303943!important;border:1px solid rgba(255,255,255,.94)!important;box-shadow:var(--at3-shadow),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%)}
+.creator .ey,.creator p{color:#697581!important}.creator a{color:#fff!important;background:linear-gradient(135deg,#657b96,#8c9caf)!important;border-radius:15px!important;box-shadow:0 8px 20px rgba(76,91,108,.18)}
+#lsBottomNav,.ls-bottom-nav{background:linear-gradient(145deg,rgba(255,255,255,.82),rgba(255,255,255,.5))!important;border:1px solid rgba(255,255,255,.96)!important;box-shadow:0 14px 38px rgba(30,42,58,.13),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(32px) saturate(195%)!important;backdrop-filter:blur(32px) saturate(195%)!important}
+@media(max-width:720px){.header.home-header{border-radius:20px!important}.book{border-radius:16px!important}.creator{border-radius:21px!important}}
+html[data-ls-theme="dark"] body{background-image:radial-gradient(ellipse at 15% 0%,rgba(115,135,160,.16),transparent 42%),linear-gradient(145deg,#171a20,#20252e 55%,#191d24)!important}
+html[data-ls-theme="dark"] .header.home-header,html[data-ls-theme="dark"] .creator,html[data-ls-theme="dark"] #lsBottomNav,html[data-ls-theme="dark"] .ls-bottom-nav{background:linear-gradient(145deg,rgba(48,55,66,.84),rgba(27,32,40,.8))!important;border-color:rgba(255,255,255,.12)!important}
+html[data-ls-theme="dark"] .shelf-title,html[data-ls-theme="dark"] .creator{color:#f3f5f8!important}
+html[data-ls-theme="dark"] .header.home-header .circle{background:rgba(45,52,62,.72)!important;color:#eef1f4!important;border-color:rgba(255,255,255,.12)!important}
+html[data-ls-theme="dark"] .creator .ey,html[data-ls-theme="dark"] .creator p{color:#c0c8d1!important}

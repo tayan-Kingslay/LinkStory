@@ -10,8 +10,112 @@
   <title>Política de Privacidade — LinkStory</title>
   <style>
     .legal-page{max-width:900px;margin:0 auto;padding:48px 20px 80px}.legal-back{display:inline-flex;margin-bottom:30px;color:#0b72e7;font-weight:800;text-decoration:none}.legal-page h1{font-size:clamp(34px,7vw,56px);letter-spacing:-1.5px;margin:0 0 12px}.legal-updated{color:#687585;font-size:13px;margin:0 0 40px}.legal-page h2{font-size:22px;margin:34px 0 10px}.legal-page p,.legal-page li{color:#4e5d6d;line-height:1.75;font-size:15px}.legal-page ul{padding-left:22px}.legal-card{border:1px solid #dce8f5;background:#f7fbff;border-radius:16px;padding:18px 20px;margin:24px 0}.legal-card p{margin:0}.legal-footer{border-top:1px solid #e5ebf2;padding-top:22px;margin-top:48px}.legal-footer a{color:#0b72e7;text-decoration:none;font-weight:700;margin-right:18px}
+
+    /* AT3 — Política de Privacidade: refinamento Liquid Glass */
+    body{
+      min-height:100vh;
+      background:
+        radial-gradient(ellipse at 88% 2%,rgba(11,114,231,.075),transparent 38%),
+        linear-gradient(180deg,#f5f8fc 0%,#f1f5f9 100%)!important;
+    }
+    body>.header{
+      position:sticky!important;top:10px!important;z-index:40!important;
+      width:calc(100% - 20px)!important;margin:10px 10px 0!important;
+      border:1px solid rgba(255,255,255,.88)!important;border-radius:17px!important;
+      background:rgba(255,255,255,.7)!important;
+      -webkit-backdrop-filter:blur(26px) saturate(180%)!important;
+      backdrop-filter:blur(26px) saturate(180%)!important;
+      box-shadow:0 10px 30px rgba(28,43,63,.07),inset 0 1px 0 #fff!important;
+    }
+    .legal-page{
+      max-width:900px!important;padding:42px 24px 84px!important;
+    }
+    .legal-back{
+      align-items:center;min-height:36px;padding:7px 11px;
+      border:1px solid rgba(11,114,231,.12);border-radius:11px;
+      background:rgba(255,255,255,.68);
+      transition:background .18s ease,transform .18s ease;
+    }
+    .legal-back:hover{background:#fff;transform:translateX(-2px)}
+    .legal-page h1{
+      max-width:760px;line-height:1.06;letter-spacing:-2px!important;
+      color:#17283d;
+    }
+    .legal-updated{margin:0 0 30px!important;color:#7b8999!important}
+    .legal-page h2{
+      margin:38px 0 11px!important;padding-top:4px;
+      font-size:clamp(19px,3vw,22px)!important;letter-spacing:-.45px;
+      color:#20344b;
+    }
+    .legal-page p,.legal-page li{
+      color:#536477!important;font-size:15px!important;line-height:1.8!important;
+    }
+    .legal-page ul{padding-left:23px!important}
+    .legal-page li{padding-left:3px;margin:5px 0}
+    .legal-card{
+      padding:21px 23px!important;margin:27px 0 32px!important;
+      border:1px solid rgba(255,255,255,.94)!important;border-radius:19px!important;
+      background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(235,244,255,.72))!important;
+      box-shadow:0 12px 30px rgba(31,48,70,.055),inset 0 1px 0 #fff!important;
+      -webkit-backdrop-filter:blur(20px) saturate(170%);
+      backdrop-filter:blur(20px) saturate(170%);
+    }
+    .legal-card p{color:#34465b!important}
+    .legal-footer{
+      display:flex;flex-wrap:wrap;gap:12px 20px;
+      border-top:1px solid rgba(145,164,187,.28)!important;
+      padding-top:24px!important;margin-top:55px!important;
+    }
+    .legal-footer a{
+      margin:0!important;padding:8px 11px;border-radius:10px;
+      background:rgba(255,255,255,.6);
+      transition:background .18s ease,color .18s ease;
+    }
+    .legal-footer a:hover{background:rgba(11,114,231,.09);color:#075cc5}
+    .legal-back:focus-visible,.legal-footer a:focus-visible{
+      outline:3px solid rgba(11,114,231,.3);outline-offset:3px;
+    }
+    @media(max-width:600px){
+      body>.header{top:7px!important;width:calc(100% - 14px)!important;margin:7px 7px 0!important}
+      .legal-page{padding:28px 19px 60px!important}
+      .legal-page h1{letter-spacing:-1.4px!important}
+      .legal-updated{margin-bottom:24px!important}
+      .legal-card{padding:17px!important;border-radius:16px!important}
+      .legal-page h2{margin-top:31px!important}
+      .legal-footer{gap:8px;margin-top:40px!important}
+      .legal-footer a{font-size:13px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      .legal-back,.legal-footer a{transition:none!important}
+    }
+    html[data-ls-theme="dark"] body{
+      background:radial-gradient(ellipse at 88% 2%,rgba(32,126,235,.15),transparent 38%),linear-gradient(180deg,#151a22,#202733 58%,#171d26)!important;
+    }
+    html[data-ls-theme="dark"] body>.header{
+      background:rgba(31,39,51,.78)!important;border-color:rgba(255,255,255,.12)!important;
+      box-shadow:0 10px 30px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.08)!important;
+    }
+    html[data-ls-theme="dark"] .legal-page h1,
+    html[data-ls-theme="dark"] .legal-page h2{color:#f0f4fa!important}
+    html[data-ls-theme="dark"] .legal-updated,
+    html[data-ls-theme="dark"] .legal-page p,
+    html[data-ls-theme="dark"] .legal-page li{color:#b6c2d1!important}
+    html[data-ls-theme="dark"] .legal-card{
+      background:linear-gradient(145deg,rgba(48,58,72,.88),rgba(29,36,47,.84))!important;
+      border-color:rgba(255,255,255,.12)!important;
+      box-shadow:0 12px 30px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.07)!important;
+    }
+    html[data-ls-theme="dark"] .legal-card p{color:#e0e7f0!important}
+    html[data-ls-theme="dark"] .legal-back,
+    html[data-ls-theme="dark"] .legal-footer a{
+      background:rgba(31,48,68,.72);border-color:rgba(255,255,255,.1);
+    }
+    html[data-ls-theme="dark"] .legal-footer{border-color:rgba(255,255,255,.12)!important}
+
   </style>
-<link rel="stylesheet" href="visual-system.css?v=2">
+<link rel="stylesheet" href="visual-system.css?v=4">
+<link rel="stylesheet" href="at3-global.css?v=2">
+<link rel="stylesheet" href="visual-refresh.css?v=2">
 </head>
 <body>
   <header class="header">
