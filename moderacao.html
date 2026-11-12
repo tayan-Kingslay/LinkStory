@@ -124,6 +124,42 @@ html[data-ls-theme="dark"] .details{color:#e0e7f0!important;background:rgba(19,2
 html[data-ls-theme="dark"] .case textarea{color:#f3f6fb!important;background:rgba(19,26,36,.68)!important;border-color:rgba(255,255,255,.14)!important}
 html[data-ls-theme="dark"] .case textarea::placeholder{color:#9caabd}
 html[data-ls-theme="dark"] .badge{color:#b9d9ff!important;background:rgba(24,72,122,.42)!important;border-color:rgba(110,174,244,.18)!important}
+
+/* AT3 — refinamento de interação e leitura */
+.toolbar button:hover,.case button:not(:disabled):hover{
+  border-color:rgba(11,114,231,.28)!important;
+  box-shadow:0 6px 15px rgba(31,48,70,.075),inset 0 1px 0 #fff!important;
+  transform:translateY(-1px);
+}
+.toolbar button.active:hover,.case button.primary:hover{
+  background:linear-gradient(135deg,#0878e8,#075cc5)!important;
+  color:#fff!important;border-color:transparent!important;
+}
+.case{transition:box-shadow .2s ease,border-color .2s ease}
+.case:hover{
+  border-color:rgba(11,114,231,.19)!important;
+  box-shadow:0 17px 40px rgba(31,48,70,.085),inset 0 1px 0 #fff!important;
+}
+.top a:focus-visible,.toolbar button:focus-visible,.case button:focus-visible{
+  outline:3px solid rgba(11,114,231,.32)!important;outline-offset:3px;
+}
+.case-head strong{line-height:1.4}
+.meta{overflow-wrap:anywhere}
+@media(hover:none){
+  .toolbar button:hover,.case button:hover,.case:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){.case{transition:none!important}}
+html[data-ls-theme="dark"] .toolbar button:hover,
+html[data-ls-theme="dark"] .case button:not(.primary):hover{
+  background:rgba(43,83,129,.48)!important;
+  border-color:rgba(110,174,244,.32)!important;
+  box-shadow:0 6px 15px rgba(0,0,0,.16)!important;
+}
+html[data-ls-theme="dark"] .case:hover{
+  border-color:rgba(110,174,244,.22)!important;
+  box-shadow:0 17px 40px rgba(0,0,0,.25),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+
 </style><link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="at3-global.css?v=2">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
