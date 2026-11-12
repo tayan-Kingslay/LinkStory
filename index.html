@@ -186,7 +186,23 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 }
 </style>
 
-<style>.ranking-entry{margin:0 0 22px}.ranking-entry a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border:1px solid rgba(130,150,175,.22);border-radius:17px;background:linear-gradient(115deg,#fff,#f3f8ff);box-shadow:0 7px 22px rgba(16,32,51,.05);text-decoration:none;color:inherit}.ranking-entry small,.ranking-entry strong,.ranking-entry em{display:block}.ranking-entry small{font-size:9px;font-weight:900;letter-spacing:1.5px;color:#0b72e7}.ranking-entry strong{font-size:17px;margin:3px 0}.ranking-entry em{font-style:normal;font-size:11px;color:#77869a}.ranking-entry b{white-space:nowrap;color:#0b72e7;font-size:12px}@media(max-width:420px){.ranking-entry a{padding:14px}.ranking-entry strong{font-size:15px}.ranking-entry em{max-width:205px;line-height:1.4}}</style>
+<style>
+/* Ajuste fino do cabeçalho: sino e menu ficam lado a lado, sem espaço elástico. */
+.header.home-header>.header-actions{width:max-content!important;min-width:0!important;justify-self:end!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;gap:8px!important}
+.header.home-header>.header-actions>.home-shortcut,
+.header.home-header>.header-actions>#openMenu{flex:0 0 42px!important;margin:0!important}
+@media(max-width:720px){.header.home-header>.header-actions{gap:7px!important}}
+@media(max-width:420px){.header.home-header>.header-actions{gap:6px!important}.header.home-header>.header-actions>.home-shortcut,.header.home-header>.header-actions>#openMenu{flex-basis:38px!important}}
+/* Card Pontos corridos: fluxo abaixo do cabeçalho e composição compacta. */
+main{padding-top:16px!important}
+.ranking-entry{width:min(1080px,calc(100% - 32px));margin:0 auto 30px!important}
+.ranking-entry a{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:104px;padding:18px 20px;border:1px solid rgba(130,150,175,.22);border-radius:18px;background:rgba(255,255,255,.82);box-shadow:0 5px 18px rgba(16,32,51,.045);text-decoration:none;color:inherit}
+.ranking-entry small{display:block;font-size:9px;font-weight:850;letter-spacing:1.3px;color:#0b72e7}
+.ranking-entry strong{display:block;font-size:18px;line-height:1.2;margin:5px 0 3px;color:#102033}
+.ranking-entry em{display:block;font-style:normal;font-size:12px;line-height:1.4;color:#77869a}
+.ranking-entry b{flex:0 0 auto;white-space:nowrap;color:#0b72e7;font-size:13px;font-weight:800}
+@media(max-width:480px){main{padding-top:14px!important}.ranking-entry{width:calc(100% - 24px);margin-bottom:26px!important}.ranking-entry a{min-height:92px;padding:15px 14px;gap:10px}.ranking-entry strong{font-size:16px}.ranking-entry em{font-size:11px;max-width:220px}.ranking-entry b{font-size:12px}}
+</style>
 </head>
 <body>
 <header class="header home-header">
