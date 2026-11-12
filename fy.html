@@ -555,18 +555,7 @@ main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!im
 </style>
   <link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="at3-global.css?v=2">
-<style id="fy-reference-layout-fix">
-.topbar:has(> .ls-global-menu-btn){display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;grid-template-columns:none!important;position:relative!important;inset:auto!important;transform:none!important;width:100%!important;max-width:760px!important;height:auto!important;min-height:0!important;margin:0 auto!important;padding:12px 14px 10px!important;gap:12px!important;border:0!important;border-bottom:1px solid #dce5f0!important;border-radius:0!important;background:rgba(247,249,253,.97)!important;box-shadow:none!important}
-.topbar .ls-global-menu-btn{display:none!important}
-.topbar .brand{display:flex!important;align-items:center!important;justify-content:center!important;width:100%!important;height:76px!important;margin:0!important;grid-column:auto!important}
-.topbar .brand img{display:block!important;width:210px!important;height:68px!important;max-height:68px!important;object-fit:contain!important;filter:none!important}
-.topbar .top-switch{order:2!important;display:flex!important;align-items:center!important;justify-content:center!important;width:min(370px,100%)!important;margin:0 auto!important;padding:5px!important;gap:4px!important;border:1px solid #d7e1ef!important;border-radius:999px!important;background:#e8eef8!important;box-shadow:inset 0 1px 2px rgba(32,57,91,.05)!important}
-.topbar .top-switch :is(a,button){flex:1!important;text-align:center!important;padding:12px 15px!important;border:0!important;border-radius:999px!important;background:transparent!important;color:#263449!important;font-size:15px!important;font-weight:750!important}
-.topbar .top-switch :is(a,button).top-switch-active,.topbar .top-switch button.active{background:#fff!important;color:#111827!important;box-shadow:0 2px 8px rgba(22,43,72,.09)!important}
-main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!important}
-.tabs{display:none!important}
-@media(max-width:430px){.topbar{padding:10px 12px 11px!important;gap:9px!important}.topbar .brand{height:66px!important}.topbar .brand img{width:190px!important;height:62px!important}.topbar .top-switch{width:min(370px,calc(100% - 12px))!important}.topbar .top-switch :is(a,button){padding:11px 12px!important;font-size:14px!important}}
-</style>
+
 
 <style id="compose-dialog-mobile-redesign">
 /* Nova publicação: modal compacto, com rolagem interna e ações sempre acessíveis */
@@ -665,47 +654,47 @@ main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!im
 }
 </style>
 <style id="fy-liquid-glass-header">
-/* Cabeçalho único da página Pra você: logo + menu no mesmo vidro. */
-.topbar:has(> .ls-global-menu-btn){
- position:sticky!important;top:10px!important;z-index:200!important;
+/* Mesmo padrão estrutural das outras páginas: apenas logo e menu. */
+header.topbar.fy-header{
+ position:sticky!important;top:8px!important;z-index:200!important;
  display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
- width:calc(100% - 24px)!important;max-width:760px!important;height:82px!important;min-height:82px!important;
- margin:10px auto 18px!important;padding:8px 64px!important;gap:0!important;
- border:1px solid rgba(210,224,240,.72)!important;border-radius:24px!important;
- background:rgba(255,255,255,.58)!important;
- box-shadow:0 10px 30px rgba(27,55,91,.09),inset 0 1px 0 rgba(255,255,255,.8)!important;
- -webkit-backdrop-filter:blur(24px) saturate(165%)!important;backdrop-filter:blur(24px) saturate(165%)!important;
+ width:calc(100% - 20px)!important;max-width:1080px!important;height:68px!important;min-height:68px!important;
+ margin:8px auto 16px!important;padding:0 58px!important;gap:0!important;
+ border:1px solid rgba(219,229,239,.88)!important;border-radius:20px!important;
+ background:rgba(255,255,255,.78)!important;
+ box-shadow:0 8px 26px rgba(16,32,51,.07),inset 0 1px 0 rgba(255,255,255,.9)!important;
+ -webkit-backdrop-filter:blur(22px) saturate(160%)!important;backdrop-filter:blur(22px) saturate(160%)!important;
 }
-.topbar:has(> .ls-global-menu-btn)>.brand{
+header.topbar.fy-header>.brand{
  display:flex!important;align-items:center!important;justify-content:center!important;
  width:auto!important;height:100%!important;margin:0!important;flex:0 1 auto!important;
 }
-.topbar:has(> .ls-global-menu-btn)>.brand img{
- display:block!important;width:190px!important;height:64px!important;max-height:64px!important;object-fit:contain!important;
-}
-.topbar:has(> .ls-global-menu-btn)>.ls-global-menu-btn{
- display:flex!important;position:absolute!important;right:12px!important;top:50%!important;left:auto!important;bottom:auto!important;
+header.topbar.fy-header>.brand img{display:block!important;width:164px!important;height:54px!important;max-height:54px!important;object-fit:contain!important}
+header.topbar.fy-header>.ls-global-menu-btn{
+ display:flex!important;position:absolute!important;right:10px!important;top:50%!important;left:auto!important;bottom:auto!important;
  transform:translateY(-50%)!important;align-items:center!important;justify-content:center!important;
- width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;
- margin:0!important;border:1px solid rgba(210,224,240,.8)!important;border-radius:15px!important;
- background:rgba(255,255,255,.62)!important;color:#1768bd!important;
- box-shadow:0 4px 14px rgba(27,55,91,.07)!important;
- -webkit-backdrop-filter:blur(16px)!important;backdrop-filter:blur(16px)!important;
+ width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
+ margin:0!important;border:1px solid rgba(219,229,239,.95)!important;border-radius:50%!important;
+ background:rgba(255,255,255,.86)!important;color:#52657a!important;
+ box-shadow:0 3px 10px rgba(16,32,51,.06)!important;font-size:0!important;
+ -webkit-backdrop-filter:blur(14px)!important;backdrop-filter:blur(14px)!important;
 }
-.topbar:has(> .ls-global-menu-btn)>.ls-global-menu-btn svg{width:24px!important;height:24px!important}
+header.topbar.fy-header>.ls-global-menu-btn:before{
+ content:""!important;display:block!important;width:19px!important;height:17px!important;
+ background:linear-gradient(#52657a 0 2px,transparent 2px 7px,#52657a 7px 9px,transparent 9px 14px,#52657a 14px 16px)!important;
+}
 @media(max-width:430px){
- .topbar:has(> .ls-global-menu-btn){width:calc(100% - 20px)!important;height:76px!important;min-height:76px!important;margin:9px auto 16px!important;padding:7px 56px!important;border-radius:22px!important}
- .topbar:has(> .ls-global-menu-btn)>.brand img{width:178px!important;height:60px!important;max-height:60px!important}
- .topbar:has(> .ls-global-menu-btn)>.ls-global-menu-btn{right:9px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;border-radius:13px!important}
+ header.topbar.fy-header{width:calc(100% - 20px)!important;height:64px!important;min-height:64px!important;margin:8px auto 14px!important;padding:0 54px!important;border-radius:18px!important}
+ header.topbar.fy-header>.brand img{width:150px!important;height:50px!important;max-height:50px!important}
+ header.topbar.fy-header>.ls-global-menu-btn{right:8px!important;width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
 }
-html[data-ls-theme="dark"] .topbar:has(> .ls-global-menu-btn){
- background:rgba(18,24,34,.62)!important;border-color:rgba(130,155,185,.28)!important;
- box-shadow:0 10px 30px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.07)!important;
-}
+html[data-ls-theme="dark"] header.topbar.fy-header{background:rgba(21,28,38,.82)!important;border-color:rgba(130,155,185,.28)!important;box-shadow:0 8px 26px rgba(0,0,0,.22)!important}
+html[data-ls-theme="dark"] header.topbar.fy-header>.ls-global-menu-btn{background:rgba(30,40,53,.9)!important;border-color:#3b4d61!important}
+html[data-ls-theme="dark"] header.topbar.fy-header>.ls-global-menu-btn:before{background:linear-gradient(#c4ced9 0 2px,transparent 2px 7px,#c4ced9 7px 9px,transparent 9px 14px,#c4ced9 14px 16px)!important}
 </style>
 </head>
 <body>
-<header class="topbar"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a></header>
+<header class="header topbar fy-header"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a></header>
 <main>
 <nav class="tabs" aria-label="Feed"><button class="tab active" data-feed="for-you">Para você</button><button class="tab" data-feed="following">Seguindo</button><button class="tab" data-feed="ideas">Ideias</button></nav>
 <section class="composer" id="composer">
