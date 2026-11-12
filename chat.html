@@ -147,7 +147,7 @@ body.chat-page .compose-wrap{flex:0 0 auto;position:relative;z-index:4}
   const b=document.createElement('div');b.className='bubble'+(mine?' mine':'');
   if(m.deleted_for_all_at){b.classList.add('deleted-message');b.textContent='Esta mensagem foi apagada.'}
   else {
-   const bodyText=m.body||'',urlPattern=/(https?:\\/\\/[^\\s]+)/g;let cursor=0,match;
+   const bodyText=m.body||'',urlPattern=/(https?:\/\/[^\s]+)/g;let cursor=0,match;
    while((match=urlPattern.exec(bodyText))){
     b.append(document.createTextNode(bodyText.slice(cursor,match.index)));
     let shared=null;try{const parsed=new URL(match[0],location.origin);if(parsed.pathname.endsWith('/fy.html')&&parsed.searchParams.get('post'))shared=parsed.searchParams.get('post')}catch(_){}
