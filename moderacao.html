@@ -2,6 +2,128 @@
 <html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b72e7"><title>Central de Segurança — LinkStory</title>
 <style>
 :root{--blue:#0b72e7;--ink:#102033;--muted:#66788d;--line:#dbe5ef;--soft:#f5f9ff}*{box-sizing:border-box}body{margin:0;background:#f7f8fa;color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.top{height:64px;display:flex;align-items:center;padding:0 18px;background:#fff;border-bottom:1px solid var(--line)}.brand{font-size:22px;font-weight:950;text-decoration:none;color:var(--ink)}.brand b{color:var(--blue)}main{width:min(1000px,calc(100% - 28px));margin:30px auto 80px}.ey{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--blue)}h1{font-size:clamp(30px,6vw,44px);letter-spacing:-2px;margin:7px 0}.intro{color:var(--muted);line-height:1.6;font-size:14px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.toolbar button,.case button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px 13px;font-weight:800;color:var(--ink)}.toolbar button.active,.case button.primary{background:var(--blue);color:white;border-color:var(--blue)}#status{font-size:13px;color:var(--muted);margin:14px 0}.case{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:12px 0;box-shadow:0 6px 20px #10203308}.case-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.badge{font-size:10px;font-weight:900;border-radius:99px;background:#edf5ff;color:var(--blue);padding:6px 9px}.meta{color:var(--muted);font-size:12px;margin:10px 0}.details{white-space:pre-wrap;line-height:1.55;font-size:14px}.case textarea{width:100%;min-height:76px;border:1px solid var(--line);border-radius:10px;padding:11px;margin:12px 0;font:inherit}.actions{display:flex;gap:8px;flex-wrap:wrap}.empty{padding:36px 18px;text-align:center;border:1px dashed var(--line);border-radius:14px;color:var(--muted);background:#fff}@media(max-width:600px){main{margin-top:22px}.case{padding:14px}.actions button{flex:1}.toolbar button{flex:1}}
+
+/* AT3 — Central de Segurança: Liquid Glass, somente acabamento visual */
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 82% 0%,rgba(11,114,231,.075),transparent 36%),
+    radial-gradient(ellipse at 8% 78%,rgba(255,255,255,.9),transparent 42%),
+    #f2f5f8!important;
+  color:#202a38!important;
+}
+.top{
+  position:sticky!important;top:10px!important;z-index:30!important;
+  width:calc(100% - 20px)!important;margin:0 10px!important;
+  height:62px!important;padding:0 18px!important;
+  border:1px solid rgba(255,255,255,.9)!important;border-radius:16px!important;
+  background:rgba(255,255,255,.68)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(185%)!important;
+  backdrop-filter:blur(26px) saturate(185%)!important;
+  box-shadow:0 10px 30px rgba(28,43,63,.07),inset 0 1px 0 #fff!important;
+}
+.brand{letter-spacing:-.8px!important}
+.top>a:last-child{
+  margin-right:0!important;padding:9px 12px;border:1px solid rgba(11,114,231,.12);
+  border-radius:12px;background:rgba(231,242,255,.72);
+}
+main{width:min(1000px,calc(100% - 30px))!important;margin:34px auto 80px!important}
+h1{letter-spacing:-1.8px!important;margin:8px 0 10px!important}
+.intro{max-width:760px;line-height:1.7!important;color:#617187!important}
+.toolbar{
+  gap:9px!important;margin:24px 0 18px!important;padding:7px;
+  border:1px solid rgba(255,255,255,.9);border-radius:17px;
+  background:rgba(255,255,255,.52);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.85);
+  -webkit-backdrop-filter:blur(18px) saturate(170%);backdrop-filter:blur(18px) saturate(170%);
+}
+.toolbar button,.case button{
+  min-height:40px;padding:10px 14px!important;
+  border:1px solid rgba(177,192,210,.42)!important;border-radius:12px!important;
+  background:rgba(255,255,255,.78)!important;color:#334256!important;
+  box-shadow:0 3px 9px rgba(31,48,70,.035),inset 0 1px 0 #fff!important;
+  transition:background .18s ease,border-color .18s ease,transform .18s ease!important;
+}
+.toolbar button.active,.case button.primary{
+  border-color:transparent!important;background:linear-gradient(135deg,#1684f5,#0865d5)!important;
+  color:#fff!important;box-shadow:0 6px 15px rgba(11,114,231,.19),inset 0 1px 0 rgba(255,255,255,.2)!important;
+}
+.toolbar button:active,.case button:active{transform:scale(.98)}
+#status{padding:4px 2px;color:#65758a!important;font-size:13px!important}
+.case{
+  position:relative;overflow:hidden;
+  margin:13px 0!important;padding:20px!important;
+  border:1px solid rgba(255,255,255,.94)!important;border-radius:20px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(255,255,255,.64))!important;
+  box-shadow:0 14px 36px rgba(31,48,70,.065),inset 0 1px 0 #fff!important;
+  -webkit-backdrop-filter:blur(22px) saturate(175%)!important;
+  backdrop-filter:blur(22px) saturate(175%)!important;
+}
+.case-head{align-items:center}
+.case-head strong{font-size:15px;letter-spacing:-.2px}
+.badge{
+  padding:7px 11px!important;border:1px solid rgba(11,114,231,.10);
+  background:rgba(231,242,255,.86)!important;color:#0865d5!important;
+}
+.meta{line-height:1.55!important;color:#718096!important;overflow-wrap:anywhere}
+.details{
+  margin:12px 0;padding:13px 14px;border:1px solid rgba(177,192,210,.28);
+  border-radius:13px;background:rgba(243,247,252,.72);
+  color:#344256;line-height:1.65!important;overflow-wrap:anywhere;
+}
+.case textarea{
+  min-height:88px;margin:12px 0!important;padding:13px 14px!important;
+  border:1px solid rgba(177,192,210,.5)!important;border-radius:13px!important;
+  background:rgba(255,255,255,.78)!important;color:#202a38!important;
+  line-height:1.5;resize:vertical;
+  box-shadow:inset 0 1px 3px rgba(25,42,62,.035)!important;
+}
+.case textarea:focus{
+  outline:none;border-color:rgba(11,114,231,.58)!important;
+  box-shadow:0 0 0 4px rgba(11,114,231,.10)!important;
+}
+.case textarea::placeholder{color:#98a5b5}
+.actions{gap:9px!important}
+.actions button{flex:0 1 auto}
+.case button:disabled{opacity:.58;cursor:wait}
+.empty{
+  padding:42px 20px!important;border:1px dashed rgba(145,164,187,.55)!important;
+  border-radius:18px!important;background:rgba(255,255,255,.64)!important;
+  color:#718096!important;
+}
+@media(max-width:600px){
+  .top{top:8px!important;padding:0 13px!important}
+  .brand{font-size:20px!important}
+  .top>a:last-child{font-size:11px!important;padding:8px 9px}
+  main{width:calc(100% - 24px)!important;margin:25px auto 55px!important}
+  .toolbar{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));}
+  .toolbar button{width:100%;padding:10px 8px!important;font-size:12px}
+  .toolbar button:last-child{grid-column:1/-1}
+  .case{padding:16px!important;border-radius:17px!important}
+  .case-head{align-items:flex-start}
+  .actions{display:grid!important;grid-template-columns:1fr}
+  .actions button{width:100%}
+}
+@media(prefers-reduced-motion:reduce){.toolbar button,.case button{transition:none!important}}
+html[data-ls-theme="dark"] body{
+  background:radial-gradient(ellipse at 82% 0%,rgba(32,126,235,.16),transparent 38%),linear-gradient(145deg,#151a22,#202733 58%,#171d26)!important;
+  color:#f2f5f9!important;
+}
+html[data-ls-theme="dark"] .intro,html[data-ls-theme="dark"] #status{color:#b5c1d0!important}
+html[data-ls-theme="dark"] .toolbar,html[data-ls-theme="dark"] .case,html[data-ls-theme="dark"] .empty{
+  border-color:rgba(255,255,255,.13)!important;
+  background:linear-gradient(145deg,rgba(48,58,72,.88),rgba(29,36,47,.84))!important;
+  box-shadow:0 14px 36px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08)!important;
+}
+html[data-ls-theme="dark"] .toolbar button,html[data-ls-theme="dark"] .case button:not(.primary){
+  color:#e5ebf3!important;background:rgba(19,26,36,.72)!important;border-color:rgba(255,255,255,.13)!important;
+}
+html[data-ls-theme="dark"] .toolbar button.active,html[data-ls-theme="dark"] .case button.primary{color:#fff!important;background:linear-gradient(135deg,#1684f5,#0865d5)!important}
+html[data-ls-theme="dark"] .case .meta{color:#a8b5c6!important}
+html[data-ls-theme="dark"] .details{color:#e0e7f0!important;background:rgba(19,26,36,.58)!important;border-color:rgba(255,255,255,.1)!important}
+html[data-ls-theme="dark"] .case textarea{color:#f3f6fb!important;background:rgba(19,26,36,.68)!important;border-color:rgba(255,255,255,.14)!important}
+html[data-ls-theme="dark"] .case textarea::placeholder{color:#9caabd}
+html[data-ls-theme="dark"] .badge{color:#b9d9ff!important;background:rgba(24,72,122,.42)!important;border-color:rgba(110,174,244,.18)!important}
 </style><link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="at3-global.css?v=2">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
