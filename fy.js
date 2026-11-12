@@ -78,6 +78,23 @@ async function loadFeed(reset=false){
  }catch(e){console.error('FY load:',e);$('feedStatus').hidden=false;$('feedStatus').textContent='Erro ao carregar o feed: '+(e.message||'tente novamente');$('loadMore').hidden=true}
  finally{state.loading=false;$('loadMore').disabled=false}
 }
+async function openSharedPost(postId){
+ try{
+  const result=await sb().from('posts').select('id,author_id,body,post_type,idea_title,media_url,media_type,thumbnail_url,created_at,profiles:author_id(id,username,display_name,avatar_url,verification_type)').eq('id',postId).neq('post_type','story').maybeSingle();
+  if(result.error)throw result.error;
+  if(!result.data){$('feedList').replaceChildren();$('feedStatus').hidden=false;$('feedStatus').className='empty';$('feedStatus').textContent='Esta publicação não está disponível.';$('loadMore').hidden=true;return}
+  const p=result.data;
+  const [likes,comments,mine]=await Promise.all([
+   sb().from('post_likes').select('id',{count:'exact',head:true}).eq('post_id',postId),
+   sb().from('comments').select('id',{count:'exact',head:true}).eq('post_id',postId),
+   state.user?sb().from('post_likes').select('post_id').eq('post_id',postId).eq('user_id',state.user.id).maybeSingle():Promise.resolve({data:null,error:null})
+  ]);
+  p.likes=likes.count||0;p.comments=comments.count||0;p.liked=!!mine.data;
+  state.posts=[p];$('feedList').replaceChildren();renderPosts([p]);
+  $('feedStatus').hidden=true;$('loadMore').hidden=true;
+  requestAnimationFrame(()=>{const card=$('feedList').querySelector('.post');if(card){card.scrollIntoView({behavior:'smooth',block:'center'});card.classList.add('shared-post-focus')}});
+ }catch(e){console.error('Shared post load:',e);$('feedList').replaceChildren();$('feedStatus').hidden=false;$('feedStatus').className='empty';$('feedStatus').textContent='Não foi possível abrir esta publicação.';$('loadMore').hidden=true}
+}
 function renderQueuePage(){
  const page=state.queue.slice(state.queueCursor,state.queueCursor+state.limit);
  state.queueCursor+=page.length;state.posts=state.posts.concat(page);renderPosts(page);
@@ -265,5 +282,5 @@ $('feedList').addEventListener('click',async e=>{
  const expand=e.target.closest('[data-expand-post]');
  if(expand){const card=expand.closest('.post'),body=card?.querySelector('.post-body');if(!body)return;const expanded=body.classList.toggle('is-expanded');body.classList.toggle('is-collapsed',!expanded);expand.textContent=expanded?'Mostrar menos':'Ler tudo';expand.setAttribute('aria-expanded',String(expanded));return}
  const b=e.target.closest('[data-action]');if(!b)return;const card=b.closest('.post'),id=card?.dataset.id;if(!id)return;switch(b.dataset.action){case'like':return toggleLike(id,b);case'comment':return openComments(id);case'share':return sharePostWithFriend(id);case'follow':return followAuthor(id,b);case'delete':return deletePost(id,card,b);case'report':return reportPost(id)}});
-init().then(()=>{const params=new URLSearchParams(location.search);if(params.get('create')==='video')$('quickVideo').click()});
+init().then(()=>{const params=new URLSearchParams(location.search);if(params.get('create')==='video')$('quickVideo').click();const sharedPost=params.get('post');if(sharedPost)openSharedPost(sharedPost)});
 })();
