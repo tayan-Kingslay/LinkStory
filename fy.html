@@ -665,50 +665,41 @@ main{width:min(760px,100%)!important;margin:0 auto!important;padding:0 0 96px!im
 }
 </style>
 <style id="fy-liquid-glass-header">
-/* AT3 — cabeçalho da página Pra você em vidro líquido */
-.topbar{
-  position:sticky!important;
-  top:10px!important;
-  z-index:100!important;
-  display:flex!important;
-  flex-direction:row!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:calc(100% - 24px)!important;
-  max-width:760px!important;
-  height:82px!important;
-  min-height:82px!important;
-  margin:10px auto 18px!important;
-  padding:8px 18px!important;
-  border:1px solid rgba(210,224,240,.72)!important;
-  border-radius:24px!important;
-  background:rgba(255,255,255,.58)!important;
-  box-shadow:0 10px 30px rgba(27,55,91,.09),inset 0 1px 0 rgba(255,255,255,.8)!important;
-  -webkit-backdrop-filter:blur(24px) saturate(165%)!important;
-  backdrop-filter:blur(24px) saturate(165%)!important;
+/* Cabeçalho único da página Pra você: logo + menu no mesmo vidro. */
+.topbar:has(> .ls-global-menu-btn){
+ position:sticky!important;top:10px!important;z-index:200!important;
+ display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;
+ width:calc(100% - 24px)!important;max-width:760px!important;height:82px!important;min-height:82px!important;
+ margin:10px auto 18px!important;padding:8px 64px!important;gap:0!important;
+ border:1px solid rgba(210,224,240,.72)!important;border-radius:24px!important;
+ background:rgba(255,255,255,.58)!important;
+ box-shadow:0 10px 30px rgba(27,55,91,.09),inset 0 1px 0 rgba(255,255,255,.8)!important;
+ -webkit-backdrop-filter:blur(24px) saturate(165%)!important;backdrop-filter:blur(24px) saturate(165%)!important;
 }
-.topbar .brand{
-  display:flex!important;
-  align-items:center!important;
-  justify-content:center!important;
-  width:auto!important;
-  height:100%!important;
-  margin:0!important;
+.topbar:has(> .ls-global-menu-btn)>.brand{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:auto!important;height:100%!important;margin:0!important;flex:0 1 auto!important;
 }
-.topbar .brand img{
-  display:block!important;
-  width:190px!important;
-  height:64px!important;
-  max-height:64px!important;
-  object-fit:contain!important;
+.topbar:has(> .ls-global-menu-btn)>.brand img{
+ display:block!important;width:190px!important;height:64px!important;max-height:64px!important;object-fit:contain!important;
 }
+.topbar:has(> .ls-global-menu-btn)>.ls-global-menu-btn{
+ display:flex!important;position:absolute!important;right:12px!important;top:50%!important;left:auto!important;bottom:auto!important;
+ transform:translateY(-50%)!important;align-items:center!important;justify-content:center!important;
+ width:48px!important;height:48px!important;min-width:48px!important;min-height:48px!important;
+ margin:0!important;border:1px solid rgba(210,224,240,.8)!important;border-radius:15px!important;
+ background:rgba(255,255,255,.62)!important;color:#1768bd!important;
+ box-shadow:0 4px 14px rgba(27,55,91,.07)!important;
+ -webkit-backdrop-filter:blur(16px)!important;backdrop-filter:blur(16px)!important;
+}
+.topbar:has(> .ls-global-menu-btn)>.ls-global-menu-btn svg{width:24px!important;height:24px!important}
 @media(max-width:430px){
- .topbar{width:calc(100% - 20px)!important;height:76px!important;min-height:76px!important;margin:9px auto 16px!important;padding:7px 14px!important;border-radius:22px!important}
- .topbar .brand img{width:178px!important;height:60px!important;max-height:60px!important}
+ .topbar:has(> .ls-global-menu-btn){width:calc(100% - 20px)!important;height:76px!important;min-height:76px!important;margin:9px auto 16px!important;padding:7px 56px!important;border-radius:22px!important}
+ .topbar:has(> .ls-global-menu-btn)>.brand img{width:178px!important;height:60px!important;max-height:60px!important}
+ .topbar:has(> .ls-global-menu-btn)>.ls-global-menu-btn{right:9px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;border-radius:13px!important}
 }
-html[data-ls-theme="dark"] .topbar{
- background:rgba(18,24,34,.62)!important;
- border-color:rgba(130,155,185,.28)!important;
+html[data-ls-theme="dark"] .topbar:has(> .ls-global-menu-btn){
+ background:rgba(18,24,34,.62)!important;border-color:rgba(130,155,185,.28)!important;
  box-shadow:0 10px 30px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.07)!important;
 }
 </style>
