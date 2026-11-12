@@ -1,4 +1,103 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b72e7"><title>Criar conta — LinkStory</title><style>:root{--blue:#0b72e7;--ink:#102033;--muted:#66788d;--line:#dbe5ef;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}*{box-sizing:border-box}body{margin:0;background:#fff}.top{height:72px;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--line)}.back{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:25px;line-height:1}.logo{font-size:26px;font-weight:950;letter-spacing:-1.8px}.logo b{color:var(--blue)}main{min-height:calc(100vh - 72px);display:grid;place-items:center;padding:45px 18px}.box{width:min(430px,100%);text-align:center}.eyebrow{font-size:11px;font-weight:900;letter-spacing:2.5px;color:var(--blue)}h1{font-size:clamp(40px,7vw,56px);letter-spacing:-3px;margin:12px 0}.intro{color:var(--muted);font-size:14px;line-height:1.6}.form{text-align:left;border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:28px;box-shadow:0 18px 45px #1020330f}label{display:block;font-size:12px;font-weight:900;margin:0 0 7px}input{width:100%;height:48px;border:1px solid var(--line);border-radius:10px;padding:0 13px;margin-bottom:16px;font:inherit;outline:none}.primary{width:100%;height:48px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer}.divider{display:flex;align-items:center;gap:12px;color:#8b9bad;font-size:11px;margin:20px 0}.divider:before,.divider:after{content:"";height:1px;background:var(--line);flex:1}.google{width:100%;height:48px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:13px;font-weight:850;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}.google-mark{font-size:18px;font-weight:950;color:#4285f4}.role-choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 16px}.role-card{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;text-align:left;cursor:pointer}.role-card.selected{border:2px solid var(--blue);padding:11px;background:#eef6ff}.role-card strong{display:block;font-size:13px}.role-card span{display:block;color:var(--muted);font-size:11px;line-height:1.35;margin-top:4px}.message{display:none;margin:14px 0 0;padding:11px 12px;border-radius:10px;background:#eef6ff;color:#35536f;font-size:11px;line-height:1.5}.login{font-size:12px;color:var(--muted);margin-top:20px}.login a{color:var(--blue);font-weight:850}a{text-decoration:none;color:inherit}@media(max-width:600px){.top{height:66px;padding:0 14px}.logo{font-size:23px}}</style><link rel="stylesheet" href="visual-system.css?v=4">
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#0b72e7"><title>Criar conta — LinkStory</title><style>:root{--blue:#0b72e7;--ink:#102033;--muted:#66788d;--line:#dbe5ef;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}*{box-sizing:border-box}body{margin:0;background:#fff}.top{height:72px;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:1px solid var(--line)}.back{width:42px;height:42px;border:1px solid var(--line);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:25px;line-height:1}.logo{font-size:26px;font-weight:950;letter-spacing:-1.8px}.logo b{color:var(--blue)}main{min-height:calc(100vh - 72px);display:grid;place-items:center;padding:45px 18px}.box{width:min(430px,100%);text-align:center}.eyebrow{font-size:11px;font-weight:900;letter-spacing:2.5px;color:var(--blue)}h1{font-size:clamp(40px,7vw,56px);letter-spacing:-3px;margin:12px 0}.intro{color:var(--muted);font-size:14px;line-height:1.6}.form{text-align:left;border:1px solid var(--line);border-radius:18px;padding:24px;margin-top:28px;box-shadow:0 18px 45px #1020330f}label{display:block;font-size:12px;font-weight:900;margin:0 0 7px}input{width:100%;height:48px;border:1px solid var(--line);border-radius:10px;padding:0 13px;margin-bottom:16px;font:inherit;outline:none}.primary{width:100%;height:48px;border:0;border-radius:10px;background:var(--blue);color:#fff;font-weight:900;cursor:pointer}.divider{display:flex;align-items:center;gap:12px;color:#8b9bad;font-size:11px;margin:20px 0}.divider:before,.divider:after{content:"";height:1px;background:var(--line);flex:1}.google{width:100%;height:48px;border:1px solid var(--line);border-radius:10px;background:#fff;font:inherit;font-size:13px;font-weight:850;display:flex;align-items:center;justify-content:center;gap:10px;cursor:pointer}.google-mark{font-size:18px;font-weight:950;color:#4285f4}.role-choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 16px}.role-card{border:1px solid var(--line);background:#fff;border-radius:12px;padding:12px;text-align:left;cursor:pointer}.role-card.selected{border:2px solid var(--blue);padding:11px;background:#eef6ff}.role-card strong{display:block;font-size:13px}.role-card span{display:block;color:var(--muted);font-size:11px;line-height:1.35;margin-top:4px}.message{display:none;margin:14px 0 0;padding:11px 12px;border-radius:10px;background:#eef6ff;color:#35536f;font-size:11px;line-height:1.5}.login{font-size:12px;color:var(--muted);margin-top:20px}.login a{color:var(--blue);font-weight:850}a{text-decoration:none;color:inherit}@media(max-width:600px){.top{height:66px;padding:0 14px}.logo{font-size:23px}}
+/* AT3 — Cadastro: acabamento Liquid Glass, somente visual */
+body:has(.box){
+  min-height:100vh;
+  background:
+    radial-gradient(ellipse at 50% 12%,rgba(11,114,231,.075),transparent 35%),
+    radial-gradient(ellipse at 8% 85%,rgba(255,255,255,.9),transparent 42%),
+    #f3f5f8!important;
+}
+.top{
+  position:sticky!important;top:10px!important;z-index:20!important;
+  margin:0 10px!important;width:calc(100% - 20px)!important;
+  height:62px!important;padding:0 14px!important;
+  border:1px solid rgba(255,255,255,.9)!important;border-radius:16px!important;
+  background:rgba(255,255,255,.66)!important;
+  -webkit-backdrop-filter:blur(26px) saturate(185%)!important;
+  backdrop-filter:blur(26px) saturate(185%)!important;
+  box-shadow:0 10px 30px rgba(28,43,63,.07),inset 0 1px 0 #fff!important;
+}
+.back{border-radius:12px!important;background:rgba(255,255,255,.76)!important}
+main{
+  min-height:calc(100svh - 72px)!important;
+  padding:clamp(28px,5vh,48px) 16px calc(34px + env(safe-area-inset-bottom))!important;
+}
+.box{width:min(440px,100%)!important;margin:0 auto!important}
+.box>.intro{max-width:360px;margin:0 auto!important}
+.form{
+  position:relative;overflow:hidden;text-align:left;
+  margin-top:25px!important;padding:26px!important;
+  border:1px solid rgba(255,255,255,.94)!important;border-radius:25px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.84),rgba(255,255,255,.57))!important;
+  box-shadow:0 22px 58px rgba(31,48,70,.10),inset 0 1px 0 #fff!important;
+  -webkit-backdrop-filter:blur(30px) saturate(185%)!important;
+  backdrop-filter:blur(30px) saturate(185%)!important;
+}
+.form label{color:#334155!important;font-size:12px!important;letter-spacing:.12px}
+.form input{
+  height:49px!important;margin-bottom:17px!important;padding:0 14px!important;
+  border:1px solid rgba(179,194,211,.52)!important;border-radius:14px!important;
+  background:rgba(255,255,255,.76)!important;
+  box-shadow:inset 0 1px 3px rgba(25,42,62,.045),0 1px 0 rgba(255,255,255,.8)!important;
+  transition:border-color .18s ease,box-shadow .18s ease!important;
+}
+.form input:focus{border-color:rgba(11,114,231,.58)!important;box-shadow:0 0 0 4px rgba(11,114,231,.10)!important}
+.form input::placeholder{color:#9aa7b6}
+.role-choice{gap:10px!important;margin:4px 0 18px!important}
+.role-card{
+  min-height:86px;padding:13px!important;border:1px solid rgba(179,194,211,.55)!important;
+  border-radius:15px!important;background:rgba(255,255,255,.58)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important;
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease!important;
+}
+.role-card.selected{
+  padding:12px!important;border:2px solid rgba(11,114,231,.72)!important;
+  background:rgba(231,242,255,.88)!important;
+  box-shadow:0 5px 16px rgba(11,114,231,.09),inset 0 1px 0 #fff!important;
+}
+.role-card strong{font-size:13px!important;color:#1c2b3c}
+.role-card span{line-height:1.4!important}
+.form>p[style]{line-height:1.5!important;margin-top:-8px!important}
+.primary{
+  min-height:50px!important;border-radius:14px!important;
+  background:linear-gradient(135deg,#1684f5,#0865d5)!important;
+  box-shadow:0 8px 18px rgba(11,114,231,.22),inset 0 1px 0 rgba(255,255,255,.28)!important;
+  transition:transform .18s ease,box-shadow .18s ease!important;
+}
+.primary:active{transform:scale(.985)}
+.message{
+  border:1px solid rgba(11,114,231,.12)!important;
+  border-radius:13px!important;background:rgba(226,240,255,.82)!important;
+}
+.login{margin-top:23px!important}
+.login a{font-weight:900}
+@media(max-width:600px){
+  .top{top:8px!important}
+  main{padding:26px 14px calc(28px + env(safe-area-inset-bottom))!important}
+  .form{padding:21px!important;border-radius:22px!important}
+  .role-card{min-height:92px;padding:11px!important}
+  .role-card.selected{padding:10px!important}
+}
+@media(max-width:360px){.role-choice{grid-template-columns:1fr!important}.role-card{min-height:0}}
+@media(prefers-reduced-motion:reduce){.form input,.role-card,.primary{transition:none!important}}
+html[data-ls-theme="dark"] body:has(.box){
+  background:radial-gradient(ellipse at 50% 12%,rgba(32,126,235,.16),transparent 38%),linear-gradient(145deg,#151a22,#202733 58%,#171d26)!important;
+}
+html[data-ls-theme="dark"] .form{
+  border-color:rgba(255,255,255,.14)!important;
+  background:linear-gradient(145deg,rgba(48,58,72,.88),rgba(29,36,47,.84))!important;
+  box-shadow:0 22px 58px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.10)!important;
+}
+html[data-ls-theme="dark"] .form label,html[data-ls-theme="dark"] .role-card strong{color:#e5ebf3!important}
+html[data-ls-theme="dark"] .form input{
+  color:#f3f6fb!important;background:rgba(19,26,36,.68)!important;border-color:rgba(255,255,255,.14)!important;
+}
+html[data-ls-theme="dark"] .form input::placeholder{color:#9caabd}
+html[data-ls-theme="dark"] .role-card{background:rgba(24,31,42,.72)!important;border-color:rgba(255,255,255,.13)!important}
+html[data-ls-theme="dark"] .role-card.selected{background:rgba(23,76,132,.5)!important;border-color:rgba(91,166,255,.72)!important}
+html[data-ls-theme="dark"] .role-card span,html[data-ls-theme="dark"] .login{color:#bbc6d4!important}
+html[data-ls-theme="dark"] .message{color:#d9eaff!important;background:rgba(24,72,122,.42)!important;border-color:rgba(110,174,244,.18)!important}
+</style><link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="at3-global.css?v=2">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
 </head><body><header class="top"><a class="back" href="login.html">‹</a><a class="logo" href="index.html">Link<b>Story</b></a></header><main><section class="box"><span class="eyebrow">LINKSTORY</span><h1>Criar conta.</h1><p class="intro">Crie seu espaço para ler, salvar histórias e publicar seus próprios mangás.</p><div class="form"><label>Nome</label><input id="name" placeholder="Seu nome" autocomplete="name"><label>Nome de usuário</label><input id="username" placeholder="ex.: tayan_kingslay" autocomplete="username"><label>Tipo de conta</label><div class="role-choice"><button class="role-card selected" type="button" data-role="leitor"><strong>Leitor</strong><span>Ler, salvar e acompanhar histórias.</span></button><button class="role-card" type="button" data-role="criador"><strong>Criador</strong><span>Publicar e administrar suas próprias obras.</span></button></div><label>Seu KX.Mail</label><input id="kxMail" type="text" inputmode="email" placeholder="seuusuario@kx.mail" autocomplete="username"><p style="margin:-8px 0 16px;color:var(--muted);font-size:11px">Ele é criado automaticamente a partir do seu nome de usuário.</p><label>Senha</label><input id="password" type="password" placeholder="Crie uma senha" autocomplete="new-password"><button class="primary" id="createAccount" type="button">Criar conta</button><div class="message" id="message"></div></div><p class="login">Já tem uma conta? <a href="login.html">Entrar</a></p></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script>const msg=document.getElementById('message');let accountRole='leitor';document.querySelectorAll('.role-card').forEach(b=>b.onclick=()=>{accountRole=b.dataset.role;document.querySelectorAll('.role-card').forEach(x=>x.classList.toggle('selected',x===b))});function show(text){msg.textContent=text;msg.style.display='block'}const usernameInput=document.getElementById('username'),kxInput=document.getElementById('kxMail');usernameInput.addEventListener('input',()=>{const value=usernameInput.value.trim().toLowerCase().replace(/^@/,'').replace(/@kx\.mail$/i,'');kxInput.value=value?makeKxMail(value):''});kxInput.addEventListener('input',()=>{const value=kxInput.value.trim().toLowerCase().replace(/@kx\.mail$/i,'').replace(/^@/,'');usernameInput.value=value});document.getElementById('createAccount').onclick=async()=>{const name=document.getElementById('name').value.trim(),kxMail=kxInput.value.trim().toLowerCase(),username=kxMail.replace(/@kx\.mail$/i,'').replace(/^@/,'').trim(),password=document.getElementById('password').value;if(!name||!username||!password)return show('Preencha nome, nome de usuário e senha.');if(!/^[a-zA-Z0-9._-]{3,24}$/.test(username))return show('O nome de usuário deve ter de 3 a 24 caracteres e usar letras, números, ponto, hífen ou _.');if(password.length<6)return show('A senha precisa ter pelo menos 6 caracteres.');const{data,error}=await signUpWithKxMail(kxMail,password,name,username,accountRole);if(error)return show(error.message);if(data.session){location.href='index.html'}else show('Conta criada! Seu KX.Mail é '+kxMail+'. Se a confirmação de e-mail estiver ativa no Supabase, a conta precisará ser confirmada no painel antes do primeiro acesso.');};// A tela de cadastro permanece acessível mesmo quando existe uma sessão ativa, permitindo criar outra conta neste dispositivo.</script></body></html>
