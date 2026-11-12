@@ -89,7 +89,61 @@ h2{letter-spacing:-.8px}
 <link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="at3-global.css?v=2">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
-</head>
+
+<style id="at3-manga-finish">
+/* AT3 — acabamento visual da página do mangá; sem alterar comportamento */
+.top{display:grid!important;grid-template-columns:44px minmax(0,1fr) 44px!important;gap:10px!important;align-items:center!important}
+.top .back{justify-self:start!important;display:grid!important;place-items:center!important;border:1px solid rgba(255,255,255,.9)!important;background:rgba(255,255,255,.72)!important;box-shadow:0 3px 12px rgba(20,45,75,.06)!important;backdrop-filter:blur(16px)!important}
+.top .brand{justify-self:center!important;white-space:nowrap!important;font-weight:950!important}
+.top .menu{justify-self:end!important;margin:0!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.72)!important;backdrop-filter:blur(16px)!important}
+main#main{padding-top:34px!important}
+.manga-view{position:relative}
+.cover-shell{width:min(330px,78vw)!important;border:1px solid rgba(255,255,255,.92)!important;border-radius:25px!important;background:linear-gradient(145deg,rgba(255,255,255,.94),rgba(224,239,255,.72))!important;box-shadow:0 22px 55px rgba(23,55,91,.13),0 3px 10px rgba(255,255,255,.8) inset!important;padding:7px!important}
+.cover{border-radius:19px!important;background-color:#edf4fb!important}
+.actions{gap:10px!important}
+.actions .btn{border-radius:15px!important;min-height:50px!important;border:1px solid rgba(207,220,235,.9)!important;background:rgba(255,255,255,.78)!important;box-shadow:0 5px 16px rgba(20,45,75,.055)!important;backdrop-filter:blur(14px)!important}
+.actions .btn.primary{background:linear-gradient(135deg,#1683f5,#0866d5)!important;border-color:rgba(255,255,255,.25)!important;color:white!important;box-shadow:0 9px 22px rgba(11,114,231,.22)!important}
+.creator-label{margin-top:25px!important;color:#8190a3!important;font-size:9px!important;letter-spacing:2.3px!important}
+.creator-profile{border:1px solid rgba(220,230,241,.9)!important;border-radius:17px!important;background:rgba(255,255,255,.76)!important;box-shadow:0 8px 24px rgba(18,45,75,.055)!important;backdrop-filter:blur(16px)!important;padding:13px 15px!important}
+.creator-avatar{box-shadow:0 0 0 3px rgba(11,114,231,.08)!important}
+.creator-follow-wrap{margin:8px auto 0!important}
+.creator-follow{border-radius:12px!important;box-shadow:0 5px 14px rgba(11,114,231,.13)!important}
+.stats{border:1px solid rgba(220,230,241,.9)!important;border-radius:19px!important;background:rgba(255,255,255,.78)!important;padding:17px 10px!important;box-shadow:0 9px 28px rgba(18,45,75,.055)!important;backdrop-filter:blur(16px)!important}
+.stat{padding:3px 5px!important}.stat strong{font-size:21px!important;letter-spacing:-.6px!important;color:#14243a!important}.stat span{display:block;margin-top:4px!important;font-size:10px!important;font-weight:650!important;color:#7a899b!important}
+.block{margin-top:38px!important}.block h2{font-size:26px!important;letter-spacing:-1.1px!important;margin:7px 0 15px!important}
+.ey{font-size:9px!important;letter-spacing:2.4px!important;font-weight:900!important}
+.chapter{min-height:68px!important;padding:12px 13px!important;margin:8px 0!important;border:1px solid rgba(220,230,241,.9)!important;border-radius:15px!important;background:rgba(255,255,255,.78)!important;box-shadow:0 5px 17px rgba(18,45,75,.035)!important;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease!important}
+.chapter:hover{transform:translateY(-2px)!important;border-color:#c5ddf8!important;box-shadow:0 10px 22px rgba(18,45,75,.075)!important}
+.chapter-num{border-radius:12px!important;background:linear-gradient(145deg,#eaf4ff,#f5f9ff)!important}
+.chapter-info strong{font-size:14px!important;color:#17283d!important}.chapter-info small{display:block;margin-top:4px!important;font-size:11px!important}
+.chev{font-size:27px!important;color:#8ca4bd!important}
+.social{border:1px solid rgba(220,230,241,.95)!important;border-radius:19px!important;background:rgba(255,255,255,.82)!important;box-shadow:0 9px 28px rgba(18,45,75,.055)!important;backdrop-filter:blur(16px)!important;padding:20px!important}
+.social>strong{font-size:16px!important;letter-spacing:-.3px!important}
+.social #like{min-height:42px!important;border:1px solid #dce7f2!important;border-radius:12px!important;background:#f7faff!important;color:#31506f!important;padding:0 15px!important;font-weight:850!important}
+.social #like.active{background:#eaf4ff!important;border-color:#b9d8fa!important;color:#086bd8!important}
+.stars{margin:12px 0 4px!important}.stars button{min-width:38px!important;min-height:40px!important}
+.comment input{min-height:44px!important;border:1px solid #dce5ef!important;border-radius:12px!important;background:rgba(255,255,255,.9)!important;outline:none!important}
+.comment input:focus{border-color:#80b9f5!important;box-shadow:0 0 0 3px rgba(11,114,231,.1)!important}
+.comment button{min-height:44px!important;border-radius:12px!important}
+.one-comment{border-color:#edf1f5!important}.one-comment p{line-height:1.55!important;color:#52647a!important}
+.empty{border-radius:15px!important;background:rgba(255,255,255,.65)!important;padding:24px 14px!important}
+.credit-person{border-color:rgba(220,230,241,.9)!important;border-radius:15px!important;background:rgba(255,255,255,.8)!important;box-shadow:0 5px 16px rgba(18,45,75,.035)!important}
+@media(max-width:600px){
+ main#main{padding:23px 0 64px!important}
+ .cover-shell{width:min(290px,78vw)!important}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:0!important;padding:7px!important}
+ .stat{padding:12px 5px!important;border-bottom:1px solid #edf1f5!important}
+ .stat:nth-child(3),.stat:nth-child(4){border-bottom:0!important}
+ .stat:nth-child(odd){border-right:1px solid #edf1f5!important}
+ .stat strong{font-size:20px!important}
+ .block{margin-top:30px!important}
+ .social{padding:16px!important}
+ .chapter{padding:11px!important}
+ .creator-profile{margin-top:5px!important}
+}
+@media(prefers-reduced-motion:reduce){.chapter,.actions .btn{transition:none!important}.chapter:hover,.actions .btn:hover{transform:none!important}}
+</style>
+\n</head>
 <body>
 <header class="top">
 <a class="back" href="index.html" aria-label="Voltar">‹</a>
