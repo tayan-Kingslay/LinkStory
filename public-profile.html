@@ -31,7 +31,46 @@ h1{margin:0 0 7px;font-size:clamp(25px,5vw,38px);line-height:1.12;letter-spacing
 .hero.hero-reordered>.social-inline{grid-column:1/-1!important;grid-row:2!important;position:static!important;clear:both!important;margin:0!important}
 .hero.hero-reordered>.bio{grid-column:1/-1!important;grid-row:3!important;position:static!important}
 @media(max-width:560px){.hero.hero-reordered{grid-template-columns:76px minmax(0,1fr)!important;column-gap:14px!important;row-gap:16px!important;padding:18px!important}.hero.hero-reordered>.identity h1{font-size:clamp(22px,6vw,30px)!important;letter-spacing:-.8px!important}.hero.hero-reordered>.identity .handle{font-size:clamp(13px,3.8vw,16px)!important}.hero.hero-reordered>.social-inline{padding:13px 4px!important}}
-</style></head><body>
+</style><style id="at3-public-profile-finish">
+/* AT3 — Perfil público: Liquid Glass, somente acabamento visual */
+body{min-height:100vh;background:radial-gradient(ellipse at 82% 0%,rgba(23,105,210,.09),transparent 38%),linear-gradient(145deg,#f1f5fa,#f8faff 58%,#edf3f9)!important;color:#202a38!important}
+header{position:sticky!important;top:9px!important;z-index:40!important;width:calc(100% - 18px)!important;margin:9px 9px 0!important;height:62px!important;padding:0 15px!important;border:1px solid rgba(255,255,255,.9)!important;border-radius:17px!important;background:rgba(255,255,255,.7)!important;-webkit-backdrop-filter:blur(25px) saturate(180%)!important;backdrop-filter:blur(25px) saturate(180%)!important;box-shadow:0 10px 28px rgba(24,53,87,.07),inset 0 1px 0 #fff!important}
+.back{border-color:rgba(177,192,210,.42)!important;background:rgba(245,249,255,.76)!important;box-shadow:inset 0 1px 0 #fff}
+main{margin-top:27px!important}
+.hero,.work,.invite-card,.social-panel,.network-dialog{border:1px solid rgba(255,255,255,.92)!important;background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(255,255,255,.65))!important;box-shadow:0 13px 34px rgba(24,53,87,.065),inset 0 1px 0 #fff!important;-webkit-backdrop-filter:blur(20px) saturate(170%);backdrop-filter:blur(20px) saturate(170%)}
+.hero{border-radius:23px!important;padding:25px!important}
+.avatar{box-shadow:0 5px 18px rgba(24,53,87,.1),0 0 0 3px rgba(255,255,255,.72)!important}
+.bio{border-color:rgba(130,150,175,.2)!important;color:#5e7086!important}
+.section{margin-top:30px!important}
+.section h2{letter-spacing:-.8px!important}
+.work{padding:10px!important;border-radius:18px!important;transition:transform .18s ease,box-shadow .18s ease}
+.work:active{transform:scale(.99)}
+.cover{border-radius:12px!important;background:linear-gradient(145deg,rgba(231,240,251,.9),rgba(246,249,253,.85))!important}
+.empty{border:1px dashed rgba(145,164,187,.55)!important;border-radius:18px!important;background:rgba(255,255,255,.62)!important;color:#718096!important}
+.invite-card{border-radius:16px!important;padding:13px!important}
+.invite-actions button,.network-close{border:1px solid rgba(177,192,210,.4)!important;border-radius:11px!important;background:rgba(255,255,255,.8)!important;box-shadow:inset 0 1px 0 #fff}
+.invite-actions .accept{background:linear-gradient(135deg,#1684f5,#0865d5)!important;color:#fff!important;border-color:transparent!important}
+.social-panel{border-radius:21px!important}
+.social-count{border-color:rgba(177,192,210,.35)!important;background:rgba(255,255,255,.72)!important;border-radius:14px!important}
+.follow-button{border-radius:13px!important;box-shadow:0 6px 16px rgba(23,105,210,.18)!important}
+.follow-button.following{border-color:rgba(23,105,210,.3)!important;background:rgba(255,255,255,.76)!important;box-shadow:none!important}
+.network-dialog{overflow:hidden!important;border-radius:21px!important}
+.network-head{background:rgba(255,255,255,.62);border-color:rgba(130,150,175,.2)!important}
+.network-person{border-color:rgba(177,192,210,.3)!important;border-radius:14px!important;background:rgba(255,255,255,.55)}
+.network-dialog::backdrop{background:rgba(16,32,51,.48)!important;-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px)}
+@media(max-width:560px){header{top:7px!important;margin:7px 7px 0!important;width:calc(100% - 14px)!important;height:59px!important}main{margin-top:19px!important}.hero{padding:18px!important}.work{padding:8px!important}.section{margin-top:25px!important}}
+@media(prefers-reduced-motion:reduce){.work{transition:none!important}}
+html[data-ls-theme="dark"] body{background:radial-gradient(ellipse at 82% 0%,rgba(32,126,235,.16),transparent 38%),linear-gradient(145deg,#151a22,#202733 58%,#171d26)!important;color:#f2f5f9!important}
+html[data-ls-theme="dark"] .hero,html[data-ls-theme="dark"] .work,html[data-ls-theme="dark"] .invite-card,html[data-ls-theme="dark"] .social-panel,html[data-ls-theme="dark"] .network-dialog,html[data-ls-theme="dark"] .empty{border-color:rgba(255,255,255,.13)!important;background:linear-gradient(145deg,rgba(48,58,72,.9),rgba(29,36,47,.86))!important;box-shadow:0 14px 36px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.08)!important}
+html[data-ls-theme="dark"] .brand,html[data-ls-theme="dark"] h1,html[data-ls-theme="dark"] .section h2,html[data-ls-theme="dark"] .work h3,html[data-ls-theme="dark"] .social-count strong{color:#f1f5fa!important}
+html[data-ls-theme="dark"] .handle,html[data-ls-theme="dark"] .bio,html[data-ls-theme="dark"] .work p,html[data-ls-theme="dark"] .invite-info small,html[data-ls-theme="dark"] .follow-status{color:#b2bfd0!important}
+html[data-ls-theme="dark"] .bio,html[data-ls-theme="dark"] .network-head{border-color:rgba(255,255,255,.12)!important}
+html[data-ls-theme="dark"] .social-count,html[data-ls-theme="dark"] .network-person,html[data-ls-theme="dark"] .invite-actions button,html[data-ls-theme="dark"] .network-close{color:#e5ebf3!important;background:rgba(19,26,36,.68)!important;border-color:rgba(255,255,255,.13)!important}
+html[data-ls-theme="dark"] .follow-button.following{color:#b9d9ff!important;background:rgba(19,26,36,.72)!important}
+html[data-ls-theme="dark"] .network-person small,html[data-ls-theme="dark"] .network-empty{color:#a8b5c6!important}
+html[data-ls-theme="dark"] .network-person strong{color:#f1f5fa!important}
+</style>
+</head><body>
 <header><a class="back" href="javascript:history.back()" aria-label="Voltar">‹</a><a class="brand" href="index.html">LINK<span>STORY</span></a></header>
 <main><section class="hero hero-reordered"><div class="avatar" id="avatar">L</div><div class="identity"><h1 id="name">Carregando perfil…</h1><div class="handle" id="handle"></div></div><div class="social-inline" aria-label="Seguidores e seguindo"><button class="social-inline-count" id="openFollowers" type="button"><strong id="followersCount">—</strong><span>seguidores</span></button><button class="social-inline-count" id="openFollowing" type="button"><strong id="followingCount">—</strong><span>seguindo</span></button></div><div class="bio" id="bio"></div></section><div class="follow-actions"><button class="follow-button" id="followButton" type="button" hidden>Seguir</button><div class="follow-status" id="followStatus" role="status" aria-live="polite"></div></div>
 <section class="section"><div class="eyebrow">PUBLICAÇÕES</div><h2>Obras criadas</h2><div id="works" class="works"><div class="empty">Carregando publicações…</div></div></section><section class="section" id="profilePhotosSection" hidden><div class="eyebrow">FEED</div><h2>Fotos</h2><div id="profilePhotos" class="profile-photo-grid"></div></section><style>.profile-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.profile-photo-grid a{display:block;aspect-ratio:1;overflow:hidden;border-radius:13px;background:#edf3fa}.profile-photo-grid img{width:100%;height:100%;object-fit:cover;display:block}@media(max-width:560px){.profile-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><section class="section" id="collabSection" hidden><div class="eyebrow">PARTICIPAÇÕES</div><h2>Mangás em que colaborou</h2><div id="collaborations" class="works"></div></section><section class="section" id="invitesSection" hidden><div class="eyebrow">CONVITES</div><h2>Convites de colaboração</h2><div id="invites" class="invite-list"></div></section></main>
