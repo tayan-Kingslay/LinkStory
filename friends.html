@@ -32,6 +32,63 @@ html[data-ls-theme="dark"] body{background:#111!important;color:#f5f7fa!importan
 .chat-inspiration p{font-size:12px;line-height:1.6;color:#718198;margin:7px 0 13px}
 .chat-inspiration button{border:1px solid #dbe8f8;background:#f5f9ff;color:#0b72e7;border-radius:999px;padding:8px 11px;margin:3px;font-size:11px;font-weight:800}
 
+
+/* AT3 — Amigos: acabamento Liquid Glass, somente visual */
+:root{--at3-glass:rgba(255,255,255,.72);--at3-edge:rgba(255,255,255,.82);--at3-shadow:0 16px 42px rgba(24,55,92,.075)}
+body{background:radial-gradient(ellipse at 12% 0%,rgba(11,114,231,.10),transparent 34%),linear-gradient(145deg,#f7faff 0%,#eef4fb 100%);background-attachment:fixed}
+.topbar{height:72px;justify-content:center;padding-inline:18px;background:rgba(255,255,255,.68);border-bottom:1px solid rgba(255,255,255,.8);box-shadow:0 5px 24px rgba(30,60,90,.045);backdrop-filter:blur(24px) saturate(1.35);-webkit-backdrop-filter:blur(24px) saturate(1.35)}
+.topbar .logo{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center}
+.topbar .logo img{width:132px;height:44px;object-fit:contain}
+.shell{max-width:900px;margin:34px auto 56px}
+.intro{padding:8px 4px 18px}
+.eyebrow{letter-spacing:2.4px}
+h1{font-weight:850;line-height:1.08}
+.intro p{font-size:13px;line-height:1.65;max-width:600px}
+.grid{gap:18px}
+.card{background:var(--at3-glass);border:1px solid var(--at3-edge);border-radius:24px;box-shadow:var(--at3-shadow);backdrop-filter:blur(22px) saturate(1.25);-webkit-backdrop-filter:blur(22px) saturate(1.25)}
+.card-head{padding:19px 21px;background:linear-gradient(110deg,rgba(255,255,255,.55),rgba(241,247,255,.30));border-bottom:1px solid rgba(190,208,230,.48)}
+.card-head h2{font-size:16px;letter-spacing:-.35px}
+.card-head p{line-height:1.5}
+.add{padding:16px 18px 12px;border-bottom:1px solid rgba(190,208,230,.42)}
+.add form{gap:9px}
+.add input,.chat-compose textarea{border:1px solid rgba(178,198,222,.7);background:rgba(255,255,255,.78);box-shadow:inset 0 1px 2px rgba(20,50,80,.025);transition:border-color .18s,box-shadow .18s}
+.add input:focus,.chat-compose textarea:focus{outline:none;border-color:#7eb7f4;box-shadow:0 0 0 4px rgba(11,114,231,.10)}
+.primary{background:linear-gradient(135deg,#1684f5,#0865d4);box-shadow:0 6px 16px rgba(11,114,231,.20);transition:transform .18s,box-shadow .18s}
+.primary:active,.small:active{transform:scale(.97)}
+.list{padding:9px 12px}
+.person{padding:12px 10px;border-bottom-color:rgba(190,208,230,.42);border-radius:13px;transition:background .18s}
+.person:hover{background:rgba(235,244,255,.62)}
+.avatar{box-shadow:0 3px 12px rgba(11,114,231,.10);border:1px solid rgba(255,255,255,.9)}
+.person-info strong{letter-spacing:-.15px}
+.small{background:rgba(255,255,255,.72);border-color:rgba(178,198,222,.68);transition:background .18s,border-color .18s,transform .18s}
+.small.accept{background:linear-gradient(135deg,rgba(231,243,255,.96),rgba(215,235,255,.82));border-color:rgba(127,180,238,.62)}
+.empty{padding:28px 14px;line-height:1.6}
+.status{padding:2px 2px 0;line-height:1.5}
+@media(max-width:760px){
+ .topbar{height:64px}
+ .shell{margin:20px auto 36px;padding:0 13px}
+ .intro{padding:6px 3px 15px}
+ .card{border-radius:20px}
+ .card-head{padding:16px 17px}
+ .add{padding:13px 13px 10px}
+ .add form{gap:7px}
+ .primary{padding:0 12px}
+ .list{padding:7px}
+ .person{padding:11px 7px}
+ .actions{justify-content:flex-end}
+}
+@media(prefers-reduced-motion:reduce){.person,.small,.primary,.add input{transition:none}}
+html[data-ls-theme="dark"] body{background:radial-gradient(ellipse at 12% 0%,rgba(24,112,210,.16),transparent 36%),linear-gradient(145deg,#10141b,#151b24)!important}
+html[data-ls-theme="dark"] .topbar{background:rgba(20,25,33,.76)!important;border-color:rgba(255,255,255,.08)!important}
+html[data-ls-theme="dark"] .card{background:rgba(28,35,45,.78)!important;border-color:rgba(255,255,255,.10)!important;box-shadow:0 16px 42px rgba(0,0,0,.20)!important}
+html[data-ls-theme="dark"] .card-head{background:linear-gradient(110deg,rgba(255,255,255,.035),rgba(255,255,255,.01))!important;border-color:rgba(255,255,255,.08)!important}
+html[data-ls-theme="dark"] .person{border-color:rgba(255,255,255,.07)!important}
+html[data-ls-theme="dark"] .person:hover{background:rgba(255,255,255,.045)!important}
+html[data-ls-theme="dark"] .add input{background:rgba(10,14,20,.62)!important;border-color:rgba(255,255,255,.15)!important;color:#f5f7fa!important}
+html[data-ls-theme="dark"] .small{background:rgba(255,255,255,.06)!important;border-color:rgba(255,255,255,.14)!important;color:#e7edf6!important}
+html[data-ls-theme="dark"] .small.accept{background:rgba(31,111,196,.22)!important;border-color:rgba(90,160,235,.35)!important;color:#9bcaff!important}
+html[data-ls-theme="dark"] .avatar{background:#203b59!important;color:#9bcaff!important;border-color:rgba(255,255,255,.10)!important}
+
 </style></head><body>
 <header class="topbar"><a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory" style="display:block;width:132px;height:44px;object-fit:contain"></a></header>
 <main class="shell"><section class="intro"><span class="eyebrow">LINKSTORY · COMUNIDADE</span><h1>Meus amigos.</h1><p>Encontre pessoas, envie solicitações e organize suas amizades. Para conversar, acesse a página Mensagens.</p></section>
