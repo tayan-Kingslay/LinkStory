@@ -9,6 +9,34 @@
 main{width:min(760px,calc(100% - 28px));margin:auto;padding:28px 0 80px}.ey{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--blue)}h1{font-size:clamp(32px,7vw,46px);letter-spacing:-2px;margin:7px 0}.sub{color:var(--muted);font-size:13px;line-height:1.55}
 .card{margin-top:20px;padding:22px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 8px 26px #1020330a}.field{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}.field label{font-size:13px;font-weight:850}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:11px;padding:13px;background:#fff;color:var(--ink);font:inherit;font-size:16px}.field textarea{min-height:130px;resize:vertical}.cover-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.cover-preview{width:100px;aspect-ratio:3/4;object-fit:cover;border-radius:10px;background:#edf2f7}.file{font-size:12px;color:var(--muted)}.actions{display:flex;gap:10px;margin-top:22px}.btn{min-height:46px;padding:12px 16px;border-radius:11px;border:1px solid var(--line);background:#fff;color:var(--ink);font-weight:850;font-size:13px;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}.primary{background:var(--blue);border-color:var(--blue);color:#fff;flex:1}.btn:disabled{opacity:.55}.status{min-height:20px;margin-top:12px;color:var(--muted);font-size:12px}.danger-box{margin-top:18px;padding:17px;border:1px solid #efcccc;background:#fff8f8;border-radius:14px}.danger-box strong{color:var(--danger)}.danger-box p{font-size:12px;line-height:1.5;color:#805858}.danger{color:var(--danger);border-color:#efcccc}
 @media(max-width:600px){main{padding-top:22px}.card{padding:17px}.actions{display:grid;grid-template-columns:1fr}.cover-preview{width:86px}}
+
+/* AT3 — Editar mangá: acabamento Liquid Glass (somente visual) */
+:root{--edit-glass:rgba(255,255,255,.76);--edit-stroke:rgba(211,224,239,.8);--edit-shadow:0 14px 38px rgba(22,52,86,.075)}
+body{background:radial-gradient(ellipse at 8% 2%,rgba(11,114,231,.08),transparent 34%),radial-gradient(ellipse at 92% 28%,rgba(116,174,235,.08),transparent 32%),#f3f7fc!important}
+.top{height:62px!important;top:9px!important;margin:0 10px!important;width:calc(100% - 20px)!important;padding:0 14px!important;border:1px solid rgba(255,255,255,.86)!important;border-radius:16px!important;background:rgba(255,255,255,.72)!important;backdrop-filter:blur(24px) saturate(165%);-webkit-backdrop-filter:blur(24px) saturate(165%);box-shadow:0 8px 30px rgba(18,45,76,.08)!important}
+.back{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--edit-stroke);border-radius:12px;background:rgba(255,255,255,.75);color:var(--ink);transition:transform .18s ease,background .18s ease}
+.back:hover{transform:translateY(-1px);background:#fff}
+main{padding-top:36px!important}
+h1{line-height:1.03!important}
+.sub{line-height:1.7!important;max-width:620px}
+.card,.danger-box{border:1px solid var(--edit-stroke)!important;border-radius:20px!important;background:var(--edit-glass)!important;backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);box-shadow:var(--edit-shadow),inset 0 1px 0 rgba(255,255,255,.92)!important}
+.card{padding:clamp(17px,3vw,25px)!important}
+.field input,.field textarea,.field select{border:1px solid rgba(202,218,236,.92)!important;border-radius:12px!important;background:rgba(255,255,255,.84)!important;box-shadow:inset 0 1px 2px rgba(20,45,75,.025);transition:border-color .18s ease,box-shadow .18s ease}
+.field input:focus,.field textarea:focus,.field select:focus{outline:0;border-color:rgba(11,114,231,.58)!important;box-shadow:0 0 0 3px rgba(11,114,231,.1)!important}
+.field textarea{line-height:1.6}
+.cover-row{padding:12px;border:1px solid rgba(211,224,239,.8);border-radius:15px;background:rgba(248,251,255,.62)}
+.cover-preview{border:1px solid rgba(207,222,239,.9);border-radius:12px!important;box-shadow:0 6px 16px rgba(20,48,78,.08)}
+.file{max-width:100%;min-width:0}
+.btn{border-color:rgba(203,218,235,.92)!important;border-radius:12px!important;background:rgba(255,255,255,.82)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.9);transition:transform .18s ease,box-shadow .18s ease,background .18s ease}
+.btn:hover{transform:translateY(-1px);box-shadow:0 7px 16px rgba(20,48,78,.08)}
+.btn.primary{border-color:transparent!important;background:linear-gradient(135deg,#1684f5,#0864d5)!important;color:#fff!important;box-shadow:0 7px 17px rgba(11,114,231,.18)}
+.btn.danger{color:#a73535!important;border-color:rgba(226,177,177,.75)!important;background:rgba(255,247,247,.84)!important}
+.status{line-height:1.5}
+.danger-box{background:rgba(255,248,248,.76)!important;border-color:rgba(233,190,190,.75)!important}
+.danger-box p{line-height:1.65}
+@media(max-width:600px){.top{top:8px!important}main{padding-top:25px!important}.card{padding:17px!important}.actions{gap:9px}.actions .btn{width:100%;min-height:46px}.cover-row{align-items:flex-start}.file{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.back,.btn,.field input,.field textarea,.field select{transition:none!important}.back:hover,.btn:hover{transform:none!important}}
+
 </style></head><body>
 <header class="top"><a class="back" href="studio.html" aria-label="Voltar">‹</a><div class="brand">Link<b>Story</b></div></header>
 <main><span class="ey">MEU ESTÚDIO · EDIÇÃO</span><h1>Editar mangá.</h1><p class="sub">Atualize as informações da sua obra. As alterações serão salvas na publicação existente.</p>
