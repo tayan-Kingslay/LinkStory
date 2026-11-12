@@ -56,6 +56,21 @@ html[data-ls-theme="dark"] .send{background:linear-gradient(135deg,#197ce8,#1769
 html[data-ls-theme="dark"] .status{color:#a8b5c5!important}
 
 
+/* Shared LinkStory publication cards: preserve the published media's natural proportions. */
+.shared-post-card{display:block;width:min(88vw,480px);max-width:100%;margin:10px 0 2px;padding:0;border:1px solid rgba(215,226,239,.85);border-radius:17px;overflow:hidden;background:#fff;color:#21344a;text-decoration:none;box-shadow:0 5px 18px rgba(24,53,87,.08);white-space:normal}
+.shared-post-label{display:block;padding:11px 13px 8px;color:#1769d2;font-size:9px;font-weight:900;letter-spacing:1.1px}
+.shared-post-content{display:flex;flex-direction:column;gap:8px;padding:0 12px 12px}
+.shared-post-author{font-size:11px;color:#7b8ba0;font-weight:750}
+.shared-post-title{font-size:15px;line-height:1.3;color:#17263a}
+.shared-post-body{font-size:13px;line-height:1.45;color:#40536a;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:5;-webkit-box-orient:vertical;overflow:hidden}
+.shared-post-media{display:block;width:100%;height:auto;max-height:none;object-fit:contain;border-radius:10px;background:#f1f4f8}
+.shared-post-open{font-size:11px;font-weight:800;color:#1769d2;padding-top:2px}
+.bubble:has(.shared-post-card){width:min(88vw,500px);max-width:92vw}
+html[data-ls-theme="dark"] .shared-post-card{background:#1b2735;border-color:#344255;color:#edf3fa}
+html[data-ls-theme="dark"] .shared-post-title{color:#f2f6fb}
+html[data-ls-theme="dark"] .shared-post-body{color:#c2cfdd}
+html[data-ls-theme="dark"] .shared-post-media{background:#111b27}
+.shared-post-focus{outline:2px solid rgba(23,105,210,.35);outline-offset:4px;border-radius:16px}
 /* Discreet per-message actions and inline editing. */
 .message-row{display:flex;flex-direction:column;align-items:flex-start;max-width:100%;gap:3px}
 .message-row.mine{align-items:flex-end}
@@ -114,13 +129,32 @@ body.chat-page .compose-wrap{flex:0 0 auto;position:relative;z-index:4}
  function avatar(p){$('avatar').replaceChildren();if(p.avatar_url){const img=document.createElement('img');img.src=p.avatar_url;img.alt='';$('avatar').append(img)}else $('avatar').textContent=(p.display_name||p.username||'L').slice(0,1).toUpperCase()}
  function inspiration(){const box=document.createElement('div');box.className='inspiration';box.innerHTML='<div class="spark">✦</div><strong>Que tal começar com algo positivo?</strong><p>Escolha uma mensagem para enviar e deixe a conversa começar com boas energias.</p><button type="button" data-text="Oi! Como está seu dia?">Perguntar como está</button><button type="button" data-text="Continue criando. Sua história merece ser vista!">Incentivar a criar</button><button type="button" data-text="Passei aqui para desejar um ótimo dia!">Desejar um bom dia</button>';box.querySelectorAll('[data-text]').forEach(b=>b.onclick=()=>{$('chatInput').value=b.dataset.text;$('chatInput').focus()});return box}
  function closeMessageMenus(except){document.querySelectorAll('.message-actions-menu').forEach(m=>{if(m!==except)m.remove()})}
+ async function loadSharedPostPreview(postId,card){
+  try{
+   const r=await db.from('posts').select('id,author_id,body,post_type,idea_title,media_url,media_type,thumbnail_url,created_at,profiles:author_id(id,username,display_name,avatar_url)').eq('id',postId).neq('post_type','story').maybeSingle();
+   if(r.error)throw r.error;if(!r.data){card.querySelector('.shared-post-content').textContent='Publicação indisponível';return}
+   const p=r.data,content=card.querySelector('.shared-post-content');content.replaceChildren();
+   const author=document.createElement('span');author.className='shared-post-author';author.textContent=(p.profiles?.display_name||p.profiles?.username||'LinkStory')+(p.profiles?.username?' · @'+p.profiles.username:'');content.append(author);
+   if(p.idea_title){const title=document.createElement('strong');title.className='shared-post-title';title.textContent=p.idea_title;content.append(title)}
+   if(p.body){const body=document.createElement('span');body.className='shared-post-body';body.textContent=p.body;content.append(body)}
+   const media=p.media_type==='video'?(p.thumbnail_url||''):p.media_url;
+   if(media){const img=document.createElement('img');img.className='shared-post-media';img.src=media;img.alt='Imagem da publicação compartilhada';img.loading='lazy';img.onerror=()=>img.remove();content.append(img)}
+   const foot=document.createElement('span');foot.className='shared-post-open';foot.textContent='Toque para abrir no LinkStory ›';content.append(foot);
+  }catch(e){console.warn('Shared post preview:',e);const content=card.querySelector('.shared-post-content');if(content)content.textContent='Não foi possível carregar a prévia. Toque para abrir.'}
+ }
  function renderMessage(m,box){
   const mine=m.sender_id===user.id,wrap=document.createElement('div');wrap.className='message-row'+(mine?' mine':'');
   const b=document.createElement('div');b.className='bubble'+(mine?' mine':'');
   if(m.deleted_for_all_at){b.classList.add('deleted-message');b.textContent='Esta mensagem foi apagada.'}
   else {
-   const bodyText=m.body||'',urlPattern=/(https?:\/\/[^\s]+)/g;let cursor=0,match;
-   while((match=urlPattern.exec(bodyText))){b.append(document.createTextNode(bodyText.slice(cursor,match.index)));const link=document.createElement('a');link.href=match[0];link.textContent=match[0];link.target='_blank';link.rel='noopener noreferrer';link.style.cssText='color:inherit;text-decoration:underline;text-underline-offset:3px';b.append(link);cursor=match.index+match[0].length}
+   const bodyText=m.body||'',urlPattern=/(https?:\\/\\/[^\\s]+)/g;let cursor=0,match;
+   while((match=urlPattern.exec(bodyText))){
+    b.append(document.createTextNode(bodyText.slice(cursor,match.index)));
+    let shared=null;try{const parsed=new URL(match[0],location.origin);if(parsed.pathname.endsWith('/fy.html')&&parsed.searchParams.get('post'))shared=parsed.searchParams.get('post')}catch(_){}
+    if(shared){const card=document.createElement('a');card.className='shared-post-card';card.href='/fy.html?post='+encodeURIComponent(shared);card.setAttribute('aria-label','Abrir publicação compartilhada no LinkStory');const label=document.createElement('span');label.className='shared-post-label';label.textContent='PUBLICAÇÃO DO LINKSTORY';const content=document.createElement('span');content.className='shared-post-content';content.textContent='Carregando publicação…';card.append(label,content);b.append(card);loadSharedPostPreview(shared,card)}
+    else{const link=document.createElement('a');link.href=match[0];link.textContent=match[0];link.target='_blank';link.rel='noopener noreferrer';link.style.cssText='color:inherit;text-decoration:underline;text-underline-offset:3px';b.append(link)}
+    cursor=match.index+match[0].length;
+   }
    b.append(document.createTextNode(bodyText.slice(cursor)));
   }
   const t=document.createElement('time');t.textContent=clock(m.created_at)+(m.edited_at?' · editada':'');b.append(t);wrap.append(b);
