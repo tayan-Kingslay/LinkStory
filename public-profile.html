@@ -73,8 +73,8 @@ html[data-ls-theme="dark"] .network-person strong{color:#f1f5fa!important}
 </head><body>
 <header><a class="back" href="javascript:history.back()" aria-label="Voltar">‹</a><a class="brand" href="index.html">LINK<span>STORY</span></a></header>
 <main><section class="hero hero-reordered"><div class="avatar" id="avatar">L</div><div class="identity"><h1 id="name">Carregando perfil…</h1><div class="handle" id="handle"></div></div><div class="social-inline" aria-label="Seguidores e seguindo"><button class="social-inline-count" id="openFollowers" type="button"><strong id="followersCount">—</strong><span>seguidores</span></button><button class="social-inline-count" id="openFollowing" type="button"><strong id="followingCount">—</strong><span>seguindo</span></button></div><div class="bio" id="bio"></div></section><div class="follow-actions"><button class="follow-button" id="followButton" type="button" hidden>Seguir</button><div class="follow-status" id="followStatus" role="status" aria-live="polite"></div></div>
-<section class="section"><div class="eyebrow">PUBLICAÇÕES</div><h2>Obras criadas</h2><div id="works" class="works"><div class="empty">Carregando publicações…</div></div></section><section class="section" id="profilePhotosSection" hidden><div class="eyebrow">FEED</div><h2>Fotos</h2><div id="profilePhotos" class="profile-photo-grid"></div></section><style>.profile-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.profile-photo-grid a{display:block;aspect-ratio:1;overflow:hidden;border-radius:13px;background:#edf3fa}.profile-photo-grid img{width:100%;height:100%;object-fit:cover;display:block}@media(max-width:560px){.profile-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style><section class="section" id="collabSection" hidden><div class="eyebrow">PARTICIPAÇÕES</div><h2>Mangás em que colaborou</h2><div id="collaborations" class="works"></div></section><section class="section" id="invitesSection" hidden><div class="eyebrow">CONVITES</div><h2>Convites de colaboração</h2><div id="invites" class="invite-list"></div></section></main>
-<dialog class="network-dialog" id="networkDialog"><div class="network-head"><h2 id="networkTitle">Seguidores</h2><button class="network-close" id="closeNetwork" type="button" aria-label="Fechar">×</button></div><div class="network-list" id="networkList"><div class="network-empty">Carregando…</div></div></dialog><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script src="global-nav.js?v=20261110-2"></script>
+<nav class="profile-tabs" aria-label="Conteúdo do perfil"><button type="button" class="profile-tab active" data-profile-tab="feed" aria-selected="true">Feed</button><button type="button" class="profile-tab" data-profile-tab="manga" aria-selected="false">Mangá</button></nav><section class="section profile-tab-panel" id="profileFeedPanel"><div class="eyebrow">PUBLICAÇÕES</div><div id="profilePhotosSection" class="profile-photo-grid"></div><div id="profileFeedEmpty" class="empty" hidden><strong>Nenhuma foto publicada ainda.</strong>Quando este perfil publicar fotos, elas aparecerão aqui.</div></section><section class="section profile-tab-panel" id="profileMangaPanel" hidden><div class="eyebrow">OBRAS DO CRIADOR</div><h2>Mangás publicados</h2><div id="works" class="works"><div class="empty">Carregando publicações…</div></div></section><style>.profile-tabs{display:flex;gap:8px;margin:28px 0 0;padding:5px;border:1px solid rgba(130,150,175,.2);border-radius:15px;background:rgba(255,255,255,.62)}.profile-tab{flex:1;min-height:46px;border:0;border-radius:11px;background:transparent;color:#71839a;font:inherit;font-size:13px;font-weight:850;cursor:pointer}.profile-tab.active{background:#1769d2;color:#fff;box-shadow:0 5px 13px #1769d226}.profile-tab-panel{margin-top:18px!important}.profile-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.profile-photo{display:block;aspect-ratio:1;overflow:hidden;border:0;border-radius:13px;padding:0;background:#edf3fa;cursor:pointer}.profile-photo img{width:100%;height:100%;object-fit:cover;display:block}.profile-photo:focus-visible,.profile-tab:focus-visible{outline:3px solid #7ab5ff;outline-offset:2px}@media(max-width:560px){.profile-photo-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}.profile-photo{border-radius:5px}}</style><section class="section" id="collabSection" hidden><div class="eyebrow">PARTICIPAÇÕES</div><h2>Mangás em que colaborou</h2><div id="collaborations" class="works"></div></section><section class="section" id="invitesSection" hidden><div class="eyebrow">CONVITES</div><h2>Convites de colaboração</h2><div id="invites" class="invite-list"></div></section></main>
+<dialog class="photo-viewer-dialog" id="photoViewer" aria-label="Feed de fotos"><div class="photo-viewer-top"><button type="button" id="closePhotoViewer" aria-label="Fechar">×</button><strong>Publicações</strong><span id="photoViewerCount"></span></div><div class="photo-viewer-scroll" id="photoViewerScroll"></div></dialog><dialog class="photo-comments-dialog" id="photoCommentsDialog"><div class="photo-comments-head"><strong>Comentários</strong><button type="button" id="closePhotoComments" aria-label="Fechar comentários">×</button></div><div id="photoCommentsList" class="photo-comments-list"></div><form id="photoCommentForm" class="photo-comment-form"><input id="photoCommentInput" maxlength="1000" placeholder="Adicione um comentário…" aria-label="Escreva um comentário" required><button type="submit">Publicar</button></form></dialog><style>.photo-viewer-dialog{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;background:#080d16;color:#fff;overflow:hidden}.photo-viewer-dialog::backdrop{background:#080d16}.photo-viewer-top{position:absolute;z-index:5;top:0;left:0;right:0;height:58px;padding:0 15px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(#080d16d9,transparent)}.photo-viewer-top button,.photo-comments-head button{width:40px;height:40px;border:0;border-radius:50%;background:#ffffff1c;color:inherit;font-size:26px}.photo-viewer-top strong{font-size:14px}.photo-viewer-top span{font-size:12px;color:#c4cfdf}.photo-viewer-scroll{height:100%;overflow-y:auto;overscroll-behavior:contain;scroll-snap-type:y mandatory}.photo-viewer-slide{position:relative;min-height:100%;height:100%;display:flex;flex-direction:column;justify-content:center;scroll-snap-align:start;scroll-snap-stop:always;padding:66px 0 22px}.photo-viewer-image-wrap{height:min(68vh,760px);width:100%;display:grid;place-items:center}.photo-viewer-image{display:block;max-width:100%;max-height:100%;width:100%;height:100%;object-fit:contain}.photo-viewer-caption{padding:13px 17px 0;max-height:82px;overflow:auto;color:#f3f5f9;font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}.photo-viewer-actions{display:flex;align-items:center;gap:8px;padding:12px 13px 0}.photo-viewer-actions button{flex:1;min-width:0;min-height:43px;border:1px solid #ffffff26;border-radius:12px;background:#ffffff12;color:#fff;font-size:12px;font-weight:800}.photo-viewer-actions button.liked{color:#ff7c9b;border-color:#ff7c9b55}.photo-viewer-meta{padding:8px 17px 0;color:#aebbd0;font-size:11px}.photo-comments-dialog{position:fixed;inset:auto 0 0;width:100%;max-width:none;max-height:78dvh;margin:0;padding:0;border:1px solid #dbe5ef;border-radius:22px 22px 0 0;background:#fff;color:#17263a;box-shadow:0 -15px 55px #0005}.photo-comments-dialog::backdrop{background:#0008}.photo-comments-head{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 17px;border-bottom:1px solid #e8edf4}.photo-comments-head button{background:#f1f5fa;color:#17263a}.photo-comments-list{max-height:calc(78dvh - 122px);overflow:auto;padding:12px 16px}.photo-comment{padding:11px 0;border-bottom:1px solid #edf1f5}.photo-comment strong{font-size:12px}.photo-comment p{margin:5px 0 0;font-size:13px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}.photo-comment small{color:#8794a5;font-size:10px}.photo-comment-form{display:flex;gap:8px;padding:11px 13px calc(11px + env(safe-area-inset-bottom));border-top:1px solid #e8edf4}.photo-comment-form input{flex:1;min-width:0;border:1px solid #dce5ef;border-radius:22px;padding:11px 14px;font:inherit;font-size:13px}.photo-comment-form button{border:0;border-radius:22px;padding:0 16px;background:#1769d2;color:#fff;font-weight:850}@media(min-width:700px){.photo-viewer-image-wrap{height:min(70vh,780px)}.photo-viewer-slide{max-width:760px;margin:auto}}@media(prefers-reduced-motion:reduce){.photo-viewer-scroll{scroll-behavior:auto}}</style><dialog class="network-dialog" id="networkDialog"><div class="network-head"><h2 id="networkTitle">Seguidores</h2><button class="network-close" id="closeNetwork" type="button" aria-label="Fechar">×</button></div><div class="network-list" id="networkList"><div class="network-empty">Carregando…</div></div></dialog><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script src="global-nav.js?v=20261110-2"></script>
 <script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase,id=new URLSearchParams(location.search).get('id');
@@ -144,8 +144,122 @@ html[data-ls-theme="dark"] .network-person strong{color:#f1f5fa!important}
  const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===p.id),box=$('works');box.replaceChildren();
  if(!works.length){const empty=document.createElement('div');empty.className='empty';empty.innerHTML='<strong>Nenhuma obra criada ainda.</strong>Quando este perfil publicar uma obra, ela aparecerá aqui.';box.append(empty)}
  else{works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).forEach(m=>box.append(cardFor(m,'Autor principal')))}
- const photos=await db.from('posts').select('id,media_url,body,created_at').eq('author_id',p.id).eq('media_type','image').not('media_url','is',null).order('created_at',{ascending:false}).limit(30);
- if(!photos.error&&(photos.data||[]).length){$('profilePhotosSection').hidden=false;const grid=$('profilePhotos');photos.data.forEach(post=>{const a=document.createElement('a');a.href='fy.html';a.setAttribute('aria-label',post.body||'Foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';a.append(img);grid.append(a)})}
+ const photosResult=await db.from('posts').select('id,author_id,body,post_type,idea_title,media_url,media_type,created_at').eq('author_id',p.id).eq('media_type','image').not('media_url','is',null).neq('post_type','story').order('created_at',{ascending:false}).limit(60);
+ const photoPosts=photosResult.error?[]:(photosResult.data||[]);
+ const photoGrid=$('profilePhotosSection'),feedEmpty=$('profileFeedEmpty');
+ const photoState={activePost:null,liked:new Set(),counts:{},commentTarget:null};
+ const photoUrl=post=>location.origin+'/fy.html?post='+encodeURIComponent(post.id);
+ const escPhoto=value=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const photoCount=async postId=>{
+  const [likes,comments,mine]=await Promise.all([
+   db.from('post_likes').select('id',{count:'exact',head:true}).eq('post_id',postId),
+   db.from('comments').select('id',{count:'exact',head:true}).eq('post_id',postId),
+   viewer?db.from('post_likes').select('post_id').eq('post_id',postId).eq('user_id',viewer).maybeSingle():Promise.resolve({data:null,error:null})
+  ]);
+  if(likes.error)throw likes.error;if(comments.error)throw comments.error;
+  photoState.counts[postId]={likes:Number(likes.count||0),comments:Number(comments.count||0)};
+  if(mine.data)photoState.liked.add(postId);
+ };
+ if(photoPosts.length){
+  feedEmpty.hidden=true;
+  photoPosts.forEach(post=>{
+   const button=document.createElement('button');button.type='button';button.className='profile-photo';button.setAttribute('aria-label','Abrir foto publicada');
+   const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';button.append(img);
+   button.addEventListener('click',()=>openPhotoViewer(post.id));photoGrid.append(button);
+  });
+ }else{feedEmpty.hidden=false}
+ document.querySelectorAll('[data-profile-tab]').forEach(button=>button.addEventListener('click',()=>{
+  const tab=button.dataset.profileTab;
+  document.querySelectorAll('[data-profile-tab]').forEach(item=>{const active=item===button;item.classList.toggle('active',active);item.setAttribute('aria-selected',String(active))});
+  $('profileFeedPanel').hidden=tab!=='feed';$('profileMangaPanel').hidden=tab!=='manga';
+ }));
+ const viewerDialog=$('photoViewer'),viewerScroll=$('photoViewerScroll'),commentsDialog=$('photoCommentsDialog');
+ function updatePhotoCounts(postId){
+  const count=photoState.counts[postId]||{likes:0,comments:0};
+  const slide=viewerScroll.querySelector('[data-photo-id="'+postId+'"]');if(!slide)return;
+  const stats=slide.querySelector('.photo-viewer-meta');if(stats)stats.textContent=count.likes+' curtidas · '+count.comments+' comentários';
+  const like=slide.querySelector('[data-photo-like]');if(like){like.classList.toggle('liked',photoState.liked.has(postId));like.textContent=photoState.liked.has(postId)?'♥ Curtido':'♡ Curtir'}
+ }
+ async function openPhotoViewer(postId){
+  viewerScroll.replaceChildren();
+  const index=photoPosts.findIndex(post=>post.id===postId);
+  for(const post of photoPosts){
+   await photoCount(post.id);
+   const slide=document.createElement('article');slide.className='photo-viewer-slide';slide.dataset.photoId=post.id;
+   const wrap=document.createElement('div');wrap.className='photo-viewer-image-wrap';
+   const img=document.createElement('img');img.className='photo-viewer-image';img.src=post.media_url;img.alt=post.body||'Foto publicada';wrap.append(img);
+   const caption=document.createElement('div');caption.className='photo-viewer-caption';caption.textContent=post.body||'';
+   const actions=document.createElement('div');actions.className='photo-viewer-actions';
+   const like=document.createElement('button');like.type='button';like.dataset.photoLike='';like.textContent=photoState.liked.has(post.id)?'♥ Curtido':'♡ Curtir';like.classList.toggle('liked',photoState.liked.has(post.id));
+   like.addEventListener('click',()=>togglePhotoLike(post,like));
+   const comment=document.createElement('button');comment.type='button';comment.textContent='Comentários';comment.addEventListener('click',()=>openPhotoComments(post));
+   const share=document.createElement('button');share.type='button';share.textContent='Compartilhar';share.addEventListener('click',()=>sharePhoto(post));
+   const link=document.createElement('button');link.type='button';link.textContent='Copiar link';link.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(photoUrl(post));link.textContent='Link copiado!'}catch(error){prompt('Copie o link da publicação:',photoUrl(post))}});
+   actions.append(like,comment,share,link);
+   const meta=document.createElement('div');meta.className='photo-viewer-meta';meta.textContent=photoState.counts[post.id].likes+' curtidas · '+photoState.counts[post.id].comments+' comentários';
+   slide.append(wrap,caption,actions,meta);viewerScroll.append(slide);
+  }
+  $('photoViewerCount').textContent=(index+1)+' / '+photoPosts.length;
+  viewerDialog.showModal();
+  requestAnimationFrame(()=>{const target=viewerScroll.querySelector('[data-photo-id="'+postId+'"]');if(target)target.scrollIntoView({block:'start'})});
+ }
+ viewerScroll.addEventListener('scroll',()=>{
+  const slides=[...viewerScroll.querySelectorAll('.photo-viewer-slide')];if(!slides.length)return;
+  const top=viewerScroll.getBoundingClientRect().top;let nearest=slides[0],distance=Infinity;
+  slides.forEach(slide=>{const d=Math.abs(slide.getBoundingClientRect().top-top);if(d<distance){distance=d;nearest=slide}});
+  const idx=photoPosts.findIndex(post=>post.id===nearest.dataset.photoId);$('photoViewerCount').textContent=(idx+1)+' / '+photoPosts.length;
+ },{passive:true});
+ $('closePhotoViewer').onclick=()=>viewerDialog.close();
+ async function togglePhotoLike(post,button){
+  if(!viewer)return location.href='login.html';
+  button.disabled=true;
+  try{
+   if(photoState.liked.has(post.id)){
+    const result=await db.from('post_likes').delete().eq('post_id',post.id).eq('user_id',viewer);if(result.error)throw result.error;
+    photoState.liked.delete(post.id);photoState.counts[post.id].likes=Math.max(0,photoState.counts[post.id].likes-1);
+   }else{
+    const result=await db.from('post_likes').insert({post_id:post.id,user_id:viewer});if(result.error&&result.error.code!=='23505')throw result.error;
+    photoState.liked.add(post.id);if(!result.error)photoState.counts[post.id].likes++;
+   }
+   updatePhotoCounts(post.id);
+  }catch(error){alert(error.message||'Não foi possível curtir esta foto.')}
+  finally{button.disabled=false}
+ }
+ async function sharePhoto(post){
+  const url=photoUrl(post);
+  try{if(navigator.share)await navigator.share({title:'Publicação no LinkStory',text:post.body||'Confira esta foto no LinkStory',url});else{await navigator.clipboard.writeText(url);alert('Link copiado!')}}
+  catch(error){if(error.name!=='AbortError'){try{await navigator.clipboard.writeText(url);alert('Link copiado!')}catch(e){prompt('Copie o link da publicação:',url)}}}
+ }
+ async function openPhotoComments(post){
+  photoState.commentTarget=post;const list=$('photoCommentsList');list.textContent='Carregando comentários…';$('photoCommentInput').value='';commentsDialog.showModal();
+  try{
+   const result=await db.from('comments').select('id,body,author_id,created_at,profiles:author_id(id,display_name,username,avatar_url)').eq('post_id',post.id).order('created_at',{ascending:true});
+   if(result.error)throw result.error;list.replaceChildren();
+   if(!result.data?.length){list.innerHTML='<div class="empty">Seja a primeira pessoa a comentar.</div>';return}
+   result.data.forEach(comment=>{
+    const row=document.createElement('article');row.className='photo-comment';
+    const name=comment.profiles?.display_name||comment.profiles?.username||'Usuário';
+    const strong=document.createElement('strong');strong.textContent=name;
+    const date=document.createElement('small');date.textContent=' · '+new Date(comment.created_at).toLocaleString('pt-BR',{dateStyle:'short',timeStyle:'short'});
+    const body=document.createElement('p');body.textContent=comment.body;row.append(strong,date,body);list.append(row);
+   });
+  }catch(error){list.textContent='Não foi possível carregar os comentários: '+(error.message||'tente novamente')}
+ }
+ $('closePhotoComments').onclick=()=>commentsDialog.close();
+ commentsDialog.addEventListener('click',event=>{if(event.target===commentsDialog)commentsDialog.close()});
+ $('photoCommentForm').addEventListener('submit',async event=>{
+  event.preventDefault();if(!viewer)return location.href='login.html';
+  const post=photoState.commentTarget,field=$('photoCommentInput'),body=field.value.trim();if(!post||!body)return;
+  const send=event.submitter;send.disabled=true;send.textContent='Enviando…';
+  try{
+   const result=await db.from('comments').insert({post_id:post.id,author_id:viewer,body});
+   if(result.error)throw result.error;field.value='';
+   photoState.counts[post.id].comments++;updatePhotoCounts(post.id);
+   await openPhotoComments(post);
+  }catch(error){alert(error.message||'Não foi possível publicar o comentário.')}
+  finally{send.disabled=false;send.textContent='Publicar'}
+ });
+
  const collaborations=await LinkStoryManga.collaborationsForUser(p.id),collabBox=$('collaborations');
  if(collaborations.length){$('collabSection').hidden=false;collaborations.forEach(item=>{if(item.mangas)collabBox.append(cardFor(item.mangas,item.role+' · Colaborador'))})}
  if(viewer===p.id){const invites=await LinkStoryManga.myCollaborationInvites();if(invites.length){$('invitesSection').hidden=false;const inviteBox=$('invites');invites.forEach(invite=>{const row=document.createElement('div');row.className='invite-card';const cover=invite.mangas?.cover_url?document.createElement('img'):document.createElement('div');if(invite.mangas?.cover_url){cover.src=invite.mangas.cover_url;cover.alt=''}else{cover.className='invite-cover';cover.textContent='Mangá'}const info=document.createElement('div');info.className='invite-info';const title=document.createElement('strong');title.textContent=invite.mangas?.title||'Mangá';const by=document.createElement('small');by.textContent='Convite de '+(invite.inviter?.display_name||invite.inviter?.username||'criador')+' · '+invite.role;info.append(title,by);const actions=document.createElement('div');actions.className='invite-actions';const accept=document.createElement('button');accept.className='accept';accept.textContent='Aceitar';const decline=document.createElement('button');decline.textContent='Recusar';async function respond(status,button){button.disabled=true;button.textContent='Salvando…';try{await LinkStoryManga.respondToCollaboration(invite.id,status);row.remove();if(status==='accepted'){const fresh=await LinkStoryManga.collaborationsForUser(p.id);collabBox.replaceChildren();$('collabSection').hidden=!fresh.length;fresh.forEach(item=>{if(item.mangas)collabBox.append(cardFor(item.mangas,item.role+' · Colaborador'))})}if(!inviteBox.children.length)$('invitesSection').hidden=true}catch(error){button.disabled=false;button.textContent=status==='accepted'?'Aceitar':'Recusar';alert(error.message||'Não foi possível responder ao convite.')}}accept.onclick=()=>respond('accepted',accept);decline.onclick=()=>respond('declined',decline);actions.append(accept,decline);row.append(cover,info,actions);inviteBox.append(row)})}}
