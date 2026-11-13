@@ -120,7 +120,31 @@ html[data-ls-theme="dark"] header.top .menu-btn,html[data-ls-theme="dark"] heade
 html[data-ls-theme="dark"] header.top .menu-btn:before,html[data-ls-theme="dark"] header.topbar .menu-btn:before{
  background:linear-gradient(#c4ced9 0 2px,transparent 2px 8px,#c4ced9 8px 10px,transparent 10px 16px,#c4ced9 16px 18px)!important;
 }
-</style></head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile profile-reordered"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div class="profile-identity"><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div></div><div class="social-inline" aria-label="Seguidores e seguindo"><button type="button" id="openMyFollowers" class="social-inline-count"><strong id="myFollowersCount">—</strong><span>seguidores</span></button><button type="button" id="openMyFollowing" class="social-inline-count"><strong id="myFollowingCount">—</strong><span>seguindo</span></button></div><div class="muted profile-bio" id="bio"></div></section>
+</style>
+<style id="profile-menu-button-stability">
+/* Perfil: botão de menu sempre alinhado ao centro do próprio botão. */
+header.top button#openMenu{
+ position:absolute!important;left:auto!important;right:12px!important;top:50%!important;
+ transform:translateY(-50%)!important;display:flex!important;align-items:center!important;
+ justify-content:center!important;box-sizing:border-box!important;
+ width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
+ margin:0!important;padding:0!important;overflow:hidden!important;
+ border:1px solid rgba(210,222,237,.95)!important;border-radius:14px!important;
+ background:rgba(255,255,255,.9)!important;color:#52657a!important;
+}
+header.top button#openMenu::before{
+ content:""!important;position:absolute!important;left:50%!important;top:50%!important;
+ width:18px!important;height:2px!important;border:0!important;border-radius:3px!important;
+ background:currentColor!important;box-shadow:0 -6px 0 currentColor,0 6px 0 currentColor!important;
+ transform:translate(-50%,-50%)!important;display:block!important;opacity:1!important;
+}
+header.top button#openMenu::after{content:none!important;display:none!important}
+@media(max-width:560px){
+ header.top button#openMenu{right:10px!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;border-radius:13px!important}
+}
+html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!important;color:#a9d3ff!important;border-color:rgba(139,177,218,.24)!important}
+</style>
+</head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile profile-reordered"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div class="profile-identity"><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div></div><div class="social-inline" aria-label="Seguidores e seguindo"><button type="button" id="openMyFollowers" class="social-inline-count"><strong id="myFollowersCount">—</strong><span>seguidores</span></button><button type="button" id="openMyFollowing" class="social-inline-count"><strong id="myFollowingCount">—</strong><span>seguindo</span></button></div><div class="muted profile-bio" id="bio"></div></section>
 
 <style>
 .verification-area{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:12px}
