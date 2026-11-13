@@ -243,7 +243,7 @@ html[data-ls-theme="dark"] .network-person strong{color:#f1f5fa!important}
   catch(error){if(error.name!=='AbortError'){try{await navigator.clipboard.writeText(url);alert('Link copiado!')}catch(e){prompt('Copie o link da publicação:',url)}}}
  }
  async function openPhotoComments(post){
-  photoState.commentTarget=post;const list=$('photoCommentsList');list.textContent='Carregando comentários…';$('photoCommentInput').value='';commentsDialog.showModal();
+  photoState.commentTarget=post;const list=$('photoCommentsList');list.textContent='Carregando comentários…';$('photoCommentInput').value='';if(!commentsDialog.open)commentsDialog.showModal();
   try{
    const result=await db.from('comments').select('id,body,author_id,created_at,profiles:author_id(id,display_name,username,avatar_url)').eq('post_id',post.id).order('created_at',{ascending:true});
    if(result.error)throw result.error;list.replaceChildren();
@@ -262,7 +262,7 @@ html[data-ls-theme="dark"] .network-person strong{color:#f1f5fa!important}
  $('photoCommentForm').addEventListener('submit',async event=>{
   event.preventDefault();if(!viewer)return location.href='login.html';
   const post=photoState.commentTarget,field=$('photoCommentInput'),body=field.value.trim();if(!post||!body)return;
-  const send=event.submitter;send.disabled=true;send.textContent='Enviando…';
+  const send=$('photoCommentForm').querySelector('button[type="submit"]');send.disabled=true;send.textContent='Enviando…';
   try{
    const result=await db.from('comments').insert({post_id:post.id,author_id:viewer,body});
    if(result.error)throw result.error;field.value='';
