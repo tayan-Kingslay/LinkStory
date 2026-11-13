@@ -84,7 +84,7 @@ header.top,header.topbar{
  position:sticky!important;isolation:isolate!important;
 }
 header.top .menu-btn,header.topbar .menu-btn{
- position:absolute!important;right:14px!important;top:calc(50% - 5px)!important;
+ position:absolute!important;right:14px!important;top:50%!important;
  transform:translateY(-50%)!important;
  display:flex!important;align-items:center!important;justify-content:center!important;
  width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;
@@ -108,7 +108,7 @@ header.top .menu-btn:before,header.topbar .menu-btn:before{
 }
 @media(max-width:430px){
  header.top .menu-btn,header.topbar .menu-btn{
-  right:12px!important;top:calc(50% - 5px)!important;width:42px!important;height:42px!important;
+  right:12px!important;top:50%!important;width:42px!important;height:42px!important;
   min-width:42px!important;min-height:42px!important;border-radius:13px!important;
  }
  .profile h1#name{gap:2px!important}
@@ -128,7 +128,7 @@ html[data-ls-theme="dark"] header.top .menu-btn:before,html[data-ls-theme="dark"
 .verification-chip img{width:24px;height:24px;object-fit:contain}
 .verification-action{border:1px solid #d9b65c;background:#fff8e5;color:#815b08;border-radius:10px;padding:9px 12px;font-size:11px;font-weight:850}
 #verificationStatus{font-size:11px;color:#718198}
-</style><div class="verification-area" id="verificationArea" hidden><div id="verificationChip" class="verification-chip" hidden></div><button id="requestVerification" class="verification-action" hidden>Solicitar selo de influenciador</button><span id="verificationStatus"></span></div><div class="profile-actions"><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button></div>
+</style><div class="verification-area" id="verificationArea" hidden><div id="verificationChip" class="verification-chip" hidden></div><button id="requestVerification" class="verification-action" hidden>Solicitar selo de influenciador</button><span id="verificationStatus"></span></div><div class="profile-actions"><a class="profile-action" id="openStudioShortcut" href="studio.html" aria-label="Abrir Meu Estúdio">Meu Estúdio ↗</a><button class="profile-action primary" id="editProfile" hidden>Editar perfil</button></div>
 <section class="section"><div class="head"><div><span class="ey">PUBLICAÇÕES</span><h2>Minhas obras</h2></div></div><div id="empty" class="empty"><strong>Nenhuma obra publicada.</strong>Quando você publicar, ela aparecerá aqui.</div><div id="works" class="works"></div></section><section class="section" id="myPhotosSection" hidden><div class="head"><div><span class="ey">FEED</span><h2>Fotos</h2></div></div><div id="myPhotos" class="profile-photo-grid"></div></section><style>.profile-photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.profile-photo-grid a{display:block;aspect-ratio:1;overflow:hidden;border-radius:13px;background:#edf3fa}.profile-photo-grid img{width:100%;height:100%;object-fit:cover;display:block}@media(max-width:560px){.profile-photo-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}</style></main>
 <dialog id="myNetworkDialog" style="width:min(460px,calc(100% - 24px));max-height:80vh;border:1px solid #dce8f7;border-radius:20px;padding:0;box-shadow:0 24px 70px #102d501f"><div style="display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #e8edf4"><h2 id="myNetworkTitle" style="margin:0;font-size:18px">Seguidores</h2><button type="button" id="closeMyNetwork" aria-label="Fechar" style="width:36px;height:36px;border:0;border-radius:10px;background:#f1f5fa;font-size:22px">×</button></div><div id="myNetworkList" style="display:grid;gap:8px;padding:13px;overflow:auto;max-height:65vh"><div style="padding:28px 16px;text-align:center;color:#78889d;font-size:13px">Carregando…</div></div></dialog>
 <style>#myNetworkDialog::backdrop{background:#10203380;backdrop-filter:blur(3px)}.my-network-person{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid #e5edf6;border-radius:13px;text-decoration:none;color:inherit}.my-network-person img,.my-network-avatar{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;background:#eaf3ff;display:grid;place-items:center;color:#1769d2;font-weight:900}.my-network-person span{min-width:0}.my-network-person strong,.my-network-person small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.my-network-person small{margin-top:3px;color:#78889d;font-size:11px}.my-network-empty{padding:28px 16px;text-align:center;color:#78889d;font-size:13px}</style>
