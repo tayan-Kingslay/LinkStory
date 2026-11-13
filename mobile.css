@@ -68,3 +68,14 @@ main{min-width:0}
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}
 }
+
+/* Settings: keep category controls visible and active content readable on touch devices. */
+@media(max-width:800px),(pointer:coarse){
+  body:has(.settings-menu) .layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+  body:has(.settings-menu) .layout > .settings-menu{display:flex!important;visibility:visible!important;opacity:1!important;position:relative!important;inset:auto!important;z-index:2!important;width:100%!important;max-width:100%!important;min-height:48px!important;overflow-x:auto!important;overflow-y:hidden!important;flex-wrap:nowrap!important;gap:5px!important;padding:6px!important;scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important}
+  body:has(.settings-menu) .layout > .settings-menu::-webkit-scrollbar{display:none!important}
+  body:has(.settings-menu) .layout > .settings-menu button{display:block!important;visibility:visible!important;opacity:1!important;position:relative!important;flex:0 0 auto!important;width:auto!important;min-width:max-content!important;min-height:42px!important;white-space:nowrap!important;padding:10px 13px!important;font-size:12px!important}
+  body:has(.settings-menu) .layout > .panel{min-width:0!important;width:100%!important}
+  body:has(.settings-menu) .layout > .panel.active{display:grid!important;visibility:visible!important;opacity:1!important}
+  body:has(.settings-menu) .layout > .panel:not(.active){display:none!important}
+}
