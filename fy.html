@@ -814,3 +814,14 @@ html[data-ls-theme="dark"] .modal-head{background:linear-gradient(145deg,#1d2a3b
 <script src="fy.js?v=20261110-fy-tabs"></script>
 <script src="global-nav.js?v=mobile-1"></script>
 </body></html>
+
+<style id="like-heart-only-style">
+/* Like state changes the heart only; button, label and surface remain neutral. */
+.actions .action[data-action="like"]{color:#8794a8!important;background:transparent!important}
+.actions .action[data-action="like"].liked{color:#8794a8!important;background:transparent!important}
+.actions .action[data-action="like"] .action-icon svg path{fill:#8794a8!important;stroke:#8794a8!important;transition:fill .15s ease,stroke .15s ease}
+.actions .action[data-action="like"].liked .action-icon svg path{fill:#e53955!important;stroke:#e53955!important}
+html[data-ls-theme="dark"] .actions .action[data-action="like"],html[data-ls-theme="dark"] .actions .action[data-action="like"].liked{color:#a9b8cc!important;background:transparent!important}
+html[data-ls-theme="dark"] .actions .action[data-action="like"] .action-icon svg path{fill:#a9b8cc!important;stroke:#a9b8cc!important}
+html[data-ls-theme="dark"] .actions .action[data-action="like"].liked .action-icon svg path{fill:#ff526b!important;stroke:#ff526b!important}
+</style>
