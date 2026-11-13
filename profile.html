@@ -274,4 +274,4 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
   if(!photoResult.error&&(photoResult.data||[]).length){$('myPhotosSection').hidden=false;const grid=$('myPhotos');photoResult.data.forEach(post=>{const a=document.createElement('a');a.href='fy.html';a.setAttribute('aria-label',post.body||'Foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';a.append(img);grid.append(a)})}
  }catch(e){console.error(e);$('handle').textContent=e.message||'Não foi possível carregar o perfil.'}
 })();
-</script><script src="global-nav.js"></script></body></html>
+</script><script src="global-nav.js?v=mobile-1"></script></body></html>
