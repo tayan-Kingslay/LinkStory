@@ -149,6 +149,32 @@ main#main{padding-top:34px!important}
 @media(prefers-reduced-motion:reduce){.chapter,.actions .btn{transition:none!important}.chapter:hover,.actions .btn:hover{transform:none!important}}
 </style>
 \n<link rel="stylesheet" href="mobile.css?v=4">
+<style id="manga-dark-repair">
+/* Correção visual da página do mangá: tema escuro e capa como imagem real */
+:root{color-scheme:dark;--ink:#eef3fa;--muted:#9aa9bd;--line:#263449;--soft:#172438;--ls-line:#263449}
+html,body{background:#080e18!important;color:#eef3fa!important}
+.top,.topbar{background:rgba(12,20,33,.94)!important;border-color:#263449!important;box-shadow:0 8px 28px rgba(0,0,0,.24)!important}
+.back,.menu,.menu-btn{background:#111d2d!important;border-color:#2a3a50!important;color:#edf4ff!important}
+.brand{color:#f3f6fb!important}
+.cover-shell{width:min(330px,78vw)!important;aspect-ratio:2/3!important;padding:0!important;overflow:hidden!important;background:#111d2d!important;border:1px solid #2b3b51!important;border-radius:20px!important;box-shadow:0 18px 48px rgba(0,0,0,.35)!important}
+.cover{display:block!important;width:100%!important;height:100%!important;object-fit:contain!important;object-position:center!important;background:#111d2d!important;border-radius:19px!important}
+.cover.cover-error{visibility:hidden!important}
+.creator-profile,.stats,.chapter,.social,.credit-person{background:#111b2a!important;border-color:#26364b!important;color:#edf3fb!important;box-shadow:0 8px 25px rgba(0,0,0,.18)!important}
+.creator-copy strong,.stat strong,.chapter-info strong,.social>strong,.block h2{color:#edf3fb!important}
+.creator-copy small,.stat span,.chapter-info small,.creator-label,.one-comment p{color:#9aabc0!important}
+.chapter-num{background:#1a2b42!important;color:#72b5ff!important}
+.chev{color:#8ca8c7!important}
+.actions .btn,.social button,.comment input{background:#172438!important;border-color:#30435c!important;color:#eaf2fc!important}
+.actions .btn.primary,.comment button{background:#0b72e7!important;border-color:#0b72e7!important;color:#fff!important}
+.social #like,.social #like.active{background:#172438!important;border-color:#30435c!important;color:#eaf2fc!important}
+.comment input::placeholder{color:#8798ae!important}
+.one-comment{border-color:#26364b!important}
+.empty{background:#111b2a!important;color:#a8b7ca!important}
+.creator-follow{background:#0b72e7!important;color:#fff!important}
+.creator-follow.following{background:#172438!important;color:#8fc2ff!important}
+@media(max-width:600px){.cover-shell{width:min(290px,78vw)!important}}
+</style>
+
 </head>
 <body>
 <header class="top">
@@ -175,7 +201,7 @@ main#main{padding-top:34px!important}
 
   $("main").innerHTML=
   '<section class="manga-view">'+
-    '<div class="cover-shell"><div class="cover" id="cover"></div></div>'+
+    '<div class="cover-shell"><img class="cover" id="cover" alt="Capa do mangá" decoding="async"></div>'+
     '<div class="actions reading">'+
       '<a class="btn primary" href="reader.html?manga_id='+m.id+'&chapter_id='+(cs[0]?.id||"")+'">Começar a ler</a>'+
     '</div>'+
@@ -223,7 +249,13 @@ main#main{padding-top:34px!important}
   const credits=await LinkStoryManga.collaboratorsForManga(m.id);if(credits.length){const section=document.createElement('section');section.className='block';const eyebrow=document.createElement('span');eyebrow.className='ey';eyebrow.textContent='PRODUÇÃO';const heading=document.createElement('h2');heading.textContent='Colaboradores';const list=document.createElement('div');list.className='credit-list';credits.forEach(async person=>{const row=document.createElement('div');row.className='credit-person';const avatar=person.profiles?.avatar_url?document.createElement('img'):document.createElement('div');if(person.profiles?.avatar_url){avatar.src=person.profiles.avatar_url;avatar.alt=''}else{avatar.className='credit-avatar';avatar.textContent=(person.profiles?.display_name||person.profiles?.username||'U').slice(0,1).toUpperCase()}const copy=document.createElement('div'),link=document.createElement('a'),role=document.createElement('small');link.href='public-profile.html?id='+encodeURIComponent(person.user_id);link.textContent=person.profiles?.display_name||person.profiles?.username||'Colaborador';role.textContent=person.role;copy.append(link,role);row.append(avatar,copy);await mountFollowButton(person.user_id,row.querySelector("a"));list.append(row)});section.append(eyebrow,heading,list);document.querySelector('.stats').before(section)}
   if(window.LinkStoryGuard){const reportArea=document.querySelector('.social');window.LinkStoryGuard.mountReportButton(reportArea,{target_type:'manga',target_id:m.id});window.LinkStoryGuard.mountBlockButton(reportArea,m.creator_id,'Bloquear criador');}
 
-  if(m.cover_url)$("cover").style.backgroundImage='url("'+m.cover_url.replace(/"/g,'&quot;')+'")';
+  const cover=$("cover");
+  if(m.cover_url){
+   cover.src=m.cover_url;
+   cover.onerror=()=>{cover.removeAttribute("src");cover.alt="Não foi possível carregar a capa";cover.classList.add("cover-error")};
+  }else{
+   cover.alt="Capa não cadastrada";cover.classList.add("cover-error");
+  }
 
   const cl=$("chapters");
   cs.forEach(c=>{
