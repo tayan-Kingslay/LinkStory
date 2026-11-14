@@ -79,3 +79,47 @@ main{min-width:0}
   body:has(.settings-menu) .layout > .panel.active{display:grid!important;visibility:visible!important;opacity:1!important}
   body:has(.settings-menu) .layout > .panel:not(.active){display:none!important}
 }
+
+
+/* LINKSTORY — proporções universais de mídia.
+   Capas preservam a arte inteira; fotos e páginas mantêm a proporção original.
+   Avatares e banners mantêm seus recortes intencionais. */
+:where(.book,.library-cover,.work .cover,.cover-shell){
+  aspect-ratio:3 / 4!important;
+}
+:where(.book img,.library-cover img,.work .cover img,.cover-shell img){
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+:where(.book,.library-cover,.work .cover,.cover-shell){
+  background-color:var(--ls-media-bg,#edf2f8)!important;
+}
+:where(.cover-shell .cover){
+  width:100%!important;height:100%!important;
+  background-size:contain!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
+}
+:where(.reader-page){
+  display:block!important;
+  width:100%!important;height:auto!important;
+  max-width:100%!important;max-height:none!important;
+  object-fit:contain!important;object-position:top center!important;
+}
+:where(.ig-post-media img,.photo-viewer-image,.my-photo-viewer-content img,.media:not(video)){
+  height:auto!important;max-width:100%!important;
+  object-fit:contain!important;object-position:center!important;
+}
+:where(.profile-photo-grid img,.photo-grid img){
+  object-fit:contain!important;object-position:center!important;
+}
+:where(.avatar img,.creator-avatar img,.comment-avatar img,.profile-avatar img){
+  width:100%;height:100%;object-fit:cover!important;
+}
+html[data-ls-theme="dark"] :where(.book,.library-cover,.work .cover,.cover-shell){
+  background-color:#182433!important;
+}
