@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>LinkStory · Modo Experiência</title>
+<link rel="stylesheet" href="visual-system.css?v=4"><link rel="stylesheet" href="mobile.css?v=3"><link rel="stylesheet" href="at3-global.css?v=2"><link rel="stylesheet" href="visual-refresh.css?v=2">
+<style>
+:root{--rx-bg:#080f19;--rx-panel:#121b2b;--rx-line:#ffffff20;--rx-muted:#a8b5c6;--rx-brand:#1976d2}
+html,body{margin:0;min-height:100%;background:var(--rx-bg);color:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{padding:0!important;overflow:hidden}.rx-shell{height:100dvh;display:flex;flex-direction:column}
+.rx-head{height:66px;flex:0 0 66px;display:flex;align-items:center;gap:12px;padding:0 14px;background:#0b1220f2;border-bottom:1px solid var(--rx-line);z-index:5}
+.rx-back,.rx-icon{width:42px;height:42px;min-width:42px;border:1px solid var(--rx-line);border-radius:13px;background:#ffffff08;color:white;display:grid;place-items:center;text-decoration:none;font-size:23px}
+.rx-title{min-width:0;flex:1}.rx-title strong,.rx-title small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rx-title strong{font-size:15px}.rx-title small{font-size:11px;color:var(--rx-muted);margin-top:3px}
+.rx-count{font-size:12px;color:#d8e2ee;font-weight:800;white-space:nowrap}
+.rx-stage{flex:1;min-height:0;display:grid;place-items:center;position:relative;padding:8px 12px}
+.rx-art{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;touch-action:pan-y;user-select:none;-webkit-user-drag:none}
+.rx-nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;pointer-events:none;padding:0 8px}
+.rx-nav button{pointer-events:auto;width:42px;height:52px;border:1px solid #ffffff20;border-radius:13px;background:#080f1980;color:white;font-size:25px;backdrop-filter:blur(8px)}
+.rx-footer{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px max(12px,env(safe-area-inset-bottom));background:#0b1220;border-top:1px solid var(--rx-line)}
+.rx-progress{height:3px;background:#ffffff20;position:absolute;left:0;right:0;bottom:0}.rx-progress span{display:block;height:100%;background:var(--rx-brand);width:0;transition:width .2s}
+.rx-hint{font-size:11px;color:var(--rx-muted);text-align:center;flex:1}.rx-primary{min-height:42px;border:0;border-radius:12px;padding:0 15px;background:var(--rx-brand);color:white;font-weight:800}
+.rx-immersive .rx-head,.rx-immersive .rx-footer{opacity:0;pointer-events:none;transition:opacity .2s}.rx-immersive .rx-stage{padding:0}.rx-immersive .rx-progress{opacity:.25}
+.rx-end{display:none;position:absolute;inset:0;background:#080f19ed;z-index:4;place-content:center;text-align:center;padding:24px}.rx-end.show{display:grid}.rx-end h2{margin:0 0 8px}.rx-end p{color:var(--rx-muted);margin:0 0 18px}
+.rx-comments{display:none;position:absolute;inset:0;z-index:8;background:var(--rx-bg);overflow:auto;padding:18px 14px max(22px,env(safe-area-inset-bottom));overscroll-behavior:contain}.rx-comments.show{display:block}.rx-comments h2{font-size:20px}.rx-comment-form{display:flex;gap:8px}.rx-comment-form input{flex:1;min-width:0;min-height:44px;border:1px solid var(--rx-line);border-radius:11px;background:#ffffff0c;color:#fff;padding:0 12px;font-size:16px}.rx-comment-form button{border:0;border-radius:11px;background:var(--rx-brand);color:white;padding:0 14px;font-weight:800}.rx-comment{border-top:1px solid var(--rx-line);padding:12px 0}.rx-comment strong{font-size:13px}.rx-comment p{color:#d0d9e4;font-size:13px;line-height:1.5;margin:5px 0}
+.rx-status{color:var(--rx-muted);font-size:13px;text-align:center;padding:20px}
+@media(max-width:600px){.rx-head{height:58px;flex-basis:58px;padding:0 10px}.rx-stage{padding:4px}.rx-nav button{width:36px;height:46px}.rx-footer{padding-inline:10px}.rx-hint{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.rx-art,.rx-progress span{transition:none}}
+</style></head>
+<body><div class="rx-shell" id="shell">
+<header class="rx-head"><a class="rx-back" id="back" href="javascript:history.back()" aria-label="Voltar">‹</a><div class="rx-title"><strong id="mangaTitle">LinkStory</strong><small id="chapterTitle">Modo Experiência</small></div><span class="rx-count" id="counter">— / —</span></header>
+<main class="rx-stage" id="stage"><canvas class="rx-art" id="art" aria-label="Quadrinho atual"></canvas><div class="rx-nav"><button id="prev" aria-label="Quadrinho anterior">‹</button><button id="next" aria-label="Próximo quadrinho">›</button></div><div class="rx-end" id="end"><div><h2>Fim desse episódio</h2><p>Você chegou ao final deste capítulo.</p><button class="rx-primary" id="showComments">Ver comentários</button></div></div></main>
+<footer class="rx-footer"><span class="rx-hint" id="hint">Deslize para avançar · Toque no topo ou embaixo para ocultar os controles</span><button class="rx-primary" id="nextChapter" hidden>Próximo capítulo</button></footer><div class="rx-progress"><span id="progress"></span></div>
+<section class="rx-comments" id="comments"><button class="rx-back" id="closeComments" aria-label="Voltar à leitura">‹</button><h2>Conversa da comunidade</h2><p id="commentContext" style="color:var(--rx-muted);font-size:13px"></p><div class="rx-comment-form"><input id="commentText" maxlength="1000" placeholder="Compartilhe sua opinião" aria-label="Escreva um comentário"><button id="commentBtn">Enviar</button></div><div id="commentList"></div></section>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="manga-db.js?v=20261110-3"></script>
+<script>
+(()=>{'use strict';const $=id=>document.getElementById(id),q=new URLSearchParams(location.search),mangaId=q.get('manga_id'),requestedId=q.get('chapter_id');let manga,chapter,chapters=[],panels=[],index=0,dragStart=null,immersive=false;
+const canvas=$('art'),ctx=canvas.getContext('2d');function setStatus(t){$('hint').textContent=t}
+function draw(){const p=panels[index];if(!p)return;const img=p.image;if(!img.complete||!img.naturalWidth)return;const sx=Math.round(p.x*img.naturalWidth),sy=Math.round(p.y*img.naturalHeight),sw=Math.max(1,Math.round(p.width*img.naturalWidth)),sh=Math.max(1,Math.round(p.height*img.naturalHeight));const scale=Math.min((innerWidth-20)/sw,(innerHeight-150)/sh,2);canvas.width=Math.max(1,Math.round(sw*scale));canvas.height=Math.max(1,Math.round(sh*scale));ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,sx,sy,sw,sh,0,0,canvas.width,canvas.height);$('counter').textContent=(index+1)+' / '+panels.length;$('progress').style.width=((index+1)/panels.length*100)+'%';$('prev').disabled=index===0;$('next').disabled=index===panels.length-1}
+function toggleImmersive(){immersive=!immersive;$('shell').classList.toggle('rx-immersive',immersive)}
+function go(n){if(n<0||n>=panels.length)return;index=n;$('end').classList.remove('show');draw();setStatus('Deslize para avançar · Toque no topo ou embaixo para ocultar os controles')}
+function finish(){index=panels.length-1;draw();$('end').classList.add('show');$('nextChapter').hidden=!chapters.some(c=>Number(c.chapter_number)>Number(chapter.chapter_number));setStatus('Fim do capítulo')}
+function openComments(){ $('comments').classList.add('show');$('commentContext').textContent=(manga.title||'Mangá')+' · Capítulo '+chapter.chapter_number;loadComments(); }
+function closeComments(){ $('comments').classList.remove('show'); }
+async function loadComments(){const box=$('commentList');box.replaceChildren();try{const list=await LinkStoryManga.comments(manga.id);if(!list.length){box.textContent='Ainda não há comentários.';return}list.forEach(c=>{const row=document.createElement('article');row.className='rx-comment';const name=document.createElement('strong');name.textContent=c.profiles?.display_name||c.profiles?.username||'Leitor';const body=document.createElement('p');body.textContent=c.body||'';row.append(name,body);box.append(row)})}catch{box.textContent='Não foi possível carregar os comentários.'}}
+$('commentBtn').onclick=async()=>{const value=$('commentText').value.trim();if(!value)return;try{if(!await LinkStoryManga.session())return location.href='login.html';await LinkStoryManga.addComment(manga.id,value);$('commentText').value='';loadComments()}catch{setStatus('Não foi possível enviar o comentário.')}};
+$('prev').onclick=()=>go(index-1);$('next').onclick=()=>index===panels.length-1?finish():go(index+1);$('showComments').onclick=openComments;$('closeComments').onclick=closeComments;
+$('nextChapter').onclick=()=>{const next=chapters.find(c=>Number(c.chapter_number)>Number(chapter.chapter_number));if(next)location.href='reader-experience.html?manga_id='+encodeURIComponent(manga.id)+'&chapter_id='+encodeURIComponent(next.id)};
+$('stage').addEventListener('pointerdown',e=>{dragStart={x:e.clientX,y:e.clientY}});$('stage').addEventListener('pointerup',e=>{if(!dragStart)return;const dx=e.clientX-dragStart.x,dy=e.clientY-dragStart.y;dragStart=null;if(Math.abs(dx)>45&&Math.abs(dx)>Math.abs(dy)){if(dx<0)index===panels.length-1?finish():go(index+1);else go(index-1)}else if(Math.abs(dy)<12&&(e.clientY<90||e.clientY>innerHeight-90))toggleImmersive();else if(Math.abs(dy)>70&&dy<0&&index===panels.length-1)openComments()});
+window.addEventListener('keydown',e=>{if(e.key==='ArrowRight')index===panels.length-1?finish():go(index+1);if(e.key==='ArrowLeft')go(index-1);if(e.key==='Escape'){closeComments();if(immersive)toggleImmersive()}});
+window.addEventListener('resize',draw);
+(async()=>{try{if(!mangaId)throw Error('Mangá não informado.');manga=await LinkStoryManga.mangaById(mangaId);if(!manga)throw Error('Mangá não encontrado.');chapters=await LinkStoryManga.chapters(manga.id);chapter=requestedId?await LinkStoryManga.chapterWithPages(requestedId):null;if(!chapter)chapter=await LinkStoryManga.chapterWithPages(chapters[0]?.id);if(!chapter||chapter.manga_id!==manga.id)throw Error('Capítulo não encontrado.');$('mangaTitle').textContent=manga.title;$('chapterTitle').textContent='Capítulo '+chapter.chapter_number+' · '+(chapter.title||'');$('back').href='manga.html?id='+manga.id;
+const images=await Promise.all(chapter.pages.map(p=>new Promise((resolve,reject)=>{const img=new Image();img.onload=()=>resolve({page:p,img});img.onerror=()=>reject(new Error('Falha ao carregar página'));img.src=p.image_url})));
+images.forEach(({page,img})=>(Array.isArray(page.panels)?page.panels:[]).slice().sort((a,b)=>(a.order||0)-(b.order||0)).forEach(c=>{if(c.width>0&&c.height>0)panels.push({image:img,x:c.x,y:c.y,width:c.width,height:c.height})}));
+if(!panels.length){$('stage').innerHTML='<div class="rx-status">Este capítulo ainda não foi dividido em quadrinhos para o Modo Experiência.<br><br>O autor precisa organizar os quadros no LinkStory antes de liberar esta leitura.</div>';$('prev').hidden=true;$('next').hidden=true;$('counter').textContent='— / —';setStatus('Modo Experiência ainda não disponível neste capítulo.');return}
+draw();try{await LinkStoryManga.saveProgress(manga.id,chapter.id)}catch{}
+}catch(e){console.error(e);setStatus(e.message||'Não foi possível abrir o leitor.')}})();
+})();
+</script></body></html>
