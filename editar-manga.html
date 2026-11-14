@@ -37,7 +37,8 @@ h1{line-height:1.03!important}
 @media(max-width:600px){.top{top:8px!important}main{padding-top:25px!important}.card{padding:17px!important}.actions{gap:9px}.actions .btn{width:100%;min-height:46px}.cover-row{align-items:flex-start}.file{font-size:11px}}
 @media(prefers-reduced-motion:reduce){.back,.btn,.field input,.field textarea,.field select{transition:none!important}.back:hover,.btn:hover{transform:none!important}}
 
-</style></head><body>
+ .cover-size-note{display:block;margin-top:9px;color:#66788d;font-size:12px;line-height:1.5}.cover-size-note strong{color:#1769d2}
+</style><link rel="stylesheet" href="mobile.css?v=4"></head><body>
 <header class="top"><a class="back" href="studio.html" aria-label="Voltar">‹</a><div class="brand">Link<b>Story</b></div></header>
 <main><span class="ey">MEU ESTÚDIO · EDIÇÃO</span><h1>Editar mangá.</h1><p class="sub">Atualize as informações da sua obra. As alterações serão salvas na publicação existente.</p>
 <form class="card" id="editForm">
@@ -45,7 +46,7 @@ h1{line-height:1.03!important}
 <div class="field"><label for="genre">Gênero</label><input id="genre" maxlength="120" required></div>
 <div class="field"><label for="rating">Classificação indicativa</label><select id="rating"><option>Livre</option><option>10 anos</option><option>12 anos</option><option>14 anos</option><option>16 anos</option><option>18 anos</option></select></div>
 <div class="field"><label for="description">Descrição</label><textarea id="description" maxlength="5000"></textarea></div>
-<div class="field"><label>Capa</label><div class="cover-row"><img id="coverPreview" class="cover-preview" alt="Capa atual"><input id="cover" class="file" type="file" accept="image/jpeg,image/png,image/webp"><small class="cover-size-note">Tamanho recomendado: <strong>1600 × 2400 px</strong> (proporção 2:3). Também aceitamos artes próximas de <strong>1700 × 2400 px</strong>. Use uma imagem vertical para melhor resultado.</small></div></div>
+<div class="field"><label>Capa</label><div class="cover-row"><img id="coverPreview" class="cover-preview" alt="Capa atual"><input id="cover" class="file" type="file" accept="image/jpeg,image/png,image/webp"><small class="cover-size-note">Tamanho recomendado: <strong>1600 × 2400 px</strong> (proporção 2:3). Também aceitamos artes próximas de <strong>1700 × 2400 px</strong>. Use uma imagem vertical para melhor resultado.</small><small class="cover-size-note">Tamanho recomendado: <strong>1600 × 2400 px</strong> (proporção 2:3). Também aceitamos artes próximas de <strong>1700 × 2400 px</strong>. Use uma imagem vertical para melhor resultado.</small></div></div>
 <div class="actions"><a class="btn" href="studio.html">Cancelar</a><button class="btn primary" id="save" type="submit">Salvar alterações</button></div><div class="status" id="status" role="status"></div>
 </form>
 <div class="danger-box"><strong>Zona de perigo</strong><p>Apagar esta obra remove a publicação. A ação é permanente e não pode ser desfeita.</p><button class="btn danger" id="delete" type="button">Apagar mangá</button></div>
