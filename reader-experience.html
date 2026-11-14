@@ -32,7 +32,7 @@ body{padding:0!important;overflow:hidden}.rx-shell{height:100dvh;display:flex;fl
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="manga-db.js?v=20261110-3"></script>
 <script>
-(()=>{'use strict';const $=id=>document.getElementById(id),q=new URLSearchParams(location.search),mangaId=q.get('manga_id'),requestedId=q.get('chapter_id');let manga,chapter,chapters=[],panels=[],index=0,dragStart=null,immersive=false;
+(()=>{'use strict';const $=id=>document.getElementById(id),q=new URLSearchParams(location.search),mangaId=q.get('manga_id'),requestedId=q.get('chapter_id'),returnTo=q.get('return_to');let manga,chapter,chapters=[],panels=[],index=0,dragStart=null,immersive=false;
 const canvas=$('art'),ctx=canvas.getContext('2d');function setStatus(t){$('hint').textContent=t}
 function draw(){const p=panels[index];if(!p)return;const img=p.image;if(!img.complete||!img.naturalWidth)return;const sx=Math.round(p.x*img.naturalWidth),sy=Math.round(p.y*img.naturalHeight),sw=Math.max(1,Math.round(p.width*img.naturalWidth)),sh=Math.max(1,Math.round(p.height*img.naturalHeight));const scale=Math.min((innerWidth-20)/sw,(innerHeight-150)/sh,2);canvas.width=Math.max(1,Math.round(sw*scale));canvas.height=Math.max(1,Math.round(sh*scale));ctx.clearRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,sx,sy,sw,sh,0,0,canvas.width,canvas.height);$('counter').textContent=(index+1)+' / '+panels.length;$('progress').style.width=((index+1)/panels.length*100)+'%';$('prev').disabled=index===0;$('next').disabled=false}
 function toggleImmersive(){immersive=!immersive;$('shell').classList.toggle('rx-immersive',immersive)}
