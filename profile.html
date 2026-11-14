@@ -162,7 +162,20 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
 <label class="edit-field"><span>Foto do perfil</span><input id="editAvatarFile" type="file" accept="image/*"><small id="avatarFileHint">Escolha uma foto da galeria ou tire uma nova.</small></label>
 <label class="edit-field"><span>Biografia</span><textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você…"></textarea></label>
 <div class="edit-status" id="editStatus" role="status"></div><div class="edit-actions"><button type="button" class="profile-action" id="cancelEdit">Cancelar</button><button type="submit" class="profile-action primary" id="saveProfile">Salvar alterações</button></div></form></dialog>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script>
+<dialog id="myPhotoViewer" class="my-photo-viewer" aria-label="Foto publicada"><div class="my-photo-viewer-head"><button type="button" id="closeMyPhotoViewer" aria-label="Fechar">×</button><strong>Publicação</strong><span id="myPhotoPosition"></span></div><div class="my-photo-viewer-content"><img id="myPhotoImage" alt="Foto publicada"><p id="myPhotoCaption"></p><div class="my-photo-viewer-actions"><button type="button" id="myPhotoLike" aria-pressed="false">♡ Curtir</button><span id="myPhotoLikeCount">0 curtidas</span></div></div></dialog>
+<style>
+.my-photo-viewer{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#f5f7fb;color:#243247}
+.my-photo-viewer::backdrop{background:rgba(8,15,28,.88)}
+.my-photo-viewer-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:14px;padding:calc(12px + env(safe-area-inset-top)) 16px 12px;background:rgba(255,255,255,.96);border-bottom:1px solid #dfe7f1}
+.my-photo-viewer-head button{width:38px;height:38px;border:0;border-radius:12px;background:#edf3fb;font-size:25px;color:#334b69}
+.my-photo-viewer-head strong{flex:1}.my-photo-viewer-content{max-width:760px;margin:0 auto;padding:14px}
+.my-photo-viewer-content img{display:block;width:100%;max-height:70vh;object-fit:contain;border-radius:14px;background:#e9eff7}
+.my-photo-viewer-content p{white-space:pre-wrap;overflow-wrap:anywhere}
+.my-photo-viewer-actions{display:flex;align-items:center;gap:14px}
+.my-photo-viewer-actions button{padding:11px 18px;border:1px solid #dce6f3;border-radius:12px;background:#fff;color:#647b99;font-weight:750}
+.my-photo-viewer-actions button.liked{color:#e63858}
+@media(prefers-color-scheme:dark){html[data-ls-theme="dark"] .my-photo-viewer{background:#111a26;color:#e8eef7}html[data-ls-theme="dark"] .my-photo-viewer-head{background:#172333;border-color:#344255}}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase;
  let user=null,profile=null;
@@ -271,7 +284,29 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
    info.append(title,genre,actions);d.append(cover,info);container.append(d);
   })}
   const photoResult=await db.from('posts').select('id,media_url,body,created_at').eq('author_id',user.id).eq('media_type','image').not('media_url','is',null).order('created_at',{ascending:false}).limit(30);
-  if(!photoResult.error&&(photoResult.data||[]).length){const grid=$('myPhotos');photoResult.data.forEach(post=>{const a=document.createElement('a');a.href='fy.html?post='+encodeURIComponent(post.id);a.setAttribute('aria-label',post.body||'Foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';a.append(img);grid.append(a)})}else{$('myPhotosEmpty').hidden=false}
+  if(!photoResult.error&&(photoResult.data||[]).length){
+   const photoPosts=photoResult.data,grid=$('myPhotos'),viewerDialog=$('myPhotoViewer');
+   const ids=photoPosts.map(post=>post.id),[likes,mine]=await Promise.all([
+    db.from('post_likes').select('post_id').in('post_id',ids),
+    db.from('post_likes').select('post_id').eq('user_id',user.id).in('post_id',ids)
+   ]);
+   const likeCounts=(likes.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
+   const liked=new Set((mine.data||[]).map(row=>row.post_id));let activePost=null;
+   const showPhoto=post=>{
+    activePost=post;$('myPhotoImage').src=post.media_url;$('myPhotoImage').alt=post.body||'Foto publicada';$('myPhotoCaption').textContent=post.body||'';
+    $('myPhotoPosition').textContent=(photoPosts.indexOf(post)+1)+' / '+photoPosts.length;
+    $('myPhotoLikeCount').textContent=(likeCounts[post.id]||0)+' curtida(s)';
+    $('myPhotoLike').classList.toggle('liked',liked.has(post.id));$('myPhotoLike').textContent=liked.has(post.id)?'♥ Curtido':'♡ Curtir';
+    $('myPhotoLike').setAttribute('aria-pressed',String(liked.has(post.id)));viewerDialog.showModal();
+   };
+   photoPosts.forEach(post=>{const button=document.createElement('button');button.type='button';button.className='profile-photo';button.setAttribute('aria-label',post.body||'Abrir foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';button.append(img);button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();showPhoto(post)});grid.append(button)});
+   $('closeMyPhotoViewer').onclick=()=>viewerDialog.close();
+   $('myPhotoLike').onclick=async()=>{if(!activePost)return;const button=$('myPhotoLike');button.disabled=true;try{
+    if(liked.has(activePost.id)){const result=await db.from('post_likes').delete().eq('post_id',activePost.id).eq('user_id',user.id);if(result.error)throw result.error;liked.delete(activePost.id);likeCounts[activePost.id]=Math.max(0,(likeCounts[activePost.id]||0)-1)}
+    else{const result=await db.from('post_likes').insert({post_id:activePost.id,user_id:user.id});if(result.error&&result.error.code!=='23505')throw result.error;if(!result.error)likeCounts[activePost.id]=(likeCounts[activePost.id]||0)+1;liked.add(activePost.id)}
+    $('myPhotoLikeCount').textContent=(likeCounts[activePost.id]||0)+' curtida(s)';button.classList.toggle('liked',liked.has(activePost.id));button.textContent=liked.has(activePost.id)?'♥ Curtido':'♡ Curtir';button.setAttribute('aria-pressed',String(liked.has(activePost.id)));
+   }catch(error){alert(error.message||'Não foi possível atualizar a curtida.')}finally{button.disabled=false}};
+  }else{$('myPhotosEmpty').hidden=false}
  }catch(e){console.error(e);$('handle').textContent=e.message||'Não foi possível carregar o perfil.'}
 })();
 </script><script src="global-nav.js?v=mobile-1"></script></body></html>
