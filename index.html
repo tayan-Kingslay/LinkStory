@@ -286,6 +286,13 @@ html[data-ls-theme="dark"] #searchDialog input{background:#1c2938!important;colo
 </style>
 
 <link rel="stylesheet" href="mobile.css?v=4">
+<style id="homepage-cover-crop">
+/* Na vitrine, todas as capas ocupam o mesmo quadro; o detalhe do mangá mantém a arte inteira. */
+.catalog .book{height:276px!important;aspect-ratio:2/3!important;overflow:hidden!important;position:relative!important}
+.catalog .book img{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+@media(max-width:720px){.catalog .book{height:248px!important}}
+@media(max-width:420px){.catalog .book{height:232px!important}}
+</style>
 </head>
 <body>
 <header class="header home-header">
