@@ -1,6 +1,6 @@
 (()=>{
   const mobileStylesheet=document.createElement('link');
-  mobileStylesheet.rel='stylesheet';mobileStylesheet.href='mobile.css?v=2';
+  mobileStylesheet.rel='stylesheet';mobileStylesheet.href='mobile.css?v=3';
   if(!document.querySelector('link[href^="mobile.css"]'))document.head.appendChild(mobileStylesheet);
   const theme=localStorage.getItem('linkstory-theme')||'light';
   document.documentElement.dataset.lsTheme=theme;
