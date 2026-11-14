@@ -48,8 +48,8 @@ h2{letter-spacing:-.8px}
 /* Fix cards shrinking to half-width while their action row overflows. */
 #works{width:100%;min-width:0}
 #works .work{width:100%;min-width:0;max-width:100%;align-items:stretch}
-#works .work .cover{display:block;width:100%;height:auto;aspect-ratio:3/4;min-width:0;overflow:hidden}
-#works .work .cover img{display:block;width:100%;height:100%;object-fit:cover}
+#works .work .cover{display:block;width:100%;height:auto;aspect-ratio:auto;min-width:0;overflow:visible;background:transparent;border:0}
+#works .work .cover img{display:block;width:100%;height:auto;object-fit:contain}
 #works .work .info{display:block;width:100%;min-width:0;max-width:100%}
 #works .work .info h3{white-space:normal;overflow-wrap:anywhere;line-height:1.35}
 #works .work .actions{display:grid;width:100%;min-width:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
