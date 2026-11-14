@@ -208,7 +208,7 @@ html[data-ls-theme="dark"] .hero.hero-reordered>.bio-card .bio{color:#c0cad7!imp
  const all=await LinkStoryManga.publishedMangas(),works=all.filter(m=>m.creator_id===p.id),box=$('works');box.replaceChildren();
  if(!works.length){const empty=document.createElement('div');empty.className='empty';empty.innerHTML='<strong>Nenhuma obra criada ainda.</strong>Quando este perfil publicar uma obra, ela aparecerá aqui.';box.append(empty)}
  else{works.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at)).forEach(m=>box.append(cardFor(m,'Autor principal')))}
- const postsResult=await db.from('posts').select('id,author_id,body,post_type,idea_title,media_url,media_type,created_at').eq('author_id',p.id).neq('post_type','story').order('created_at',{ascending:false}).limit(60);
+ const postsResult=await db.from('posts').select('id,author_id,body,post_type,idea_title,media_url,media_type,created_at').eq('author_id',p.id).order('created_at',{ascending:false}).limit(60);
  const profilePosts=postsResult.error?[]:(postsResult.data||[]);
  const photoPosts=profilePosts.filter(post=>post.media_type==='image'&&post.media_url);
  const photoGrid=$('profilePhotosSection'),feedEmpty=$('profileFeedEmpty');
