@@ -81,7 +81,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     @keyframes lsDrawerIn{from{transform:translateX(28px);opacity:.6}to{transform:translateX(0);opacity:1}}
     .ls-menu-wrap{height:100%;overflow:auto;padding:26px 22px 34px;font-family:'DM Sans','DM Sans',sans-serif}
     .ls-menu-head{display:flex;align-items:center;justify-content:space-between;padding:5px 2px 24px;border-bottom:1px solid #e4eaf2}
-    .ls-menu-brand{display:flex;flex-direction:column;gap:5px}
+    .ls-menu-brand{display:flex;align-items:center;justify-content:center;min-width:0}.ls-menu-brand img{display:block;width:142px;height:42px;object-fit:contain;background:transparent}
     .ls-menu-brand strong{font:800 17px/1 'DM Sans',sans-serif;letter-spacing:2.5px;color:#14243a}
     .ls-menu-brand span{font:600 10px/1.3 'DM Sans',sans-serif;letter-spacing:1.5px;text-transform:uppercase;color:#8493a7}
     .ls-menu-close{width:40px;height:40px;border:1px solid #e1e8f1;border-radius:13px;background:#fff;color:#53657b;font:400 27px/1 'DM Sans',sans-serif;cursor:pointer}
@@ -102,8 +102,8 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     .ls-menu-dialog::backdrop,.menu-dialog::backdrop{background:rgba(13,25,42,.38);backdrop-filter:blur(3px)}
     html[data-ls-theme="dark"] .ls-menu-dialog,html[data-ls-theme="dark"] .menu-dialog{background:#141c27;color:#edf3fb}
     html[data-ls-theme="dark"] .ls-menu-head{border-color:#303d4d}
-    html[data-ls-theme="dark"] .ls-menu-brand strong,html[data-ls-theme="dark"] .ls-menu-intro strong{color:#edf3fb}
-    html[data-ls-theme="dark"] .ls-menu-brand span,html[data-ls-theme="dark"] .ls-menu-intro p,html[data-ls-theme="dark"] .ls-menu-label{color:#91a1b5}
+    html[data-ls-theme="dark"] .ls-menu-intro strong{color:#edf3fb}
+    html[data-ls-theme="dark"] .ls-menu-intro p,html[data-ls-theme="dark"] .ls-menu-label{color:#91a1b5}
     html[data-ls-theme="dark"] .ls-menu-close,html[data-ls-theme="dark"] .ls-menu-links a{background:#1c2735;border-color:#303d4d;color:#edf3fb}
     html[data-ls-theme="dark"] .ls-menu-links a:hover{background:#22354a;border-color:#38516d}
     html[data-ls-theme="dark"] .ls-menu-icon{background:#22354a;color:#79baff}
@@ -155,8 +155,8 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     }
     .ls-menu-wrap{height:100%!important;overflow:auto!important;padding:26px 22px 34px!important;font-family:'DM Sans',"DM Sans",sans-serif!important}
     .ls-menu-head{display:flex!important;align-items:center!important;justify-content:space-between!important;padding:4px 2px 20px!important;border-bottom:1px solid #e3eaf2!important}
-    .ls-menu-brand strong{font:800 16px/1 'DM Sans',sans-serif!important;letter-spacing:2.4px!important;color:#17263a!important}
-    .ls-menu-brand span{font:700 9px/1.4 'DM Sans',sans-serif!important;letter-spacing:1.4px!important;text-transform:uppercase!important;color:#8392a5!important}
+    .ls-menu-brand img{width:142px;height:42px;object-fit:contain}
+    
     .ls-menu-close{width:40px!important;height:40px!important;border:1px solid #e0e7f0!important;border-radius:13px!important;background:#fff!important;color:#52647a!important;font:400 26px/1 'DM Sans',sans-serif!important}
     .ls-menu-intro{padding:23px 3px 18px!important}
     .ls-menu-intro strong{font:800 25px/1.15 'DM Sans',sans-serif!important;letter-spacing:-1px!important;color:#17263a!important}
@@ -179,8 +179,8 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     .ls-menu-footer{margin-top:22px!important;padding:16px 4px 0!important;border-top:1px solid #e3eaf2!important;color:#94a1b0!important;font:700 9px/1.5 'DM Sans',sans-serif!important;letter-spacing:.7px!important}
     html[data-ls-theme="dark"] .ls-menu-dialog{background:#121c28!important;color:#edf4fc!important;border-color:#303e4e!important}
     html[data-ls-theme="dark"] .ls-menu-head,html[data-ls-theme="dark"] .ls-menu-footer{border-color:#2b3949!important}
-    html[data-ls-theme="dark"] .ls-menu-brand strong,html[data-ls-theme="dark"] .ls-menu-intro strong{color:#edf4fc!important}
-    html[data-ls-theme="dark"] .ls-menu-brand span,html[data-ls-theme="dark"] .ls-menu-intro p,html[data-ls-theme="dark"] .ls-menu-label{color:#91a2b6!important}
+    html[data-ls-theme="dark"] .ls-menu-intro strong{color:#edf4fc!important}
+    html[data-ls-theme="dark"] .ls-menu-intro p,html[data-ls-theme="dark"] .ls-menu-label{color:#91a2b6!important}
     html[data-ls-theme="dark"] .ls-menu-close,html[data-ls-theme="dark"] .ls-menu-links a{background:#1a2736!important;border-color:#304052!important;color:#edf4fc!important}
     html[data-ls-theme="dark"] .ls-menu-links a:hover{background:#21354a!important;border-color:#3b5876!important}
     html[data-ls-theme="dark"] .ls-menu-icon{background:#223a52!important;color:#83bdff!important}
@@ -298,7 +298,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
 
   let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');const header=document.querySelector('.topbar,.top,.header,body>header:not(.chat-header)');let opener=document.getElementById('openMenu')||(header&&header.querySelector('.menu-btn,.menu,.menu-button,.ls-global-menu-btn'));
   const menuMarkup=`<div class="ls-menu-wrap">
-    <div class="ls-menu-head"><div class="ls-menu-brand"><strong>LINKSTORY</strong><span>Seu universo de histórias</span></div><button class="ls-menu-close" aria-label="Fechar menu">×</button></div>
+    <div class="ls-menu-head"><div class="ls-menu-brand"><img src="assets/linkstory-logo.svg" alt="LinkStory"></div><button class="ls-menu-close" aria-label="Fechar menu">×</button></div>
     <div class="ls-menu-intro"><strong>O que vamos explorar?</strong><p>Encontre histórias, acompanhe suas leituras e cuide do seu espaço.</p></div>
     <section class="ls-menu-group"><span class="ls-menu-label">Comunicação</span><nav class="ls-menu-links">
       <a href="kx-mail.html"><span class="ls-menu-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span><span class="ls-menu-copy">KX Mail<small>Sua caixa de mensagens @kx.mail</small></span><span class="ls-menu-arrow">›</span></a>
