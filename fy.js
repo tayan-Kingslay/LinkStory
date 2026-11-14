@@ -85,11 +85,13 @@ async function openSharedPost(postId){
   if(!result.data){$('feedList').replaceChildren();$('feedStatus').hidden=false;$('feedStatus').className='empty';$('feedStatus').textContent='Esta publicação não está disponível.';$('loadMore').hidden=true;return}
   const p=result.data;
   const [likes,comments,mine]=await Promise.all([
-   sb().from('post_likes').select('id',{count:'exact',head:true}).eq('post_id',postId),
-   sb().from('comments').select('id',{count:'exact',head:true}).eq('post_id',postId),
+   sb().from('post_likes').select('post_id').eq('post_id',postId),
+   sb().from('comments').select('post_id').eq('post_id',postId),
    state.user?sb().from('post_likes').select('post_id').eq('post_id',postId).eq('user_id',state.user.id).maybeSingle():Promise.resolve({data:null,error:null})
   ]);
-  p.likes=likes.count||0;p.comments=comments.count||0;p.liked=!!mine.data;
+  if(likes.error)console.warn('Shared post likes count unavailable:',likes.error);
+  if(comments.error)console.warn('Shared post comments count unavailable:',comments.error);
+  p.likes=likes.error?0:(likes.data||[]).length;p.comments=comments.error?0:(comments.data||[]).length;p.liked=!!mine.data;
   state.posts=[p];$('feedList').replaceChildren();renderPosts([p]);
   $('feedStatus').hidden=true;$('loadMore').hidden=true;
   requestAnimationFrame(()=>{const card=$('feedList').querySelector('.post');if(card){card.scrollIntoView({behavior:'smooth',block:'center'});card.classList.add('shared-post-focus')}});
