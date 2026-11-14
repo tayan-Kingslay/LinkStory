@@ -231,9 +231,9 @@ html[data-ls-theme="dark"] .hero.hero-reordered>.bio-card .bio{color:#c0cad7!imp
  }
  if(photoPosts.length){
   photoPosts.forEach(post=>{
-   const button=document.createElement('button');button.type='button';button.className='profile-photo';button.setAttribute('aria-label','Abrir foto publicada');
+   const button=document.createElement('button');button.type='button';button.className='profile-photo';button.dataset.postId=post.id;button.setAttribute('aria-label','Abrir foto publicada');
    const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';button.append(img);
-   button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();openPhotoViewer(post.id)});photoGrid.append(button);
+   photoGrid.append(button);
   });
  }
  const otherBox=$('profileOtherPosts'),otherPosts=profilePosts.filter(post=>!(post.media_type==='image'&&post.media_url));
@@ -285,6 +285,16 @@ html[data-ls-theme="dark"] .hero.hero-reordered>.bio-card .bio{color:#c0cad7!imp
   slides.forEach(slide=>{const d=Math.abs(slide.getBoundingClientRect().top-top);if(d<distance){distance=d;nearest=slide}});
   const idx=photoPosts.findIndex(post=>post.id===nearest.dataset.photoId);$('photoViewerCount').textContent=(idx+1)+' / '+photoPosts.length;
  },{passive:true});
+ // Intercepta o toque no nível do documento, antes de qualquer navegação delegada.
+ // A grade de fotos do perfil nunca deve encaminhar o usuário ao Feed "Pra você".
+ document.addEventListener('click',event=>{
+  const target=event.target instanceof Element?event.target:null;
+  const photoButton=target?.closest('button.profile-photo');
+  if(!photoButton||!photoGrid.contains(photoButton))return;
+  event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+  const postId=photoButton.dataset.postId;
+  if(postId)openPhotoViewer(postId);
+ },true);
  $('closePhotoViewer').onclick=()=>viewerDialog.close();
  async function togglePhotoLike(post,button){
   if(!viewer)return location.href='login.html';
