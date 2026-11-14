@@ -162,7 +162,7 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
 <label class="edit-field"><span>Foto do perfil</span><input id="editAvatarFile" type="file" accept="image/*"><small id="avatarFileHint">Escolha uma foto da galeria ou tire uma nova.</small></label>
 <label class="edit-field"><span>Biografia</span><textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você…"></textarea></label>
 <div class="edit-status" id="editStatus" role="status"></div><div class="edit-actions"><button type="button" class="profile-action" id="cancelEdit">Cancelar</button><button type="submit" class="profile-action primary" id="saveProfile">Salvar alterações</button></div></form></dialog>
-<dialog id="myPhotoViewer" class="my-photo-viewer" aria-label="Publicação"><header class="ig-post-top"><button type="button" id="closeMyPhotoViewer" aria-label="Voltar">‹</button><div><strong>Publicações</strong><span id="myPhotoTopUsername"></span></div><span id="myPhotoPosition"></span></header><article class="ig-post"><div class="ig-post-author"><img id="myPhotoAvatar" alt=""><div><strong id="myPhotoAuthor"></strong><small id="myPhotoHandle"></small></div></div><div class="ig-post-media"><img id="myPhotoImage" alt="Foto publicada"></div><div class="ig-post-insights"><span id="myPhotoInsights"></span><span>Visualizações</span></div><div class="ig-post-actions"><button type="button" id="myPhotoLike" aria-label="Curtir" aria-pressed="false"><span id="myPhotoHeart">♡</span><span id="myPhotoLikeCount">0</span></button><button type="button" id="myPhotoOpenComments" class="ig-icon-action" aria-label="Comentários"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.7-3A7.5 7.5 0 1 1 20 11.5Z"/></svg><span id="myPhotoComments">0</span></button><button type="button" id="myPhotoShare" class="ig-icon-action" aria-label="Compartilhar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button><span class="ig-post-spacer"></span></div><div class="ig-post-caption"><strong id="myPhotoCaptionAuthor"></strong> <span id="myPhotoCaption"></span><small id="myPhotoDate"></small></div></article></dialog>
+<dialog id="myPhotoViewer" class="my-photo-viewer" aria-label="Publicações do perfil"><header class="ig-post-top glass-top"><button type="button" id="closeMyPhotoViewer" aria-label="Voltar">‹</button><div><strong>Publicações</strong><span id="myPhotoTopUsername"></span></div><span id="myPhotoPosition"></span></header><div id="myPhotoStream" class="my-photo-stream"></div></dialog>
 <dialog id="myPhotoCommentsDialog" class="my-photo-comments"><header><button type="button" id="closeMyPhotoComments" aria-label="Voltar">‹</button><strong>Comentários</strong></header><div id="myPhotoCommentList" class="my-photo-comment-list" aria-live="polite"></div><form id="myPhotoCommentForm"><div id="myPhotoReplyingTo" hidden></div><textarea id="myPhotoCommentBody" maxlength="1000" required placeholder="Adicione um comentário…"></textarea><button id="myPhotoSendComment" type="submit">Publicar</button></form></dialog>
 <dialog id="myPhotoShareDialog" class="my-photo-share"><header><strong>Compartilhar publicação</strong><button type="button" id="closeMyPhotoShare">×</button></header><button type="button" id="myPhotoShareFriend">Enviar para um amigo no LinkStory</button><button type="button" id="myPhotoShareExternal">Compartilhar em outro aplicativo</button><button type="button" id="myPhotoCopyLink">Copiar link</button></dialog>
 <style>
@@ -232,6 +232,36 @@ html[data-ls-theme="dark"] .ig-post-insights{border-color:#29333e}
 html[data-ls-theme="dark"] .my-photo-comments,html[data-ls-theme="dark"] .my-photo-share{background:#101821;color:#edf3fa}
 html[data-ls-theme="dark"] #myPhotoCommentBody{border-color:#394858}
 html[data-ls-theme="dark"] .my-photo-comment{border-color:rgba(180,195,215,.12)}
+/* LinkStory Glass: vidro translúcido, profundidade suave e rolagem contínua. */
+.my-photo-viewer{inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;overflow:hidden;background:rgba(244,248,253,.94);color:#17283e}
+.my-photo-viewer::backdrop{background:rgba(7,14,25,.68);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.ig-post-top.glass-top{height:auto;min-height:66px;padding:calc(8px + env(safe-area-inset-top)) 16px 10px;background:rgba(249,252,255,.76);border-bottom:1px solid rgba(255,255,255,.7);box-shadow:0 8px 28px rgba(27,52,82,.08);-webkit-backdrop-filter:blur(26px) saturate(180%);backdrop-filter:blur(26px) saturate(180%)}
+.ig-post-top.glass-top>button{width:42px;height:42px;border-radius:15px;background:rgba(255,255,255,.68);border:1px solid rgba(255,255,255,.9);box-shadow:0 5px 16px rgba(35,63,96,.1);font-size:32px;line-height:1}
+.my-photo-stream{height:calc(100% - 66px);overflow-y:auto;overscroll-behavior:contain;scroll-behavior:smooth;padding:12px 12px calc(30px + env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+.ig-post{max-width:720px;margin:0 auto 18px;border:1px solid rgba(255,255,255,.78);border-radius:24px;overflow:hidden;background:rgba(255,255,255,.72);box-shadow:0 12px 34px rgba(32,58,88,.09),inset 0 1px 0 rgba(255,255,255,.8);-webkit-backdrop-filter:blur(22px) saturate(155%);backdrop-filter:blur(22px) saturate(155%)}
+.ig-post-author{height:64px;padding:9px 14px}.ig-post-author img{box-shadow:0 3px 12px rgba(22,40,62,.13)}
+.ig-post-media{min-height:150px;background:rgba(220,230,242,.34);padding:6px}
+.ig-post-media img{width:100%;height:auto;max-height:none;object-fit:contain;border-radius:15px}
+.ig-post-insights{border:0;padding:12px 17px 5px;background:transparent;color:var(--ls-accent,#347fe5)}
+.ig-post-actions{padding:5px 15px 4px;gap:19px}
+.ig-post-actions button{min-width:42px;min-height:42px;justify-content:center;border-radius:14px;transition:background .18s ease,transform .18s ease}
+.ig-post-actions button:active{transform:scale(.94);background:rgba(111,151,204,.12)}
+.ig-post-actions .ig-icon-action svg{width:27px;height:27px}
+.ig-post-caption{margin:0 5px;padding:10px 13px 17px;border:0;border-top:1px solid rgba(130,155,185,.10);background:rgba(245,249,255,.23);font-size:14px;line-height:1.55}
+.ig-caption-text{overflow-wrap:anywhere;white-space:pre-wrap}
+.ig-caption-text.is-collapsed{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.ig-caption-more{display:inline-block;margin:4px 0 0;padding:0;border:0;background:transparent;color:#6e8fba;font:inherit;font-weight:750;cursor:pointer}
+.ig-post-caption small{margin-top:9px}
+html[data-ls-theme="dark"] .my-photo-viewer{background:rgba(9,16,25,.97);color:#edf4fc}
+html[data-ls-theme="dark"] .ig-post-top.glass-top{background:rgba(17,27,40,.76);border-color:rgba(255,255,255,.08);box-shadow:0 8px 28px rgba(0,0,0,.25)}
+html[data-ls-theme="dark"] .ig-post-top.glass-top>button{background:rgba(38,54,73,.7);border-color:rgba(255,255,255,.1);color:#e9f1fb}
+html[data-ls-theme="dark"] .my-photo-stream{background:transparent}
+html[data-ls-theme="dark"] .ig-post{background:rgba(24,36,51,.78);border-color:rgba(255,255,255,.09);box-shadow:0 14px 36px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05)}
+html[data-ls-theme="dark"] .ig-post-media{background:rgba(5,11,18,.42)}
+html[data-ls-theme="dark"] .ig-post-caption{background:rgba(8,15,24,.15);border-color:rgba(255,255,255,.07)}
+html[data-ls-theme="dark"] .ig-caption-more{color:#91baff}
+@media(max-width:560px){.my-photo-viewer{width:100vw;height:100dvh}.my-photo-stream{height:calc(100dvh - 66px);padding:9px 8px calc(24px + env(safe-area-inset-bottom))}.ig-post{border-radius:20px;margin-bottom:14px}.ig-post-media{padding:4px}.ig-post-media img{border-radius:14px}}
+@media(prefers-reduced-motion:reduce){.my-photo-stream{scroll-behavior:auto}.ig-post-actions button{transition:none}}
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase;
@@ -342,7 +372,7 @@ html[data-ls-theme="dark"] .my-photo-comment{border-color:rgba(180,195,215,.12)}
   })}
   const photoResult=await db.from('posts').select('id,media_url,body,created_at').eq('author_id',user.id).eq('media_type','image').not('media_url','is',null).order('created_at',{ascending:false}).limit(30);
   if(!photoResult.error&&(photoResult.data||[]).length){
-   const photoPosts=photoResult.data,grid=$('myPhotos'),viewerDialog=$('myPhotoViewer');
+   const photoPosts=photoResult.data,grid=$('myPhotos'),viewerDialog=$('myPhotoViewer'),stream=$('myPhotoStream');
    const ids=photoPosts.map(post=>post.id),[likes,mine,comments]=await Promise.all([
     db.from('post_likes').select('post_id').in('post_id',ids),
     db.from('post_likes').select('post_id').eq('user_id',user.id).in('post_id',ids),
@@ -351,34 +381,39 @@ html[data-ls-theme="dark"] .my-photo-comment{border-color:rgba(180,195,215,.12)}
    const likeCounts=(likes.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
    const commentCounts=(comments.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
    const liked=new Set((mine.data||[]).map(row=>row.post_id));let activePost=null,photoComments=[],photoCommentLikes={},replyTarget=null;
-   const activeIndex=()=>photoPosts.findIndex(x=>x.id===activePost?.id);
-   const showPhoto=post=>{
-    activePost=post;$('myPhotoImage').src=post.media_url;$('myPhotoImage').alt=post.body||'Foto publicada';
+   const setActive=post=>{activePost=post};
+   const openViewer=post=>{
+    stream.replaceChildren();
     $('myPhotoTopUsername').textContent='@'+(profile?.username||'');
-    $('myPhotoAuthor').textContent=profile?.display_name||profile?.username||'Você';
-    $('myPhotoHandle').textContent='@'+(profile?.username||'');
-    $('myPhotoAvatar').src=profile?.avatar_url||'';$('myPhotoAvatar').hidden=!profile?.avatar_url;
-    $('myPhotoInsights').textContent=(likeCounts[post.id]||0)+' curtidas · '+(commentCounts[post.id]||0)+' comentários';
-    $('myPhotoComments').textContent=String(commentCounts[post.id]||0);
-    $('myPhotoCaptionAuthor').textContent=profile?.username||'';
-    $('myPhotoCaption').textContent=post.body||'';
-    $('myPhotoDate').textContent=post.created_at?new Date(post.created_at).toLocaleDateString('pt-BR',{day:'numeric',month:'long'}):'';
-    $('myPhotoPosition').textContent=(activeIndex()+1)+' / '+photoPosts.length;
-    $('myPhotoLikeCount').textContent=String(likeCounts[post.id]||0);
-    $('myPhotoLike').classList.toggle('liked',liked.has(post.id));$('myPhotoHeart').textContent=liked.has(post.id)?'♥':'♡';
-    $('myPhotoLike').setAttribute('aria-pressed',String(liked.has(post.id)));viewerDialog.showModal();
+    $('myPhotoPosition').textContent=photoPosts.length+' fotos';
+    photoPosts.forEach((item,index)=>{
+     const card=document.createElement('article');card.className='ig-post';card.dataset.postId=item.id;
+     const author=document.createElement('div');author.className='ig-post-author';
+     const avatar=document.createElement('img');avatar.alt='';avatar.src=profile?.avatar_url||'';avatar.hidden=!profile?.avatar_url;
+     const identity=document.createElement('div');const authorName=document.createElement('strong');authorName.textContent=profile?.display_name||profile?.username||'Perfil';const handle=document.createElement('small');handle.textContent='@'+(profile?.username||'');identity.append(authorName,handle);author.append(avatar,identity);
+     const media=document.createElement('div');media.className='ig-post-media';const image=document.createElement('img');image.src=item.media_url;image.alt=item.body||'Foto publicada';image.loading=index===0?'eager':'lazy';media.append(image);
+     const insights=document.createElement('div');insights.className='ig-post-insights';const insightText=document.createElement('span');insightText.className='ig-insight-text';insightText.textContent=(likeCounts[item.id]||0)+' curtidas · '+(commentCounts[item.id]||0)+' comentários';insights.append(insightText);
+     const actions=document.createElement('div');actions.className='ig-post-actions';
+     const likeBtn=document.createElement('button');likeBtn.type='button';likeBtn.className='ig-photo-like'+(liked.has(item.id)?' liked':'');likeBtn.setAttribute('aria-label','Curtir');likeBtn.setAttribute('aria-pressed',String(liked.has(item.id)));const heart=document.createElement('span');heart.className='ig-photo-heart';heart.textContent=liked.has(item.id)?'♥':'♡';const count=document.createElement('span');count.className='ig-photo-like-count';count.textContent=String(likeCounts[item.id]||0);likeBtn.append(heart,count);
+     const commentBtn=document.createElement('button');commentBtn.type='button';commentBtn.className='ig-icon-action';commentBtn.setAttribute('aria-label','Comentários');commentBtn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.7-3A7.5 7.5 0 1 1 20 11.5Z"/></svg>';const commentCount=document.createElement('span');commentCount.className='ig-photo-comment-count';commentCount.textContent=String(commentCounts[item.id]||0);commentBtn.append(commentCount);
+     const shareBtn=document.createElement('button');shareBtn.type='button';shareBtn.className='ig-icon-action';shareBtn.setAttribute('aria-label','Compartilhar');shareBtn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>';
+     const spacer=document.createElement('span');spacer.className='ig-post-spacer';actions.append(likeBtn,commentBtn,shareBtn,spacer);
+     const caption=document.createElement('div');caption.className='ig-post-caption';const captionName=document.createElement('strong');captionName.textContent=profile?.username||'';const captionText=document.createElement('span');captionText.className='ig-caption-text';captionText.textContent=item.body||'';caption.append(captionName,document.createTextNode(' '),captionText);
+     if((item.body||'').length>150){captionText.classList.add('is-collapsed');const more=document.createElement('button');more.type='button';more.className='ig-caption-more';more.textContent='Ler mais';more.setAttribute('aria-expanded','false');more.onclick=()=>{const collapsed=captionText.classList.toggle('is-collapsed');more.textContent=collapsed?'Ler mais':'Ver menos';more.setAttribute('aria-expanded',String(!collapsed))};caption.append(more)}
+     const date=document.createElement('small');date.textContent=item.created_at?new Date(item.created_at).toLocaleDateString('pt-BR',{day:'numeric',month:'long'}):'';caption.append(date);
+     card.append(author,media,insights,actions,caption);stream.append(card);
+     likeBtn.addEventListener('click',async()=>{setActive(item);likeBtn.disabled=true;try{
+      if(liked.has(item.id)){const result=await db.from('post_likes').delete().eq('post_id',item.id).eq('user_id',user.id);if(result.error)throw result.error;liked.delete(item.id);likeCounts[item.id]=Math.max(0,(likeCounts[item.id]||0)-1)}
+      else{const result=await db.from('post_likes').insert({post_id:item.id,user_id:user.id});if(result.error&&result.error.code!=='23505')throw result.error;if(!result.error)likeCounts[item.id]=(likeCounts[item.id]||0)+1;liked.add(item.id)}
+      likeBtn.classList.toggle('liked',liked.has(item.id));heart.textContent=liked.has(item.id)?'♥':'♡';count.textContent=String(likeCounts[item.id]||0);likeBtn.setAttribute('aria-pressed',String(liked.has(item.id)));insightText.textContent=(likeCounts[item.id]||0)+' curtidas · '+(commentCounts[item.id]||0)+' comentários';
+     }catch(error){alert(error.message||'Não foi possível atualizar a curtida.')}finally{likeBtn.disabled=false}});
+     commentBtn.addEventListener('click',()=>{setActive(item);openPhotoComments()});
+     shareBtn.addEventListener('click',()=>{setActive(item);$('myPhotoShareDialog').showModal()});
+     const thumb=document.createElement('button');thumb.type='button';thumb.className='profile-photo';thumb.setAttribute('aria-label',item.body||'Abrir foto publicada');const thumbImg=document.createElement('img');thumbImg.src=item.media_url;thumbImg.alt=item.body||'Foto publicada';thumbImg.loading='lazy';thumb.append(thumbImg);thumb.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openViewer(item)});grid.append(thumb);
+    });
+    viewerDialog.showModal();stream.scrollTop=0;
    };
-   const movePhoto=delta=>{const next=activeIndex()+delta;if(next>=0&&next<photoPosts.length)showPhoto(photoPosts[next])};
-   photoPosts.forEach(post=>{const button=document.createElement('button');button.type='button';button.className='profile-photo';button.setAttribute('aria-label',post.body||'Abrir foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';button.append(img);button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();showPhoto(post)});grid.append(button)});
    $('closeMyPhotoViewer').onclick=()=>viewerDialog.close();
-   let touchStartX=0,touchStartY=0;
-   $('myPhotoImage').addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].clientX;touchStartY=e.changedTouches[0].clientY},{passive:true});
-   $('myPhotoImage').addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchStartX,dy=e.changedTouches[0].clientY-touchStartY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.25)movePhoto(dx<0?1:-1)},{passive:true});
-   $('myPhotoLike').onclick=async()=>{if(!activePost)return;const button=$('myPhotoLike');button.disabled=true;try{
-    if(liked.has(activePost.id)){const result=await db.from('post_likes').delete().eq('post_id',activePost.id).eq('user_id',user.id);if(result.error)throw result.error;liked.delete(activePost.id);likeCounts[activePost.id]=Math.max(0,(likeCounts[activePost.id]||0)-1)}
-    else{const result=await db.from('post_likes').insert({post_id:activePost.id,user_id:user.id});if(result.error&&result.error.code!=='23505')throw result.error;if(!result.error)likeCounts[activePost.id]=(likeCounts[activePost.id]||0)+1;liked.add(activePost.id)}
-    $('myPhotoLikeCount').textContent=String(likeCounts[activePost.id]||0);$('myPhotoInsights').textContent=(likeCounts[activePost.id]||0)+' curtidas · '+(commentCounts[activePost.id]||0)+' comentários';button.classList.toggle('liked',liked.has(activePost.id));$('myPhotoHeart').textContent=liked.has(activePost.id)?'♥':'♡';button.setAttribute('aria-pressed',String(liked.has(activePost.id)));
-   }catch(error){alert(error.message||'Não foi possível atualizar a curtida.')}finally{button.disabled=false}};
    const renderPhotoComments=()=>{
     const box=$('myPhotoCommentList');box.replaceChildren();
     if(!photoComments.length){const empty=document.createElement('p');empty.textContent='Ainda não há comentários. Seja a primeira pessoa a comentar.';empty.style.cssText='text-align:center;color:#8994a3;padding:35px 10px';box.append(empty);return}
@@ -394,10 +429,10 @@ html[data-ls-theme="dark"] .my-photo-comment{border-color:rgba(180,195,215,.12)}
     const commentIds=photoComments.map(c=>c.id);if(commentIds.length){const likesResult=await db.from('comment_likes').select('comment_id,user_id').in('comment_id',commentIds);if(likesResult.error)throw likesResult.error;(likesResult.data||[]).forEach(x=>{const item=photoCommentLikes[x.comment_id]||(photoCommentLikes[x.comment_id]={count:0,liked:false});item.count++;if(x.user_id===user.id)item.liked=true})}
     renderPhotoComments();
    }catch(e){$('myPhotoCommentList').textContent='Não foi possível carregar os comentários: '+e.message}};
-   $('myPhotoOpenComments').onclick=openPhotoComments;$('closeMyPhotoComments').onclick=()=>$('myPhotoCommentsDialog').close();
+   $('closeMyPhotoComments').onclick=()=>$('myPhotoCommentsDialog').close();
    $('myPhotoReplyingTo').onclick=()=>{replyTarget=null;$('myPhotoReplyingTo').hidden=true;$('myPhotoCommentBody').placeholder='Adicione um comentário…'};
    $('myPhotoCommentForm').onsubmit=async e=>{e.preventDefault();if(!user)return alert('Entre na sua conta para comentar.');const body=$('myPhotoCommentBody').value.trim();if(!body)return;const b=$('myPhotoSendComment');b.disabled=true;b.textContent='Enviando…';try{
-    const result=await db.from('comments').insert({post_id:activePost.id,author_id:user.id,body,parent_comment_id:replyTarget?.id||null}).select('id,body,parent_comment_id,author_id,created_at,profiles:author_id(id,display_name,username,avatar_url,verification_type)').single();if(result.error)throw result.error;photoComments.push(result.data);photoCommentLikes[result.data.id]={count:0,liked:false};commentCounts[activePost.id]=(commentCounts[activePost.id]||0)+1;$('myPhotoComments').textContent=String(commentCounts[activePost.id]);$('myPhotoInsights').textContent=(likeCounts[activePost.id]||0)+' curtidas · '+commentCounts[activePost.id]+' comentários';$('myPhotoCommentBody').value='';replyTarget=null;$('myPhotoReplyingTo').hidden=true;renderPhotoComments();
+    const result=await db.from('comments').insert({post_id:activePost.id,author_id:user.id,body,parent_comment_id:replyTarget?.id||null}).select('id,body,parent_comment_id,author_id,created_at,profiles:author_id(id,display_name,username,avatar_url,verification_type)').single();if(result.error)throw result.error;photoComments.push(result.data);photoCommentLikes[result.data.id]={count:0,liked:false};commentCounts[activePost.id]=(commentCounts[activePost.id]||0)+1;const activeCard=stream.querySelector('[data-post-id="'+activePost.id+'"]');if(activeCard){activeCard.querySelector('.ig-photo-comment-count').textContent=String(commentCounts[activePost.id]);activeCard.querySelector('.ig-insight-text').textContent=(likeCounts[activePost.id]||0)+' curtidas · '+commentCounts[activePost.id]+' comentários';}$('myPhotoCommentBody').value='';replyTarget=null;$('myPhotoReplyingTo').hidden=true;renderPhotoComments();
    }catch(error){alert(error.message||'Não foi possível comentar.')}finally{b.disabled=false;b.textContent='Publicar'}};
    const shareDialog=$('myPhotoShareDialog');$('myPhotoShare').onclick=()=>shareDialog.showModal();$('closeMyPhotoShare').onclick=()=>shareDialog.close();
    const photoLink=()=>location.origin+'/fy.html?post='+encodeURIComponent(activePost.id);
