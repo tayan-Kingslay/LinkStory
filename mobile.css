@@ -116,3 +116,10 @@ main{min-width:0}
   #works .work .cover,.work .cover{width:100%!important;height:auto!important;aspect-ratio:2 / 3!important}
   .work .cover img{width:100%!important;height:100%!important;object-fit:contain!important}
 }
+
+
+/* Capas originais: sem cortes, molduras ou proporção forçada */
+:where(.book,.library-cover,.work .cover,.cover-shell,.cover-preview,.mock-cover,.cover){aspect-ratio:auto!important;height:auto!important;min-height:0!important;overflow:visible!important;border:0!important;box-shadow:none!important;background:transparent!important}
+:where(.book img,.library-cover img,.work .cover img,.cover-shell .cover,.cover-preview,.mock-cover img,.cover img){display:block!important;width:100%!important;height:auto!important;max-width:100%!important;object-fit:contain!important;object-position:center!important;border:0!important;border-radius:0!important;background:transparent!important}
+:where(.page img,.mock-page img){width:100%!important;height:auto!important;aspect-ratio:auto!important;object-fit:contain!important}
+:where(.top,.topbar,.header) .logo img,:where(.top,.topbar,.header) .brand img{display:block!important;width:122px!important;height:38px!important;max-width:42vw!important;object-fit:contain!important;background:transparent!important}
