@@ -382,6 +382,7 @@ html[data-ls-theme="dark"] .ig-caption-more{color:#91baff}
    const commentCounts=(comments.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
    const liked=new Set((mine.data||[]).map(row=>row.post_id));let activePost=null,photoComments=[],photoCommentLikes={},replyTarget=null;
    const setActive=post=>{activePost=post};
+   photoPosts.forEach(item=>{const thumb=document.createElement('button');thumb.type='button';thumb.className='profile-photo';thumb.setAttribute('aria-label',item.body||'Abrir foto publicada');const thumbImg=document.createElement('img');thumbImg.src=item.media_url;thumbImg.alt=item.body||'Foto publicada';thumbImg.loading='lazy';thumb.append(thumbImg);thumb.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openViewer(item)});grid.append(thumb)});
    const openViewer=post=>{
     stream.replaceChildren();
     $('myPhotoTopUsername').textContent='@'+(profile?.username||'');
@@ -409,7 +410,6 @@ html[data-ls-theme="dark"] .ig-caption-more{color:#91baff}
      }catch(error){alert(error.message||'Não foi possível atualizar a curtida.')}finally{likeBtn.disabled=false}});
      commentBtn.addEventListener('click',()=>{setActive(item);openPhotoComments()});
      shareBtn.addEventListener('click',()=>{setActive(item);$('myPhotoShareDialog').showModal()});
-     const thumb=document.createElement('button');thumb.type='button';thumb.className='profile-photo';thumb.setAttribute('aria-label',item.body||'Abrir foto publicada');const thumbImg=document.createElement('img');thumbImg.src=item.media_url;thumbImg.alt=item.body||'Foto publicada';thumbImg.loading='lazy';thumb.append(thumbImg);thumb.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();openViewer(item)});grid.append(thumb);
     });
     viewerDialog.showModal();stream.scrollTop=0;
    };
