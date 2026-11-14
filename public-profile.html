@@ -233,7 +233,7 @@ html[data-ls-theme="dark"] .hero.hero-reordered>.bio-card .bio{color:#c0cad7!imp
   photoPosts.forEach(post=>{
    const button=document.createElement('button');button.type='button';button.className='profile-photo';button.setAttribute('aria-label','Abrir foto publicada');
    const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';button.append(img);
-   button.addEventListener('click',()=>openPhotoViewer(post.id));photoGrid.append(button);
+   button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();openPhotoViewer(post.id)});photoGrid.append(button);
   });
  }
  const otherBox=$('profileOtherPosts'),otherPosts=profilePosts.filter(post=>!(post.media_type==='image'&&post.media_url));
