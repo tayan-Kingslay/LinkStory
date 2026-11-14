@@ -162,7 +162,7 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
 <label class="edit-field"><span>Foto do perfil</span><input id="editAvatarFile" type="file" accept="image/*"><small id="avatarFileHint">Escolha uma foto da galeria ou tire uma nova.</small></label>
 <label class="edit-field"><span>Biografia</span><textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você…"></textarea></label>
 <div class="edit-status" id="editStatus" role="status"></div><div class="edit-actions"><button type="button" class="profile-action" id="cancelEdit">Cancelar</button><button type="submit" class="profile-action primary" id="saveProfile">Salvar alterações</button></div></form></dialog>
-<dialog id="myPhotoViewer" class="my-photo-viewer" aria-label="Foto publicada"><div class="my-photo-viewer-head"><button type="button" id="closeMyPhotoViewer" aria-label="Fechar">×</button><strong>Publicação</strong><span id="myPhotoPosition"></span></div><div class="my-photo-viewer-content"><img id="myPhotoImage" alt="Foto publicada"><p id="myPhotoCaption"></p><div class="my-photo-viewer-actions"><button type="button" id="myPhotoLike" aria-pressed="false">♡ Curtir</button><span id="myPhotoLikeCount">0 curtidas</span></div></div></dialog>
+<dialog id="myPhotoViewer" class="my-photo-viewer" aria-label="Publicação"><header class="ig-post-top"><button type="button" id="closeMyPhotoViewer" aria-label="Voltar">‹</button><div><strong>Publicações</strong><span id="myPhotoTopUsername"></span></div><span id="myPhotoPosition"></span></header><article class="ig-post"><div class="ig-post-author"><img id="myPhotoAvatar" alt=""><div><strong id="myPhotoAuthor"></strong><small id="myPhotoHandle"></small></div></div><div class="ig-post-media"><img id="myPhotoImage" alt="Foto publicada"></div><div class="ig-post-insights"><span id="myPhotoInsights"></span><span>Visualizações</span></div><div class="ig-post-actions"><button type="button" id="myPhotoLike" aria-label="Curtir" aria-pressed="false"><span id="myPhotoHeart">♡</span><span id="myPhotoLikeCount">0</span></button><span class="ig-comment-count">◯ <span id="myPhotoComments">0</span></span><button type="button" id="myPhotoShare" aria-label="Compartilhar">➤</button><span class="ig-post-spacer"></span><span class="ig-save-icon">♧</span></div><div class="ig-post-caption"><strong id="myPhotoCaptionAuthor"></strong> <span id="myPhotoCaption"></span><small id="myPhotoDate"></small></div></article></dialog>
 <style>
 .my-photo-viewer{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#f5f7fb;color:#243247}
 .my-photo-viewer::backdrop{background:rgba(8,15,28,.88)}
@@ -175,6 +175,36 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
 .my-photo-viewer-actions button{padding:11px 18px;border:1px solid #dce6f3;border-radius:12px;background:#fff;color:#647b99;font-weight:750}
 .my-photo-viewer-actions button.liked{color:#e63858}
 @media(prefers-color-scheme:dark){html[data-ls-theme="dark"] .my-photo-viewer{background:#111a26;color:#e8eef7}html[data-ls-theme="dark"] .my-photo-viewer-head{background:#172333;border-color:#344255}}
+/* Grade quadrada em três colunas, imagem inteira sem corte. */
+.profile-photo-grid button.profile-photo{display:grid;place-items:center;appearance:none;width:100%;aspect-ratio:1;border:0;padding:0;overflow:hidden;border-radius:0;background:#e9edf3;cursor:pointer}
+.profile-photo-grid button.profile-photo img{display:block;width:100%;height:100%;object-fit:contain;object-position:center}
+@media(max-width:560px){.profile-photo-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:2px}.profile-photo-grid button.profile-photo{border-radius:0}}
+.my-photo-viewer{padding:0;overflow-y:auto;background:#fff;color:#111;max-width:none;max-height:none}
+.my-photo-viewer::backdrop{background:rgba(0,0,0,.72)}
+.ig-post-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:center;gap:14px;height:62px;padding:0 14px;background:#fff;border-bottom:1px solid #e7e7e7}
+.ig-post-top>button{position:absolute;left:14px;border:0;background:none;font-size:38px;line-height:1;color:#111;padding:0 8px}
+.ig-post-top>div{display:flex;flex-direction:column;align-items:center;gap:2px}.ig-post-top>div strong{font-size:17px}.ig-post-top>div span{font-size:12px;color:#555}
+.ig-post-top>#myPhotoPosition{position:absolute;right:14px;font-size:11px;color:#777}
+.ig-post{width:100%;max-width:760px;margin:0 auto}
+.ig-post-author{height:62px;display:flex;align-items:center;gap:11px;padding:8px 14px}
+.ig-post-author img{width:40px;height:40px;object-fit:cover;border-radius:50%;background:#e7edf4}
+.ig-post-author div{display:flex;flex-direction:column;gap:3px}.ig-post-author strong{font-size:14px}.ig-post-author small{font-size:12px;color:#777}
+.ig-post-media{width:100%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;min-height:220px}
+.ig-post-media img{display:block;width:100%;height:auto;max-height:72vh;object-fit:contain}
+.ig-post-insights{display:flex;align-items:center;gap:8px;padding:13px 16px;border-bottom:1px solid #e6e6e6;color:#6688ed;font-size:14px;font-weight:650}
+.ig-post-insights span+span{margin-left:auto;color:#888;font-size:11px;font-weight:500}
+.ig-post-actions{display:flex;align-items:center;gap:20px;padding:13px 17px 7px;font-size:23px}
+.ig-post-actions button{display:inline-flex;align-items:center;gap:6px;border:0;padding:0;background:none;color:inherit;font:inherit;cursor:pointer}
+.ig-post-actions button:first-child{font-size:25px}.ig-post-actions #myPhotoHeart{font-size:34px;line-height:1}.ig-post-actions #myPhotoLikeCount{font-size:15px}
+.ig-post-actions button.liked{color:#ed304f}.ig-comment-count{font-size:22px;display:flex;align-items:center;gap:6px}.ig-comment-count span{font-size:15px}
+.ig-post-spacer{flex:1}.ig-save-icon{font-size:27px}
+.ig-post-caption{padding:7px 16px 22px;font-size:14px;line-height:1.45;overflow-wrap:anywhere}.ig-post-caption small{display:block;margin-top:9px;color:#8b8b8b;font-size:11px;text-transform:uppercase;letter-spacing:.3px}
+@media(max-width:560px){.my-photo-viewer{width:100vw;height:100dvh;inset:0;border:0;border-radius:0}.ig-post-media img{max-height:70vh}.ig-post{max-width:none}}
+html[data-ls-theme="dark"] .my-photo-viewer{background:#080d12;color:#f4f5f7}
+html[data-ls-theme="dark"] .ig-post-top{background:#080d12;border-color:#26303b}
+html[data-ls-theme="dark"] .ig-post-top>button{color:#f4f5f7}
+html[data-ls-theme="dark"] .ig-post-media{background:#111820}
+html[data-ls-theme="dark"] .ig-post-insights{border-color:#29333e}
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase;
@@ -286,17 +316,29 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
   const photoResult=await db.from('posts').select('id,media_url,body,created_at').eq('author_id',user.id).eq('media_type','image').not('media_url','is',null).order('created_at',{ascending:false}).limit(30);
   if(!photoResult.error&&(photoResult.data||[]).length){
    const photoPosts=photoResult.data,grid=$('myPhotos'),viewerDialog=$('myPhotoViewer');
-   const ids=photoPosts.map(post=>post.id),[likes,mine]=await Promise.all([
+   const ids=photoPosts.map(post=>post.id),[likes,mine,comments]=await Promise.all([
     db.from('post_likes').select('post_id').in('post_id',ids),
-    db.from('post_likes').select('post_id').eq('user_id',user.id).in('post_id',ids)
+    db.from('post_likes').select('post_id').eq('user_id',user.id).in('post_id',ids),
+    db.from('comments').select('post_id').in('post_id',ids)
    ]);
    const likeCounts=(likes.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
+   const commentCounts=(comments.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
    const liked=new Set((mine.data||[]).map(row=>row.post_id));let activePost=null;
    const showPhoto=post=>{
-    activePost=post;$('myPhotoImage').src=post.media_url;$('myPhotoImage').alt=post.body||'Foto publicada';$('myPhotoCaption').textContent=post.body||'';
+    activePost=post;
+    $('myPhotoImage').src=post.media_url;$('myPhotoImage').alt=post.body||'Foto publicada';
+    $('myPhotoTopUsername').textContent='@'+(profile?.username||'');
+    $('myPhotoAuthor').textContent=profile?.display_name||profile?.username||'Você';
+    $('myPhotoHandle').textContent='@'+(profile?.username||'');
+    $('myPhotoAvatar').src=profile?.avatar_url||'';$('myPhotoAvatar').hidden=!profile?.avatar_url;
+    $('myPhotoInsights').textContent=(likeCounts[post.id]||0)+' curtidas · '+(commentCounts[post.id]||0)+' comentários';
+    $('myPhotoComments').textContent=String(commentCounts[post.id]||0);
+    $('myPhotoCaptionAuthor').textContent=profile?.username||'';
+    $('myPhotoCaption').textContent=post.body||'';
+    $('myPhotoDate').textContent=post.created_at?new Date(post.created_at).toLocaleDateString('pt-BR',{day:'numeric',month:'long'}):'';
     $('myPhotoPosition').textContent=(photoPosts.indexOf(post)+1)+' / '+photoPosts.length;
-    $('myPhotoLikeCount').textContent=(likeCounts[post.id]||0)+' curtida(s)';
-    $('myPhotoLike').classList.toggle('liked',liked.has(post.id));$('myPhotoLike').textContent=liked.has(post.id)?'♥ Curtido':'♡ Curtir';
+    $('myPhotoLikeCount').textContent=String(likeCounts[post.id]||0);
+    $('myPhotoLike').classList.toggle('liked',liked.has(post.id));$('myPhotoHeart').textContent=liked.has(post.id)?'♥':'♡';
     $('myPhotoLike').setAttribute('aria-pressed',String(liked.has(post.id)));viewerDialog.showModal();
    };
    photoPosts.forEach(post=>{const button=document.createElement('button');button.type='button';button.className='profile-photo';button.setAttribute('aria-label',post.body||'Abrir foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';button.append(img);button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();showPhoto(post)});grid.append(button)});
@@ -304,8 +346,9 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
    $('myPhotoLike').onclick=async()=>{if(!activePost)return;const button=$('myPhotoLike');button.disabled=true;try{
     if(liked.has(activePost.id)){const result=await db.from('post_likes').delete().eq('post_id',activePost.id).eq('user_id',user.id);if(result.error)throw result.error;liked.delete(activePost.id);likeCounts[activePost.id]=Math.max(0,(likeCounts[activePost.id]||0)-1)}
     else{const result=await db.from('post_likes').insert({post_id:activePost.id,user_id:user.id});if(result.error&&result.error.code!=='23505')throw result.error;if(!result.error)likeCounts[activePost.id]=(likeCounts[activePost.id]||0)+1;liked.add(activePost.id)}
-    $('myPhotoLikeCount').textContent=(likeCounts[activePost.id]||0)+' curtida(s)';button.classList.toggle('liked',liked.has(activePost.id));button.textContent=liked.has(activePost.id)?'♥ Curtido':'♡ Curtir';button.setAttribute('aria-pressed',String(liked.has(activePost.id)));
+    $('myPhotoLikeCount').textContent=String(likeCounts[activePost.id]||0);$('myPhotoInsights').textContent=(likeCounts[activePost.id]||0)+' curtidas · '+(commentCounts[activePost.id]||0)+' comentários';button.classList.toggle('liked',liked.has(activePost.id));$('myPhotoHeart').textContent=liked.has(activePost.id)?'♥':'♡';button.setAttribute('aria-pressed',String(liked.has(activePost.id)));
    }catch(error){alert(error.message||'Não foi possível atualizar a curtida.')}finally{button.disabled=false}};
+   $('myPhotoShare').onclick=async()=>{if(!activePost)return;const url=location.origin+'/fy.html?post='+encodeURIComponent(activePost.id);try{if(navigator.share)await navigator.share({title:'Publicação no LinkStory',url});else{await navigator.clipboard.writeText(url);alert('Link copiado!')}}catch(error){if(error.name!=='AbortError')alert('Não foi possível compartilhar esta publicação.')}};
   }else{$('myPhotosEmpty').hidden=false}
  }catch(e){console.error(e);$('handle').textContent=e.message||'Não foi possível carregar o perfil.'}
 })();
