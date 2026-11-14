@@ -162,7 +162,9 @@ html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!importa
 <label class="edit-field"><span>Foto do perfil</span><input id="editAvatarFile" type="file" accept="image/*"><small id="avatarFileHint">Escolha uma foto da galeria ou tire uma nova.</small></label>
 <label class="edit-field"><span>Biografia</span><textarea id="editBio" maxlength="500" placeholder="Conte um pouco sobre você…"></textarea></label>
 <div class="edit-status" id="editStatus" role="status"></div><div class="edit-actions"><button type="button" class="profile-action" id="cancelEdit">Cancelar</button><button type="submit" class="profile-action primary" id="saveProfile">Salvar alterações</button></div></form></dialog>
-<dialog id="myPhotoViewer" class="my-photo-viewer" aria-label="Publicação"><header class="ig-post-top"><button type="button" id="closeMyPhotoViewer" aria-label="Voltar">‹</button><div><strong>Publicações</strong><span id="myPhotoTopUsername"></span></div><span id="myPhotoPosition"></span></header><article class="ig-post"><div class="ig-post-author"><img id="myPhotoAvatar" alt=""><div><strong id="myPhotoAuthor"></strong><small id="myPhotoHandle"></small></div></div><div class="ig-post-media"><img id="myPhotoImage" alt="Foto publicada"></div><div class="ig-post-insights"><span id="myPhotoInsights"></span><span>Visualizações</span></div><div class="ig-post-actions"><button type="button" id="myPhotoLike" aria-label="Curtir" aria-pressed="false"><span id="myPhotoHeart">♡</span><span id="myPhotoLikeCount">0</span></button><span class="ig-comment-count">◯ <span id="myPhotoComments">0</span></span><button type="button" id="myPhotoShare" aria-label="Compartilhar">➤</button><span class="ig-post-spacer"></span><span class="ig-save-icon">♧</span></div><div class="ig-post-caption"><strong id="myPhotoCaptionAuthor"></strong> <span id="myPhotoCaption"></span><small id="myPhotoDate"></small></div></article></dialog>
+<dialog id="myPhotoViewer" class="my-photo-viewer" aria-label="Publicação"><header class="ig-post-top"><button type="button" id="closeMyPhotoViewer" aria-label="Voltar">‹</button><div><strong>Publicações</strong><span id="myPhotoTopUsername"></span></div><span id="myPhotoPosition"></span></header><article class="ig-post"><div class="ig-post-author"><img id="myPhotoAvatar" alt=""><div><strong id="myPhotoAuthor"></strong><small id="myPhotoHandle"></small></div></div><div class="ig-post-media"><img id="myPhotoImage" alt="Foto publicada"></div><div class="ig-post-insights"><span id="myPhotoInsights"></span><span>Visualizações</span></div><div class="ig-post-actions"><button type="button" id="myPhotoLike" aria-label="Curtir" aria-pressed="false"><span id="myPhotoHeart">♡</span><span id="myPhotoLikeCount">0</span></button><button type="button" id="myPhotoOpenComments" class="ig-icon-action" aria-label="Comentários"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H5l1.7-3A7.5 7.5 0 1 1 20 11.5Z"/></svg><span id="myPhotoComments">0</span></button><button type="button" id="myPhotoShare" class="ig-icon-action" aria-label="Compartilhar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V3m-5 5 5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg></button><span class="ig-post-spacer"></span></div><div class="ig-post-caption"><strong id="myPhotoCaptionAuthor"></strong> <span id="myPhotoCaption"></span><small id="myPhotoDate"></small></div></article></dialog>
+<dialog id="myPhotoCommentsDialog" class="my-photo-comments"><header><button type="button" id="closeMyPhotoComments" aria-label="Voltar">‹</button><strong>Comentários</strong></header><div id="myPhotoCommentList" class="my-photo-comment-list" aria-live="polite"></div><form id="myPhotoCommentForm"><div id="myPhotoReplyingTo" hidden></div><textarea id="myPhotoCommentBody" maxlength="1000" required placeholder="Adicione um comentário…"></textarea><button id="myPhotoSendComment" type="submit">Publicar</button></form></dialog>
+<dialog id="myPhotoShareDialog" class="my-photo-share"><header><strong>Compartilhar publicação</strong><button type="button" id="closeMyPhotoShare">×</button></header><button type="button" id="myPhotoShareFriend">Enviar para um amigo no LinkStory</button><button type="button" id="myPhotoShareExternal">Compartilhar em outro aplicativo</button><button type="button" id="myPhotoCopyLink">Copiar link</button></dialog>
 <style>
 .my-photo-viewer{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#f5f7fb;color:#243247}
 .my-photo-viewer::backdrop{background:rgba(8,15,28,.88)}
@@ -205,6 +207,31 @@ html[data-ls-theme="dark"] .ig-post-top{background:#080d12;border-color:#26303b}
 html[data-ls-theme="dark"] .ig-post-top>button{color:#f4f5f7}
 html[data-ls-theme="dark"] .ig-post-media{background:#111820}
 html[data-ls-theme="dark"] .ig-post-insights{border-color:#29333e}
+/* Separação editorial invisível entre mídia e legenda: apenas respiro e mudança sutil de tom. */
+.ig-post-caption{margin-top:3px;padding:13px 16px 24px;border:0;background:transparent}
+.ig-post-caption small{border:0}
+.ig-post-actions .ig-icon-action{display:inline-flex;align-items:center;gap:6px;min-width:40px;min-height:42px;border:0;background:transparent;color:inherit;padding:0}
+.ig-icon-action svg{width:29px;height:29px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.ig-post-actions .ig-icon-action span{font-size:14px}
+.my-photo-comments,.my-photo-share{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0;border-radius:0;padding:0;background:#fff;color:#18212d}
+.my-photo-comments::backdrop,.my-photo-share::backdrop{background:rgba(0,0,0,.72)}
+.my-photo-comments header,.my-photo-share header{height:58px;display:flex;align-items:center;justify-content:center;position:sticky;top:0;background:inherit;border-bottom:1px solid #e9edf2}
+.my-photo-comments header button,.my-photo-share header button{position:absolute;left:14px;border:0;background:transparent;font-size:34px;color:inherit}
+.my-photo-share header button{left:auto;right:14px;font-size:25px}
+.my-photo-comment-list{height:calc(100% - 132px);overflow:auto;padding:14px 16px 22px}
+.my-photo-comment{display:flex;gap:10px;padding:12px 0;border-bottom:1px solid rgba(130,145,165,.12)}
+.my-photo-comment img,.my-photo-comment .avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none;background:#e7edf4}
+.my-photo-comment-content{min-width:0;flex:1;font-size:14px;line-height:1.45;overflow-wrap:anywhere}
+.my-photo-comment-content strong{font-size:13px;margin-right:6px}.my-photo-comment-content small{display:block;color:#8994a3;font-size:11px;margin-top:5px}
+.my-photo-comment-actions{display:flex;gap:16px;margin-top:7px}.my-photo-comment-actions button{border:0;background:transparent;color:#728097;font-size:12px;padding:2px 0}
+#myPhotoCommentForm{position:absolute;bottom:0;left:0;right:0;display:flex;align-items:flex-end;gap:9px;padding:10px 13px calc(10px + env(safe-area-inset-bottom));background:inherit;border-top:1px solid rgba(130,145,165,.18)}
+#myPhotoCommentBody{flex:1;min-height:42px;max-height:110px;resize:none;border:1px solid #dce4ed;border-radius:22px;padding:11px 14px;background:transparent;color:inherit;font:inherit;font-size:14px}
+#myPhotoSendComment{min-height:42px;border:0;border-radius:22px;padding:0 16px;background:#2878e5;color:#fff;font-weight:750}
+.my-photo-share{inset:auto 0 0;width:100%;height:auto;max-height:70dvh;border-radius:20px 20px 0 0;padding:0 18px calc(18px + env(safe-area-inset-bottom))}
+.my-photo-share>button{display:block;width:100%;text-align:left;padding:16px 12px;border:0;border-bottom:1px solid rgba(130,145,165,.16);background:transparent;color:inherit;font-size:15px}
+html[data-ls-theme="dark"] .my-photo-comments,html[data-ls-theme="dark"] .my-photo-share{background:#101821;color:#edf3fa}
+html[data-ls-theme="dark"] #myPhotoCommentBody{border-color:#394858}
+html[data-ls-theme="dark"] .my-photo-comment{border-color:rgba(180,195,215,.12)}
 </style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="auth.js"></script><script src="verification.js?v=1"></script><script src="manga-db.js"></script><script>
 (async()=>{
  const $=id=>document.getElementById(id),db=linkstorySupabase;
@@ -323,10 +350,10 @@ html[data-ls-theme="dark"] .ig-post-insights{border-color:#29333e}
    ]);
    const likeCounts=(likes.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
    const commentCounts=(comments.data||[]).reduce((acc,row)=>(acc[row.post_id]=(acc[row.post_id]||0)+1,acc),{});
-   const liked=new Set((mine.data||[]).map(row=>row.post_id));let activePost=null;
+   const liked=new Set((mine.data||[]).map(row=>row.post_id));let activePost=null,photoComments=[],photoCommentLikes={},replyTarget=null;
+   const activeIndex=()=>photoPosts.findIndex(x=>x.id===activePost?.id);
    const showPhoto=post=>{
-    activePost=post;
-    $('myPhotoImage').src=post.media_url;$('myPhotoImage').alt=post.body||'Foto publicada';
+    activePost=post;$('myPhotoImage').src=post.media_url;$('myPhotoImage').alt=post.body||'Foto publicada';
     $('myPhotoTopUsername').textContent='@'+(profile?.username||'');
     $('myPhotoAuthor').textContent=profile?.display_name||profile?.username||'Você';
     $('myPhotoHandle').textContent='@'+(profile?.username||'');
@@ -336,19 +363,53 @@ html[data-ls-theme="dark"] .ig-post-insights{border-color:#29333e}
     $('myPhotoCaptionAuthor').textContent=profile?.username||'';
     $('myPhotoCaption').textContent=post.body||'';
     $('myPhotoDate').textContent=post.created_at?new Date(post.created_at).toLocaleDateString('pt-BR',{day:'numeric',month:'long'}):'';
-    $('myPhotoPosition').textContent=(photoPosts.indexOf(post)+1)+' / '+photoPosts.length;
+    $('myPhotoPosition').textContent=(activeIndex()+1)+' / '+photoPosts.length;
     $('myPhotoLikeCount').textContent=String(likeCounts[post.id]||0);
     $('myPhotoLike').classList.toggle('liked',liked.has(post.id));$('myPhotoHeart').textContent=liked.has(post.id)?'♥':'♡';
     $('myPhotoLike').setAttribute('aria-pressed',String(liked.has(post.id)));viewerDialog.showModal();
    };
+   const movePhoto=delta=>{const next=activeIndex()+delta;if(next>=0&&next<photoPosts.length)showPhoto(photoPosts[next])};
    photoPosts.forEach(post=>{const button=document.createElement('button');button.type='button';button.className='profile-photo';button.setAttribute('aria-label',post.body||'Abrir foto publicada');const img=document.createElement('img');img.src=post.media_url;img.alt=post.body||'Foto publicada';img.loading='lazy';button.append(img);button.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();showPhoto(post)});grid.append(button)});
    $('closeMyPhotoViewer').onclick=()=>viewerDialog.close();
+   let touchStartX=0,touchStartY=0;
+   $('myPhotoImage').addEventListener('touchstart',e=>{touchStartX=e.changedTouches[0].clientX;touchStartY=e.changedTouches[0].clientY},{passive:true});
+   $('myPhotoImage').addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-touchStartX,dy=e.changedTouches[0].clientY-touchStartY;if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.25)movePhoto(dx<0?1:-1)},{passive:true});
    $('myPhotoLike').onclick=async()=>{if(!activePost)return;const button=$('myPhotoLike');button.disabled=true;try{
     if(liked.has(activePost.id)){const result=await db.from('post_likes').delete().eq('post_id',activePost.id).eq('user_id',user.id);if(result.error)throw result.error;liked.delete(activePost.id);likeCounts[activePost.id]=Math.max(0,(likeCounts[activePost.id]||0)-1)}
     else{const result=await db.from('post_likes').insert({post_id:activePost.id,user_id:user.id});if(result.error&&result.error.code!=='23505')throw result.error;if(!result.error)likeCounts[activePost.id]=(likeCounts[activePost.id]||0)+1;liked.add(activePost.id)}
     $('myPhotoLikeCount').textContent=String(likeCounts[activePost.id]||0);$('myPhotoInsights').textContent=(likeCounts[activePost.id]||0)+' curtidas · '+(commentCounts[activePost.id]||0)+' comentários';button.classList.toggle('liked',liked.has(activePost.id));$('myPhotoHeart').textContent=liked.has(activePost.id)?'♥':'♡';button.setAttribute('aria-pressed',String(liked.has(activePost.id)));
    }catch(error){alert(error.message||'Não foi possível atualizar a curtida.')}finally{button.disabled=false}};
-   $('myPhotoShare').onclick=async()=>{if(!activePost)return;const url=location.origin+'/fy.html?post='+encodeURIComponent(activePost.id);try{if(navigator.share)await navigator.share({title:'Publicação no LinkStory',url});else{await navigator.clipboard.writeText(url);alert('Link copiado!')}}catch(error){if(error.name!=='AbortError')alert('Não foi possível compartilhar esta publicação.')}};
+   const renderPhotoComments=()=>{
+    const box=$('myPhotoCommentList');box.replaceChildren();
+    if(!photoComments.length){const empty=document.createElement('p');empty.textContent='Ainda não há comentários. Seja a primeira pessoa a comentar.';empty.style.cssText='text-align:center;color:#8994a3;padding:35px 10px';box.append(empty);return}
+    photoComments.forEach(c=>{const row=document.createElement('article');row.className='my-photo-comment';const av=c.profiles?.avatar_url?document.createElement('img'):document.createElement('span');if(c.profiles?.avatar_url)av.src=c.profiles.avatar_url;else{av.className='avatar';av.textContent=(c.profiles?.display_name||c.profiles?.username||'U').slice(0,1).toUpperCase()}
+     const content=document.createElement('div');content.className='my-photo-comment-content';const name=document.createElement('strong');name.textContent=c.profiles?.username||c.profiles?.display_name||'Usuário';const body=document.createElement('span');body.textContent=c.body;const date=document.createElement('small');date.textContent=new Date(c.created_at).toLocaleString('pt-BR');const actions=document.createElement('div');actions.className='my-photo-comment-actions';
+     const like=document.createElement('button');const state=photoCommentLikes[c.id]||{count:0,liked:false};like.textContent=(state.liked?'♥':'♡')+' '+state.count+' Curtir';like.onclick=async()=>{if(!user)return alert('Entre na sua conta para curtir comentários.');like.disabled=true;try{if(state.liked){const x=await db.from('comment_likes').delete().eq('comment_id',c.id).eq('user_id',user.id);if(x.error)throw x.error;state.count=Math.max(0,state.count-1);state.liked=false}else{const x=await db.from('comment_likes').insert({comment_id:c.id,user_id:user.id});if(x.error&&x.error.code!=='23505')throw x.error;if(!x.error)state.count++;state.liked=true}photoCommentLikes[c.id]=state;like.textContent=(state.liked?'♥':'♡')+' '+state.count+' Curtir'}catch(e){alert(e.message)}finally{like.disabled=false}};
+     const reply=document.createElement('button');reply.textContent='Responder';reply.onclick=()=>{$('myPhotoCommentBody').focus();$('myPhotoCommentBody').placeholder='Respondendo a '+(c.profiles?.username||'usuário')+'…';replyTarget={id:c.id,name:c.profiles?.username||'usuário'};$('myPhotoReplyingTo').hidden=false;$('myPhotoReplyingTo').textContent='Respondendo a '+replyTarget.name+' · toque para cancelar';};
+     actions.append(like,reply);content.append(name,body,date,actions);row.append(av,content);box.append(row);
+    });
+   };
+   const openPhotoComments=async()=>{if(!activePost)return;photoComments=[];photoCommentLikes={};replyTarget=null;$('myPhotoReplyingTo').hidden=true;$('myPhotoCommentBody').value='';$('myPhotoCommentBody').placeholder='Adicione um comentário…';$('myPhotoCommentList').textContent='Carregando comentários…';$('myPhotoCommentsDialog').showModal();try{
+    const result=await db.from('comments').select('id,body,parent_comment_id,author_id,created_at,profiles:author_id(id,display_name,username,avatar_url,verification_type)').eq('post_id',activePost.id).order('created_at',{ascending:true});if(result.error)throw result.error;photoComments=result.data||[];
+    const commentIds=photoComments.map(c=>c.id);if(commentIds.length){const likesResult=await db.from('comment_likes').select('comment_id,user_id').in('comment_id',commentIds);if(likesResult.error)throw likesResult.error;(likesResult.data||[]).forEach(x=>{const item=photoCommentLikes[x.comment_id]||(photoCommentLikes[x.comment_id]={count:0,liked:false});item.count++;if(x.user_id===user.id)item.liked=true})}
+    renderPhotoComments();
+   }catch(e){$('myPhotoCommentList').textContent='Não foi possível carregar os comentários: '+e.message}};
+   $('myPhotoOpenComments').onclick=openPhotoComments;$('closeMyPhotoComments').onclick=()=>$('myPhotoCommentsDialog').close();
+   $('myPhotoReplyingTo').onclick=()=>{replyTarget=null;$('myPhotoReplyingTo').hidden=true;$('myPhotoCommentBody').placeholder='Adicione um comentário…'};
+   $('myPhotoCommentForm').onsubmit=async e=>{e.preventDefault();if(!user)return alert('Entre na sua conta para comentar.');const body=$('myPhotoCommentBody').value.trim();if(!body)return;const b=$('myPhotoSendComment');b.disabled=true;b.textContent='Enviando…';try{
+    const result=await db.from('comments').insert({post_id:activePost.id,author_id:user.id,body,parent_comment_id:replyTarget?.id||null}).select('id,body,parent_comment_id,author_id,created_at,profiles:author_id(id,display_name,username,avatar_url,verification_type)').single();if(result.error)throw result.error;photoComments.push(result.data);photoCommentLikes[result.data.id]={count:0,liked:false};commentCounts[activePost.id]=(commentCounts[activePost.id]||0)+1;$('myPhotoComments').textContent=String(commentCounts[activePost.id]);$('myPhotoInsights').textContent=(likeCounts[activePost.id]||0)+' curtidas · '+commentCounts[activePost.id]+' comentários';$('myPhotoCommentBody').value='';replyTarget=null;$('myPhotoReplyingTo').hidden=true;renderPhotoComments();
+   }catch(error){alert(error.message||'Não foi possível comentar.')}finally{b.disabled=false;b.textContent='Publicar'}};
+   const shareDialog=$('myPhotoShareDialog');$('myPhotoShare').onclick=()=>shareDialog.showModal();$('closeMyPhotoShare').onclick=()=>shareDialog.close();
+   const photoLink=()=>location.origin+'/fy.html?post='+encodeURIComponent(activePost.id);
+   $('myPhotoCopyLink').onclick=async()=>{try{await navigator.clipboard.writeText(photoLink());alert('Link copiado! Agora você pode enviar em outro aplicativo.')}catch(e){prompt('Copie o link da publicação:',photoLink())}shareDialog.close()};
+   $('myPhotoShareExternal').onclick=async()=>{try{if(navigator.share)await navigator.share({title:'Publicação no LinkStory',text:activePost.body||'Veja esta publicação no LinkStory',url:photoLink()});else{await navigator.clipboard.writeText(photoLink());alert('Link copiado!')}}catch(e){if(e.name!=='AbortError')alert('Não foi possível compartilhar.')}shareDialog.close()};
+   $('myPhotoShareFriend').onclick=async()=>{
+    if(!user)return alert('Entre na sua conta para compartilhar.');
+    const postId=activePost.id,dialog=$('myPhotoShareDialog');dialog.close();let friendDialog=document.getElementById('myPhotoFriendDialog');
+    if(!friendDialog){friendDialog=document.createElement('dialog');friendDialog.id='myPhotoFriendDialog';friendDialog.className='my-photo-share';friendDialog.innerHTML='<header><strong>Enviar para um amigo</strong><button type="button" data-friend-close>×</button></header><div id="myPhotoFriendList" style="padding:14px;max-height:55dvh;overflow:auto">Carregando amigos…</div><button type="button" id="myPhotoFriendSend" disabled>Enviar publicação</button>';document.body.append(friendDialog);friendDialog.querySelector('[data-friend-close]').onclick=()=>friendDialog.close()}
+    const list=$('myPhotoFriendList'),send=$('myPhotoFriendSend');list.textContent='Carregando amigos…';send.disabled=true;friendDialog.showModal();
+    try{const fr=await db.from('friendships').select('user_a,user_b').or('user_a.eq.'+user.id+',user_b.eq.'+user.id);if(fr.error)throw fr.error;const friendIds=[...new Set((fr.data||[]).map(x=>x.user_a===user.id?x.user_b:x.user_a))];if(!friendIds.length){list.textContent='Você ainda não tem amigos adicionados.';return}const people=await db.from('profiles').select('id,username,display_name,avatar_url').in('id',friendIds).order('display_name');if(people.error)throw people.error;list.replaceChildren();let selected=null;people.data.forEach(person=>{const label=document.createElement('label');label.style.cssText='display:flex;gap:10px;align-items:center;padding:12px;border-bottom:1px solid #e6ebf1';const radio=document.createElement('input');radio.type='radio';radio.name='photoFriend';radio.value=person.id;radio.onchange=()=>{selected=person.id;send.disabled=false};const name=document.createElement('span');name.textContent=(person.display_name||person.username)+' · @'+(person.username||'');label.append(radio,name);list.append(label)});send.onclick=async()=>{if(!selected)return;send.disabled=true;try{const conv=await db.rpc('create_or_get_direct_conversation',{p_friend_id:selected});if(conv.error)throw conv.error;const sent=await db.from('messages').insert({conversation_id:conv.data,sender_id:user.id,body:'📌 Publicação compartilhada no LinkStory\n'+photoLink()});if(sent.error)throw sent.error;friendDialog.close();alert('Publicação enviada para seu amigo!')}catch(e){alert(e.message);send.disabled=false}}}catch(e){list.textContent='Não foi possível carregar amigos: '+e.message}
+   };
   }else{$('myPhotosEmpty').hidden=false}
  }catch(e){console.error(e);$('handle').textContent=e.message||'Não foi possível carregar o perfil.'}
 })();
