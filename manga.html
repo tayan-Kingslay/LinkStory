@@ -31,7 +31,7 @@ main{width:min(900px,calc(100% - 28px));margin:auto;padding:34px 0 100px}
 .block{width:min(760px,100%);margin:34px auto 0}
 .ey{font-size:10px;font-weight:900;letter-spacing:2px;color:var(--blue)}
 .block h2{font-size:24px;margin:6px 0 12px}
-.chapter{display:flex;align-items:center;gap:14px;padding:13px 4px;border-block:1px solid var(--line)}
+.chapter{display:flex;align-items:center;gap:14px;padding:13px 4px}.chapter-item{border-block:1px solid var(--line)}.chapter-item+.chapter-item{border-top:0}.chapter-actions{display:flex;gap:7px;flex-wrap:wrap;padding:0 4px 12px 60px}.chapter-action{border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:12px;font-weight:800;color:var(--blue);background:#fff}.chapter-action.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.reading-choice-label{width:100%;text-align:center;color:var(--muted);font-size:10px;font-weight:900;letter-spacing:2px;margin-bottom:2px}.actions.reading.has-experience{grid-template-columns:1fr 1fr}@media(max-width:480px){.actions.reading.has-experience{grid-template-columns:1fr}.chapter-actions{padding-left:4px}}
 .chapter-num{width:42px;height:42px;border-radius:10px;background:var(--soft);color:var(--blue);display:grid;place-items:center;font-weight:950}
 .chapter-info{flex:1}.chapter-info strong{display:block}.chapter-info small{color:var(--muted)}.chev{font-size:25px;color:#7890a7}
 
@@ -197,14 +197,14 @@ html,body{background:#080e18!important;color:#eef3fa!important}
   if(!m)throw Error("notfound");
   const cs=await LinkStoryManga.chapters(m.id),st=await LinkStoryManga.stats(m.id),me=await LinkStoryManga.session();
   const mine=!!me?.user?.id&&me.user.id===m.creator_id;
+  const experienceReadyByChapter={};
+  if(m.experience_mode_enabled===true){await Promise.all(cs.map(async item=>{try{const data=await LinkStoryManga.chapterWithPages(item.id),pages=data?.pages||[];experienceReadyByChapter[item.id]=pages.length>0&&pages.every(page=>{const panels=page.panels;if(!page.image_url||!Array.isArray(panels)||!panels.length)return false;const valid=panels.every(p=>p&&[p.x,p.y,p.width,p.height].every(Number.isFinite)&&p.x>=0&&p.y>=0&&p.width>0&&p.height>0&&p.x+p.width<=1.000001&&p.y+p.height<=1.000001&&Number.isInteger(p.order)&&p.order>=1);const orders=panels.map(p=>p.order).sort((a,b)=>a-b);return valid&&orders.every((order,index)=>order===index+1)})}catch(error){console.warn("Experience readiness check failed:",error);experienceReadyByChapter[item.id]=false}}))}
   document.title=m.title+" — LinkStory";
 
   $("main").innerHTML=
   '<section class="manga-view">'+
     '<div class="cover-shell"><img class="cover" id="cover" alt="Capa do mangá" decoding="async"></div>'+
-    '<div class="actions reading">'+
-      '<a class="btn primary" href="reader.html?manga_id='+m.id+'&chapter_id='+(cs[0]?.id||"")+'">Começar a ler</a>'+
-    '</div>'+
+    '<div class="actions reading" id="readingChoices"></div>'+
     '<div class="creator-label">AUTOR PRINCIPAL</div>'+
     '<a class="creator-profile" href="public-profile.html?id='+encodeURIComponent(m.creator_id)+'" aria-label="Ver perfil de '+String(m.profiles?.display_name||m.profiles?.username||'criador').replace(/&/g,'&amp;').replace(/"/g,'&quot;')+'"><span class="creator-avatar">'+(m.profiles?.avatar_url?'<img src="'+String(m.profiles.avatar_url).replace(/"/g,'&quot;')+'" alt="">':String((m.profiles?.display_name||m.profiles?.username||'C').slice(0,1)).replace(/</g,'&lt;'))+'</span><span class="creator-copy"><strong>'+String(m.profiles?.display_name||m.profiles?.username||'Criador').replace(/&/g,'&amp;').replace(/</g,'&lt;')+(window.LinkStoryVerification?.html(m.profiles?.verification_type)||'')+'</strong><small>@'+String(m.profiles?.username||'criador').replace(/&/g,'&amp;').replace(/</g,'&lt;')+'</small></span><span class="creator-arrow">Ver perfil ›</span></a>'+
     (mine?
@@ -227,6 +227,9 @@ html,body{background:#080e18!important;color:#eef3fa!important}
     '<div class="comment"><input id="commentText" maxlength="1000" placeholder="Escreva um comentário"><button id="commentBtn">Comentar</button></div>'+
     '<div class="comments" id="comments"></div>'+
   '</section>';
+
+  const readingChoices=$("readingChoices");
+  if(cs.length){const label=document.createElement("div");label.className="reading-choice-label";label.textContent="COMO DESEJA LER?";readingChoices.append(label);const traditional=document.createElement("a");traditional.className="btn primary";traditional.textContent="Tradicional · Página inteira";traditional.href="reader.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(cs[0].id);readingChoices.append(traditional);if(experienceReadyByChapter[cs[0].id]){readingChoices.classList.add("has-experience");const experience=document.createElement("a");experience.className="btn";experience.textContent="Experiência · Um quadrinho por vez";experience.href="reader-experience.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(cs[0].id)+"&return_to=manga";readingChoices.append(experience)}}else{readingChoices.textContent="Este mangá ainda não possui capítulos publicados."}
 
   async function mountFollowButton(targetId,anchor){
    if(!targetId||!anchor)return;
@@ -259,13 +262,15 @@ html,body{background:#080e18!important;color:#eef3fa!important}
 
   const cl=$("chapters");
   cs.forEach(c=>{
-   const a=document.createElement("a");
-   a.className="chapter";
+   const item=document.createElement("div");item.className="chapter-item";
+   const a=document.createElement("a");a.className="chapter";
    a.href="reader.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(c.id)+"&chapter_number="+encodeURIComponent(c.chapter_number);
-   a.innerHTML='<div class="chapter-num">'+String(c.chapter_number).padStart(3,"0")+'</div>'+
-     '<div class="chapter-info"><strong>'+c.title+'</strong><small>Capítulo '+String(c.chapter_number).padStart(3,"0")+'</small></div>'+
-     '<span class="chev">›</span>';
-   cl.append(a);
+   const num=document.createElement("div");num.className="chapter-num";num.textContent=String(c.chapter_number).padStart(3,"0");
+   const info=document.createElement("div");info.className="chapter-info";const title=document.createElement("strong");title.textContent=c.title||"Capítulo "+c.chapter_number;const subtitle=document.createElement("small");subtitle.textContent="Capítulo "+String(c.chapter_number).padStart(3,"0");info.append(title,subtitle);const arrow=document.createElement("span");arrow.className="chev";arrow.textContent="›";a.append(num,info,arrow);item.append(a);
+   const actions=document.createElement("div");actions.className="chapter-actions";
+   if(m.experience_mode_enabled===true&&experienceReadyByChapter[c.id]){const expLink=document.createElement("a");expLink.className="chapter-action primary";expLink.textContent="Ler em Experiência";expLink.href="reader-experience.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(c.id)+"&return_to=manga";actions.append(expLink)}
+   if(mine){const organize=document.createElement("a");organize.className="chapter-action";organize.textContent="Organizar quadrinhos";organize.href="panel-editor.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(c.id);actions.append(organize)}
+   if(actions.childElementCount)item.append(actions);cl.append(item);
   });
 
   let liked=await LinkStoryManga.liked(m.id);
