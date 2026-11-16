@@ -75,3 +75,6 @@ body.ls-experience-reader .rx-comments{background:#111c2b!important;color:#f5f7f
  body.ls-experience-reader .rx-footer #nextChapter{grid-column:1/-1}
 }
 @media(prefers-reduced-motion:reduce){body.ls-experience-reader .rx-art{animation:none!important}}
+
+body.ls-experience-workspace main.pe-wrap{width:min(1040px,calc(100% - 32px))!important;max-width:1040px!important;margin:26px auto 60px!important}
+@media(max-width:640px){body.ls-experience-workspace main.pe-wrap{width:calc(100% - 20px)!important;margin:14px auto 34px!important}}
