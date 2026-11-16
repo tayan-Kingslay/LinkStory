@@ -242,6 +242,8 @@ main#main{padding-top:34px!important}
    cover.alt="Capa não cadastrada";cover.classList.add("cover-error");
   }
 
+  if(m.paired_manga_id){try{const paired=await LinkStoryManga.mangaById(m.paired_manga_id);if(paired&&paired.status==='published'){const switcher=document.createElement('a');switcher.className='chapter-action primary';switcher.href='manga.html?id='+encodeURIComponent(paired.id);switcher.textContent='Ver outra versão · '+(paired.publication_mode==='experience'?'Modo Experiência':'Tradicional');const area=document.createElement('section');area.className='paired-version';area.style.cssText='margin:18px 0;padding:14px;border:1px solid var(--line,#dbe5ef);border-radius:14px;background:var(--card,#fff)';const label=document.createElement('strong');label.textContent='Esta obra também tem outra versão';label.style.cssText='display:block;margin-bottom:10px;font-size:13px';area.append(label,switcher);document.querySelector('#chapters').before(area)}}catch(error){console.warn('Could not load paired manga version:',error)}}
+
   const cl=$("chapters");
   cs.forEach(c=>{
    const item=document.createElement("div");item.className="chapter-item";
