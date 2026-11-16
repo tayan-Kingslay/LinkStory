@@ -61,7 +61,7 @@ async function suggestPanelLayout(){
  if(page.panels.length&&!window.confirm('Esta página já tem quadros marcados. Substituir as marcações atuais pelas sugestões da IA?'))return;
  button.disabled=true;button.textContent='Analisando página…';setStatus('O Gemini está analisando os limites dos quadros. Isso pode levar alguns segundos.');
  try{
-  await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('Não foi possível abrir a imagem de referência.'));image.src=page.image_url});
+  await new Promise((resolve,reject)=>{image.crossOrigin='anonymous';image.onload=resolve;image.onerror=()=>reject(Error('Não foi possível abrir a imagem de referência. Verifique se a imagem está pública e tente novamente.'));image.src=page.image_url});
   const max=1600,scale=Math.min(1,max/Math.max(image.naturalWidth,image.naturalHeight)),canvas=document.createElement('canvas');
   canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
   canvas.getContext('2d',{alpha:false}).drawImage(image,0,0,canvas.width,canvas.height);
