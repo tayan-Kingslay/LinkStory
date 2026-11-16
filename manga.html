@@ -211,7 +211,29 @@ main#main{padding-top:34px!important}
   '</section>';
 
   const readingChoices=$("readingChoices");
-  if(cs.length){const label=document.createElement("div");label.className="reading-choice-label";label.textContent="COMO DESEJA LER?";readingChoices.append(label);const traditional=document.createElement("a");traditional.className="btn primary";traditional.textContent="Tradicional · Página inteira";traditional.href="reader.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(cs[0].id);readingChoices.append(traditional);if(experienceReadyByChapter[cs[0].id]){readingChoices.classList.add("has-experience");const experience=document.createElement("a");experience.className="btn";experience.textContent="Experiência · Um quadrinho por vez";experience.href="reader-experience.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(cs[0].id)+"&return_to=manga";readingChoices.append(experience)}}else{readingChoices.textContent="Este mangá ainda não possui capítulos publicados."}
+  if(cs.length){
+   const firstChapter=cs[0],experienceReady=experienceReadyByChapter[firstChapter.id]===true;
+   const label=document.createElement("div");label.className="reading-choice-label";
+   const experienceUrl="reader-experience.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(firstChapter.id)+"&return_to=manga";
+   const traditionalUrl="reader.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(firstChapter.id);
+   if(m.publication_mode==="experience"){
+    label.textContent=experienceReady?"MODO EXPERIÊNCIA":"PREPARANDO MODO EXPERIÊNCIA";readingChoices.append(label);
+    if(experienceReady){
+     readingChoices.classList.add("has-experience");
+     const experience=document.createElement("a");experience.className="btn primary";experience.textContent="Abrir no Modo Experiência";experience.href=experienceUrl;readingChoices.append(experience);
+    }else if(mine){
+     const prepare=document.createElement("a");prepare.className="btn primary";prepare.textContent="Preparar quadros para leitura";prepare.href="panel-editor.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(firstChapter.id);readingChoices.append(prepare);
+     const note=document.createElement("p");note.className="reading-choice-label";note.textContent="A obra está marcada como Modo Experiência, mas os quadros deste capítulo ainda precisam ser organizados.";readingChoices.append(note);
+    }else{
+     const note=document.createElement("p");note.className="reading-choice-label";note.textContent="O autor ainda está preparando os quadros deste capítulo.";readingChoices.append(note);
+    }
+    const traditional=document.createElement("a");traditional.className="btn";traditional.textContent="Abrir página inteira";traditional.href=traditionalUrl;readingChoices.append(traditional);
+   }else{
+    label.textContent="COMO DESEJA LER?";readingChoices.append(label);
+    const traditional=document.createElement("a");traditional.className="btn primary";traditional.textContent="Tradicional · Página inteira";traditional.href=traditionalUrl;readingChoices.append(traditional);
+    if(experienceReady){readingChoices.classList.add("has-experience");const experience=document.createElement("a");experience.className="btn";experience.textContent="Experiência · Um quadrinho por vez";experience.href=experienceUrl;readingChoices.append(experience)}
+   }
+  }else{readingChoices.textContent="Este mangá ainda não possui capítulos publicados."}
 
   async function mountFollowButton(targetId,anchor){
    if(!targetId||!anchor)return;
