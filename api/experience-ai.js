@@ -372,10 +372,13 @@ async function reviewChapter(token,ids,decision,feedback){
       return !Array.isArray(page.panels)||!page.panels.length||page.panels.some(function(panel){
         return !panel||![panel.x,panel.y,panel.width,panel.height].every(function(value){return Number.isFinite(Number(value));})||
           Number(panel.x)<0||Number(panel.y)<0||Number(panel.width)<=0||Number(panel.height)<=0||
-          Number(panel.x)+Number(panel.width)>1.000001||Number(panel.y)+Number(panel.height)>1.000001||!!panel.video_job_id;
+          Number(panel.x)+Number(panel.width)>1.000001||Number(panel.y)+Number(panel.height)>1.000001||
+          !!panel.video_job_id||!panel.video_url||
+          (!!(panel.narration||(Array.isArray(panel.dialogue)&&panel.dialogue.length))&&!panel.audio_url)||
+          (!!panel.sound_effect&&!panel.sound_url);
       });
     });
-    if(!pages.length||invalid)throw new Error("Todas as páginas precisam ter seus quadrinhos organizados e as animações concluídas antes da aprovação.");
+    if(!pages.length||invalid)throw new Error("Todas as páginas precisam ter seus quadros, animações e os áudios/efeitos necessários concluídos antes da aprovação.");
     cleanup=await publishDraftPages(token,ids,pages);cleanup.push(...await publishDraftMangaAssets(token,ids.mangaId));
   }
   const nextStatus=decision==="approve"?"published":"rejected";
