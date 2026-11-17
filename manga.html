@@ -214,7 +214,7 @@ main#main{padding-top:34px!important}
   if(cs.length){
    const firstChapter=cs[0],experienceReady=experienceReadyByChapter[firstChapter.id]===true;
    const label=document.createElement("div");label.className="reading-choice-label";
-   const experienceUrl="reader-experience.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(firstChapter.id)+"&return_to=manga";
+   const experienceUrl="reader-experience.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(firstChapter.id)+"&return_to=manga"+(firstChapter.review_status&&firstChapter.review_status!=="published"?"&preview=1":"");
    const traditionalUrl="reader.html?manga_id="+encodeURIComponent(m.id)+"&chapter_id="+encodeURIComponent(firstChapter.id);
    if(m.publication_mode==="experience"){
     label.textContent=experienceReady?"MODO EXPERIÊNCIA":"PREPARANDO MODO EXPERIÊNCIA";readingChoices.append(label);
