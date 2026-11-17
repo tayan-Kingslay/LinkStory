@@ -33,12 +33,14 @@ async function verifyChapterAndPage(token, ids, requirePage) {
   const chapters = await chapterResponse.json();
   if (!chapters.length) throw new Error("Este capítulo não pertence à obra informada.");
   if (requirePage) {
-    const pageUrl = SUPABASE_URL + "/rest/v1/manga_pages?id=eq." + encodeURIComponent(ids.pageId) + "&chapter_id=eq." + encodeURIComponent(ids.chapterId) + "&select=id";
+    const pageUrl = SUPABASE_URL + "/rest/v1/manga_pages?id=eq." + encodeURIComponent(ids.pageId) + "&chapter_id=eq." + encodeURIComponent(ids.chapterId) + "&select=id,image_url,panels";
     const pageResponse = await fetch(pageUrl, { headers: headers });
     if (!pageResponse.ok) throw new Error("Não foi possível validar a página.");
     const pages = await pageResponse.json();
     if (!pages.length) throw new Error("Esta página não pertence ao capítulo informado.");
+    return pages[0];
   }
+  return null;
 }
 async function store(token, path, bytes, type) {
   const safe = path.split("/").map(encodeURIComponent).join("/");
@@ -154,25 +156,70 @@ function imageData(value) {
   if (!bytes.length || bytes.length > 12*1024*1024) throw new Error("Imagem do quadro excede 12 MB.");
   return {type:match[1],bytes:bytes};
 }
-async function animate(token, body, ids) {
+async function updatePanelData(token, ids, patch) {
+  const headers = { apikey: SUPABASE_KEY, Authorization: "Bearer " + token, "Content-Type": "application/json", Prefer: "return=representation" };
+  const pageUrl = SUPABASE_URL + "/rest/v1/manga_pages?id=eq." + encodeURIComponent(ids.pageId) + "&chapter_id=eq." + encodeURIComponent(ids.chapterId) + "&select=id,panels";
+  const get = await fetch(pageUrl, { headers: headers });
+  if (!get.ok) throw new Error("Não foi possível carregar o quadro para atualizar a geração.");
+  const rows = await get.json();
+  if (!rows.length) throw new Error("Página não encontrada.");
+  const panels = Array.isArray(rows[0].panels) ? rows[0].panels.slice() : [];
+  const index = ids.panelIndex - 1;
+  if (!panels[index]) throw new Error("Quadro não encontrado nesta página.");
+  panels[index] = Object.assign({}, panels[index], patch);
+  const update = await fetch(pageUrl, { method:"PATCH", headers:headers, body:JSON.stringify({panels:panels}) });
+  if (!update.ok) throw new Error("Não foi possível salvar o estado da animação.");
+  return panels[index];
+}
+async function startAnimation(token, body, ids) {
   const key = process.env.GOOGLE_GEMINI_API_KEY;
   if (!key) throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
   const image = imageData(body.panelImage);
   const prompt = "Anime este quadro como animação 2D de mangá. Preserve rigorosamente rosto, identidade, roupas, proporções, cores, cenário e traço original. Não acrescente personagens, objetos, textos ou balões. Não redesenhe o personagem. Movimento natural e controlado, sem deformações. Cena: " + String(body.description || "") + ". Ação: " + String(body.action || "movimento sutil") + ". Câmera: " + String(body.camera || "movimento suave") + ". Direção: " + String(body.motionPrompt || "");
   const aspect = Number(body.aspectRatio) >= 1 ? "16:9" : "9:16";
   const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions?key=" + encodeURIComponent(key), {
-    method:"POST", headers:{"x-goog-api-key":key,"Content-Type":"application/json"},
-    body:JSON.stringify({model:"gemini-omni-1.1-flash",input:[{type:"image",data:image.bytes.toString("base64"),mime_type:image.type},{type:"text",text:prompt}],generation_config:{video_config:{task:"image_to_video"}},response_format:{type:"video",resolution:"360p",aspect_ratio:aspect}})
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"gemini-omni-1.1-flash",background:true,input:[{type:"image",data:image.bytes.toString("base64"),mime_type:image.type},{type:"text",text:prompt}],generation_config:{video_config:{task:"image_to_video"}},response_format:{type:"video",resolution:"360p",aspect_ratio:aspect}})
   });
   const data = await response.json().catch(function(){return {};});
   if (!response.ok) throw new Error(data.error && data.error.message ? data.error.message : "A IA de animação falhou.");
-  let encoded = "";
-  (data.steps || []).forEach(function(step){(step.content || []).forEach(function(part){if(part.type==="video" && part.data) encoded=part.data;});});
-  if (!encoded && data.output_video && data.output_video.data) encoded=data.output_video.data;
-  if (!encoded) throw new Error("A IA não retornou o arquivo de vídeo.");
+  if (data.output_video && data.output_video.data) {
+    const bytes = Buffer.from(data.output_video.data,"base64");
+    if (!bytes.length || bytes.length > 35*1024*1024) throw new Error("Vídeo excede o limite de 35 MB.");
+    const url = await store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4");
+    await updatePanelData(token,ids,{video_url:url,video_job_id:null,video_error:null});
+    return {videoUrl:url,pending:false};
+  }
+  if (!data.id) throw new Error("O Google não retornou o identificador da animação.");
+  await updatePanelData(token,ids,{video_job_id:data.id,video_error:null});
+  return {jobId:data.id,pending:true};
+}
+async function animationStatus(token, body, ids) {
+  const key = process.env.GOOGLE_GEMINI_API_KEY;
+  const jobId = String(body.jobId || "");
+  if (!key) throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
+  if (!/^[A-Za-z0-9_-]{5,200}$/.test(jobId)) throw new Error("Identificador de geração inválido.");
+  const pageUrl = SUPABASE_URL + "/rest/v1/manga_pages?id=eq." + encodeURIComponent(ids.pageId) + "&chapter_id=eq." + encodeURIComponent(ids.chapterId) + "&select=id,panels";
+  const headers = { apikey:SUPABASE_KEY, Authorization:"Bearer "+token };
+  const pageResponse = await fetch(pageUrl,{headers:headers});
+  if (!pageResponse.ok) throw new Error("Não foi possível validar a geração.");
+  const pages = await pageResponse.json();
+  const panel = pages[0] && Array.isArray(pages[0].panels) ? pages[0].panels[ids.panelIndex-1] : null;
+  if (!panel || panel.video_job_id !== jobId) throw new Error("Esta geração não pertence ao quadro selecionado.");
+  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions/"+encodeURIComponent(jobId)+"?key="+encodeURIComponent(key),{headers:{"Content-Type":"application/json"}});
+  const data = await response.json().catch(function(){return {};});
+  if (!response.ok) throw new Error(data.error && data.error.message ? data.error.message : "Não foi possível consultar a animação.");
+  if (data.status==="failed" || data.status==="cancelled" || data.status==="canceled") {
+    await updatePanelData(token,ids,{video_job_id:null,video_error:String(data.error && data.error.message || "A geração de vídeo falhou.").slice(0,300)});
+    throw new Error("A geração da animação falhou. Você pode tentar novamente.");
+  }
+  const encoded = data.output_video && data.output_video.data || "";
+  if (data.status!=="completed" || !encoded) return {pending:true,status:data.status||"running"};
   const bytes = Buffer.from(encoded,"base64");
   if (!bytes.length || bytes.length > 35*1024*1024) throw new Error("Vídeo excede o limite de 35 MB.");
-  return store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4");
+  const url = await store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4");
+  await updatePanelData(token,ids,{video_url:url,video_job_id:null,video_error:null});
+  return {pending:false,videoUrl:url};
 }
 async function reviewChapter(token, ids, decision, feedback) {
   const headers = { apikey: SUPABASE_KEY, Authorization: "Bearer " + token, "Content-Type": "application/json", Prefer: "return=representation" };
@@ -214,12 +261,16 @@ module.exports = async function handler(req,res) {
     if (!validId(mangaId) || !validId(chapterId) || (!decision && !validId(pageId))) return reply(res,400,{error:"Identificadores inválidos."});
     const auth=await verifyOwner(req,mangaId);
     const ids={mangaId:mangaId,chapterId:chapterId,pageId:pageId,panelIndex:Math.max(1,Math.min(24,Number(body.panelIndex)||1))};
-    await verifyChapterAndPage(auth.token,ids,!decision);
+    const verifiedPage = await verifyChapterAndPage(auth.token,ids,!decision);
     if (decision) return reply(res,200,await reviewChapter(auth.token,ids,body.action,body.reviewFeedback));
-    if (body.action==="analyze") return await analyze(req,res,auth.token,body,ids);
+    if (body.action==="analyze") {
+      if (String(body.pageImageUrl || "") !== String(verifiedPage.image_url || "")) throw new Error("A imagem enviada não corresponde à página deste capítulo.");
+      return await analyze(req,res,auth.token,body,ids);
+    }
     if (body.action==="speech") return reply(res,200,{ok:true,audioUrl:await speech(auth.token,body,ids)});
     if (body.action==="sound") return reply(res,200,{ok:true,soundUrl:await sound(auth.token,body,ids)});
-    if (body.action==="animate") return reply(res,200,{ok:true,videoUrl:await animate(auth.token,body,ids)});
+    if (body.action==="animate") return reply(res,200,Object.assign({ok:true},await startAnimation(auth.token,body,ids)));
+    if (body.action==="animate-status") return reply(res,200,Object.assign({ok:true},await animationStatus(auth.token,body,ids)));
     return reply(res,400,{error:"Etapa de geração desconhecida."});
   } catch(error) {
     console.error("[experience-ai]",error);
