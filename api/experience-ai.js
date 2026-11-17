@@ -18,7 +18,7 @@ async function verifyOwner(req, mangaId) {
   const userRes = await fetch(SUPABASE_URL + "/auth/v1/user", { headers: headers });
   if (!userRes.ok) throw new Error("Sua sessão expirou. Entre novamente.");
   const user = await userRes.json();
-  const mangaRes = await fetch(SUPABASE_URL + "/rest/v1/mangas?id=eq." + encodeURIComponent(mangaId) + "&select=creator_id", { headers: headers });
+  const mangaRes = await fetch(SUPABASE_URL + "/rest/v1/mangas?id=eq." + encodeURIComponent(mangaId) + "&select=creator_id,publication_mode", { headers: headers });
   if (!mangaRes.ok) throw new Error("Não foi possível verificar a autoria.");
   const rows = await mangaRes.json();
   if (!rows[0] || rows[0].creator_id !== user.id) throw new Error("Somente o autor pode gerar esta experiência.");
@@ -232,7 +232,7 @@ async function reviewChapter(token, ids, decision, feedback) {
     const pagesResponse = await fetch(SUPABASE_URL + "/rest/v1/manga_pages?chapter_id=eq." + encodeURIComponent(ids.chapterId) + "&select=id,panels&order=page_number.asc", { headers: headers });
     if (!pagesResponse.ok) throw new Error("Não foi possível conferir as páginas.");
     const pages = await pagesResponse.json();
-    if (!pages.length || pages.some(function(page) { return !Array.isArray(page.panels) || !page.panels.length; })) {
+    if (!pages.length || pages.some(function(page) { return !Array.isArray(page.panels) || !page.panels.length || page.panels.some(function(panel) { return !panel || ![panel.x,panel.y,panel.width,panel.height].every(function(value){return Number.isFinite(Number(value));}) || Number(panel.x)<0 || Number(panel.y)<0 || Number(panel.width)<=0 || Number(panel.height)<=0 || Number(panel.x)+Number(panel.width)>1.000001 || Number(panel.y)+Number(panel.height)>1.000001; }); })) {
       throw new Error("Todas as páginas precisam ter seus quadrinhos organizados antes da aprovação.");
     }
   }
