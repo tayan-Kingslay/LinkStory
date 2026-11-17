@@ -63,8 +63,8 @@ async function startStory(){
    const panel=panels[i],text=String(panel.storyText||'').trim(),effect=String(panel.soundEffectPrompt||'').trim();
    if(!text&&!effect)continue;
    go(i);const tasks=[];
-   if(effect){setStatus('Preparando efeito sonoro e narração do quadro '+(i+1)+'…');tasks.push((async()=>{let url=panel.sfxAudioUrl;if(!url)url=await fetchStoryAudio('elevenlabs','sfx',effect,session.access_token);if(!storyStopRequested)await playStoryClip(url)})())}
-   if(text){tasks.push((async()=>{let url=panel.voiceAudioUrl;if(!url)url=await fetchStoryAudio('fish','voice',text,session.access_token);if(!storyStopRequested)await playStoryClip(url)})())}
+   if(effect){if(panel.sfxAudioUrl)tasks.push((async()=>{if(!storyStopRequested)await playStoryClip(panel.sfxAudioUrl)})());else setStatus('O efeito sonoro do quadro '+(i+1)+' ainda não foi gerado pelo autor.');}
+   if(text){if(panel.voiceAudioUrl)tasks.push((async()=>{if(!storyStopRequested)await playStoryClip(panel.voiceAudioUrl)})());else setStatus('A narração do quadro '+(i+1)+' ainda não foi gerada pelo autor.');}
    await Promise.all(tasks);
   }
   if(!storyStopRequested)setStatus('Fim da Hora da História.');
