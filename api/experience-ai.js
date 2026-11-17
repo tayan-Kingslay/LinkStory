@@ -95,7 +95,7 @@ async function analyze(req, res, token, body, ids) {
       description:String(p.description || "").slice(0,1000), action:String(p.action || "").slice(0,500),
       camera:String(p.camera || "").slice(0,250), narration:String(p.narration || "").slice(0,1000),
       dialogue:(Array.isArray(p.dialogue) ? p.dialogue : []).slice(0,8).map(function(d){
-        return { speaker:String(d.speaker || "Personagem").slice(0,70), text:String(d.text || "").slice(0,450), emotion:String(d.emotion || "natural").slice(0,40), delivery:String(d.delivery || "").slice(0,70) };
+        return { speaker:String(d.speaker || "Personagem").slice(0,70), speaker_confidence:Math.max(0,Math.min(1,Number(d.speaker_confidence)||0)), text:String(d.text || "").slice(0,450), emotion:String(d.emotion || "natural").slice(0,40), delivery:String(d.delivery || "").slice(0,70) };
       }).filter(function(d){ return d.text.trim(); }),
       sound_effect:String(p.sound_effect || "").slice(0,250), motion_prompt:String(p.motion_prompt || "").slice(0,800)
     };
