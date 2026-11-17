@@ -163,4 +163,4 @@ module.exports = async function handler(req,res) {
     return reply(res,400,{error:String(error && error.message || "Erro ao gerar experiência.").slice(0,500)});
   }
 };
-module.exports.config={maxDuration:300,bodyParser:{sizeLimit:"18mb"}};
+module.exports.config={maxDuration:60,bodyParser:{sizeLimit:"18mb"}};
