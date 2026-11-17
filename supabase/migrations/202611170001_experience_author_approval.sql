@@ -5,6 +5,29 @@ alter table public.manga_chapters
 alter table public.manga_chapters
   add column if not exists review_feedback text,
   add column if not exists reviewed_at timestamptz;
+alter table public.manga_pages add column if not exists private_image_path text;
+
+insert into storage.buckets (id,name,public,file_size_limit,allowed_mime_types)
+values ('linkstory-drafts','linkstory-drafts',false,52428800,array['image/jpeg','image/png','image/webp','audio/mpeg','video/mp4']::text[])
+on conflict (id) do update set public=false,file_size_limit=excluded.file_size_limit,allowed_mime_types=excluded.allowed_mime_types;
+
+drop policy if exists linkstory_drafts_owner_read on storage.objects;
+create policy linkstory_drafts_owner_read on storage.objects for select to authenticated
+using (bucket_id='linkstory-drafts' and exists(select 1 from public.mangas m where m.id::text=split_part(name,'/',2) and m.creator_id=(select auth.uid()) and is_creator()));
+
+drop policy if exists linkstory_drafts_owner_insert on storage.objects;
+create policy linkstory_drafts_owner_insert on storage.objects for insert to authenticated
+with check (bucket_id='linkstory-drafts' and exists(select 1 from public.mangas m where m.id::text=split_part(name,'/',2) and m.creator_id=(select auth.uid()) and is_creator()));
+
+drop policy if exists linkstory_drafts_owner_update on storage.objects;
+create policy linkstory_drafts_owner_update on storage.objects for update to authenticated
+using (bucket_id='linkstory-drafts' and exists(select 1 from public.mangas m where m.id::text=split_part(name,'/',2) and m.creator_id=(select auth.uid()) and is_creator()))
+with check (bucket_id='linkstory-drafts' and exists(select 1 from public.mangas m where m.id::text=split_part(name,'/',2) and m.creator_id=(select auth.uid()) and is_creator()));
+
+drop policy if exists linkstory_drafts_owner_delete on storage.objects;
+create policy linkstory_drafts_owner_delete on storage.objects for delete to authenticated
+using (bucket_id='linkstory-drafts' and exists(select 1 from public.mangas m where m.id::text=split_part(name,'/',2) and m.creator_id=(select auth.uid()) and is_creator()));
+
 
 do $$
 begin
