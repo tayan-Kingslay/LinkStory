@@ -89,12 +89,25 @@ async function speech(token, body, ids) {
   const key = process.env.ELEVENLABS_API_KEY;
   if (!key) throw new Error("ELEVENLABS_API_KEY não está configurada no Vercel.");
   const lines = [];
-  const narrator = String(body.narration || "").trim().slice(0,1000);
+  let remaining = 2000;
+  const narrator = String(body.narration || "").trim();
   const narratorVoice = String(body.narratorVoiceId || process.env.ELEVENLABS_NARRATOR_VOICE_ID || DEFAULT_VOICE);
-  if (narrator) lines.push({ text:"[narrando com emoção natural] " + narrator, voice_id:narratorVoice });
+  if (narrator && remaining > 0) {
+    const tagged = "[narrando com emoção natural] " + narrator;
+    const safe = tagged.slice(0, remaining);
+    lines.push({ text:safe, voice_id:narratorVoice });
+    remaining -= safe.length;
+  }
   (Array.isArray(body.dialogue) ? body.dialogue : []).slice(0,8).forEach(function(line){
-    const text = String(line.text || "").trim().slice(0,450);
-    if (text) lines.push({ text:"[" + String(line.emotion || "natural").slice(0,40) + "] " + text, voice_id:String(line.voiceId || process.env.ELEVENLABS_CHARACTER_VOICE_ID || DEFAULT_VOICE) });
+    if (remaining <= 0) return;
+    const raw = String(line.text || "").trim();
+    if (!raw) return;
+    const tagged = "[" + String(line.emotion || "natural").slice(0,40) + "] " + raw;
+    const safe = tagged.slice(0, Math.min(450, remaining));
+    if (safe) {
+      lines.push({ text:safe, voice_id:String(line.voiceId || process.env.ELEVENLABS_CHARACTER_VOICE_ID || DEFAULT_VOICE) });
+      remaining -= safe.length;
+    }
   });
   if (!lines.length) return null;
   const response = await fetch("https://api.elevenlabs.io/v1/text-to-dialogue?output_format=mp3_44100_128", {
@@ -133,7 +146,7 @@ async function animate(token, body, ids) {
   const aspect = Number(body.aspectRatio) >= 1 ? "16:9" : "9:16";
   const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
     method:"POST", headers:{"x-goog-api-key":key,"Content-Type":"application/json"},
-    body:JSON.stringify({model:"gemini-omni-1.1-flash",input:[{type:"image",data:image.bytes.toString("base64"),mime_type:image.type},{type:"text",text:prompt}],generation_config:{video_config:{task:"image_to_video"}},response_format:{type:"video",resolution:"360p",aspect_ratio:aspect}})
+    body:JSON.stringify({model:"gemini-omni-1.1-flash",input:[{type:"image",data:image.bytes.toString("base64"),mime_type:image.type},{type:"text",text:prompt}],response_format:{type:"video",resolution:"360p",aspect_ratio:aspect,duration:"3s"}})
   });
   const data = await response.json().catch(function(){return {};});
   if (!response.ok) throw new Error(data.error && data.error.message ? data.error.message : "A IA de animação falhou.");
