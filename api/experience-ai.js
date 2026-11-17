@@ -103,6 +103,56 @@ async function analyze(req, res, token, body, ids) {
   if (!panels.length) throw new Error("A IA não encontrou quadros confiáveis. Nenhuma alteração foi feita.");
   return reply(res, 200, { ok:true, readingDirection:result.reading_direction || "rtl", panels:panels });
 }
+async function planTrailer(token, ids) {
+  const key = process.env.GOOGLE_GEMINI_API_KEY;
+  if (!key) throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
+  const mangaResponse = await fetch(SUPABASE_URL + "/rest/v1/mangas?id=eq." + encodeURIComponent(ids.mangaId) + "&select=id,title,status,cover_url", { headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token} });
+  if (!mangaResponse.ok) throw new Error("Não foi possível consultar a obra.");
+  const mangas = await mangaResponse.json();
+  if (!mangas[0] || mangas[0].status !== "published") throw new Error("O trailer só pode ser criado depois que a obra estiver publicada.");
+  const chaptersResponse = await fetch(SUPABASE_URL + "/rest/v1/manga_chapters?manga_id=eq." + encodeURIComponent(ids.mangaId) + "&review_status=eq.published&select=id,chapter_number,title&order=chapter_number.asc", { headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token} });
+  if (!chaptersResponse.ok) throw new Error("Não foi possível consultar os capítulos publicados.");
+  const chapters = await chaptersResponse.json();
+  if (!chapters.length) throw new Error("A obra ainda não tem capítulos aprovados.");
+  const chapterIds = chapters.map(function(ch){return ch.id;});
+  const pagesResponse = await fetch(SUPABASE_URL + "/rest/v1/manga_pages?chapter_id=in.(" + chapterIds.map(encodeURIComponent).join(",") + ")&select=id,chapter_id,page_number,image_url,panels&order=page_number.asc", { headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token} });
+  if (!pagesResponse.ok) throw new Error("Não foi possível carregar as páginas publicadas.");
+  const pages = await pagesResponse.json();
+  const chapterMap = Object.fromEntries(chapters.map(function(ch){return[ch.id,ch];}));
+  const candidates = [];
+  pages.forEach(function(page){
+    (Array.isArray(page.panels)?page.panels:[]).forEach(function(panel,index){
+      if (!panel || ![panel.x,panel.y,panel.width,panel.height].every(function(v){return Number.isFinite(Number(v));})) return;
+      candidates.push({
+        pageId:page.id,panelIndex:index+1,chapterId:page.chapter_id,
+        chapterNumber:chapterMap[page.chapter_id].chapter_number,
+        chapterTitle:chapterMap[page.chapter_id].title,
+        pageNumber:page.page_number,pageImageUrl:page.image_url,
+        panelImageUrl:panel.image_url||null,videoUrl:panel.video_url||null,
+        narration:String(panel.narration||"").slice(0,500),
+        dialogue:(Array.isArray(panel.dialogue)?panel.dialogue:[]).slice(0,4).map(function(d){return String(d.text||"").slice(0,180)}),
+        description:String(panel.description||"").slice(0,350),
+        action:String(panel.action||"").slice(0,250),
+        soundEffect:String(panel.sound_effect||"").slice(0,120),
+        x:Number(panel.x),y:Number(panel.y),width:Number(panel.width),height:Number(panel.height)
+      });
+    });
+  });
+  if (!candidates.length) throw new Error("Organize os quadros dos capítulos publicados antes de criar o trailer.");
+  const compact = candidates.slice(0,100).map(function(c,i){return {id:i,chapter:c.chapterNumber,page:c.pageNumber,description:c.description,action:c.action,narration:c.narration,dialogue:c.dialogue,soundEffect:c.soundEffect,hasAnimation:!!c.videoUrl};});
+  const instruction = "Você é editor de trailers de mangá. Escolha de 4 a 8 cenas entre os IDs fornecidos, sem repetir IDs. Crie uma progressão curta: gancho inicial, escalada, momento emocional ou de ação e encerramento que desperte curiosidade sem revelar o final. Prefira cenas com contexto e falas fortes. Não invente acontecimentos. Retorne JSON válido em português: title (até 80 caracteres), hook (até 140), scenes (lista de id, caption até 100 caracteres, reason até 160, duration entre 2 e 5 segundos). Não escolha cenas sem descrição suficiente se houver opções melhores. IDs disponíveis: " + JSON.stringify(compact);
+  const result = await gemini(key,{contents:[{role:"user",parts:[{text:instruction}]}],generationConfig:{temperature:0.25,responseMimeType:"application/json"}});
+  const seen = new Set();
+  const scenes = (Array.isArray(result.scenes)?result.scenes:[]).slice(0,8).map(function(scene){
+    const id=Number(scene.id);
+    if (!Number.isInteger(id)||id<0||id>=Math.min(candidates.length,100)||seen.has(id)) return null;
+    seen.add(id);
+    const c=candidates[id];
+    return Object.assign({},c,{caption:String(scene.caption||"").slice(0,100),reason:String(scene.reason||"").slice(0,160),duration:Math.max(2,Math.min(5,Number(scene.duration)||3.5))});
+  }).filter(Boolean);
+  if (scenes.length<3) throw new Error("A IA não encontrou cenas suficientes para um trailer consistente.");
+  return {ok:true,title:String(result.title||mangas[0].title).slice(0,80),hook:String(result.hook||"Uma nova história começa.").slice(0,140),coverUrl:mangas[0].cover_url||null,scenes:scenes};
+}
 async function speech(token, body, ids) {
   const key = process.env.ELEVENLABS_API_KEY;
   if (!key) throw new Error("ELEVENLABS_API_KEY não está configurada no Vercel.");
@@ -263,6 +313,7 @@ module.exports = async function handler(req,res) {
     const ids={mangaId:mangaId,chapterId:chapterId,pageId:pageId,panelIndex:Math.max(1,Math.min(24,Number(body.panelIndex)||1))};
     const verifiedPage = await verifyChapterAndPage(auth.token,ids,!decision);
     if (decision) return reply(res,200,await reviewChapter(auth.token,ids,body.action,body.reviewFeedback));
+    if (body.action==="trailer-plan") return reply(res,200,await planTrailer(auth.token,ids));
     if (body.action==="analyze") {
       if (String(body.pageImageUrl || "") !== String(verifiedPage.image_url || "")) throw new Error("A imagem enviada não corresponde à página deste capítulo.");
       return await analyze(req,res,auth.token,body,ids);
