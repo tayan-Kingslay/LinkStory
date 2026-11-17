@@ -145,6 +145,35 @@ async function animate(token, body, ids) {
   if (!bytes.length || bytes.length > 35*1024*1024) throw new Error("Vídeo excede o limite de 35 MB.");
   return store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4");
 }
+async function reviewChapter(token, ids, decision) {
+  const headers = { apikey: SUPABASE_KEY, Authorization: "Bearer " + token, "Content-Type": "application/json", Prefer: "return=representation" };
+  const chapterUrl = SUPABASE_URL + "/rest/v1/manga_chapters?id=eq." + encodeURIComponent(ids.chapterId) + "&manga_id=eq." + encodeURIComponent(ids.mangaId) + "&select=id,review_status";
+  const chapterResponse = await fetch(chapterUrl, { headers: headers });
+  if (!chapterResponse.ok) throw new Error("Não foi possível conferir o capítulo.");
+  const chapters = await chapterResponse.json();
+  if (!chapters.length) throw new Error("Capítulo não encontrado nesta obra.");
+  if (decision === "approve") {
+    const pagesResponse = await fetch(SUPABASE_URL + "/rest/v1/manga_pages?chapter_id=eq." + encodeURIComponent(ids.chapterId) + "&select=id,panels&order=page_number.asc", { headers: headers });
+    if (!pagesResponse.ok) throw new Error("Não foi possível conferir as páginas.");
+    const pages = await pagesResponse.json();
+    if (!pages.length || pages.some(function(page) { return !Array.isArray(page.panels) || !page.panels.length; })) {
+      throw new Error("Todas as páginas precisam ter seus quadrinhos organizados antes da aprovação.");
+    }
+  }
+  const nextStatus = decision === "approve" ? "published" : "rejected";
+  const updateChapter = await fetch(chapterUrl, { method: "PATCH", headers: headers, body: JSON.stringify({ review_status: nextStatus }) });
+  if (!updateChapter.ok) throw new Error("Não foi possível salvar a decisão de revisão.");
+  if (decision === "approve") {
+    const mangaResponse = await fetch(SUPABASE_URL + "/rest/v1/mangas?id=eq." + encodeURIComponent(ids.mangaId) + "&select=id,status", { headers: headers });
+    if (!mangaResponse.ok) throw new Error("Capítulo aprovado, mas não foi possível consultar a obra.");
+    const mangas = await mangaResponse.json();
+    if (mangas[0] && mangas[0].status !== "published") {
+      const publishResponse = await fetch(SUPABASE_URL + "/rest/v1/mangas?id=eq." + encodeURIComponent(ids.mangaId), { method: "PATCH", headers: headers, body: JSON.stringify({ status: "published", updated_at: new Date().toISOString() }) });
+      if (!publishResponse.ok) throw new Error("Capítulo aprovado, mas a obra ainda não pôde ser publicada. Tente novamente.");
+    }
+  }
+  return { ok: true, reviewStatus: nextStatus };
+}
 module.exports = async function handler(req,res) {
   if (req.method !== "POST") return reply(res,405,{error:"Método não permitido."});
   try {
@@ -153,6 +182,7 @@ module.exports = async function handler(req,res) {
     if (!validId(mangaId) || !validId(chapterId) || !validId(pageId)) return reply(res,400,{error:"Identificadores inválidos."});
     const auth=await verifyOwner(req,mangaId);
     const ids={mangaId:mangaId,chapterId:chapterId,pageId:pageId,panelIndex:Math.max(1,Math.min(24,Number(body.panelIndex)||1))};
+    if (body.action==="approve" || body.action==="reject") return reply(res,200,await reviewChapter(auth.token,ids,body.action));
     if (body.action==="analyze") return await analyze(req,res,auth.token,body,ids);
     if (body.action==="speech") return reply(res,200,{ok:true,audioUrl:await speech(auth.token,body,ids)});
     if (body.action==="sound") return reply(res,200,{ok:true,soundUrl:await sound(auth.token,body,ids)});
