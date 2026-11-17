@@ -22,7 +22,23 @@ async function verifyOwner(req, mangaId) {
   if (!mangaRes.ok) throw new Error("Não foi possível verificar a autoria.");
   const rows = await mangaRes.json();
   if (!rows[0] || rows[0].creator_id !== user.id) throw new Error("Somente o autor pode gerar esta experiência.");
+  if (rows[0].publication_mode !== "experience") throw new Error("Esta obra não está no modo Melhor Experiência.");
   return { token: token, userId: user.id };
+}
+async function verifyChapterAndPage(token, ids, requirePage) {
+  const headers = { apikey: SUPABASE_KEY, Authorization: "Bearer " + token };
+  const chapterUrl = SUPABASE_URL + "/rest/v1/manga_chapters?id=eq." + encodeURIComponent(ids.chapterId) + "&manga_id=eq." + encodeURIComponent(ids.mangaId) + "&select=id";
+  const chapterResponse = await fetch(chapterUrl, { headers: headers });
+  if (!chapterResponse.ok) throw new Error("Não foi possível validar o capítulo.");
+  const chapters = await chapterResponse.json();
+  if (!chapters.length) throw new Error("Este capítulo não pertence à obra informada.");
+  if (requirePage) {
+    const pageUrl = SUPABASE_URL + "/rest/v1/manga_pages?id=eq." + encodeURIComponent(ids.pageId) + "&chapter_id=eq." + encodeURIComponent(ids.chapterId) + "&select=id";
+    const pageResponse = await fetch(pageUrl, { headers: headers });
+    if (!pageResponse.ok) throw new Error("Não foi possível validar a página.");
+    const pages = await pageResponse.json();
+    if (!pages.length) throw new Error("Esta página não pertence ao capítulo informado.");
+  }
 }
 async function store(token, path, bytes, type) {
   const safe = path.split("/").map(encodeURIComponent).join("/");
@@ -144,9 +160,9 @@ async function animate(token, body, ids) {
   const image = imageData(body.panelImage);
   const prompt = "Anime este quadro como animação 2D de mangá. Preserve rigorosamente rosto, identidade, roupas, proporções, cores, cenário e traço original. Não acrescente personagens, objetos, textos ou balões. Não redesenhe o personagem. Movimento natural e controlado, sem deformações. Cena: " + String(body.description || "") + ". Ação: " + String(body.action || "movimento sutil") + ". Câmera: " + String(body.camera || "movimento suave") + ". Direção: " + String(body.motionPrompt || "");
   const aspect = Number(body.aspectRatio) >= 1 ? "16:9" : "9:16";
-  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions", {
+  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions?key=" + encodeURIComponent(key), {
     method:"POST", headers:{"x-goog-api-key":key,"Content-Type":"application/json"},
-    body:JSON.stringify({model:"gemini-omni-1.1-flash",input:[{type:"image",data:image.bytes.toString("base64"),mime_type:image.type},{type:"text",text:prompt}],response_format:{type:"video",resolution:"360p",aspect_ratio:aspect,duration:"3s"}})
+    body:JSON.stringify({model:"gemini-omni-1.1-flash",input:[{type:"image",data:image.bytes.toString("base64"),mime_type:image.type},{type:"text",text:prompt}],generation_config:{video_config:{task:"image_to_video"}},response_format:{type:"video",resolution:"360p",aspect_ratio:aspect}})
   });
   const data = await response.json().catch(function(){return {};});
   if (!response.ok) throw new Error(data.error && data.error.message ? data.error.message : "A IA de animação falhou.");
@@ -158,7 +174,7 @@ async function animate(token, body, ids) {
   if (!bytes.length || bytes.length > 35*1024*1024) throw new Error("Vídeo excede o limite de 35 MB.");
   return store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4");
 }
-async function reviewChapter(token, ids, decision) {
+async function reviewChapter(token, ids, decision, feedback) {
   const headers = { apikey: SUPABASE_KEY, Authorization: "Bearer " + token, "Content-Type": "application/json", Prefer: "return=representation" };
   const chapterUrl = SUPABASE_URL + "/rest/v1/manga_chapters?id=eq." + encodeURIComponent(ids.chapterId) + "&manga_id=eq." + encodeURIComponent(ids.mangaId) + "&select=id,review_status";
   const chapterResponse = await fetch(chapterUrl, { headers: headers });
@@ -173,8 +189,10 @@ async function reviewChapter(token, ids, decision) {
       throw new Error("Todas as páginas precisam ter seus quadrinhos organizados antes da aprovação.");
     }
   }
+  const note = String(feedback || "").trim().slice(0,1000);
+  if (decision === "reject" && !note) throw new Error("Explique qual parte precisa ser corrigida antes de reprovar.");
   const nextStatus = decision === "approve" ? "published" : "rejected";
-  const updateChapter = await fetch(chapterUrl, { method: "PATCH", headers: headers, body: JSON.stringify({ review_status: nextStatus }) });
+  const updateChapter = await fetch(chapterUrl, { method: "PATCH", headers: headers, body: JSON.stringify({ review_status: nextStatus, review_feedback: decision === "reject" ? note : null, reviewed_at: new Date().toISOString() }) });
   if (!updateChapter.ok) throw new Error("Não foi possível salvar a decisão de revisão.");
   if (decision === "approve") {
     const mangaResponse = await fetch(SUPABASE_URL + "/rest/v1/mangas?id=eq." + encodeURIComponent(ids.mangaId) + "&select=id,status", { headers: headers });
@@ -192,10 +210,12 @@ module.exports = async function handler(req,res) {
   try {
     const body=req.body || {};
     const mangaId=body.mangaId, chapterId=body.chapterId, pageId=body.pageId;
-    if (!validId(mangaId) || !validId(chapterId) || !validId(pageId)) return reply(res,400,{error:"Identificadores inválidos."});
+    const decision = body.action==="approve" || body.action==="reject";
+    if (!validId(mangaId) || !validId(chapterId) || (!decision && !validId(pageId))) return reply(res,400,{error:"Identificadores inválidos."});
     const auth=await verifyOwner(req,mangaId);
     const ids={mangaId:mangaId,chapterId:chapterId,pageId:pageId,panelIndex:Math.max(1,Math.min(24,Number(body.panelIndex)||1))};
-    if (body.action==="approve" || body.action==="reject") return reply(res,200,await reviewChapter(auth.token,ids,body.action));
+    await verifyChapterAndPage(auth.token,ids,!decision);
+    if (decision) return reply(res,200,await reviewChapter(auth.token,ids,body.action,body.reviewFeedback));
     if (body.action==="analyze") return await analyze(req,res,auth.token,body,ids);
     if (body.action==="speech") return reply(res,200,{ok:true,audioUrl:await speech(auth.token,body,ids)});
     if (body.action==="sound") return reply(res,200,{ok:true,soundUrl:await sound(auth.token,body,ids)});

@@ -2,6 +2,9 @@
 -- Existing chapters remain public; only newly created experience chapters start private.
 alter table public.manga_chapters
   add column if not exists review_status text not null default 'published';
+alter table public.manga_chapters
+  add column if not exists review_feedback text,
+  add column if not exists reviewed_at timestamptz;
 
 do $$
 begin
