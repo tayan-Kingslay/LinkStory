@@ -170,6 +170,20 @@ async function planTrailer(token, ids) {
   if (scenes.length<3) throw new Error("A IA não encontrou cenas suficientes para um trailer consistente.");
   return {ok:true,title:String(result.title||mangas[0].title).slice(0,80),hook:String(result.hook||"Uma nova história começa.").slice(0,140),coverUrl:mangas[0].cover_url||null,scenes:scenes};
 }
+async function revisePanel(token,body,ids,verifiedPage){
+  const key=process.env.GOOGLE_GEMINI_API_KEY;
+  if(!key)throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
+  const panels=Array.isArray(verifiedPage.panels)?verifiedPage.panels:[];
+  const current=panels[ids.panelIndex-1];
+  if(!current)throw new Error("Quadro não encontrado nesta página.");
+  const image=imageData(body.panelImage);
+  const instruction="Revise somente o conteúdo narrativo do quadro indicado, obedecendo exatamente ao pedido do autor. Não invente personagens, falas, ações ou efeitos que não estejam visíveis. Preserve a identidade dos personagens e o sentido da cena. Se a fala não puder ser atribuída com segurança, use speaker_confidence abaixo de 0.6 e não chute o nome. Retorne JSON com description, action, camera, narration, dialogue (speaker,speaker_confidence,text,emotion,delivery), sound_effect e motion_prompt. Pedido do autor: "+String(body.feedback||"").slice(0,1000)+". Conteúdo atual: "+JSON.stringify({description:current.description,action:current.action,camera:current.camera,narration:current.narration,dialogue:current.dialogue,sound_effect:current.sound_effect,motion_prompt:current.motion_prompt});
+  const result=await gemini(key,{contents:[{role:"user",parts:[{inline_data:{mime_type:image.type,data:image.bytes.toString("base64")}},{text:instruction}]}],generationConfig:{responseMimeType:"application/json"}});
+  const dialogue=Array.isArray(result.dialogue)?result.dialogue.slice(0,8).map(function(d){return {speaker:String(d.speaker||"Personagem").slice(0,70),speaker_confidence:Math.max(0,Math.min(1,Number(d.speaker_confidence)||0)),text:String(d.text||"").slice(0,450),emotion:String(d.emotion||"natural").slice(0,40),delivery:String(d.delivery||"").slice(0,70)}}):[];
+  const revised=Object.assign({},current,{description:String(result.description||current.description||"").slice(0,500),action:String(result.action||current.action||"").slice(0,300),camera:String(result.camera||current.camera||"").slice(0,180),narration:String(result.narration||"").slice(0,1000),dialogue:dialogue,sound_effect:String(result.sound_effect||"").slice(0,180),motion_prompt:String(result.motion_prompt||"").slice(0,500),audio_url:null,sound_url:null,video_url:null,video_job_id:null,audio_error:null,sound_error:null,video_error:null});
+  await updatePanelData(token,ids,revised);
+  return {ok:true,panel:revised};
+}
 async function speech(token, body, ids) {
   const key = process.env.ELEVENLABS_API_KEY;
   if (!key) throw new Error("ELEVENLABS_API_KEY não está configurada no Vercel.");
@@ -392,6 +406,7 @@ module.exports = async function handler(req,res) {
     if(verifiedPage)ids.privateDraft=verifiedPage.review_status!=="published";
     if (decision) return reply(res,200,await reviewChapter(auth.token,ids,body.action,body.reviewFeedback));
     if (body.action==="trailer-plan") return reply(res,200,await planTrailer(auth.token,ids));
+    if (body.action==="revise-panel") return reply(res,200,await revisePanel(auth.token,body,ids,verifiedPage));
     if (body.action==="analyze") {
       return await analyze(req,res,auth.token,body,ids,verifiedPage);
     }
