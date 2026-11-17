@@ -26,6 +26,15 @@ module.exports = async function handler(req, res) {
     if (!user?.id) return send(res, 401, { error: 'Sessão inválida.' });
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    const mangaId = String(body.mangaId || ''), chapterId = String(body.chapterId || '');
+    if (!/^[0-9a-f-]{36}$/i.test(mangaId) || !/^[0-9a-f-]{36}$/i.test(chapterId)) return send(res, 400, { error: 'Identificação da obra e do capítulo é obrigatória.' });
+    const ownerResponse = await fetch(SUPABASE_URL + '/rest/v1/mangas?id=eq.' + encodeURIComponent(mangaId) + '&select=id,creator_id', { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + token } });
+    const owners = ownerResponse.ok ? await ownerResponse.json() : [];
+    if (!Array.isArray(owners) || owners.length !== 1 || owners[0].creator_id !== user.id) return send(res, 403, { error: 'Somente o autor da obra pode analisar suas cenas.' });
+    const chapterResponse = await fetch(SUPABASE_URL + '/rest/v1/manga_chapters?id=eq.' + encodeURIComponent(chapterId) + '&manga_id=eq.' + encodeURIComponent(mangaId) + '&select=id', { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + token } });
+    const chapters = chapterResponse.ok ? await chapterResponse.json() : [];
+    if (!Array.isArray(chapters) || chapters.length !== 1) return send(res, 403, { error: 'O capítulo não pertence a esta obra.' });
+ typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     const image = String(body.imageBase64 || '');
     const mimeType = String(body.mimeType || 'image/jpeg');
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(mimeType)) return send(res, 400, { error: 'Formato de imagem não suportado.' });
