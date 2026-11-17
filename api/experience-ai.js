@@ -101,8 +101,8 @@ async function analyze(req, res, token, body, ids, verifiedPage) {
   const key = process.env.GOOGLE_GEMINI_API_KEY;
   if (!key) throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
   const image = await getPageForOwner(token,verifiedPage);
-  const instruction = "Você é diretor de storyboard de mangá. Analise a página inteira e detecte cada quadro visível, sua posição e tamanho. Determine a ordem natural de leitura, respeitando evidências visuais e a direção típica do mangá. Não invente quadros nem falas ilegíveis. Retorne somente JSON válido em português com reading_direction e panels. Cada panel deve ter x,y,width,height normalizados entre 0 e 1, order, confidence, description, action, camera, narration, dialogue (lista de speaker,text,emotion,delivery), sound_effect e motion_prompt. Os retângulos devem conter um quadro por inteiro sem incluir quadros vizinhos. Limite a 24. A narração descreve a ação sem repetir falas. Dialogue vazio se não houver fala legível. Preserve exatamente o estilo e a aparência dos personagens. Não altere a página original.";
-  const result = await gemini(key, { contents: [{ role: "user", parts: [{ text: instruction }, { inline_data: { mime_type: image.type, data: image.bytes.toString("base64") } }] }], generationConfig: { temperature: 0.2, responseMimeType: "application/json" } });
+  const instruction = "Você é diretor de storyboard de mangá. Analise a página inteira e detecte cada quadro visível, sua posição e tamanho. Determine a ordem natural de leitura, respeitando evidências visuais e a direção típica do mangá. Não invente quadros nem falas ilegíveis. Retorne somente JSON válido em português com reading_direction e panels. Cada panel deve ter x,y,width,height normalizados entre 0 e 1, order, confidence, description, action, camera, narration, dialogue (lista de speaker,speaker_confidence,text,emotion,delivery), sound_effect e motion_prompt. speaker_confidence deve ser número de 0 a 1; use menos de 0.6 quando não houver evidência visual clara da identidade do locutor. Os retângulos devem conter um quadro por inteiro sem incluir quadros vizinhos. Limite a 24. A narração descreve a ação sem repetir falas. Dialogue vazio se não houver fala legível. Preserve exatamente o estilo e a aparência dos personagens. Não altere a página original.";
+  const result = await gemini(key, { contents: [{ role: "user", parts: [{ text: instruction }, { inline_data: { mime_type: image.type, data: image.bytes.toString("base64") } }] }], generationConfig: { responseMimeType: "application/json" } });
   const panels = (Array.isArray(result.panels) ? result.panels : []).slice(0, 24).map(function(p, i) {
     const x = Number(p.x), y = Number(p.y), width = Number(p.width), height = Number(p.height);
     if (![x,y,width,height].every(Number.isFinite) || x < 0 || y < 0 || width <= 0 || height <= 0 || x + width > 1.001 || y + height > 1.001) return null;
@@ -158,7 +158,7 @@ async function planTrailer(token, ids) {
   if (!candidates.length) throw new Error("Organize os quadros dos capítulos publicados antes de criar o trailer.");
   const compact = candidates.slice(0,100).map(function(c,i){return {id:i,chapter:c.chapterNumber,page:c.pageNumber,description:c.description,action:c.action,narration:c.narration,dialogue:c.dialogue,soundEffect:c.soundEffect,hasAnimation:!!c.videoUrl};});
   const instruction = "Você é editor de trailers de mangá. Escolha de 4 a 8 cenas entre os IDs fornecidos, sem repetir IDs. Crie uma progressão curta: gancho inicial, escalada, momento emocional ou de ação e encerramento que desperte curiosidade sem revelar o final. Prefira cenas com contexto e falas fortes. Não invente acontecimentos. Retorne JSON válido em português: title (até 80 caracteres), hook (até 140), scenes (lista de id, caption até 100 caracteres, reason até 160, duration entre 2 e 5 segundos). Não escolha cenas sem descrição suficiente se houver opções melhores. IDs disponíveis: " + JSON.stringify(compact);
-  const result = await gemini(key,{contents:[{role:"user",parts:[{text:instruction}]}],generationConfig:{temperature:0.25,responseMimeType:"application/json"}});
+  const result = await gemini(key,{contents:[{role:"user",parts:[{text:instruction}]}],generationConfig:{responseMimeType:"application/json"}});
   const seen = new Set();
   const scenes = (Array.isArray(result.scenes)?result.scenes:[]).slice(0,8).map(function(scene){
     const id=Number(scene.id);
@@ -238,6 +238,18 @@ async function updatePanelData(token, ids, patch) {
   if (!update.ok) throw new Error("Não foi possível salvar o estado da animação.");
   return panels[index];
 }
+function extractVideoData(interaction){
+  if(interaction&&interaction.output_video&&interaction.output_video.data)return interaction.output_video.data;
+  const steps=interaction&&Array.isArray(interaction.steps)?interaction.steps:[];
+  for(let i=steps.length-1;i>=0;i--){
+    const step=steps[i];
+    if(step&&step.type==="model_output"&&Array.isArray(step.content)){
+      const video=step.content.find(function(item){return item&&item.type==="video"&&item.data;});
+      if(video)return video.data;
+    }
+  }
+  return "";
+}
 async function startAnimation(token, body, ids) {
   const key = process.env.GOOGLE_GEMINI_API_KEY;
   if (!key) throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
@@ -250,8 +262,9 @@ async function startAnimation(token, body, ids) {
   });
   const data = await response.json().catch(function(){return {};});
   if (!response.ok) throw new Error(data.error && data.error.message ? data.error.message : "A IA de animação falhou.");
-  if (data.output_video && data.output_video.data) {
-    const bytes = Buffer.from(data.output_video.data,"base64");
+  const encodedVideo=extractVideoData(data);
+  if (encodedVideo) {
+    const bytes = Buffer.from(encodedVideo,"base64");
     if (!bytes.length || bytes.length > 35*1024*1024) throw new Error("Vídeo excede o limite de 35 MB.");
     const url = await store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4",ids.privateDraft);
     await updatePanelData(token,ids,{video_url:url,video_job_id:null,video_error:null});
@@ -280,7 +293,7 @@ async function animationStatus(token, body, ids) {
     await updatePanelData(token,ids,{video_job_id:null,video_error:String(data.error && data.error.message || "A geração de vídeo falhou.").slice(0,300)});
     throw new Error("A geração da animação falhou. Você pode tentar novamente.");
   }
-  const encoded = data.output_video && data.output_video.data || "";
+  const encoded = extractVideoData(data);
   if (data.status!=="completed" || !encoded) return {pending:true,status:data.status||"running"};
   const bytes = Buffer.from(encoded,"base64");
   if (!bytes.length || bytes.length > 35*1024*1024) throw new Error("Vídeo excede o limite de 35 MB.");
