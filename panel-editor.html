@@ -73,7 +73,7 @@ async function generateExperienceAutomatically(){
   const session=await LinkStoryManga.session();if(!session?.access_token)throw Error('Entre na sua conta para gerar a experiência.');
   button.disabled=true;const originalIndex=pageIndex;button.textContent='Preparando IA…';
   for(let pi=0;pi<pages.length;pi++){
-   pageIndex=pi;const page=pages[pi];setStatus('Página '+(pi+1)+' de '+pages.length: ');
+   pageIndex=pi;const page=pages[pi];setStatus('Processando página '+(pi+1)+' de '+pages.length+'…');
    setStatus('IA analisando a estrutura da página '+(pi+1)+' de '+pages.length+'…');
    const image=new Image();image.crossOrigin='anonymous';
    await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('Não foi possível carregar a página '+(pi+1)+'.'));image.src=page.image_url});
