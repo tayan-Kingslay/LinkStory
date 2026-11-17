@@ -35,12 +35,6 @@ body{padding:0!important;overflow:hidden}.rx-shell{height:100dvh;display:flex;fl
 <script>
 (()=>{'use strict';const $=id=>document.getElementById(id),q=new URLSearchParams(location.search),mangaId=q.get('manga_id'),requestedId=q.get('chapter_id'),returnTo=q.get('return_to');let manga,chapter,chapters=[],panels=[],index=0,dragStart=null,immersive=false,commentsReturnFocus=null,storyRunning=false,storyStopRequested=false,storyAudios=[],storyMusic=null;
 const canvas=$('art'),ctx=canvas.getContext('2d');function setStatus(t){$('hint').textContent=t}
-async function fetchStoryAudio(provider,kind,text,token){
- const response=await fetch('/api/story-audio',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({provider,kind,text,durationSeconds:kind==='music'?28:4})});
- if(!response.ok){const problem=await response.json().catch(()=>({}));throw new Error(problem.error||'Não foi possível gerar o áudio.')}
- const blob=await response.blob();if(!blob.size)throw new Error('O serviço de áudio retornou um arquivo vazio.');
- return URL.createObjectURL(blob);
-}
 function playStoryClip(url){
  return new Promise(resolve=>{
   const audio=new Audio(url);storyAudios.push(audio);
@@ -52,7 +46,6 @@ async function startStory(){
  if(storyRunning)return;
  const available=panels.some(p=>String(p.storyText||'').trim()||String(p.soundEffectPrompt||'').trim());
  if(!available){setStatus('O criador ainda não preparou a narração deste capítulo.');return}
- const session=await LinkStoryManga.session();if(!session?.access_token){setStatus('Entre na sua conta para iniciar a Hora da História.');return}
  storyRunning=true;storyStopRequested=false;storyAudios=[];
  $('storyPlay').disabled=true;$('storyStop').disabled=false;$('storyPlay').textContent='▶ Reproduzindo…';
  try{
