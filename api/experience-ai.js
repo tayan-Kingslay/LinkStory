@@ -269,7 +269,7 @@ async function startAnimation(token, body, ids) {
   const key = process.env.GOOGLE_GEMINI_API_KEY;
   if (!key) throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
   const image = imageData(body.panelImage);
-  const prompt = "Anime este quadro como animação 2D de mangá. Preserve rigorosamente rosto, identidade, roupas, proporções, cores, cenário e traço original. Não acrescente personagens, objetos, textos ou balões. Não redesenhe o personagem. Movimento natural e controlado, sem deformações. Cena: " + String(body.description || "") + ". Ação: " + String(body.action || "movimento sutil") + ". Câmera: " + String(body.camera || "movimento suave") + ". Direção: " + String(body.motionPrompt || "");
+  const prompt = "Anime este quadro como uma única tomada contínua de mangá 2D. Preserve rigorosamente rosto, identidade, roupas, proporções, cores, cenário, balões, lettering e traço original. Não acrescente personagens, objetos, textos ou balões. Não redesenhe nem estilize novamente. Movimento natural, sutil e controlado, sem deformações ou cortes. Cena: " + String(body.description || "") + ". Ação: " + String(body.action || "movimento sutil") + ". Câmera: " + String(body.camera || "movimento suave") + ". Direção: " + String(body.motionPrompt || "");
   const aspect = Number(body.aspectRatio) >= 1 ? "16:9" : "9:16";
   const response = await fetch("https://generativelanguage.googleapis.com/v1beta/interactions?key=" + encodeURIComponent(key), {
     method:"POST", headers:{"Content-Type":"application/json"},
