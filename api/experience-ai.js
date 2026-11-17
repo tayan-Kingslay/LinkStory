@@ -328,6 +328,18 @@ async function publishDraftPages(token,ids,pages){
   }
   return cleanup;
 }
+async function publishDraftMangaAssets(token,mangaId){
+  const headers={apikey:SUPABASE_KEY,Authorization:"Bearer "+token,"Content-Type":"application/json",Prefer:"return=representation"};
+  const url=SUPABASE_URL+"/rest/v1/mangas?id=eq."+encodeURIComponent(mangaId)+"&select=id,cover_url,logo_url,private_cover_path,private_logo_path";
+  const response=await fetch(url,{headers:headers});
+  if(!response.ok)throw new Error("Não foi possível conferir a capa da obra.");
+  const rows=await response.json();if(!rows.length)return [];
+  const manga=rows[0],cleanup=[],patch={};
+  if(manga.private_cover_path){cleanup.push(manga.private_cover_path);patch.cover_url=await promotePrivateAsset(token,"private://"+manga.private_cover_path,"mangas/"+mangaId+"/cover.webp");patch.private_cover_path=null}
+  if(manga.private_logo_path){cleanup.push(manga.private_logo_path);patch.logo_url=await promotePrivateAsset(token,"private://"+manga.private_logo_path,"mangas/"+mangaId+"/logo.webp");patch.private_logo_path=null}
+  if(Object.keys(patch).length){const update=await fetch(url,{method:"PATCH",headers:headers,body:JSON.stringify(patch)});if(!update.ok)throw new Error("Não foi possível publicar a capa e o logotipo da obra.")}
+  return cleanup;
+}
 async function reviewChapter(token,ids,decision,feedback){
   const headers={apikey:SUPABASE_KEY,Authorization:"Bearer "+token,"Content-Type":"application/json",Prefer:"return=representation"};
   const chapterUrl=SUPABASE_URL+"/rest/v1/manga_chapters?id=eq."+encodeURIComponent(ids.chapterId)+"&manga_id=eq."+encodeURIComponent(ids.mangaId)+"&select=id,review_status";
@@ -350,7 +362,7 @@ async function reviewChapter(token,ids,decision,feedback){
       });
     });
     if(!pages.length||invalid)throw new Error("Todas as páginas precisam ter seus quadrinhos organizados e as animações concluídas antes da aprovação.");
-    cleanup=await publishDraftPages(token,ids,pages);
+    cleanup=await publishDraftPages(token,ids,pages);cleanup.push(...await publishDraftMangaAssets(token,ids.mangaId));
   }
   const nextStatus=decision==="approve"?"published":"rejected";
   const updateChapter=await fetch(chapterUrl,{method:"PATCH",headers:headers,body:JSON.stringify({review_status:nextStatus,review_feedback:decision==="reject"?note:null,reviewed_at:new Date().toISOString()})});

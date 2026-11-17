@@ -6,6 +6,7 @@ alter table public.manga_chapters
   add column if not exists review_feedback text,
   add column if not exists reviewed_at timestamptz;
 alter table public.manga_pages add column if not exists private_image_path text;
+alter table public.mangas add column if not exists private_cover_path text, add column if not exists private_logo_path text;
 
 update storage.buckets set allowed_mime_types=array['image/*','video/*','audio/mpeg']::text[] where id='linkstory-media';
 
