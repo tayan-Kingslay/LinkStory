@@ -34,7 +34,6 @@ module.exports = async function handler(req, res) {
     const chapterResponse = await fetch(SUPABASE_URL + '/rest/v1/manga_chapters?id=eq.' + encodeURIComponent(chapterId) + '&manga_id=eq.' + encodeURIComponent(mangaId) + '&select=id', { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + token } });
     const chapters = chapterResponse.ok ? await chapterResponse.json() : [];
     if (!Array.isArray(chapters) || chapters.length !== 1) return send(res, 403, { error: 'O capítulo não pertence a esta obra.' });
- typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     const image = String(body.imageBase64 || '');
     const mimeType = String(body.mimeType || 'image/jpeg');
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(mimeType)) return send(res, 400, { error: 'Formato de imagem não suportado.' });
