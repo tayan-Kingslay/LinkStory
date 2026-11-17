@@ -128,7 +128,7 @@ async function planTrailer(token, ids) {
         chapterNumber:chapterMap[page.chapter_id].chapter_number,
         chapterTitle:chapterMap[page.chapter_id].title,
         pageNumber:page.page_number,pageImageUrl:page.image_url,
-        panelImageUrl:panel.image_url||null,videoUrl:panel.video_url||null,
+        panelImageUrl:panel.image_url||null,videoUrl:panel.video_url||null,audioUrl:panel.audio_url||null,soundUrl:panel.sound_url||null,
         narration:String(panel.narration||"").slice(0,500),
         dialogue:(Array.isArray(panel.dialogue)?panel.dialogue:[]).slice(0,4).map(function(d){return String(d.text||"").slice(0,180)}),
         description:String(panel.description||"").slice(0,350),
