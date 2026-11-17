@@ -38,7 +38,7 @@ module.exports = async function handler(req, res) {
     if (!Array.isArray(mangaRows) || mangaRows.length !== 1 || mangaRows[0].creator_id !== user.id) {
       return reply(res, 403, { error: 'Somente o autor da obra pode gerar os áudios da experiência.' });
     }
-    const chapterUrl = SUPABASE_URL + '/rest/v1/chapters?id=eq.' + encodeURIComponent(chapterId) + '&manga_id=eq.' + encodeURIComponent(mangaId) + '&select=id';
+    const chapterUrl = SUPABASE_URL + '/rest/v1/manga_chapters?id=eq.' + encodeURIComponent(chapterId) + '&manga_id=eq.' + encodeURIComponent(mangaId) + '&select=id';
     const chapterResponse = await fetch(chapterUrl, { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + accessToken } });
     if (!chapterResponse.ok) return reply(res, 403, { error: 'Não foi possível confirmar o capítulo.' });
     const chapterRows = await chapterResponse.json();
