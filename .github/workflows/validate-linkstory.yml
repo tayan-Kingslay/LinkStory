@@ -1,0 +1,27 @@
+name: Validate LinkStory changes
+on:
+  pull_request:
+    branches:
+      - studio-control-center-2026-11
+  push:
+    branches:
+      - feature/experience-approval-workflow
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          node --check api/experience-ai.js
+          node --check manga-db.js
+          node --check publish.js
+      - name: Check inline page scripts
+        run: node scripts/validate-inline-scripts.js
+      - name: Build static site
+        run: npm run build
