@@ -156,15 +156,16 @@ async function planTrailer(token, ids) {
     });
   });
   if (!candidates.length) throw new Error("Organize os quadros dos capítulos publicados antes de criar o trailer.");
-  const compact = candidates.slice(0,100).map(function(c,i){return {id:i,chapter:c.chapterNumber,page:c.pageNumber,description:c.description,action:c.action,narration:c.narration,dialogue:c.dialogue,soundEffect:c.soundEffect,hasAnimation:!!c.videoUrl};});
+  const sampled = candidates.length<=100 ? candidates : Array.from({length:100},function(_,i){return candidates[Math.round(i*(candidates.length-1)/99)];});
+  const compact = sampled.map(function(c,i){return {id:i,chapter:c.chapterNumber,page:c.pageNumber,description:c.description,action:c.action,narration:c.narration,dialogue:c.dialogue,soundEffect:c.soundEffect,hasAnimation:!!c.videoUrl};});
   const instruction = "Você é editor de trailers de mangá. Escolha de 4 a 8 cenas entre os IDs fornecidos, sem repetir IDs. Crie uma progressão curta: gancho inicial, escalada, momento emocional ou de ação e encerramento que desperte curiosidade sem revelar o final. Prefira cenas com contexto e falas fortes. Não invente acontecimentos. Retorne JSON válido em português: title (até 80 caracteres), hook (até 140), scenes (lista de id, caption até 100 caracteres, reason até 160, duration entre 2 e 5 segundos). Não escolha cenas sem descrição suficiente se houver opções melhores. IDs disponíveis: " + JSON.stringify(compact);
   const result = await gemini(key,{contents:[{role:"user",parts:[{text:instruction}]}],generationConfig:{responseMimeType:"application/json"}});
   const seen = new Set();
   const scenes = (Array.isArray(result.scenes)?result.scenes:[]).slice(0,8).map(function(scene){
     const id=Number(scene.id);
-    if (!Number.isInteger(id)||id<0||id>=Math.min(candidates.length,100)||seen.has(id)) return null;
+    if (!Number.isInteger(id)||id<0||id>=sampled.length||seen.has(id)) return null;
     seen.add(id);
-    const c=candidates[id];
+    const c=sampled[id];
     return Object.assign({},c,{caption:String(scene.caption||"").slice(0,100),reason:String(scene.reason||"").slice(0,160),duration:Math.max(2,Math.min(5,Number(scene.duration)||3.5))});
   }).filter(Boolean);
   if (scenes.length<3) throw new Error("A IA não encontrou cenas suficientes para um trailer consistente.");
