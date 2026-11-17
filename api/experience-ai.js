@@ -43,14 +43,19 @@ async function verifyChapterAndPage(token, ids, requirePage) {
   }
   return null;
 }
+function safeDraftPath(path){
+  const parts=String(path||"").split("/");
+  if(parts.length<3||parts[0]!=="mangas"||! /^[0-9a-f-]{36}$/i.test(parts[1])||parts.some(function(part){return !part||part==="."||part===".."||!/^[A-Za-z0-9._-]+$/.test(part);}))throw new Error("Caminho de arquivo privado inválido.");
+  return parts.map(encodeURIComponent).join("/");
+}
 async function store(token,path,bytes,type,privateDraft){
-  const safe=path.split("/").map(encodeURIComponent).join("/"),bucket=privateDraft?"linkstory-drafts":"linkstory-media";
+  const safe=privateDraft?safeDraftPath(path):path.split("/").map(encodeURIComponent).join("/"),bucket=privateDraft?"linkstory-drafts":"linkstory-media";
   const response=await fetch(SUPABASE_URL+"/storage/v1/object/"+bucket+"/"+safe,{method:"POST",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token,"Content-Type":type,"x-upsert":"true"},body:bytes});
   if(!response.ok)throw new Error("Falha ao salvar mídia no LinkStory: "+(await response.text()).slice(0,180));
   return privateDraft?"private://"+path:SUPABASE_URL+"/storage/v1/object/public/linkstory-media/"+safe;
 }
 async function getPrivateAsset(token,path){
-  const safe=path.split("/").map(encodeURIComponent).join("/");
+  const safe=safeDraftPath(path);
   const response=await fetch(SUPABASE_URL+"/storage/v1/object/authenticated/linkstory-drafts/"+safe,{headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token}});
   if(!response.ok)throw new Error("Não foi possível abrir o arquivo privado do rascunho.");
   const type=(response.headers.get("content-type")||"").split(";")[0],bytes=Buffer.from(await response.arrayBuffer());
@@ -64,8 +69,7 @@ async function promotePrivateAsset(token,value,destinationPath){
   return store(token,destinationPath||path,asset.bytes,asset.type||"application/octet-stream",false);
 }
 async function deletePrivateAsset(token,path){
-  const safe=String(path||"").split("/").map(encodeURIComponent).join("/");
-  if(!safe)return;
+  const safe=safeDraftPath(path);
   const response=await fetch(SUPABASE_URL+"/storage/v1/object/linkstory-drafts/"+safe,{method:"DELETE",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token}});
   if(!response.ok)console.warn("[experience-ai] private media cleanup failed",response.status);
 }
