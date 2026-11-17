@@ -284,7 +284,7 @@ async function animationStatus(token, body, ids) {
   if (data.status!=="completed" || !encoded) return {pending:true,status:data.status||"running"};
   const bytes = Buffer.from(encoded,"base64");
   if (!bytes.length || bytes.length > 35*1024*1024) throw new Error("Vídeo excede o limite de 35 MB.");
-  const url = await store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4");
+  const url = await store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+".mp4",bytes,"video/mp4",ids.privateDraft);
   await updatePanelData(token,ids,{video_url:url,video_job_id:null,video_error:null});
   return {pending:false,videoUrl:url};
 }
