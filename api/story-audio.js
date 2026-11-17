@@ -26,6 +26,23 @@ module.exports = async function handler(req, res) {
     if (!user || !user.id) return reply(res, 401, { error: 'Sessão inválida.' });
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
+    const mangaId = String(body.mangaId || '');
+    const chapterId = String(body.chapterId || '');
+    if (!/^[0-9a-f-]{36}$/i.test(mangaId) || !/^[0-9a-f-]{36}$/i.test(chapterId)) {
+      return reply(res, 400, { error: 'Identificação da obra e do capítulo é obrigatória.' });
+    }
+    const mangaUrl = SUPABASE_URL + '/rest/v1/mangas?id=eq.' + encodeURIComponent(mangaId) + '&select=id,creator_id';
+    const mangaResponse = await fetch(mangaUrl, { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + accessToken } });
+    if (!mangaResponse.ok) return reply(res, 403, { error: 'Não foi possível confirmar a permissão para gerar áudio.' });
+    const mangaRows = await mangaResponse.json();
+    if (!Array.isArray(mangaRows) || mangaRows.length !== 1 || mangaRows[0].creator_id !== user.id) {
+      return reply(res, 403, { error: 'Somente o autor da obra pode gerar os áudios da experiência.' });
+    }
+    const chapterUrl = SUPABASE_URL + '/rest/v1/chapters?id=eq.' + encodeURIComponent(chapterId) + '&manga_id=eq.' + encodeURIComponent(mangaId) + '&select=id';
+    const chapterResponse = await fetch(chapterUrl, { headers: { apikey: SUPABASE_ANON_KEY, Authorization: 'Bearer ' + accessToken } });
+    if (!chapterResponse.ok) return reply(res, 403, { error: 'Não foi possível confirmar o capítulo.' });
+    const chapterRows = await chapterResponse.json();
+    if (!Array.isArray(chapterRows) || chapterRows.length !== 1) return reply(res, 403, { error: 'O capítulo não pertence a esta obra.' });
     const text = String(body.text || '').trim();
     const provider = String(body.provider || 'fish');
     const kind = String(body.kind || 'voice');
