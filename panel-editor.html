@@ -47,10 +47,13 @@ function renderOverlay(){const overlay=$('overlay');overlay.replaceChildren();cu
 function render(){const p=current(),totalPanels=pages.reduce((sum,page)=>sum+page.panels.length,0),organizedPages=pages.filter(page=>page.panels.length>0).length,emptyPages=pages.length-organizedPages;$('chapterSummary').textContent=pages.length+' páginas · '+totalPanels+' quadrinho(s) · '+organizedPages+' página(s) organizada(s) · '+emptyPages+' sem quadrinhos marcados';$('preview').disabled=!totalPanels;$('clear').disabled=!p.panels.length;$('pageImage').onload=()=>{if(current()===p)setStatus('Página '+(pageIndex+1)+' carregada · '+p.panels.length+' quadrinho(s) marcados.')};$('pageImage').onerror=()=>{if(current()===p)setStatus('Não foi possível carregar a imagem desta página. Verifique o arquivo original antes de organizar.')};$('pageImage').crossOrigin='anonymous';$('pageImage').src=p.image_url;$('pageImage').alt='Página '+(pageIndex+1);renderTabs();renderPanels();renderOverlay();$('undo').disabled=!(undoHistory.get(p.id)||[]).length;setStatus('Página '+(pageIndex+1)+' de '+pages.length+' · '+p.panels.length+' quadrinho(s) marcados.')}
 
 async function imageToAnalysisPayload(image){
- const max=1400,scale=Math.min(1,max/Math.max(image.naturalWidth,image.naturalHeight)),canvas=document.createElement('canvas');
+ const max=1280,scale=Math.min(1,max/Math.max(image.naturalWidth,image.naturalHeight)),canvas=document.createElement('canvas');
  canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
  canvas.getContext('2d',{alpha:false}).drawImage(image,0,0,canvas.width,canvas.height);
- const url=canvas.toDataURL('image/jpeg',.78);return{imageBase64:url.split(',')[1],mimeType:'image/jpeg'};
+ let quality=.7,url=canvas.toDataURL('image/jpeg',quality);
+ while(url.length>4_000_000&&quality>.45){quality-=.08;url=canvas.toDataURL('image/jpeg',quality)}
+ if(url.length>4_000_000)throw Error('Esta página é muito grande para análise. Reduza a imagem original e tente novamente.');
+ return{imageBase64:url.split(',')[1],mimeType:'image/jpeg'};
 }
 async function callStoryApi(path,body,token){
  const response=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(body)});
@@ -59,54 +62,69 @@ async function callStoryApi(path,body,token){
 }
 async function generateAndStoreAudio(text,provider,kind,token,path){
  if(!String(text||'').trim())return '';
- const response=await callStoryApi('/api/story-audio',{provider,kind,text:String(text).slice(0,1800),durationSeconds:4},token);
+ const response=await callStoryApi('/api/story-audio',{provider,kind,text:String(text).slice(0,1800),durationSeconds:kind==='music'?28:4},token);
  const blob=await response.blob();if(!blob.size)throw Error('O serviço de áudio retornou um arquivo vazio.');
  const upload=await linkstorySupabase.storage.from('linkstory-media').upload(path,blob,{contentType:'audio/mpeg',upsert:true});
  if(upload.error)throw upload.error;
  return linkstorySupabase.storage.from('linkstory-media').getPublicUrl(path).data.publicUrl;
 }
+async function persistPagePanels(page){
+ const ordered=page.panels.map((panel,i)=>({...panel,order:i+1}));
+ const saved=await linkstorySupabase.from('manga_pages').update({panels:ordered}).eq('id',page.id).select('id');
+ if(saved.error)throw saved.error;
+ if(!Array.isArray(saved.data)||saved.data.length!==1)throw Error('Não foi possível salvar a página do capítulo.');
+ page.panels=ordered;
+}
 async function generateExperienceAutomatically(){
  const button=$('autoExperience');if(button.disabled)return;
- if(!window.confirm('A IA vai analisar todas as páginas, identificar os quadros, descrever as cenas e gerar narração e efeitos sonoros. Isso usa suas APIs de IA e pode consumir créditos. Continuar?'))return;
- let completed=0,failed=[];
+ if(!window.confirm('A IA vai identificar os quadros, interpretar cada cena, criar narração, efeitos sonoros e uma trilha instrumental contínua. Isso usa créditos das APIs conectadas. Continuar?'))return;
+ let completed=0,failed=[],originalIndex=pageIndex;
  try{
   const session=await LinkStoryManga.session();if(!session?.access_token)throw Error('Entre na sua conta para gerar a experiência.');
-  button.disabled=true;const originalIndex=pageIndex;button.textContent='Preparando IA…';
+  button.disabled=true;button.textContent='Preparando IA…';
   for(let pi=0;pi<pages.length;pi++){
-   pageIndex=pi;const page=pages[pi];setStatus('Processando página '+(pi+1)+' de '+pages.length+'…');
-   setStatus('IA analisando a estrutura da página '+(pi+1)+' de '+pages.length+'…');
+   pageIndex=pi;const page=pages[pi];render();setStatus('IA analisando a estrutura da página '+(pi+1)+' de '+pages.length+'…');
    const image=new Image();image.crossOrigin='anonymous';
-   await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('Não foi possível carregar a página '+(pi+1)+'.'));image.src=page.image_url});
-   const pagePayload=await imageToAnalysisPayload(image);
-   const detectionResponse=await callStoryApi('/api/story-panels',pagePayload,session.access_token);
+   await new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=()=>reject(Error('Não foi possível carregar a página '+(pi+1)+'. Verifique se a imagem original está acessível.'));image.src=page.image_url});
+   const detectionResponse=await callStoryApi('/api/story-panels',await imageToAnalysisPayload(image),session.access_token);
    const detection=await detectionResponse.json();
    const detected=(Array.isArray(detection.panels)?detection.panels:[]).map((p,i)=>({x:Number(p.x),y:Number(p.y),width:Number(p.width),height:Number(p.height),order:i+1,recognition_confidence:p.confidence||'média',recognition_notes:p.notes||''})).filter(p=>[p.x,p.y,p.width,p.height].every(Number.isFinite)&&p.x>=0&&p.y>=0&&p.width>0&&p.height>0&&p.x+p.width<=1.00001&&p.y+p.height<=1.00001);
-   if(!detected.length){failed.push('Página '+(pi+1)+': a IA não conseguiu identificar quadros.');continue}
-   const built=[];
+   if(!detected.length){failed.push('Página '+(pi+1)+': a IA não encontrou quadros confiáveis.');continue}
+   page.panels=detected;await persistPagePanels(page);renderTabs();
    for(let ci=0;ci<detected.length;ci++){
-    const panel=detected[ci];setStatus('Página '+(pi+1)+' · interpretando quadro '+(ci+1)+' de '+detected.length+'…');
-    const crop=document.createElement('canvas');crop.width=Math.max(1,Math.round(image.naturalWidth*panel.width));crop.height=Math.max(1,Math.round(image.naturalHeight*panel.height));
-    crop.getContext('2d').drawImage(image,Math.round(image.naturalWidth*panel.x),Math.round(image.naturalHeight*panel.y),crop.width,crop.height,0,0,crop.width,crop.height);
-    const cropData=crop.toDataURL('image/jpeg',.8).split(',')[1];
-    const directorResponse=await callStoryApi('/api/story-director',{imageBase64:cropData,mimeType:'image/jpeg'},session.access_token);
-    const director=(await directorResponse.json()).analysis||{};
+    const panel=page.panels[ci];setStatus('Página '+(pi+1)+' · interpretando quadro '+(ci+1)+' de '+detected.length+'…');
+    const sx=Math.round(image.naturalWidth*panel.x),sy=Math.round(image.naturalHeight*panel.y),sw=Math.max(1,Math.round(image.naturalWidth*panel.width)),sh=Math.max(1,Math.round(image.naturalHeight*panel.height));
+    const crop=document.createElement('canvas');const scale=Math.min(1,1100/Math.max(sw,sh));crop.width=Math.max(1,Math.round(sw*scale));crop.height=Math.max(1,Math.round(sh*scale));
+    crop.getContext('2d',{alpha:false}).drawImage(image,sx,sy,sw,sh,0,0,crop.width,crop.height);
+    const cropData=crop.toDataURL('image/jpeg',.7).split(',')[1];
+    let director={};
+    try{
+     const directorResponse=await callStoryApi('/api/story-director',{imageBase64:cropData,mimeType:'image/jpeg'},session.access_token);
+     director=(await directorResponse.json()).analysis||{};
+    }catch(error){panel.director_error=String(error.message||'Falha na análise da cena').slice(0,240);failed.push('Página '+(pi+1), 'quadro '+(ci+1)+': '+panel.director_error);}
     const storyText=String(director.spoken_text||director.narration_suggestion||director.scene_description||'').trim().slice(0,1800);
-    const record={...panel,scene_description:director.scene_description||'',visible_elements:Array.isArray(director.visible_elements)?director.visible_elements:[],mood:director.mood||'',shot_type:director.shot_type||'',camera_motion:director.camera_motion||'zoom lento',lighting:director.lighting||'',visual_effect:director.visual_effect||'',director_confidence:director.confidence||'',director_cautions:Array.isArray(director.cautions)?director.cautions:[],story_text:storyText,sound_effect_prompt:String(director.sound_effect_prompt||'').slice(0,240)};
+    Object.assign(panel,{scene_description:director.scene_description||'',visible_elements:Array.isArray(director.visible_elements)?director.visible_elements:[],mood:director.mood||'',shot_type:director.shot_type||'',camera_motion:director.camera_motion||'zoom lento',lighting:director.lighting||'',visual_effect:director.visual_effect||'',director_confidence:director.confidence||'',director_cautions:Array.isArray(director.cautions)?director.cautions:[],story_text:storyText,sound_effect_prompt:String(director.sound_effect_prompt||'').slice(0,240)});
     const base='mangas/'+manga.id+'/chapters/'+chapter.id+'/experience/'+page.id+'-'+(ci+1)+'-';
-    if(record.story_text){setStatus('Página '+(pi+1)+' · gerando voz do quadro '+(ci+1)+'…');record.voice_audio_url=await generateAndStoreAudio(record.story_text,'fish','voice',session.access_token,base+'voice.mp3')}
-    if(record.sound_effect_prompt){setStatus('Página '+(pi+1)+' · criando efeito sonoro '+(ci+1)+'…');record.sfx_audio_url=await generateAndStoreAudio(record.sound_effect_prompt,'elevenlabs','sfx',session.access_token,base+'sfx.mp3')}
-    built.push(record);
+    if(panel.story_text){try{setStatus('Página '+(pi+1)+' · gerando voz '+(ci+1)+'…');panel.voice_audio_url=await generateAndStoreAudio(panel.story_text,'fish','voice',session.access_token,base+'voice.mp3')}catch(error){panel.voice_generation_error=String(error.message||'Falha ao gerar voz').slice(0,240)}}
+    if(panel.sound_effect_prompt){try{setStatus('Página '+(pi+1)+' · criando efeito sonoro '+(ci+1)+'…');panel.sfx_audio_url=await generateAndStoreAudio(panel.sound_effect_prompt,'elevenlabs','sfx',session.access_token,base+'sfx.mp3')}catch(error){panel.sfx_generation_error=String(error.message||'Falha ao gerar efeito').slice(0,240)}}
+    await persistPagePanels(page);renderTabs();
    }
-   if(!built.length){failed.push('Página '+(pi+1)+': não foi possível preparar os quadros.');continue}
-   const saved=await linkstorySupabase.from('manga_pages').update({panels:built}).eq('id',page.id).select('id');
-   if(saved.error)throw saved.error;if(!Array.isArray(saved.data)||saved.data.length!==1)throw Error('Não foi possível salvar a página '+(pi+1)+'.');
-   page.panels=built;completed++;renderTabs();
+   completed++;
   }
-  pageIndex=originalIndex;render();
-  if(completed===pages.length)setStatus('Experiência gerada! '+completed+' página(s), '+pages.reduce((n,p)=>n+p.panels.length,0)+' quadros. Narrações e efeitos foram salvos. Revise a sequência antes de publicar.');
-  else setStatus(completed+' página(s) prontas. '+failed.join(' '));
- }catch(error){console.error(error);setStatus('A geração foi interrompida: '+(error.message||'erro desconhecido')+'. As páginas já concluídas continuam salvas.')}
- finally{button.disabled=false;button.textContent='✦ Gerar experiência completa com IA'}
+  const allPanels=pages.flatMap(p=>p.panels);
+  const musicBrief=allPanels.map(p=>[p.mood,p.scene_description].filter(Boolean).join(': ')).filter(Boolean).slice(0,8).join('; ').slice(0,900);
+  if(allPanels.length&&musicBrief){
+   try{
+    setStatus('Criando trilha instrumental para o capítulo…');
+    const music=await generateAndStoreAudio('Looping cinematic instrumental underscore for a manga chapter. No vocals, no lyrics. Mood and scene direction: '+musicBrief,'elevenlabs','music',session.access_token,'mangas/'+manga.id+'/chapters/'+chapter.id+'/experience/chapter-'+chapter.id+'-music.mp3');
+    for(const page of pages){page.panels=page.panels.map(p=>({...p,music_audio_url:music}));await persistPagePanels(page)}
+   }catch(error){failed.push('Trilha sonora: '+String(error.message||'não foi possível gerar').slice(0,180))}
+  }
+  dirty=false;undoHistory.clear();
+  if(completed===pages.length&&failed.length===0)setStatus('Experiência gerada! '+completed+' página(s), '+allPanels.length+' quadros, narração, efeitos e trilha instrumental salvos. Revise antes de publicar.');
+  else setStatus(completed+' de '+pages.length+' página(s) processadas. '+failed.slice(0,6).join(' · ')+(failed.length>6?' · e mais '+(failed.length-6)+' aviso(s).':''));
+ }catch(error){console.error(error);setStatus('A geração foi interrompida: '+(error.message||'erro desconhecido')+'. O que já foi concluído permanece salvo.')}
+ finally{pageIndex=originalIndex;render();button.disabled=false;button.textContent='✦ Gerar experiência completa com IA'}
 }
 $('autoExperience').addEventListener('click',generateExperienceAutomatically);
 function previewSequence(){return pages.flatMap((page,pi)=>page.panels.map((panel,si)=>({page,panel,pageIndex:pi,panelIndex:si})))}
