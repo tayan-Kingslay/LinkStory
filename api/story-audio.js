@@ -28,11 +28,12 @@ module.exports = async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : (req.body || {});
     const text = String(body.text || '').trim();
     const provider = String(body.provider || 'fish');
+    const kind = String(body.kind || 'voice');
     if (!text) return reply(res, 400, { error: 'Escreva o texto que será narrado.' });
     if (text.length > 1800) return reply(res, 413, { error: 'Divida a narração em trechos de até 1.800 caracteres.' });
 
     let upstream;
-    if (provider === 'fish' && body.kind !== 'sfx') {
+    if (provider === 'fish' && kind === 'voice') {
       const apiKey = process.env.FISH_AUDIO_API_KEY;
       if (!apiKey) return reply(res, 503, { error: 'Fish Audio ainda não está configurado neste ambiente.' });
       const payload = { text, format: 'mp3' };
@@ -42,11 +43,11 @@ module.exports = async function handler(req, res) {
         headers: {
           Authorization: 'Bearer ' + apiKey,
           'Content-Type': 'application/json',
-          model: 's2.1-pro-free'
+          model: 's2.1-pro'
         },
         body: JSON.stringify(payload)
       });
-    } else if (provider === 'elevenlabs' && body.kind === 'sfx') {
+    } else if (provider === 'elevenlabs' && (kind === 'sfx' || kind === 'music')) {
       const apiKey = process.env.ELEVENLABS_API_KEY;
       if (!apiKey) return reply(res, 503, { error: 'ElevenLabs ainda não está configurado neste ambiente.' });
       const duration = Number(body.durationSeconds);
@@ -54,7 +55,8 @@ module.exports = async function handler(req, res) {
         text,
         model_id: 'eleven_text_to_sound_v3',
         output_format: 'mp3_44100_128',
-        ...(Number.isFinite(duration) ? { duration_seconds: Math.max(0.5, Math.min(12, duration)) } : {})
+        ...(kind === 'music' ? { loop: true, prompt_influence: 0.45 } : {}),
+        ...(Number.isFinite(duration) ? { duration_seconds: Math.max(0.5, Math.min(kind === 'music' ? 30 : 12, duration)) } : {})
       };
       upstream = await fetch('https://api.elevenlabs.io/v1/sound-generation?output_format=mp3_44100_128', {
         method: 'POST',
