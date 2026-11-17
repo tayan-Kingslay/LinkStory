@@ -81,7 +81,7 @@ async function generateExperienceAutomatically(){
  let completed=0,failed=[],originalIndex=pageIndex;
  try{
   const session=await LinkStoryManga.session();if(!session?.access_token)throw Error('Entre na sua conta para gerar a experiência.');
-  button.disabled=true;button.textContent='Preparando IA…';
+  button.disabled=true;document.body.classList.add('pe-saving');button.textContent='Preparando IA…';
   for(let pi=0;pi<pages.length;pi++){
    pageIndex=pi;const page=pages[pi];render();setStatus('IA analisando a estrutura da página '+(pi+1)+' de '+pages.length+'…');
    const image=new Image();image.crossOrigin='anonymous';
@@ -124,7 +124,7 @@ async function generateExperienceAutomatically(){
   if(completed===pages.length&&failed.length===0)setStatus('Experiência gerada! '+completed+' página(s), '+allPanels.length+' quadros, narração, efeitos e trilha instrumental salvos. Revise antes de publicar.');
   else setStatus(completed+' de '+pages.length+' página(s) processadas. '+failed.slice(0,6).join(' · ')+(failed.length>6?' · e mais '+(failed.length-6)+' aviso(s).':''));
  }catch(error){console.error(error);setStatus('A geração foi interrompida: '+(error.message||'erro desconhecido')+'. O que já foi concluído permanece salvo.')}
- finally{pageIndex=originalIndex;render();button.disabled=false;button.textContent='✦ Gerar experiência completa com IA'}
+ finally{pageIndex=originalIndex;render();document.body.classList.remove('pe-saving');button.disabled=false;button.textContent='✦ Gerar experiência completa com IA'}
 }
 $('autoExperience').addEventListener('click',generateExperienceAutomatically);
 function previewSequence(){return pages.flatMap((page,pi)=>page.panels.map((panel,si)=>({page,panel,pageIndex:pi,panelIndex:si})))}
