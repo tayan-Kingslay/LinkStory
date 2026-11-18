@@ -268,7 +268,7 @@ async function speech(token, body, ids) {
       const speakerKey=normalizeSpeaker(line.speaker),assigned=voiceCast[speakerKey];
       const selectedVoice=String(line.voiceId||(assigned&&assigned.voice_id)||process.env.ELEVENLABS_CHARACTER_VOICE_ID||DEFAULT_VOICE);
       lines.push({ text:safe, voice_id:selectedVoice });
-      if(assigned)voiceAssignments.push({speaker:String(line.speaker||"Personagem"),speaker_key:speakerKey,voiceId:assigned.voice_id,voiceName:assigned.voice_name});
+      if(assigned&&!line.voiceId)voiceAssignments.push({speaker:String(line.speaker||"Personagem"),speaker_key:speakerKey,voiceId:assigned.voice_id,voiceName:assigned.voice_name});
       remaining -= safe.length;
     }
   });
