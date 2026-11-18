@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - feature/experience-approval-workflow
+      - feature/experience-voice-design-reader-ui
 jobs:
   validate:
     runs-on: ubuntu-latest

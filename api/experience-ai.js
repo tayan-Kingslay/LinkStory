@@ -1,6 +1,60 @@
 const SUPABASE_URL = "https://qwhpikyxilzwazeneddw.supabase.co";
 const SUPABASE_KEY = "sb_publishable_FjocCd5CH-v6Un0Qg_HBdQ_ujxKhD9q";
 const DEFAULT_VOICE = process.env.ELEVENLABS_DEFAULT_VOICE_ID || "EXAVITQu4vr4xnSDxMaL";
+function normalizeSpeaker(value) {
+  return String(value || "personagem").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim().slice(0,80) || "personagem";
+}
+async function loadVoiceCast(token,mangaId) {
+  const url=SUPABASE_URL+"/rest/v1/mangas?id=eq."+encodeURIComponent(mangaId)+"&select=experience_voice_cast";
+  const response=await fetch(url,{headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token}});
+  if(!response.ok)throw new Error("Não foi possível carregar o elenco de vozes da obra.");
+  const rows=await response.json();
+  return rows[0]&&rows[0].experience_voice_cast&&typeof rows[0].experience_voice_cast==="object"?rows[0].experience_voice_cast:{};
+}
+async function assignCharacterVoices(token,mangaId,dialogue) {
+  const lines=(Array.isArray(dialogue)?dialogue:[]).filter(function(line){return String(line.text||"").trim()});
+  const cast=await loadVoiceCast(token,mangaId);
+  const missing=[];
+  lines.forEach(function(line){
+    const key=normalizeSpeaker(line.speaker);
+    if(Number(line.speaker_confidence)<0.6&&!line.speaker_confirmed)
+      throw new Error("Confirme quem está falando em cada balão marcado como incerto antes de gerar a dublagem.");
+    if(line.voiceId||cast[key]&&cast[key].voice_id)return;
+    if(!missing.some(function(item){return item.key===key;}))
+      missing.push({key:key,speaker:String(line.speaker||"Personagem").slice(0,70),profile:String(line.voice_profile||"").slice(0,350),sample:String(line.text||"").slice(0,180)});
+  });
+  if(!missing.length)return cast;
+  const apiKey=process.env.ELEVENLABS_API_KEY;
+  const geminiKey=process.env.GOOGLE_GEMINI_API_KEY;
+  if(!apiKey||!geminiKey)throw new Error("As chaves da ElevenLabs e do Gemini precisam estar configuradas para escolher as vozes dos personagens.");
+  const voiceResponse=await fetch("https://api.elevenlabs.io/v2/voices?page_size=100&language=pt&include_total_count=false",{headers:{"xi-api-key":apiKey}});
+  const voiceData=await voiceResponse.json().catch(function(){return {}});
+  if(!voiceResponse.ok)throw new Error("Não foi possível consultar as vozes disponíveis na ElevenLabs: "+String(voiceData.detail||voiceData.message||"verifique a chave e o plano").slice(0,180));
+  const voiceRows=Array.isArray(voiceData.voices)?voiceData.voices:[];
+  const voices=voiceRows.map(function(v){
+    return {voice_id:String(v.voice_id||""),name:String(v.name||"Voz"),category:String(v.category||""),description:String(v.description||"").slice(0,240),labels:v.labels||{}};
+  }).filter(function(v){return v.voice_id});
+  if(!voices.length)throw new Error("A ElevenLabs não retornou vozes em português disponíveis para esta conta.");
+  const candidates=voices.slice(0,100);
+  const instruction="Você é diretor de elenco de dublagem de mangá em português brasileiro. Para cada personagem, escolha a voz mais adequada entre as vozes reais disponíveis. Considere perfil vocal, idade aparente fictícia, apresentação vocal, timbre, energia, personalidade e naturalidade em pt-BR. Não escolha pela semelhança do nome. Cada personagem deve ter uma voz diferente sempre que houver opções adequadas. Retorne apenas JSON: assignments com speaker_key e voice_id. Só use IDs da lista fornecida. Personagens: "+JSON.stringify(missing)+". Vozes disponíveis: "+JSON.stringify(candidates);
+  const chosen=await gemini(geminiKey,{contents:[{role:"user",parts:[{text:instruction}]}],generationConfig:{responseMimeType:"application/json"}});
+  const byId=new Map(candidates.map(function(v){return[v.voice_id,v]}));
+  const used=new Set(Object.keys(cast).map(function(k){return cast[k]&&cast[k].voice_id}).filter(Boolean));
+  const assigned=Array.isArray(chosen.assignments)?chosen.assignments:[];
+  missing.forEach(function(character){
+    const pick=assigned.find(function(item){return item.speaker_key===character.key||normalizeSpeaker(item.speaker_key||item.speaker)===character.key})||assigned.find(function(item){return normalizeSpeaker(item.speaker||item.character)===character.key});
+    let voice=pick&&byId.get(String(pick.voice_id||""));
+    if(!voice)throw new Error("A IA não conseguiu selecionar uma voz válida para "+character.speaker+". Tente gerar novamente ou escolha uma voz manualmente.");
+    if(used.has(voice.voice_id))voice=candidates.find(function(v){return !used.has(v.voice_id)});
+    if(!voice)throw new Error("Não há vozes diferentes suficientes para todos os personagens deste capítulo.");
+    used.add(voice.voice_id);
+    cast[character.key]={speaker:character.speaker,voice_id:voice.voice_id,voice_name:voice.name,voice_profile:character.profile,source:"ai",updated_at:new Date().toISOString()};
+  });
+  const saveUrl=SUPABASE_URL+"/rest/v1/mangas?id=eq."+encodeURIComponent(mangaId);
+  const save=await fetch(saveUrl,{method:"PATCH",headers:{apikey:SUPABASE_KEY,Authorization:"Bearer "+token,"Content-Type":"application/json",Prefer:"return=minimal"},body:JSON.stringify({experience_voice_cast:cast})});
+  if(!save.ok)throw new Error("As vozes foram escolhidas, mas não foi possível salvar o elenco permanente da obra.");
+  return cast;
+}
 function reply(res, status, data) {
   res.status(status);
   res.setHeader("Content-Type", "application/json; charset=utf-8");
@@ -105,7 +159,7 @@ async function analyze(req, res, token, body, ids, verifiedPage) {
   const key = process.env.GOOGLE_GEMINI_API_KEY;
   if (!key) throw new Error("GOOGLE_GEMINI_API_KEY não está configurada no Vercel.");
   const image = await getPageForOwner(token,verifiedPage);
-  const instruction = "Você é diretor de storyboard de mangá. Analise a página inteira e detecte cada quadro visível, sua posição e tamanho. Determine a ordem natural de leitura, respeitando evidências visuais e a direção típica do mangá. Não invente quadros nem falas ilegíveis. Retorne somente JSON válido em português com reading_direction e panels. Cada panel deve ter x,y,width,height normalizados entre 0 e 1, order, confidence, description, action, camera, narration, dialogue (lista de speaker,speaker_confidence,text,emotion,delivery), sound_effect e motion_prompt. speaker_confidence deve ser número de 0 a 1; use menos de 0.6 quando não houver evidência visual clara da identidade do locutor. Os retângulos devem conter um quadro por inteiro sem incluir quadros vizinhos. Limite a 24. A narração descreve a ação sem repetir falas. Dialogue vazio se não houver fala legível. Preserve exatamente o estilo e a aparência dos personagens. Não altere a página original.";
+  const instruction = "Você é diretor de storyboard e diretor de dublagem de mangá. Analise a página inteira e detecte cada quadro visível, sua posição e tamanho. Determine a ordem natural de leitura. Não invente quadros nem falas ilegíveis. Retorne JSON válido em português com reading_direction e panels. Cada panel deve ter x,y,width,height normalizados, order, confidence, description, action, camera, narration, dialogue, sound_effect e motion_prompt. Cada item de dialogue deve conter speaker, speaker_confidence, text, emotion, delivery e voice_profile. voice_profile deve descrever em até 240 caracteres o perfil vocal sugerido para aquele personagem: faixa etária aparente fictícia, apresentação vocal, timbre, altura, textura, energia e personalidade vocal, sempre adequado a português brasileiro. Baseie-se apenas no que é visível e no contexto da fala; não trate isso como fato sobre uma pessoa real. Quando não houver evidência clara do locutor, speaker_confidence abaixo de 0.6 e não invente identidade. A narração não repete falas. Preserve integralmente arte, lettering e identidade dos personagens.";
   const result = await gemini(key, { contents: [{ role: "user", parts: [{ text: instruction }, { inline_data: { mime_type: image.type, data: image.bytes.toString("base64") } }] }], generationConfig: { responseMimeType: "application/json" } });
   const panels = (Array.isArray(result.panels) ? result.panels : []).slice(0, 24).map(function(p, i) {
     const x = Number(p.x), y = Number(p.y), width = Number(p.width), height = Number(p.height);
@@ -116,7 +170,7 @@ async function analyze(req, res, token, body, ids, verifiedPage) {
       description:String(p.description || "").slice(0,1000), action:String(p.action || "").slice(0,500),
       camera:String(p.camera || "").slice(0,250), narration:String(p.narration || "").slice(0,1000),
       dialogue:(Array.isArray(p.dialogue) ? p.dialogue : []).slice(0,8).map(function(d){
-        return { speaker:String(d.speaker || "Personagem").slice(0,70), speaker_confidence:Math.max(0,Math.min(1,Number(d.speaker_confidence)||0)), text:String(d.text || "").slice(0,450), emotion:String(d.emotion || "natural").slice(0,40), delivery:String(d.delivery || "").slice(0,70) };
+        return { speaker:String(d.speaker || "Personagem").slice(0,70), speaker_confidence:Math.max(0,Math.min(1,Number(d.speaker_confidence)||0)), text:String(d.text || "").slice(0,450), emotion:String(d.emotion || "natural").slice(0,40), delivery:String(d.delivery || "").slice(0,70), voice_profile:String(d.voice_profile||"").slice(0,350), speaker_confirmed:d.speaker_confirmed===true };
       }).filter(function(d){ return d.text.trim(); }),
       sound_effect:String(p.sound_effect || "").slice(0,250), motion_prompt:String(p.motion_prompt || "").slice(0,800)
     };
@@ -184,7 +238,7 @@ async function revisePanel(token,body,ids,verifiedPage){
   const image=imageData(body.panelImage);
   const instruction="Revise somente o conteúdo narrativo do quadro indicado, obedecendo exatamente ao pedido do autor. Não invente personagens, falas, ações ou efeitos que não estejam visíveis. Preserve a identidade dos personagens e o sentido da cena. Se a fala não puder ser atribuída com segurança, use speaker_confidence abaixo de 0.6 e não chute o nome. Retorne JSON com description, action, camera, narration, dialogue (speaker,speaker_confidence,text,emotion,delivery), sound_effect e motion_prompt. Pedido do autor: "+String(body.feedback||"").slice(0,1000)+". Conteúdo atual: "+JSON.stringify({description:current.description,action:current.action,camera:current.camera,narration:current.narration,dialogue:current.dialogue,sound_effect:current.sound_effect,motion_prompt:current.motion_prompt});
   const result=await gemini(key,{contents:[{role:"user",parts:[{inline_data:{mime_type:image.type,data:image.bytes.toString("base64")}},{text:instruction}]}],generationConfig:{responseMimeType:"application/json"}});
-  const dialogue=Array.isArray(result.dialogue)?result.dialogue.slice(0,8).map(function(d){return {speaker:String(d.speaker||"Personagem").slice(0,70),speaker_confidence:Math.max(0,Math.min(1,Number(d.speaker_confidence)||0)),text:String(d.text||"").slice(0,450),emotion:String(d.emotion||"natural").slice(0,40),delivery:String(d.delivery||"").slice(0,70)}}):[];
+  const dialogue=Array.isArray(result.dialogue)?result.dialogue.slice(0,8).map(function(d){return {speaker:String(d.speaker||"Personagem").slice(0,70),speaker_confidence:Math.max(0,Math.min(1,Number(d.speaker_confidence)||0)),text:String(d.text||"").slice(0,450),emotion:String(d.emotion||"natural").slice(0,40),delivery:String(d.delivery||"").slice(0,70),voice_profile:String(d.voice_profile||"").slice(0,350),speaker_confirmed:false}}):[];
   const revised=Object.assign({},current,{description:String(result.description||current.description||"").slice(0,500),action:String(result.action||current.action||"").slice(0,300),camera:String(result.camera||current.camera||"").slice(0,180),narration:String(result.narration||"").slice(0,1000),dialogue:dialogue,sound_effect:String(result.sound_effect||"").slice(0,180),motion_prompt:String(result.motion_prompt||"").slice(0,500),audio_url:null,sound_url:null,video_url:null,video_job_id:null,audio_error:null,sound_error:null,video_error:null});
   await updatePanelData(token,ids,revised);
   return {ok:true,panel:revised};
@@ -194,6 +248,8 @@ async function speech(token, body, ids) {
   if (!key) throw new Error("ELEVENLABS_API_KEY não está configurada no Vercel.");
   const lines = [];
   let remaining = 2000;
+  const voiceCast=await assignCharacterVoices(token,ids.mangaId,body.dialogue);
+  const voiceAssignments=[];
   const narrator = String(body.narration || "").trim();
   const narratorVoice = String(body.narratorVoiceId || process.env.ELEVENLABS_NARRATOR_VOICE_ID || DEFAULT_VOICE);
   if (narrator && remaining > 0) {
@@ -209,7 +265,10 @@ async function speech(token, body, ids) {
     const tagged = "[" + String(line.emotion || "natural").slice(0,40) + "] " + raw;
     const safe = tagged.slice(0, Math.min(450, remaining));
     if (safe) {
-      lines.push({ text:safe, voice_id:String(line.voiceId || process.env.ELEVENLABS_CHARACTER_VOICE_ID || DEFAULT_VOICE) });
+      const speakerKey=normalizeSpeaker(line.speaker),assigned=voiceCast[speakerKey];
+      const selectedVoice=String(line.voiceId||(assigned&&assigned.voice_id)||process.env.ELEVENLABS_CHARACTER_VOICE_ID||DEFAULT_VOICE);
+      lines.push({ text:safe, voice_id:selectedVoice });
+      if(assigned&&!line.voiceId)voiceAssignments.push({speaker:String(line.speaker||"Personagem"),speaker_key:speakerKey,voiceId:assigned.voice_id,voiceName:assigned.voice_name});
       remaining -= safe.length;
     }
   });
@@ -220,7 +279,8 @@ async function speech(token, body, ids) {
   });
   if (!response.ok) throw new Error("Falha na dublagem: " + (await response.text()).slice(0,180));
   const bytes = Buffer.from(await response.arrayBuffer());
-  return store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+"-voice.mp3",bytes,"audio/mpeg",ids.privateDraft);
+  const audioUrl=await store(token,"mangas/"+ids.mangaId+"/chapters/"+ids.chapterId+"/experience/"+ids.pageId+"-panel-"+ids.panelIndex+"-voice.mp3",bytes,"audio/mpeg",ids.privateDraft);
+  return {audioUrl:audioUrl,voiceAssignments:voiceAssignments};
 }
 async function sound(token, body, ids) {
   const prompt = String(body.soundEffect || "").trim();
@@ -418,7 +478,7 @@ module.exports = async function handler(req,res) {
     if (body.action==="analyze") {
       return await analyze(req,res,auth.token,body,ids,verifiedPage);
     }
-    if (body.action==="speech") return reply(res,200,{ok:true,audioUrl:await speech(auth.token,body,ids)});
+    if (body.action==="speech") { const result=await speech(auth.token,body,ids); return reply(res,200,Object.assign({ok:true},result||{audioUrl:null,voiceAssignments:[]})); }
     if (body.action==="sound") return reply(res,200,{ok:true,soundUrl:await sound(auth.token,body,ids)});
     if (body.action==="animate") return reply(res,200,Object.assign({ok:true},await startAnimation(auth.token,body,ids)));
     if (body.action==="animate-status") return reply(res,200,Object.assign({ok:true},await animationStatus(auth.token,body,ids)));
