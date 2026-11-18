@@ -30,12 +30,7 @@ async function assignCharacterVoices(token,mangaId,dialogue) {
   const voiceResponse=await fetch("https://api.elevenlabs.io/v2/voices?page_size=100&language=pt&include_total_count=false",{headers:{"xi-api-key":apiKey}});
   const voiceData=await voiceResponse.json().catch(function(){return {}});
   if(!voiceResponse.ok)throw new Error("Não foi possível consultar as vozes disponíveis na ElevenLabs: "+String(voiceData.detail||voiceData.message||"verifique a chave e o plano").slice(0,180));
-  let voiceRows=Array.isArray(voiceData.voices)?voiceData.voices:[];
-  if(!voiceRows.length){
-    const fallbackResponse=await fetch("https://api.elevenlabs.io/v2/voices?page_size=100&include_total_count=false",{headers:{"xi-api-key":apiKey}});
-    const fallbackData=await fallbackResponse.json().catch(function(){return {}});
-    if(fallbackResponse.ok)voiceRows=Array.isArray(fallbackData.voices)?fallbackData.voices:[];
-  }
+  const voiceRows=Array.isArray(voiceData.voices)?voiceData.voices:[];
   const voices=voiceRows.map(function(v){
     return {voice_id:String(v.voice_id||""),name:String(v.name||"Voz"),category:String(v.category||""),description:String(v.description||"").slice(0,240),labels:v.labels||{}};
   }).filter(function(v){return v.voice_id});
@@ -49,7 +44,8 @@ async function assignCharacterVoices(token,mangaId,dialogue) {
   missing.forEach(function(character){
     const pick=assigned.find(function(item){return item.speaker_key===character.key||normalizeSpeaker(item.speaker_key||item.speaker)===character.key})||assigned.find(function(item){return normalizeSpeaker(item.speaker||item.character)===character.key});
     let voice=pick&&byId.get(String(pick.voice_id||""));
-    if(!voice||used.has(voice.voice_id))voice=candidates.find(function(v){return !used.has(v.voice_id)});
+    if(!voice)throw new Error("A IA não conseguiu selecionar uma voz válida para "+character.speaker+". Tente gerar novamente ou escolha uma voz manualmente.");
+    if(used.has(voice.voice_id))voice=candidates.find(function(v){return !used.has(v.voice_id)});
     if(!voice)throw new Error("Não há vozes diferentes suficientes para todos os personagens deste capítulo.");
     used.add(voice.voice_id);
     cast[character.key]={speaker:character.speaker,voice_id:voice.voice_id,voice_name:voice.name,voice_profile:character.profile,source:"ai",updated_at:new Date().toISOString()};
