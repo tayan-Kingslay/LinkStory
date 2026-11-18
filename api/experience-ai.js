@@ -17,9 +17,9 @@ async function assignCharacterVoices(token,mangaId,dialogue) {
   const missing=[];
   lines.forEach(function(line){
     const key=normalizeSpeaker(line.speaker);
-    if(line.voiceId||cast[key])return;
     if(Number(line.speaker_confidence)<0.6&&!line.speaker_confirmed)
       throw new Error("Confirme quem está falando em cada balão marcado como incerto antes de gerar a dublagem.");
+    if(line.voiceId||cast[key]&&cast[key].voice_id)return;
     if(!missing.some(function(item){return item.key===key;}))
       missing.push({key:key,speaker:String(line.speaker||"Personagem").slice(0,70),profile:String(line.voice_profile||"").slice(0,350),sample:String(line.text||"").slice(0,180)});
   });
@@ -30,7 +30,13 @@ async function assignCharacterVoices(token,mangaId,dialogue) {
   const voiceResponse=await fetch("https://api.elevenlabs.io/v2/voices?page_size=100&language=pt&include_total_count=false",{headers:{"xi-api-key":apiKey}});
   const voiceData=await voiceResponse.json().catch(function(){return {}});
   if(!voiceResponse.ok)throw new Error("Não foi possível consultar as vozes disponíveis na ElevenLabs: "+String(voiceData.detail||voiceData.message||"verifique a chave e o plano").slice(0,180));
-  const voices=(Array.isArray(voiceData.voices)?voiceData.voices:[]).map(function(v){
+  let voiceRows=Array.isArray(voiceData.voices)?voiceData.voices:[];
+  if(!voiceRows.length){
+    const fallbackResponse=await fetch("https://api.elevenlabs.io/v2/voices?page_size=100&include_total_count=false",{headers:{"xi-api-key":apiKey}});
+    const fallbackData=await fallbackResponse.json().catch(function(){return {}});
+    if(fallbackResponse.ok)voiceRows=Array.isArray(fallbackData.voices)?fallbackData.voices:[];
+  }
+  const voices=voiceRows.map(function(v){
     return {voice_id:String(v.voice_id||""),name:String(v.name||"Voz"),category:String(v.category||""),description:String(v.description||"").slice(0,240),labels:v.labels||{}};
   }).filter(function(v){return v.voice_id});
   if(!voices.length)throw new Error("A ElevenLabs não retornou vozes em português disponíveis para esta conta.");
@@ -41,7 +47,7 @@ async function assignCharacterVoices(token,mangaId,dialogue) {
   const used=new Set(Object.keys(cast).map(function(k){return cast[k]&&cast[k].voice_id}).filter(Boolean));
   const assigned=Array.isArray(chosen.assignments)?chosen.assignments:[];
   missing.forEach(function(character){
-    const pick=assigned.find(function(item){return item.speaker_key===character.key})||assigned.find(function(item){return normalizeSpeaker(item.speaker_key)===character.key});
+    const pick=assigned.find(function(item){return item.speaker_key===character.key||normalizeSpeaker(item.speaker_key||item.speaker)===character.key})||assigned.find(function(item){return normalizeSpeaker(item.speaker||item.character)===character.key});
     let voice=pick&&byId.get(String(pick.voice_id||""));
     if(!voice||used.has(voice.voice_id))voice=candidates.find(function(v){return !used.has(v.voice_id)});
     if(!voice)throw new Error("Não há vozes diferentes suficientes para todos os personagens deste capítulo.");
