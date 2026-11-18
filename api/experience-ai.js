@@ -2,7 +2,7 @@ const SUPABASE_URL = "https://qwhpikyxilzwazeneddw.supabase.co";
 const SUPABASE_KEY = "sb_publishable_FjocCd5CH-v6Un0Qg_HBdQ_ujxKhD9q";
 const DEFAULT_VOICE = process.env.ELEVENLABS_DEFAULT_VOICE_ID || "EXAVITQu4vr4xnSDxMaL";
 function normalizeSpeaker(value) {
-  return String(value || "personagem").normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim().slice(0,80) || "personagem";
+  return String(value || "personagem").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim().slice(0,80) || "personagem";
 }
 async function loadVoiceCast(token,mangaId) {
   const url=SUPABASE_URL+"/rest/v1/mangas?id=eq."+encodeURIComponent(mangaId)+"&select=experience_voice_cast";
