@@ -43,6 +43,12 @@ async function saveAIPage(page){const ordered=page.panels.map((panel,index)=>({.
 async function generateCompleteExperience(){const button=$('generateAll');if(button.disabled)return;if(!window.confirm('A IA vai analisar todas as páginas e gerar animações, narração, dublagem e efeitos sonoros quando necessários. Isso pode consumir créditos das APIs e levar alguns minutos. Deseja continuar?'))return;button.disabled=true;button.textContent='IA trabalhando…';let total=0,failed=0;try{if(!manga||!chapter||!pages.length)throw new Error('O capítulo ainda não terminou de carregar.');
 for(let reviewPageIndex=0;reviewPageIndex<pages.length;reviewPageIndex++){
  const reviewPage=pages[reviewPageIndex];
+ // Toda página aberta no modo Experiência passa pela confirmação do autor,
+ // inclusive quadros antigos que já tinham descrição e poderiam escapar da revisão.
+ if(Array.isArray(reviewPage.panels)&&reviewPage.panels.length){
+   reviewPage.panels=reviewPage.panels.map((panel,index)=>({...panel,order:index+1,needs_author_review:true,author_confirmed:panel.author_confirmed===true,layout_source:panel.layout_source||'existing'}));
+   await saveAIPage(reviewPage);
+ }
  const needsReviewAnalysis=!Array.isArray(reviewPage.panels)||!reviewPage.panels.length||reviewPage.panels.some(panel=>!panel.description&&!panel.narration&&!(panel.dialogue&&panel.dialogue.length)&&!panel.sound_effect&&!panel.motion_prompt);
  if(!needsReviewAnalysis)continue;
  setStatus('Primeiro, a IA está mapeando os quadros da página '+(reviewPageIndex+1)+' de '+pages.length+'. Nenhum áudio ou vídeo será gerado ainda…');
