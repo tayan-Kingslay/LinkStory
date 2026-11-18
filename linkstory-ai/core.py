@@ -71,18 +71,15 @@ def split_source(path: Path, source_root: Path):
         add_start_index=True,
         separators=["\nclass ", "\ndef ", "\nfunction ", "\n\n", "\n", " ", ""],
     )
-    chunks = splitter.split_text(raw)
+    source_document = Document(page_content=raw)
+    chunks = splitter.split_documents([source_document])
     relative = str(path.resolve().relative_to(source_root.resolve()))
     documents = []
-    search_from = 0
     for chunk in chunks:
-        start = raw.find(chunk, search_from)
-        if start < 0:
-            start = 0
-        search_from = start + len(chunk)
+        start = int(chunk.metadata.get("start_index", 0))
         line_start = raw.count("\n", 0, start) + 1
         documents.append(Document(
-            page_content=chunk,
+            page_content=chunk.page_content,
             metadata={
                 "source": relative,
                 "line_start": line_start,
