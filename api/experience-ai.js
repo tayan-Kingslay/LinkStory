@@ -433,6 +433,10 @@ async function reviewChapter(token,ids,decision,feedback){
     const pagesResponse=await fetch(SUPABASE_URL+"/rest/v1/manga_pages?chapter_id=eq."+encodeURIComponent(ids.chapterId)+"&select=id,page_number,image_url,private_image_path,panels&order=page_number.asc",{headers:headers});
     if(!pagesResponse.ok)throw new Error("Não foi possível conferir as páginas.");
     const pages=await pagesResponse.json();
+    const pendingPanelReview=pages.some(function(page){return Array.isArray(page.panels)&&page.panels.some(function(panel){return panel&&panel.needs_author_review===true&&panel.author_confirmed!==true;});});
+    const uncertainSpeaker=pages.some(function(page){return Array.isArray(page.panels)&&page.panels.some(function(panel){return Array.isArray(panel.dialogue)&&panel.dialogue.some(function(line){return Number(line.speaker_confidence)<0.6&&line.speaker_confirmed!==true;});});});
+    if(pendingPanelReview)throw new Error("A aprovação está bloqueada: o autor ainda precisa conferir a área e a ordem de todos os quadros sugeridos pela IA.");
+    if(uncertainSpeaker)throw new Error("A aprovação está bloqueada: existe fala com personagem incerto que precisa ser confirmada ou corrigida pelo autor.");
     const invalid=pages.some(function(page){
       return !Array.isArray(page.panels)||!page.panels.length||page.panels.some(function(panel){
         return !panel||![panel.x,panel.y,panel.width,panel.height].every(function(value){return Number.isFinite(Number(value));})||
