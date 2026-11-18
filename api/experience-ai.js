@@ -143,13 +143,28 @@ function parseJsonText(text) {
   try { return JSON.parse(clean); } catch (e) { throw new Error("A IA retornou uma análise inválida. Tente novamente."); }
 }
 async function gemini(apiKey, payload) {
-  const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
-    method: "POST",
-    headers: { "x-goog-api-key": apiKey, "Content-Type": "application/json" },
-    body: JSON.stringify(payload)
-  });
-  const data = await response.json().catch(function(){ return {}; });
-  if (!response.ok) throw new Error(data.error && data.error.message ? data.error.message : "Gemini não conseguiu analisar a página.");
+  const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent";
+  let response, data = {};
+  for (let attempt = 0; attempt < 3; attempt++) {
+    response = await fetch(endpoint, {
+      method: "POST",
+      headers: { "x-goog-api-key": apiKey, "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    data = await response.json().catch(function(){ return {}; });
+    if (response.ok) break;
+    const status = response.status;
+    const retryable = status === 429 || status === 500 || status === 502 || status === 503 || status === 504;
+    if (!retryable || attempt === 2) {
+      const message = data.error && data.error.message ? data.error.message : "Gemini não conseguiu analisar a página.";
+      if (status === 429 || status === 503) throw new Error("A IA está com alta demanda no momento. O LinkStory tentou novamente automaticamente, mas o serviço continua indisponível. Seus dados salvos foram preservados. Tente gerar novamente em instantes.");
+      throw new Error(message);
+    }
+    const retryAfter = Number(response.headers && response.headers.get("retry-after"));
+    const delay = Number.isFinite(retryAfter) && retryAfter > 0 ? Math.min(retryAfter * 1000, 5000) : (attempt + 1) * 1200;
+    await new Promise(function(resolve){ setTimeout(resolve, delay); });
+  }
+  if (!response || !response.ok) throw new Error("A IA não ficou disponível após as tentativas automáticas. Tente novamente em instantes.");
   const parts = data.candidates && data.candidates[0] && data.candidates[0].content ? data.candidates[0].content.parts || [] : [];
   const text = parts.map(function(part){ return part.text || ""; }).join("\n");
   if (!text) throw new Error("A IA não retornou a análise.");
