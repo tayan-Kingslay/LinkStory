@@ -182,7 +182,7 @@ h1{line-height:1.02!important}
 
 
 /* Escolha de publicação diretamente no Meu Estúdio */
-.publish-choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;width:min(100%,620px)}
+.publish-choices{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:min(100%,620px)}
 .publish-choice{min-width:0;min-height:92px;display:flex;align-items:center;gap:12px;padding:15px 16px;border:1px solid rgba(197,215,236,.9);border-radius:17px;background:rgba(255,255,255,.82);box-shadow:0 9px 24px rgba(18,45,76,.065),inset 0 1px 0 #fff;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease}
 .publish-choice:hover{transform:translateY(-2px);border-color:rgba(11,114,231,.42);box-shadow:0 14px 30px rgba(18,45,76,.1)}
 .choice-icon{width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:13px;background:#eaf3ff;color:#0b72e7;font-size:22px;font-weight:900}
@@ -194,8 +194,8 @@ h1{line-height:1.02!important}
 <link rel="stylesheet" href="at3-global.css?v=2">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
 <link rel="stylesheet" href="mobile.css?v=5"></head><body><header class="topbar"><a class="back" href="index.html">‹</a><a class="logo" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" aria-label="Abrir menu"></button></header><dialog class="menu-dialog" id="menuDialog"><div class="menu-wrap"><div class="menu-head"><strong>LINKSTORY</strong><button class="close" id="closeMenu">×</button></div><nav class="menu-list"><a href="profile.html">Perfil <strong>›</strong></a><a href="studio.html">Meu Estúdio <strong>›</strong></a><a href="publish.html">Publicar mangá <strong>›</strong></a><a href="settings.html">Configurações <strong>›</strong></a><a href="login.html">Entrar <strong>›</strong></a></nav></div></dialog><main><section class="intro"><div><span class="ey">ÁREA DO CRIADOR</span><h1>Meu Estúdio.</h1><p class="subtitle">Aqui aparecem somente suas obras reais.</p></div><div class="publish-choices" aria-label="Escolha como publicar seu mangá">
-<a class="publish-choice traditional" href="publish.html?mode=traditional"><span class="choice-icon" aria-hidden="true">▤</span><span class="choice-copy"><strong>Publicar mangá tradicional</strong><small>Páginas completas, no formato clássico.</small></span><span class="choice-arrow" aria-hidden="true">↗</span></a>
-<a class="publish-choice experience" href="publish.html?mode=experience"><span class="choice-icon" aria-hidden="true">▦</span><span class="choice-copy"><strong>Publicar com Melhor Experiência</strong><small>Leitura quadro por quadro, com fluxo próprio.</small></span><span class="choice-arrow" aria-hidden="true">↗</span></a>
+<a class="publish-choice traditional" href="publish.html"><span class="choice-icon" aria-hidden="true">▤</span><span class="choice-copy"><strong>Publicar mangá</strong><small>Páginas completas, no formato clássico.</small></span><span class="choice-arrow" aria-hidden="true">↗</span></a>
+
 </div></section><section class="stats"><div class="stat"><strong id="worksCount">0</strong><span>Obras publicadas</span></div><div class="stat"><strong id="chaptersCount">0</strong><span>Capítulos publicados</span></div><div class="stat"><strong id="likesCount">0</strong><span>Curtidas recebidas</span></div></section><section><div class="section-head"><div><span class="ey">CRIAÇÕES</span><h2>Minhas obras</h2></div></div><div id="works" class="works"><div class="empty" style="grid-column:1/-1"><strong>Carregando suas obras…</strong></div></div></section>
 <section class="creator-feed" id="creatorFeed">
  <div class="section-head"><div><span class="ey">COMUNIDADE</span><h2>Meu Feed</h2><p class="subtitle">Gerencie suas publicações sem sair do Estúdio.</p></div><a class="section-link" href="fy.html">Abrir Feed →</a></div>
