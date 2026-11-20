@@ -1,0 +1,82 @@
+/* LinkStory — identidade editorial. O Liquid Glass fica reservado à navegação e aos painéis flutuantes. */
+:root{
+  --ls-editorial-bg:#f5f7fa;
+  --ls-editorial-surface:#fff;
+  --ls-editorial-line:#e1e7ef;
+  --ls-editorial-ink:#172536;
+  --ls-editorial-muted:#718096;
+  --ls-editorial-blue:#176fd1;
+  --ls-editorial-shadow:0 3px 12px rgba(20,42,68,.055);
+}
+body:not(:has(.reader-title)){
+  background:var(--ls-editorial-bg)!important;
+  background-image:none!important;
+  color:var(--ls-editorial-ink);
+}
+/* Catálogo: capas e informações ganham prioridade; sem vidro nos cartões de conteúdo. */
+:where(.book,.card,.library-card,.continue-card,.work,.ranking-entry a,.suggestion,.empty-state,.empty,.creator,.library-heading,.profile,.intro,.stat,.metric,.panel,.form,.social-panel){
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+  box-shadow:var(--ls-editorial-shadow)!important;
+}
+:where(.book,.card,.library-card,.continue-card,.work,.ranking-entry a,.empty-state,.empty,.stat,.metric,.panel,.form,.social-panel){
+  border:1px solid var(--ls-editorial-line)!important;
+  background:var(--ls-editorial-surface)!important;
+}
+:where(.book,.library-card,.continue-card,.work,.card){border-radius:9px!important}
+:where(.book){outline:0!important;box-shadow:0 2px 9px rgba(20,42,68,.10)!important}
+:where(.book):after{border-radius:inherit}
+:where(.book img,.library-cover img,.work .cover img){border-radius:inherit}
+:where(.shelf-title,.section-head h2,.section-heading h2){color:var(--ls-editorial-ink)!important;letter-spacing:-.035em!important}
+:where(.shelf-link,.section-link,.count){color:var(--ls-editorial-blue)!important}
+:where(.ranking-entry a){border-radius:10px!important}
+:where(.ranking-entry a:before){display:none!important}
+:where(.ranking-entry strong){color:var(--ls-editorial-ink)!important}
+:where(.ranking-entry em,.library-info small,.meta,.subtitle){color:var(--ls-editorial-muted)!important}
+:where(.creator){
+  border:0!important;border-radius:12px!important;
+  background:#176fd1!important;color:#fff!important;
+  box-shadow:none!important;
+}
+:where(.creator .ey,.creator p){color:rgba(255,255,255,.84)!important}
+:where(.creator a){background:#fff!important;color:#145eae!important;border-radius:8px!important;box-shadow:none!important}
+:where(.suggestion){box-shadow:none!important}
+:where(.search input,input,textarea,select){
+  border-color:#d8e1eb!important;border-radius:9px!important;
+  background:#fff!important;box-shadow:none!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+}
+:where(.tabs){background:#edf1f5!important;border:1px solid #e0e6ed!important;box-shadow:none!important}
+:where(.tabs button.active){background:#fff!important;border:1px solid #dce4ed!important;box-shadow:0 1px 3px rgba(20,42,68,.07)!important}
+:where(.library-heading){background:#fff!important;border:1px solid var(--ls-editorial-line)!important;border-radius:12px!important}
+:where(.heading-mark){box-shadow:none!important}
+:where(.stat){border-radius:10px!important}
+:where(.work){border-radius:10px!important}
+:where(.empty,.empty-state){border-style:dashed!important;border-radius:12px!important}
+:where(.card:hover,.library-card:hover,.continue-card:hover){transform:translateY(-2px);box-shadow:0 7px 18px rgba(20,42,68,.09)!important}
+@media(max-width:720px){
+  :where(.book,.card,.library-card,.continue-card,.work){border-radius:8px!important}
+  :where(.ranking-entry a){border-radius:9px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  :where(.card,.library-card,.continue-card){transition:none!important}
+}
+/* Tema escuro: contraste editorial sem perder a navegação translúcida. */
+html[data-ls-theme="dark"] body:not(:has(.reader-title)){
+  background:#111923!important;background-image:none!important;color:#edf3fa!important;
+}
+html[data-ls-theme="dark"]{
+  --ls-editorial-surface:#192330;
+  --ls-editorial-line:#2d3a49;
+  --ls-editorial-ink:#edf3fa;
+  --ls-editorial-muted:#a5b2c2;
+}
+html[data-ls-theme="dark"] :where(.book,.card,.library-card,.continue-card,.work,.ranking-entry a,.empty-state,.empty,.stat,.metric,.panel,.form,.social-panel,.library-heading,.profile,.intro){
+  background:#192330!important;border-color:#2d3a49!important;color:#edf3fa!important;
+}
+html[data-ls-theme="dark"] :where(.shelf-title,.section-head h2,.section-heading h2,.ranking-entry strong,.empty strong,.empty-state strong){color:#edf3fa!important}
+html[data-ls-theme="dark"] :where(.ranking-entry em,.library-info small,.meta,.subtitle,.empty p,.empty-state span){color:#a5b2c2!important}
+html[data-ls-theme="dark"] :where(input,textarea,select,.search input){background:#17212d!important;border-color:#354457!important;color:#edf3fa!important}
+html[data-ls-theme="dark"] :where(.tabs){background:#151f2b!important;border-color:#2d3a49!important}
+html[data-ls-theme="dark"] :where(.tabs button.active){background:#243448!important;border-color:#3a5068!important;color:#8fc2ff!important}
+html[data-ls-theme="dark"] :where(.creator){background:#155eae!important;border:0!important}
