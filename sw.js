@@ -1,4 +1,4 @@
-const CACHE_NAME = 'linkstory-reader-v4';
+const CACHE_NAME = 'linkstory-reader-v5';
 const APP_SHELL = [
   './reader.html',
   './reader.html?app=reader',
@@ -10,8 +10,12 @@ const APP_SHELL = [
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(APP_SHELL))
-      .then(() => self.skipWaiting())
+      .then(cache => Promise.allSettled(APP_SHELL.map(asset => cache.add(asset))))
+      .then(results => {
+        const failed = results.filter(result => result.status === 'rejected').length;
+        if (failed) console.warn('[LinkStory] Alguns recursos offline não foram armazenados:', failed);
+        return self.skipWaiting();
+      })
   );
 });
 
