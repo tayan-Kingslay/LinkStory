@@ -2,7 +2,7 @@
   const mobileStylesheet=document.createElement('link');
   mobileStylesheet.rel='stylesheet';mobileStylesheet.href='mobile.css?v=4';
   if(!document.querySelector('link[href^="mobile.css"]'))document.head.appendChild(mobileStylesheet);
-  const theme=localStorage.getItem('linkstory-theme')||'light';
+  let theme='light';\n  try { theme=localStorage.getItem('linkstory-theme')||'light'; } catch (_) {}
   document.documentElement.dataset.lsTheme=theme;
   const css=`
     html[data-ls-theme="dark"],html[data-ls-theme="dark"] body{background:#111!important;color:#fff!important}
