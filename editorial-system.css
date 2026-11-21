@@ -80,3 +80,14 @@ html[data-ls-theme="dark"] :where(input,textarea,select,.search input){backgroun
 html[data-ls-theme="dark"] :where(.tabs){background:#151f2b!important;border-color:#2d3a49!important}
 html[data-ls-theme="dark"] :where(.tabs button.active){background:#243448!important;border-color:#3a5068!important;color:#8fc2ff!important}
 html[data-ls-theme="dark"] :where(.creator){background:#155eae!important;border:0!important}
+
+/* Revisão responsiva compartilhada nas páginas principais. */
+html,body{max-width:100%;overflow-x:hidden}
+:where(img,video,canvas,svg){max-width:100%}
+:where(main,.container,.content,.page){min-width:0;max-width:100%}
+@media(max-width:800px){
+  :where(button,[role="button"],.btn,.circle,.back,.menu-btn){min-height:44px}
+  :where(input,textarea,select){max-width:100%;font-size:16px}
+  :where(.grid,.cards,.works,.layout,.form-grid){min-width:0}
+  :where(.card,.panel,.work,.book,.library-card,.continue-card){min-width:0;max-width:100%}
+}
