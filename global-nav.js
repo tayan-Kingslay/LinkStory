@@ -41,6 +41,28 @@
     .ls-global-menu-btn{width:46px;height:46px;border:1px solid #dbe5ef;border-radius:50%;background:#fff;color:#102033;display:flex;align-items:center;justify-content:center;padding:0;font-size:21px;line-height:1;margin-left:auto;box-shadow:0 5px 18px rgba(16,32,51,.05)}
     .ls-global-menu-btn:hover{border-color:#0b72e7;color:#0b72e7}
     .ls-menu-dialog{width:min(100%,520px);height:100dvh;max-height:none;margin:0 0 0 auto;border:0;padding:0;background:#fff;color:#102033}.ls-menu-wrap{height:100%;padding:24px 20px;overflow:auto}.ls-menu-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:22px;border-bottom:1px solid #dbe5ef}.ls-menu-head strong{color:#102033;letter-spacing:2.5px;font:800 17px/1 'DM Sans',sans-serif}.ls-menu-close{border:0;background:none;font-size:38px;line-height:1;color:#102033}.ls-menu-links{display:grid;margin-top:4px}.ls-menu-links a{display:flex;align-items:center;justify-content:space-between;padding:21px 2px;border-bottom:1px solid #dbe5ef;text-decoration:none;color:#102033;font:700 18px/1.2 'DM Sans',sans-serif}.ls-menu-links span{color:#7a8da0;font-size:27px}
+    /* The open menu must be an opaque, full-screen layer above every page control. */
+    dialog#menuDialog,dialog#lsMenu,dialog.ls-menu-dialog{
+      position:fixed!important;inset:0!important;margin:0!important;
+      width:100vw!important;max-width:none!important;height:100dvh!important;max-height:none!important;
+      padding:0!important;border:0!important;border-radius:0!important;
+      background:#fff!important;color:#102033!important;opacity:1!important;
+      z-index:2147483000!important;overflow:auto!important;
+      box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+    }
+    dialog#menuDialog::backdrop,dialog#lsMenu::backdrop,dialog.ls-menu-dialog::backdrop{
+      background:rgba(12,25,42,.58)!important;opacity:1!important;
+    }
+    dialog#menuDialog .ls-menu-wrap,dialog#lsMenu .ls-menu-wrap{background:#fff!important;min-height:100dvh!important;opacity:1!important}
+    dialog#menuDialog .ls-menu-head,dialog#menuDialog .menu-head,dialog#lsMenu .ls-menu-head{background:#fff!important;opacity:1!important}
+    dialog#menuDialog .ls-menu-links,dialog#menuDialog .menu-links,dialog#menuDialog .menu-list,dialog#lsMenu .ls-menu-links{background:#fff!important;opacity:1!important}
+    dialog#menuDialog .ls-menu-links a,dialog#menuDialog .menu-links a,dialog#menuDialog .menu-list a,dialog#lsMenu .ls-menu-links a{background:#fff!important;color:#182333!important;opacity:1!important}
+    body:has(dialog[open]) #lsBottomNav{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+    body:has(dialog[open]) .ls-global-menu-btn,body:has(dialog[open]) #openMenu{visibility:hidden!important;opacity:0!important;pointer-events:none!important}
+    html[data-ls-theme="dark"] dialog#menuDialog,html[data-ls-theme="dark"] dialog#lsMenu,html[data-ls-theme="dark"] dialog.ls-menu-dialog{background:#151515!important;color:#fff!important}
+    html[data-ls-theme="dark"] dialog#menuDialog .ls-menu-wrap,html[data-ls-theme="dark"] dialog#menuDialog .menu-links,html[data-ls-theme="dark"] dialog#menuDialog .menu-list,html[data-ls-theme="dark"] dialog#lsMenu .ls-menu-wrap,html[data-ls-theme="dark"] dialog#lsMenu .ls-menu-links{background:#151515!important}
+    html[data-ls-theme="dark"] dialog#menuDialog .ls-menu-links a,html[data-ls-theme="dark"] dialog#menuDialog .menu-links a,html[data-ls-theme="dark"] dialog#menuDialog .menu-list a,html[data-ls-theme="dark"] dialog#lsMenu .ls-menu-links a{background:#151515!important;color:#fff!important}
+
     html[data-ls-theme="dark"] .ls-menu-dialog,html[data-ls-theme="dark"] #lsMenu{background:#151515!important;color:#fff!important}
     html[data-ls-theme="dark"] .ls-menu-head{border-color:#303030}.ls-menu-dialog{color:#102033}
     html[data-ls-theme="dark"] .ls-menu-head strong,html[data-ls-theme="dark"] .ls-menu-close,html[data-ls-theme="dark"] .ls-menu-links a{color:#fff!important}
