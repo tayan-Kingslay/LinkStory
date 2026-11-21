@@ -244,56 +244,24 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   /* Reuse DM Sans already loaded by the site; avoid a second font-family request. */
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
 
-  /* Layout do cabeçalho: busca | logo centralizada | notificações | menu. */
+  /* Cabeçalho: busca | logo centralizada | menu. Notificações ficam no menu lateral. */
   const headerLayoutCss = `
-    :where(.topbar,.top,.header){display:grid!important;grid-template-columns:44px minmax(0,1fr) 44px 44px!important;align-items:center!important;column-gap:10px!important}
+    :where(.topbar,.top,.header){display:grid!important;grid-template-columns:44px minmax(0,1fr) 44px!important;align-items:center!important;column-gap:10px!important}
     :where(.topbar,.top,.header) > .logo{grid-column:2!important;grid-row:1!important;justify-self:center!important;align-self:center!important;margin:0!important}
     :where(.topbar,.top,.header) > .header-actions,:where(.topbar,.top,.header) > .top-actions,:where(.topbar,.top,.header) > .actions{display:contents!important}
     :where(.topbar,.top,.header) #openSearch,:where(.topbar,.top,.header) #lsHeaderSearchShortcut{grid-column:1!important;grid-row:1!important;justify-self:start!important;margin:0!important;flex:0 0 44px!important}
-    :where(.topbar,.top,.header) #lsNotificationShortcut,:where(.topbar,.top,.header) a[href="notifications.html"]{grid-column:3!important;grid-row:1!important;justify-self:center!important;margin:0!important;flex:0 0 44px!important}
-    :where(.topbar,.top,.header) #openMenu,:where(.topbar,.top,.header) #lsGlobalMenuButton{grid-column:4!important;grid-row:1!important;justify-self:end!important;margin:0!important;flex:0 0 44px!important}
+    :where(.topbar,.top,.header) #openMenu,:where(.topbar,.top,.header) #lsGlobalMenuButton{grid-column:3!important;grid-row:1!important;justify-self:end!important;margin:0!important;flex:0 0 44px!important}
     :where(.topbar,.top,.header) .login{display:none!important}
     #lsHeaderSearchShortcut{width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border:1px solid rgba(125,151,181,.24);border-radius:15px;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(241,247,253,.92));color:#176fc2;box-shadow:0 5px 16px rgba(30,65,105,.09);text-decoration:none}
     #lsHeaderSearchShortcut svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
     html[data-ls-theme="dark"] #lsHeaderSearchShortcut{background:#223247!important;color:#a9d3ff!important;border-color:#40546c!important}
     @media(max-width:560px),(pointer:coarse){
-      :where(.topbar,.top,.header){grid-template-columns:40px minmax(0,1fr) 40px 40px!important;column-gap:7px!important}
-      :where(.topbar,.top,.header) #openSearch,:where(.topbar,.top,.header) #lsHeaderSearchShortcut,:where(.topbar,.top,.header) #lsNotificationShortcut,:where(.topbar,.top,.header) a[href="notifications.html"],:where(.topbar,.top,.header) #openMenu,:where(.topbar,.top,.header) #lsGlobalMenuButton{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
+      :where(.topbar,.top,.header){grid-template-columns:40px minmax(0,1fr) 40px!important;column-gap:7px!important}
+      :where(.topbar,.top,.header) #openSearch,:where(.topbar,.top,.header) #lsHeaderSearchShortcut,:where(.topbar,.top,.header) #openMenu,:where(.topbar,.top,.header) #lsGlobalMenuButton{width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important}
     }
   `;
   if(!document.getElementById('lsHeaderLayoutStyle')){
-    const layoutStyle=document.createElement('style');
-    layoutStyle.id='lsHeaderLayoutStyle';
-    layoutStyle.textContent=headerLayoutCss;
-    document.head.appendChild(layoutStyle);
-  }
-
-  /* Reader and direct conversation have dedicated layouts; do not inject global navigation/menu. */
-  const currentPage=location.pathname.split('/').filter(Boolean).pop()||'index.html';
-  if(document.querySelector('.reader-title')||currentPage==='chat.html'||currentPage==='reader-experience.html') return;
-  if(!document.getElementById('lsBottomNav')){
-    const path=location.pathname.split('/').pop()||'index.html';
-    const active=path==='fy.html'?'fy':path==='library.html'?'library':path==='profile.html'?'profile':'home';
-    const nav=document.createElement('nav');nav.id='lsBottomNav';nav.setAttribute('aria-label','Navegação principal');
-    nav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3.5 10 8.5-7 8.5 7v10.5h-17z"/><path d="M9 20.5v-6h6v6"/></svg></span><span>Início</span></a><a href="fy.html" class="${active==='fy'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 1.9 6.1L20 10l-6.1 1.9L12 18l-1.9-6.1L4 10l6.1-1.9z"/><path d="m19 16 .9 2.1L22 19l-2.1.9L19 22l-.9-2.1L16 19l2.1-.9z"/></svg></span><span>Pra você</span></a><a href="messages.html" class="${path==='messages.html'||path==='chat.html'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-9.5A7.5 7.5 0 0 1 10.5 4H12a8 8 0 0 1 8 7.5Z"/><path d="M8 11h8M8 14.5h5"/></svg></span><span>Mensagens</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4.5h13a2 2 0 0 1 2 2v14H6a2 2 0 0 1-2-2z"/><path d="M4 18.5a2 2 0 0 1 2-2h13M8 8h7M8 11.5h7"/></svg></span><span>Biblioteca</span></a><a href="profile.html" class="${active==='profile'?'active':''}"><span class="ls-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M4.5 21a7.5 7.5 0 0 1 15 0"/></svg></span><span>Perfil</span></a>`;
-    document.body.appendChild(nav);
-  }
-
-  {
-    const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
-    const isHomePage=page==='index.html';
-    const header=document.querySelector('.topbar,.top,.header');
-    const actions=header?.querySelector('.header-actions,.top-actions,.actions')||header;
-    const searchSelector='#openSearch,#lsHeaderSearchShortcut,.search,[aria-label="Buscar"],[title="Buscar"]';
-    if(!isHomePage){
-      if(header)header.querySelectorAll(searchSelector).forEach(el=>el.remove());
-    }else if(header&&actions&&!document.getElementById('openSearch')&&!document.getElementById('lsHeaderSearchShortcut')){
-      const searchLink=document.createElement('a');
-      searchLink.id='lsHeaderSearchShortcut';searchLink.href='explore.html';
-      searchLink.setAttribute('aria-label','Buscar');searchLink.title='Buscar';
-      searchLink.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>';
-      actions.insertBefore(searchLink,actions.firstChild);
-    }
+    const layoutStyle=document.createElement('style');layoutStyle.id='lsHeaderLayoutStyle';layoutStyle.textContent=headerLayoutCss;document.head.appendChild(layoutStyle);
   }
 
   let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');const header=document.querySelector('.topbar,.top,.header,body>header:not(.chat-header)');let opener=document.getElementById('openMenu')||(header&&header.querySelector('.menu-btn,.menu,.menu-button,.ls-global-menu-btn'));
@@ -345,31 +313,8 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   if(!opener){opener=document.createElement('button');opener.id='lsGlobalMenuButton';opener.className='ls-global-menu-btn';opener.setAttribute('aria-label','Abrir menu');opener.innerHTML='☰';if(header){header.appendChild(opener)}else{opener.classList.add('ls-global-menu-fallback');document.body.appendChild(opener)}}
   if(opener&&!opener.dataset.lsBound){opener.dataset.lsBound='1';opener.addEventListener('click',()=>{if(typeof menu.showModal==='function'){if(!menu.open)menu.showModal()}else menu.setAttribute('open','')})}
   {
-    const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
-    const showNotifications=page==='index.html';
-    const headerActions=document.querySelector('.header-actions,.top-actions,.reader-right,.header .actions');
-    const notificationContainer=headerActions||document.querySelector('.header,.topbar,.top');
-    const notificationSelector='a[href="notifications.html"],a[href$="/notifications.html"],[aria-label*="notifica" i],[title*="notifica" i],[data-notifications],#lsNotificationShortcut';
-    const injected=document.getElementById('lsNotificationShortcut');
-    if(!showNotifications){
-      if(notificationContainer)notificationContainer.querySelectorAll(notificationSelector).forEach(el=>el.remove());
-      if(injected)injected.remove();
-    }else{
-      const existing=notificationContainer?[...notificationContainer.querySelectorAll(notificationSelector)]:[];
-      const unique=[...new Set(existing)];
-      const keep=unique[0]||null;
-      unique.slice(1).forEach(el=>el.remove());
-      if(keep&&injected&&keep!==injected)injected.remove();
-      if(!keep&&!injected){
-        const notify=document.createElement('a');notify.id='lsNotificationShortcut';notify.href='notifications.html';notify.setAttribute('aria-label','Notificações');notify.title='Notificações';
-        notify.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg>';
-        notify.style.cssText='position:relative;flex:0 0 42px;width:42px;height:42px;display:inline-flex;align-items:center;justify-content:center;margin-left:auto;border:1px solid #dbe5ef;border-radius:14px;background:#fff;color:#1676dc;box-shadow:0 3px 10px #1020330c;text-decoration:none;z-index:2';
-        notify.querySelector('svg').style.cssText='width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round';
-        if(headerActions){headerActions.insertBefore(notify,opener&&opener.parentElement===headerActions?opener:null)}
-        else if(opener&&opener.parentElement){opener.parentElement.insertBefore(notify,opener)}
-        else {notify.style.position='fixed';notify.style.top='14px';notify.style.right='68px';document.body.appendChild(notify)}
-      }
-    }
+    /* Remove qualquer atalho de notificação do cabeçalho em todas as páginas. */
+    document.querySelectorAll('.topbar a[href*="notifications.html"],.top a[href*="notifications.html"],.header a[href*="notifications.html"],.topbar [aria-label*="notifica" i],.top [aria-label*="notifica" i],.header [aria-label*="notifica" i],#lsNotificationShortcut').forEach(el=>el.remove());
   }
   const close=menu.querySelector('.ls-menu-close');if(close&&!close.dataset.lsBound){close.dataset.lsBound='1';close.addEventListener('click',()=>{if(typeof menu.close==='function')menu.close();else menu.removeAttribute('open')})}
   if(!menu.dataset.lsBound){menu.dataset.lsBound='1';menu.addEventListener('click',e=>{if(e.target===menu){if(typeof menu.close==='function')menu.close();else menu.removeAttribute('open')}})}
