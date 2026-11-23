@@ -20,9 +20,7 @@ jobs:
           node-version: 22
       - name: Check JavaScript syntax
         run: |
-          node --check api/experience-ai.js
-          node --check manga-db.js
-          node --check publish.js
+          find . -path './.git' -prune -o -path './node_modules' -prune -o -path './dist' -prune -o -name '*.js' -type f -print0 | xargs -0 -n1 node --check
       - name: Check inline page scripts
         run: node scripts/validate-inline-scripts.js
       - name: Build static site
