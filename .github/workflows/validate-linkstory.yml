@@ -2,11 +2,12 @@ name: Validate LinkStory changes
 on:
   pull_request:
     branches:
-      - studio-control-center-2026-11
+      - main
   push:
     branches:
       - feature/experience-approval-workflow
       - feature/experience-voice-design-reader-ui
+      - feature/linkstory-publicacao-simples
 jobs:
   validate:
     runs-on: ubuntu-latest
