@@ -239,4 +239,5 @@ document.getElementById('saveGuardSettings').onclick=async()=>{guardStatus.textC
 document.getElementById('passwordForm').onsubmit=async e=>{e.preventDefault();const a=document.getElementById('newPassword').value,b=document.getElementById('confirmPassword').value,status=document.getElementById('passwordStatus');if(a.length<8){status.textContent='A senha precisa ter pelo menos 8 caracteres.';return}if(a!==b){status.textContent='As senhas não coincidem.';return}status.textContent='Atualizando…';const r=await db.auth.updateUser({password:a});status.textContent=r.error?(r.error.message||'Não foi possível atualizar.'):'Senha atualizada com sucesso.';if(!r.error)e.target.reset()};
 document.getElementById('signOutButton').onclick=async()=>{const b=document.getElementById('signOutButton');b.disabled=true;const r=await signOutLinkStory();if(r.error){b.disabled=false;document.getElementById('passwordStatus').textContent=r.error.message;return}location.href='login.html'};
 loadAccount().then(async()=>{await loadMangakaAccount();await loadGuardSettings()}).catch(e=>{document.getElementById('accountMessage').textContent=e.message||'Não foi possível carregar sua conta.'});
-</script></body></html>
+</script><script src="global-nav.js?v=20261123-2"></script>
+</body></html>
