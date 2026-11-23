@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#ffffff">
 <title>LinkStory — Mangás para ler e publicar</title>
+<meta name="description" content="Descubra mangás, acompanhe criadores e publique suas histórias no LinkStory.">
 <link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg"><link rel="stylesheet" href="mobile.css?v=5">
 <style>
 :root{--b:#0b72e7;--i:#102033;--m:#66788d;--l:#dbe5ef}
@@ -161,6 +162,11 @@ html[data-ls-theme="dark"] .ls-bottom-nav .bottom-nav-item.active{color:#4b9cff}
 @media(max-width:720px){.book-skeleton{flex-basis:166px;height:252px}}
 @media(max-width:420px){.book-skeleton{flex-basis:154px;height:235px}}
 @media(prefers-reduced-motion:reduce){.book-skeleton:after{animation:none;transform:none;opacity:.35}}
+.home-intro{width:min(1080px,calc(100% - 32px));margin:28px auto 20px;padding:0}
+.home-intro .kicker{display:block;color:var(--b);font-size:10px;font-weight:900;letter-spacing:2px}
+.home-intro h1{margin:7px 0 8px;color:var(--i);font-size:clamp(30px,5vw,44px);line-height:1.04;letter-spacing:-1.7px;font-weight:900}
+.home-intro p:last-child{margin:0;color:var(--m);font-size:14px;line-height:1.5}
+@media(max-width:720px){.home-intro{width:calc(100% - 24px);margin:22px auto 18px}.home-intro h1{font-size:clamp(29px,8vw,38px)}}
 </style>
   <link rel="stylesheet" href="visual-system.css?v=4">
 <link rel="stylesheet" href="visual-refresh.css?v=2">
@@ -307,6 +313,7 @@ html[data-ls-theme="dark"] #searchDialog input{background:#1c2938!important;colo
 </header>
 
 <main>
+<section class="home-intro"><span class="kicker">LEIA. DESCUBRA. CRIE.</span><h1>Encontre sua próxima história.</h1><p>Explore mangás, acompanhe criadores e descubra novos universos.</p></section>
 <section class="ranking-entry"><a href="ranking.html"><span><small>COMUNIDADE</small><strong>Pontos corridos</strong><em>Veja quem está liderando a leitura neste mês.</em></span><b>Ver ranking&nbsp; ›</b></a></section>
 <div class="catalog">
 <section class="shelf" id="popularShelf"><div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div><div class="track" id="popularTrack" aria-busy="true"><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div></div></section>
