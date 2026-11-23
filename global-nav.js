@@ -1,5 +1,5 @@
 (()=>{
-  const theme=localStorage.getItem('linkstory-theme')||'light';
+  let theme='light';try{theme=localStorage.getItem('linkstory-theme')||'light'}catch(e){}
   document.documentElement.dataset.lsTheme=theme;
   const css=`
     html[data-ls-theme="dark"],html[data-ls-theme="dark"] body{background:#111!important;color:#fff!important}
@@ -79,7 +79,7 @@
   if(document.querySelector('.reader-title')) return;
   if(!document.getElementById('lsBottomNav')){
     const path=location.pathname.split('/').pop()||'index.html';
-    const active=path==='library.html'?'library':path==='profile.html'?'profile':path==='fy.html'?'fy':'home';
+    const active=path==='library.html'?'library':path==='profile.html'?'profile':path==='fy.html'?'fy':path==='index.html'?'home':'';
     const nav=document.createElement('nav');nav.id='lsBottomNav';nav.setAttribute('aria-label','Navegação principal');
     nav.innerHTML=`<a href="index.html" class="${active==='home'?'active':''}"><span class="ls-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m3.5 10.8 8.5-7 8.5 7v9.1a1.6 1.6 0 0 1-1.6 1.6h-4.8v-6.2h-4.2v6.2H5.1a1.6 1.6 0 0 1-1.6-1.6z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Início</span></a><a href="fy.html" class="${active==='fy'?'active':''}"><span class="ls-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="m12 2.8 2.1 6.1 6.1 2.1-6.1 2.1-2.1 6.1-2.1-6.1-6.1-2.1 6.1-2.1z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="m19 15 .9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z" fill="currentColor"/></svg></span><span>Pra você</span></a><a href="profile.html" class="${active==='profile'?'active':''}"><span class="ls-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="3.6" stroke="currentColor" stroke-width="1.8"/><path d="M4.8 20c.5-3.4 3.3-5.4 7.2-5.4s6.7 2 7.2 5.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>Perfil</span></a><a href="library.html" class="${active==='library'?'active':''}"><span class="ls-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5.2A2.2 2.2 0 0 1 6.2 3H20v17H6.2A2.2 2.2 0 0 0 4 22z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 5.2v14.6A2.2 2.2 0 0 1 6.2 17.6H20M8 7h8M8 10.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span>Biblioteca</span></a>`;
     document.body.appendChild(nav);
