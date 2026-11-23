@@ -22,7 +22,7 @@ if (!htmlFiles.length) throw new Error("No HTML pages found.");
 let checked = 0;
 for (const file of htmlFiles) {
   const html = fs.readFileSync(file, "utf8");
-  const scripts = html.matchAll(/<script(?:\\s[^>]*)?>([\\s\\S]*?)<\\/script>/gi);
+  const scripts = html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/gi);
   let index = 0;
   for (const match of scripts) {
     const source = match[1].trim();
@@ -33,4 +33,4 @@ for (const file of htmlFiles) {
 }
 
 if (!checked) throw new Error("No inline scripts were checked.");
-process.stdout.write("Validated " + checked + " inline script(s) across " + htmlFiles.length + " HTML pages.\\n");
+process.stdout.write("Validated " + checked + " inline script(s) across " + htmlFiles.length + " HTML pages.\n");
