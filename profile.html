@@ -145,6 +145,9 @@ header.top button#openMenu::after{content:none!important;display:none!important}
 }
 html[data-ls-theme="dark"] header.top button#openMenu{background:#223247!important;color:#a9d3ff!important;border-color:rgba(139,177,218,.24)!important}
 </style>
+<style>/* Navegação compacta: remove o cabeçalho global nesta página. */
+body>header.top{display:none!important}main{padding-top:28px!important}
+</style>
 </head><body><header class="top"><a class="brand" href="index.html" aria-label="LinkStory"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a><button class="menu-btn" id="openMenu" type="button" aria-label="Abrir menu">☰</button></header><main><section class="profile profile-reordered"><div class="avatar" id="profileAvatar"><svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4"><circle cx="50" cy="34" r="13"/><path d="M24 82c3-20 14-30 26-30s23 10 26 30"/><circle cx="50" cy="50" r="46"/></svg></div><div class="profile-identity"><span class="ey">LINKSTORY · PERFIL</span><h1 id="name">Perfil</h1><div class="muted" id="handle">Entre para ver suas obras.</div></div><div class="social-inline" aria-label="Seguidores e seguindo"><button type="button" id="openMyFollowers" class="social-inline-count"><strong id="myFollowersCount">—</strong><span>seguidores</span></button><button type="button" id="openMyFollowing" class="social-inline-count"><strong id="myFollowingCount">—</strong><span>seguindo</span></button></div><div class="muted profile-bio" id="bio"></div></section>
 
 <style>
