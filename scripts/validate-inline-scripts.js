@@ -5,6 +5,7 @@ const vm = require("node:vm");
 const root = process.cwd();
 const ignored = new Set([".git", "node_modules", "dist", ".vercel"]);
 const htmlFiles = [];
+const jsFiles = [];
 
 function collect(dir) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -12,6 +13,8 @@ function collect(dir) {
       if (!ignored.has(entry.name)) collect(path.join(dir, entry.name));
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".html")) {
       htmlFiles.push(path.join(dir, entry.name));
+    } else if (entry.isFile() && entry.name.toLowerCase().endsWith(".js")) {
+      jsFiles.push(path.join(dir, entry.name));
     }
   }
 }
@@ -34,18 +37,9 @@ for (const file of htmlFiles) {
 
 if (!checked) throw new Error("No inline scripts were checked.");
 
-const sharedScripts = [
-  "global-nav.js",
-  "reader-behavior.js",
-  "api/site-assistant.js",
-  "api/experience-ai.js",
-  "api/publication-assistant.js"
-];
 let externalChecked = 0;
-for (const relative of sharedScripts) {
-  const file = path.join(root, relative);
-  if (!fs.existsSync(file)) continue;
-  new vm.Script(fs.readFileSync(file, "utf8"), { filename: relative });
+for (const file of jsFiles) {
+  new vm.Script(fs.readFileSync(file, "utf8"), { filename: path.relative(root, file) });
   externalChecked++;
 }
-process.stdout.write("Validated " + checked + " inline script(s) across " + htmlFiles.length + " HTML pages and " + externalChecked + " shared JavaScript file(s).\\n");
+process.stdout.write("Validated " + checked + " inline script(s) across " + htmlFiles.length + " HTML pages and " + externalChecked + " external JavaScript file(s).\\n");
