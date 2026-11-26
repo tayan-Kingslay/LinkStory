@@ -312,8 +312,11 @@ html[data-ls-theme="dark"] #searchDialog input{background:#1c2938!important;colo
 <link rel="stylesheet" href="editorial-system.css?v=1">
 <link rel="stylesheet" href="page-transition.css?v=1">
 <style id="linkstory-ai-widget">
-#lsAiLauncher{position:fixed;right:22px;bottom:24px;z-index:1200;display:flex;align-items:center;gap:9px;min-height:52px;padding:0 18px;border:1px solid #2c78c5;border-radius:999px;background:linear-gradient(135deg,#1769d2,#0b4e9b);color:#fff;font:800 13px/1 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 12px 32px rgba(5,45,90,.3);cursor:pointer}
-#lsAiLauncher span:first-child{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#ffffff24;font-size:17px}
+#lsAiLauncher{position:fixed;right:22px;bottom:24px;z-index:1200;display:flex;align-items:center;gap:10px;min-height:58px;padding:5px 18px 5px 7px;border:1px solid #2c78c5;border-radius:999px;background:linear-gradient(135deg,#1769d2,#0b4e9b);color:#fff;font:800 13px/1 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;box-shadow:0 12px 32px rgba(5,45,90,.3);cursor:pointer;transition:transform .18s ease,box-shadow .18s ease}
+#lsAiLauncher:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(5,45,90,.38)}
+#lsAiLauncher .ls-ai-bot-face{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:50%;background:linear-gradient(145deg,#eaf6ff,#9ccfff);box-shadow:inset 0 0 0 2px #ffffff8a}
+#lsAiLauncher .ls-ai-bot-face svg{width:36px;height:36px;display:block}
+#lsAiLauncher .ls-ai-launch-label{white-space:nowrap}
 #lsAiPanel{position:fixed;right:22px;bottom:88px;z-index:1201;width:min(390px,calc(100vw - 28px));height:min(570px,calc(100dvh - 130px));display:none;flex-direction:column;overflow:hidden;border:1px solid #34485f;border-radius:22px;background:#111a26;color:#f2f6fb;box-shadow:0 22px 70px #0008;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 #lsAiPanel.open{display:flex}
 .ls-ai-head{display:flex;align-items:center;gap:11px;padding:15px 16px;border-bottom:1px solid #2a394b;background:#182638}
@@ -331,7 +334,7 @@ html[data-ls-theme="dark"] #searchDialog input{background:#1c2938!important;colo
 #lsAiInput::placeholder{color:#8f9eb0}
 #lsAiSend{width:46px;min-width:46px;border:0;border-radius:13px;background:#2a76ba;color:#fff;font-size:18px;font-weight:900;cursor:pointer}
 #lsAiSend:disabled{opacity:.5;cursor:wait}
-@media(max-width:640px){#lsAiLauncher{right:14px;bottom:92px;min-height:48px;padding:0 14px}#lsAiPanel{right:10px;bottom:150px;width:calc(100vw - 20px);height:min(64dvh,560px);border-radius:20px}.ls-ai-head{padding:12px}}
+@media(max-width:640px){#lsAiLauncher{right:14px;bottom:92px;min-height:52px;padding:4px 14px 4px 6px}#lsAiPanel{right:10px;bottom:150px;width:calc(100vw - 20px);height:min(64dvh,560px);border-radius:20px}.ls-ai-head{padding:12px}}
 </style></head>
 <body>
 <header class="header home-header">
@@ -353,9 +356,9 @@ html[data-ls-theme="dark"] #searchDialog input{background:#1c2938!important;colo
 </div>
 <section class="creator" id="creatorHomeCta" hidden><div><span class="ey">PARA CRIADORES</span><h2>Publique sua história no LinkStory.</h2><p>Crie sua obra, adicione capítulos e encontre leitores.</p></div><a href="publish.html">Publicar mangá →</a></section>
 </main>
-<button id="lsAiLauncher" type="button" aria-expanded="false" aria-controls="lsAiPanel"><span aria-hidden="true">✦</span><span>IA LinkStory</span></button>
+<button id="lsAiLauncher" type="button" aria-expanded="false" aria-controls="lsAiPanel" aria-label="Conversar com o robô LinkStory"><span class="ls-ai-bot-face" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M24 5v5" stroke="#1769d2" stroke-width="2.6" stroke-linecap="round"/><circle cx="24" cy="4.5" r="3" fill="#ffcf67"/><rect x="7" y="12" width="34" height="29" rx="11" fill="#fff" stroke="#1769d2" stroke-width="2.5"/><path d="M7 23H4.5a2.5 2.5 0 0 0 0 5H7m34-5h2.5a2.5 2.5 0 0 1 0 5H41" stroke="#1769d2" stroke-width="2.5" stroke-linecap="round"/><circle cx="17.5" cy="25" r="3" fill="#1769d2"/><circle cx="30.5" cy="25" r="3" fill="#1769d2"/><path d="M17 32.5c2 2.1 4.3 3.1 7 3.1s5-1 7-3.1" stroke="#1769d2" stroke-width="2.2" stroke-linecap="round"/><path d="M19 15.5h10" stroke="#9ccfff" stroke-width="2" stroke-linecap="round"/></svg></span><span class="ls-ai-launch-label">Fale com a IA</span></button>
 <section id="lsAiPanel" role="dialog" aria-label="Assistente LinkStory e Kairox" aria-modal="false" aria-hidden="true">
- <header class="ls-ai-head"><span class="ls-ai-mark" aria-hidden="true">✦</span><div class="ls-ai-title"><strong>Assistente LinkStory</strong><small>LinkStory + Kairox Studio</small></div><button id="lsAiClose" type="button" aria-label="Fechar assistente">×</button></header>
+ <header class="ls-ai-head"><span class="ls-ai-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none" width="30" height="30"><rect x="6" y="11" width="36" height="31" rx="11" fill="#fff" stroke="#83bdff" stroke-width="2.5"/><path d="M24 4v7" stroke="#83bdff" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3" fill="#ffcf67"/><circle cx="17.5" cy="25" r="3" fill="#176fd0"/><circle cx="30.5" cy="25" r="3" fill="#176fd0"/><path d="M17 33c2 2 4.3 3 7 3s5-1 7-3" stroke="#176fd0" stroke-width="2.2" stroke-linecap="round"/></svg></span><div class="ls-ai-title"><strong>Assistente LinkStory</strong><small>LinkStory + Kairox Studio</small></div><button id="lsAiClose" type="button" aria-label="Fechar assistente">×</button></header>
  <div id="lsAiMessages" aria-live="polite"><div class="ls-ai-msg bot">Oi! Sou a assistente do LinkStory e da Kairox Studio. Pode perguntar sobre a plataforma, leitura, publicação de mangás e o estúdio.</div></div>
  <div class="ls-ai-suggestions"><button type="button">Como publico um mangá?</button><button type="button">O que é a Kairox Studio?</button></div>
  <form class="ls-ai-compose" id="lsAiForm"><textarea id="lsAiInput" rows="1" maxlength="1200" placeholder="Pergunte sobre o LinkStory ou a Kairox..." aria-label="Sua pergunta"></textarea><button id="lsAiSend" type="submit" aria-label="Enviar pergunta">➤</button></form>
