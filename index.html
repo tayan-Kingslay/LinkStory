@@ -208,6 +208,16 @@ main{padding-top:16px!important}
 .ranking-entry em{display:block;font-style:normal;font-size:12px;line-height:1.4;color:#77869a}
 .ranking-entry b{flex:0 0 auto;white-space:nowrap;color:#0b72e7;font-size:13px;font-weight:800}
 @media(max-width:480px){main{padding-top:14px!important}.ranking-entry{width:calc(100% - 24px);margin-bottom:26px!important}.ranking-entry a{min-height:92px;padding:15px 14px;gap:10px}.ranking-entry strong{font-size:16px}.ranking-entry em{font-size:11px;max-width:220px}.ranking-entry b{font-size:12px}}
+
+/* Atalho de Pontos corridos: ação visual em ícone, sem alterar a página de destino. */
+.ranking-entry a{transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.ranking-entry a:active{transform:scale(.99)}
+.ranking-entry .rank-open{width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;border-radius:15px;background:linear-gradient(145deg,#0b72e7,#4b9cff);color:#fff;box-shadow:0 7px 18px rgba(11,114,231,.24)}
+.ranking-entry .rank-open svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+html[data-ls-theme="dark"] .ranking-entry a{background:linear-gradient(145deg,#162335,#1b2b40)!important;border-color:#31445b!important;color:#f3f7fc!important}
+html[data-ls-theme="dark"] .ranking-entry strong{color:#f3f7fc!important}
+html[data-ls-theme="dark"] .ranking-entry em{color:#aab8ca!important}
+@media(max-width:480px){.ranking-entry .rank-open{width:40px;height:40px;flex-basis:40px;border-radius:13px}}
 </style>
 <style id="at3-home-finish">
 /* AT3 — acabamento da página inicial; camada exclusivamente visual */
@@ -335,7 +345,7 @@ html[data-ls-theme="dark"] #searchDialog input{background:#1c2938!important;colo
 
 <main>
 <section class="home-intro"><span class="kicker">LEIA. DESCUBRA. CRIE.</span><h1>Encontre sua próxima história.</h1><p>Explore mangás, acompanhe criadores e descubra novos universos.</p></section>
-<section class="ranking-entry"><a href="ranking.html"><span><small>COMUNIDADE</small><strong>Pontos corridos</strong><em>Veja quem está liderando a leitura neste mês.</em></span><b>Ver ranking&nbsp; ›</b></a></section>
+<section class="ranking-entry"><a href="ranking.html"><span><small>COMUNIDADE</small><strong>Pontos corridos</strong><em>Veja quem está liderando a leitura neste mês.</em></span><span class="rank-open" aria-label="Abrir pontos corridos"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a></section>
 <div class="catalog">
 <section class="shelf" id="popularShelf"><div class="shelf-head"><h2 class="shelf-title">Mais populares</h2></div><div class="track" id="popularTrack" aria-busy="true"><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div></div></section>
 <section class="shelf" id="recentShelf"><div class="shelf-head"><h2 class="shelf-title">Recém-publicados</h2></div><div class="track" id="recentTrack" aria-busy="true"><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div><div class="book-skeleton" aria-hidden="true"></div></div></section>
