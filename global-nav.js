@@ -94,6 +94,15 @@
     @media(min-width:801px) and (pointer:coarse){#lsBottomNav{display:grid!important}body{padding-bottom:96px!important}.ls-menu-dialog{border-radius:0!important;margin:0!important;max-height:none!important;height:100dvh!important}.ls-menu-wrap{min-height:100%!important}}
     @media(max-width:560px),(pointer:coarse){#lsBottomNav{height:70px;bottom:8px}.ls-menu-wrap{padding:20px}.ls-menu-links a{padding:19px 2px;font-size:17px}}
 
+    /* Feed, composer and conversation surfaces use the same navy family. */
+    html[data-ls-theme="dark"] body :is(.post,.composer,.comment,.comment-children,.comments-screen,.comments-empty,#commentsDialog,.modal-head,.comment-post-context,.comment-compose-field){
+      background:var(--ls-dark-surface)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important;
+    }
+    html[data-ls-theme="dark"] body .post-head{background:transparent!important;color:var(--ls-dark-text)!important}
+    html[data-ls-theme="dark"] body :is(.post-body,.post .body,.idea-title,.post-head strong){color:var(--ls-dark-text)!important}
+    html[data-ls-theme="dark"] body :is(.post-stats,.author small,.post-meta,.comment-meta,.comments-empty,.comment-post-author small){color:var(--ls-dark-muted)!important}
+    html[data-ls-theme="dark"] body :is(.comment-compose-field,input,textarea,select){background:var(--ls-dark-raised)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important}
+    html[data-ls-theme="dark"] body :is(.modal-head,.comments-screen-head,#commentsDialog #commentForm){background:var(--ls-dark-surface)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important}
     /* AT3 unified dark surfaces: final override after legacy page rules. */
     html[data-ls-theme="dark"] body :is(.card,.panel,.social,.work,.form,.settings-menu,.theme-option,.case,.metric,.stat,.account-pill,.library-card,.suggestion-item,.empty-state,.empty-list,.feature.empty,.test,.preview,.pages,.page,.upload,.mirror,.continue-card){
       background:var(--ls-dark-surface)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important;
