@@ -15,7 +15,8 @@
     html[data-ls-theme="dark"] body :is(.back,.menu-btn,.ls-global-menu-btn,.circle,.icon-btn){background:var(--ls-dark-raised)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important}
     html[data-ls-theme="dark"] body :is(.logo,.brand) img[src$="linkstory-logo.svg"]{filter:brightness(0) invert(1)!important;mix-blend-mode:normal!important;background:transparent!important}
     html[data-ls-theme="dark"] body :is(.logo,.brand) img:not([src$="linkstory-logo.svg"]){mix-blend-mode:normal!important;background:transparent!important}
-    html[data-ls-theme="dark"] body :is(.logo,.brand,.menu-logo,.menu-brand,.footer-logo) img.linkstory-exact-logo{mix-blend-mode:screen!important;background:transparent!important}
+    img.linkstory-exact-logo{filter:invert(1)!important;mix-blend-mode:multiply!important;background:transparent!important}
+    html[data-ls-theme="dark"] body :is(.logo,.brand,.menu-logo,.menu-brand,.footer-logo) img.linkstory-exact-logo{filter:none!important;mix-blend-mode:screen!important;background:transparent!important}
     html[data-ls-theme="dark"] body :is(.creator a,.feature a,.login){background:var(--ls-dark-raised)!important;color:var(--ls-dark-accent)!important;border-color:var(--ls-dark-border)!important}
     html[data-ls-theme="dark"] body :is(.empty-list,.empty-state){color:var(--ls-dark-muted)!important}
     html[data-ls-theme="dark"] body :is(.empty-list,.empty-state) strong{color:var(--ls-dark-text)!important}
