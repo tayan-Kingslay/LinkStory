@@ -93,6 +93,22 @@
     @media(min-width:801px) and (pointer:fine){#lsBottomNav{display:none!important}body{padding-bottom:0!important}.ls-menu-dialog{border-radius:20px;margin:16px;max-height:calc(100dvh - 32px);height:auto}.ls-menu-wrap{min-height:520px}}
     @media(min-width:801px) and (pointer:coarse){#lsBottomNav{display:grid!important}body{padding-bottom:96px!important}.ls-menu-dialog{border-radius:0!important;margin:0!important;max-height:none!important;height:100dvh!important}.ls-menu-wrap{min-height:100%!important}}
     @media(max-width:560px),(pointer:coarse){#lsBottomNav{height:70px;bottom:8px}.ls-menu-wrap{padding:20px}.ls-menu-links a{padding:19px 2px;font-size:17px}}
+
+    /* AT3 unified dark surfaces: final override after legacy page rules. */
+    html[data-ls-theme="dark"] body :is(.card,.panel,.social,.work,.form,.settings-menu,.theme-option,.case,.metric,.stat,.account-pill,.library-card,.suggestion-item,.empty-state,.empty-list,.feature.empty,.test,.preview,.pages,.page,.upload,.mirror,.continue-card){
+      background:var(--ls-dark-surface)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important;
+    }
+    html[data-ls-theme="dark"] body :is(.card,.panel,.social,.work,.form,.settings-menu,.theme-option,.case,.metric,.stat,.account-pill,.library-card,.suggestion-item,.empty-state,.empty-list,.feature.empty,.test,.preview,.pages,.page,.upload,.mirror,.continue-card) :is(h1,h2,h3,h4,h5,h6,strong,label){color:var(--ls-dark-text)!important}
+    html[data-ls-theme="dark"] body :is(.card,.panel,.social,.work,.form,.settings-menu,.theme-option,.case,.metric,.stat,.account-pill,.library-card,.suggestion-item,.empty-state,.empty-list,.feature.empty,.test,.preview,.pages,.page,.upload,.mirror,.continue-card) :is(p,small,.muted,.hint,.subtitle){color:var(--ls-dark-muted)!important}
+    html[data-ls-theme="dark"] body :is(input,textarea,select){background:var(--ls-dark-raised)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important}
+    html[data-ls-theme="dark"] body :is(.topbar,.top,.header,header){background:rgba(22,35,53,.88)!important;border-color:var(--ls-dark-border)!important;color:var(--ls-dark-text)!important}
+    html[data-ls-theme="dark"] body :is(.back,.menu-btn,.ls-global-menu-btn,.circle,.icon-btn){background:var(--ls-dark-raised)!important;color:var(--ls-dark-text)!important;border-color:var(--ls-dark-border)!important}
+    html[data-ls-theme="dark"] body :is(.logo,.brand) img[src$="linkstory-logo.svg"]{filter:brightness(0) invert(1)!important;mix-blend-mode:normal!important;background:transparent!important}
+    html[data-ls-theme="dark"] body :is(.logo,.brand) img:not([src$="linkstory-logo.svg"]){mix-blend-mode:normal!important;background:transparent!important}
+    html[data-ls-theme="dark"] body :is(.creator a,.feature a,.login){background:var(--ls-dark-raised)!important;color:var(--ls-dark-accent)!important;border-color:var(--ls-dark-border)!important}
+    html[data-ls-theme="dark"] body :is(.empty-list,.empty-state){color:var(--ls-dark-muted)!important}
+    html[data-ls-theme="dark"] body :is(.empty-list,.empty-state) strong{color:var(--ls-dark-text)!important}
+    html[data-ls-theme="dark"] #lsBottomNav{background:rgba(22,35,53,.94)!important;border-color:var(--ls-dark-border)!important}
   `;
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
   /* Reader has its own reading controls and must stay completely free of global navigation. */
