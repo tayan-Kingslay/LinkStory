@@ -2,7 +2,7 @@ const MODEL="gemini-3.8-flash";
 const WINDOW_MS=10*60*1000,MAX_REQUESTS=12;
 const requests=new Map();
 function reply(res,status,data){res.status(status);res.setHeader("Content-Type","application/json; charset=utf-8");res.setHeader("Cache-Control","no-store");return res.end(JSON.stringify(data));}
-function rateLimit(req){const ip=String(req.headers["x-forwarded-for"]||req.socket?.remoteAddress||"unknown").split(",")[0].trim();const now=Date.now();const entry=requests.get(ip)||{start:now,count:0};if(now-entry.start>WINDOW_MS){entry.start=now;entry.count=0;}entry.count++;requests.set(ip,entry);return entry.count<=MAX_REQUESTS;}
+function rateLimit(req){const ip=String(req.headers["x-forwarded-for"]||req.socket?.remoteAddress||"unknown").split(",")[0].trim();const now=Date.now();if(requests.size>1000){for(const [key,value] of requests){if(now-value.start>WINDOW_MS)requests.delete(key);}}const entry=requests.get(ip)||{start:now,count:0};if(now-entry.start>WINDOW_MS){entry.start=now;entry.count=0;}entry.count++;requests.set(ip,entry);return entry.count<=MAX_REQUESTS;}
 module.exports=async function handler(req,res){
  if(req.method!=="POST")return reply(res,405,{error:"Método não permitido."});
  if(!rateLimit(req))return reply(res,429,{error:"Você enviou muitas perguntas. Aguarde alguns minutos e tente novamente."});
