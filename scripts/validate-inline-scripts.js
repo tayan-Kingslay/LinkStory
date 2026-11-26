@@ -33,4 +33,19 @@ for (const file of htmlFiles) {
 }
 
 if (!checked) throw new Error("No inline scripts were checked.");
-process.stdout.write("Validated " + checked + " inline script(s) across " + htmlFiles.length + " HTML pages.\n");
+
+const sharedScripts = [
+  "global-nav.js",
+  "reader-behavior.js",
+  "api/site-assistant.js",
+  "api/experience-ai.js",
+  "api/publication-assistant.js"
+];
+let externalChecked = 0;
+for (const relative of sharedScripts) {
+  const file = path.join(root, relative);
+  if (!fs.existsSync(file)) continue;
+  new vm.Script(fs.readFileSync(file, "utf8"), { filename: relative });
+  externalChecked++;
+}
+process.stdout.write("Validated " + checked + " inline script(s) across " + htmlFiles.length + " HTML pages and " + externalChecked + " shared JavaScript file(s).\\n");
