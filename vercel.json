@@ -1,5 +1,5 @@
 {
-  "buildCommand": "node scripts/validate-inline-scripts.js && node build.js",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "cleanUrls": false,
   "headers": [
