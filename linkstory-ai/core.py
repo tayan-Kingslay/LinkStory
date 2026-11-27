@@ -57,7 +57,7 @@ def iter_source_files(source: Path):
     for path in source.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in SUPPORTED_EXTENSIONS:
             continue
-        if path.name.lower() in IGNORED_FILES or path.suffix.lower() in SENSITIVE_SUFFIXES:
+        if path.name.lower() in IGNORED_FILES or path.name.lower().startswith('.env') or path.suffix.lower() in SENSITIVE_SUFFIXES:
             continue
         if any(part in IGNORED_DIRS for part in path.parts):
             continue
