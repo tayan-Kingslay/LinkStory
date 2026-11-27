@@ -29,5 +29,7 @@ jobs:
         run: pip install -r requirements-dev.txt
         working-directory: linkstory-ai
       - name: Run API tests
+        env:
+          PYTHONPATH: .
         run: pytest -q tests
         working-directory: linkstory-ai
