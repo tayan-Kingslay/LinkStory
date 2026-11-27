@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import logging
+import tempfile
+from functools import lru_cache
 import os
 import sqlite3
 import time
@@ -11,7 +13,7 @@ from typing import Iterator, Optional
 from uuid import UUID, uuid4
 
 import httpx
-from fastapi import Depends, FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, File, Header, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -30,6 +32,8 @@ SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "")
 MAX_HISTORY = 20
 MAX_REQUESTS_PER_MINUTE = 20
+MAX_AUDIO_BYTES = 20 * 1024 * 1024
+WHISPER_MODEL_SIZE = os.getenv('LINKSTORY_WHISPER_MODEL', 'base')
 
 app = FastAPI(title="LinkStory AI", version="0.2.1")
 
@@ -225,6 +229,72 @@ def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
     except Exception:
         logging.exception("LinkStory AI inference failed")
         raise HTTPException(status_code=503, detail="A inteligência está indisponível no momento.")
+
+
+@lru_cache(maxsize=1)
+def transcription_model():
+    from faster_whisper import WhisperModel
+    return WhisperModel(
+        WHISPER_MODEL_SIZE,
+        device="cpu",
+        compute_type="int8",
+        cpu_threads=max(1, int(os.getenv("LINKSTORY_WHISPER_THREADS", "4"))),
+    )
+
+
+@app.post("/transcribe")
+async def transcribe_audio(
+    file: UploadFile = File(...),
+    user_id: str = Depends(get_current_user),
+):
+    enforce_rate_limit(user_id)
+    allowed_types = {
+        "audio/webm": ".webm",
+        "audio/mp4": ".mp4",
+        "audio/mpeg": ".mp3",
+        "audio/wav": ".wav",
+        "audio/x-wav": ".wav",
+        "audio/ogg": ".ogg",
+    }
+    suffix = allowed_types.get((file.content_type or "").lower())
+    if not suffix:
+        raise HTTPException(status_code=415, detail="Formato de áudio não suportado.")
+    audio = await file.read(MAX_AUDIO_BYTES + 1)
+    if not audio:
+        raise HTTPException(status_code=422, detail="O arquivo de áudio está vazio.")
+    if len(audio) > MAX_AUDIO_BYTES:
+        raise HTTPException(status_code=413, detail="O áudio ultrapassa o limite de 20 MB.")
+
+    temp_path = None
+    try:
+        with tempfile.NamedTemporaryFile(prefix="linkstory-audio-", suffix=suffix, delete=False) as temp:
+            temp.write(audio)
+            temp_path = temp.name
+        model = transcription_model()
+        segments, info = model.transcribe(
+            temp_path,
+            language="pt",
+            beam_size=5,
+            vad_filter=True,
+        )
+        transcript = " ".join(segment.text.strip() for segment in segments).strip()
+        return {
+            "text": transcript,
+            "language": info.language,
+            "language_probability": round(float(info.language_probability), 4),
+        }
+    except HTTPException:
+        raise
+    except Exception:
+        logging.exception("LinkStory AI transcription failed")
+        raise HTTPException(status_code=503, detail="Não foi possível transcrever o áudio agora.")
+    finally:
+        await file.close()
+        if temp_path:
+            try:
+                os.unlink(temp_path)
+            except OSError:
+                logging.warning("Temporary audio cleanup failed")
 
 
 @app.get("/conversations/{conversation_id}")
