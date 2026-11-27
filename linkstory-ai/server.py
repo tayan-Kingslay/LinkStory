@@ -35,7 +35,8 @@ ROOT = Path(__file__).resolve().parent
 DB_PATH = Path(os.getenv("LINKSTORY_CHAT_DB", ROOT / "data" / "conversations.sqlite3"))
 SUPABASE_URL = os.getenv("SUPABASE_URL", "").rstrip("/")
 SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "")
-MAX_HISTORY = 20
+MAX_HISTORY = 12
+MAX_MEMORY_CONTEXT = 10
 MAX_REQUESTS_PER_MINUTE = 20
 MAX_AUDIO_BYTES = 20 * 1024 * 1024
 TTS_MODEL_REPO = os.getenv('LINKSTORY_TTS_MODEL_REPO', 'eraldohug/Paradee-8M-PtBr')
@@ -72,7 +73,7 @@ class ChatResponse(BaseModel):
 
 
 class MemoryRequest(BaseModel):
-    content: str = Field(min_length=1, max_length=2000)
+    content: str = Field(min_length=1, max_length=1000)
 
 
 @contextmanager
@@ -224,8 +225,8 @@ def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
     try:
         with db() as conn:
             saved_memories = conn.execute(
-                "SELECT content FROM memories WHERE user_id=? ORDER BY updated_at DESC LIMIT 30",
-                (user_id,),
+                "SELECT content FROM memories WHERE user_id=? ORDER BY updated_at DESC LIMIT ?",
+                (user_id, MAX_MEMORY_CONTEXT),
             ).fetchall()
             previous = conn.execute(
                 "SELECT role, content FROM messages "
