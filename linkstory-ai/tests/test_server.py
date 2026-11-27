@@ -166,3 +166,35 @@ def test_supabase_auth_rejects_invalid_session(monkeypatch):
         assert False, "Expected invalid session to be rejected"
     except HTTPException as exc:
         assert exc.status_code == 401
+
+
+def test_memories_are_private_to_each_user(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        saved = client.post("/memories", json={"content": "Prefiro respostas curtas."})
+        assert saved.status_code == 200
+        memory_id = saved.json()["id"]
+        assert client.get("/memories").json()["memories"][0]["content"] == "Prefiro respostas curtas."
+
+        server.app.dependency_overrides[server.get_current_user] = lambda: str(uuid.UUID(int=2))
+        assert client.get("/memories").json()["memories"] == []
+        assert client.delete(f"/memories/{memory_id}").status_code == 404
+    finally:
+        teardown(server)
+
+
+def test_saved_memory_is_added_to_chat_context(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    captured = []
+    monkeypatch.setattr(server, "answer_question", lambda prompt: (
+        captured.append(prompt) or {"answer": "Entendido.", "sources": []}
+    ))
+    try:
+        saved = client.post("/memories", json={"content": "Meu projeto se chama LinkStory."})
+        assert saved.status_code == 200
+        response = client.post("/chat", json={"message": "Qual é o nome do meu projeto?"})
+        assert response.status_code == 200
+        assert "MEMÓRIAS SALVAS PELO USUÁRIO" in captured[0]
+        assert "Meu projeto se chama LinkStory." in captured[0]
+    finally:
+        teardown(server)
