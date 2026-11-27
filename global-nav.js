@@ -254,7 +254,7 @@
   `;
   if(!document.getElementById('lsGlobalNavStyle')){const st=document.createElement('style');st.id='lsGlobalNavStyle';st.textContent=css;document.head.appendChild(st)}
   /* Reader has its own reading controls and must stay completely free of global navigation. */
-  if(document.querySelector('.reader-title,.rx-title')) return;
+  if(document.querySelector('.reader-title,.rx-title') || location.pathname.endsWith('/ia.html')) return;
   if(!document.getElementById('lsBottomNav')){
     const path=location.pathname.split('/').pop()||'index.html';
     const active=path==='library.html'?'library':path==='profile.html'?'profile':path==='fy.html'?'fy':path==='index.html'?'home':'';
