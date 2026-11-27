@@ -13,7 +13,7 @@ import sqlite3
 import time
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator, Optional
+from typing import Iterator, Literal, Optional
 from uuid import UUID, uuid4
 
 import httpx
@@ -252,7 +252,7 @@ def transcription_model():
 
 class SpeechRequest(BaseModel):
     text: str = Field(min_length=1, max_length=2500)
-    voice: str = Field(default="pf_dora", pattern="^(pf_dora|pm_alex)$")
+    voice: Literal["pf_dora", "pm_alex"] = "pf_dora"
 
 
 @lru_cache(maxsize=2)
