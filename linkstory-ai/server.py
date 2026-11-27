@@ -19,7 +19,7 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from core import answer_question, OLLAMA_BASE_URL, CHAT_MODEL, PERSIST_DIR
+from core import answer_question, vector_store, OLLAMA_BASE_URL, CHAT_MODEL, EMBED_MODEL, PERSIST_DIR
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = Path(os.getenv("LINKSTORY_CHAT_DB", ROOT / "data" / "conversations.sqlite3"))
@@ -140,94 +140,33 @@ def enforce_rate_limit(user_id: str) -> None:
 
 @app.get("/health")
 def health():
+    tags = []
     ollama_ok = False
     try:
         response = httpx.get(f"{OLLAMA_BASE_URL.rstrip('/')}/api/tags", timeout=2.5)
-        ollama_ok = response.status_code == 200
-    except httpx.HTTPError:
+        if response.status_code == 200:
+            ollama_ok = True
+            tags = [item.get("name", "") for item in response.json().get("models", [])]
+    except (httpx.HTTPError, ValueError, TypeError):
         pass
-    ready = bool(SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY and ollama_ok and PERSIST_DIR.exists())
+
+    chat_model_ready = CHAT_MODEL in tags
+    embedding_model_ready = EMBED_MODEL in tags
+    knowledge_base_ready = False
+    if PERSIST_DIR.exists():
+        try:
+            knowledge_base_ready = vector_store()._collection.count() > 0
+        except Exception:
+            knowledge_base_ready = False
+
+    auth_ready = bool(SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY)
+    ready = auth_ready and ollama_ok and chat_model_ready and embedding_model_ready and knowledge_base_ready
     return {
         "status": "ready" if ready else "not_ready",
         "engine": "ollama",
-        "model": CHAT_MODEL,
-        "authentication_configured": bool(SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY),
+        "authentication_configured": auth_ready,
         "ollama_reachable": ollama_ok,
-        "knowledge_base_ready": PERSIST_DIR.exists(),
-    }
-
-
-@app.post("/chat", response_model=ChatResponse)
-def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
-    message = payload.message.strip()
-    if not message:
-        raise HTTPException(status_code=422, detail="A mensagem não pode estar vazia.")
-    enforce_rate_limit(user_id)
-
-    if payload.conversation_id:
-        try:
-            conversation_id = str(UUID(payload.conversation_id))
-        except ValueError:
-            raise HTTPException(status_code=400, detail="conversation_id inválido.")
-    else:
-        conversation_id = str(uuid4())
-
-    try:
-        with db() as conn:
-            previous = conn.execute(
-                "SELECT role, content FROM messages "
-                "WHERE user_id=? AND conversation_id=? ORDER BY id DESC LIMIT ?",
-                (user_id, conversation_id, MAX_HISTORY),
-            ).fetchall()
-        previous.reverse()
-        history = "\\n".join(f"{role}: {content}" for role, content in previous)
-        enriched_question = (
-            f"CONTEXTO DA CONVERSA ANTERIOR (use apenas se relevante):\\n{history}\\n\\n"
-            f"NOVA MENSAGEM DO USUÁRIO:\\n{message}"
-            if history else message
-        )
-        result = answer_question(enriched_question)
-        answer = str(result.get("answer", "")).strip()
-        if not answer:
-            raise RuntimeError("O modelo não retornou uma resposta.")
-        with db() as conn:
-            conn.executemany(
-                "INSERT INTO messages(conversation_id, user_id, role, content) VALUES (?, ?, ?, ?)",
-                [
-                    (conversation_id, user_id, "user", message),
-                    (conversation_id, user_id, "assistant", answer),
-                ],
-            )
-        return ChatResponse(
-            answer=answer,
-            conversation_id=conversation_id,
-            sources=result.get("sources", []),
-        )
-    except HTTPException:
-        raise
-    except Exception:
-        logging.exception("LinkStory AI inference failed")
-        raise HTTPException(status_code=503, detail="A inteligência está indisponível no momento.")
-
-
-@app.get("/conversations/{conversation_id}")
-def get_conversation(conversation_id: str, user_id: str = Depends(get_current_user)):
-    try:
-        conversation_id = str(UUID(conversation_id))
-    except ValueError:
-        raise HTTPException(status_code=400, detail="conversation_id inválido.")
-    with db() as conn:
-        rows = conn.execute(
-            "SELECT role, content, created_at FROM messages "
-            "WHERE user_id=? AND conversation_id=? ORDER BY id",
-            (user_id, conversation_id),
-        ).fetchall()
-    if not rows:
-        raise HTTPException(status_code=404, detail="Conversa não encontrada.")
-    return {
-        "conversation_id": conversation_id,
-        "messages": [
-            {"role": role, "content": content, "created_at": created_at}
-            for role, content, created_at in rows
-        ],
+        "chat_model_ready": chat_model_ready,
+        "embedding_model_ready": embedding_model_ready,
+        "knowledge_base_ready": knowledge_base_ready,
     }
