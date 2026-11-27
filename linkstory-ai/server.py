@@ -318,7 +318,7 @@ def speak(payload: SpeechRequest, user_id: str = Depends(get_current_user)):
 
 
 @app.post("/transcribe")
-async def transcribe_audio(
+def transcribe_audio(
     file: UploadFile = File(...),
     user_id: str = Depends(get_current_user),
 ):
@@ -334,7 +334,7 @@ async def transcribe_audio(
     suffix = allowed_types.get((file.content_type or "").lower())
     if not suffix:
         raise HTTPException(status_code=415, detail="Formato de áudio não suportado.")
-    audio = await file.read(MAX_AUDIO_BYTES + 1)
+    audio = file.file.read(MAX_AUDIO_BYTES + 1)
     if not audio:
         raise HTTPException(status_code=422, detail="O arquivo de áudio está vazio.")
     if len(audio) > MAX_AUDIO_BYTES:
@@ -364,7 +364,7 @@ async def transcribe_audio(
         logging.exception("LinkStory AI transcription failed")
         raise HTTPException(status_code=503, detail="Não foi possível transcrever o áudio agora.")
     finally:
-        await file.close()
+        file.file.close()
         if temp_path:
             try:
                 os.unlink(temp_path)
