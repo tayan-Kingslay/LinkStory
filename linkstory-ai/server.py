@@ -71,6 +71,10 @@ class ChatResponse(BaseModel):
     sources: list[dict]
 
 
+class MemoryRequest(BaseModel):
+    content: str = Field(min_length=1, max_length=2000)
+
+
 @contextmanager
 def db() -> Iterator[sqlite3.Connection]:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -93,6 +97,19 @@ def db() -> Iterator[sqlite3.Connection]:
         conn.execute(
             "CREATE INDEX IF NOT EXISTS idx_messages_owner_conversation "
             "ON messages(user_id, conversation_id, id)"
+        )
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS memories (
+                id TEXT PRIMARY KEY,
+                user_id TEXT NOT NULL,
+                content TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_memories_owner_updated "
+            "ON memories(user_id, updated_at DESC)"
         )
         conn.execute("""
             CREATE TABLE IF NOT EXISTS request_limits (
@@ -206,18 +223,25 @@ def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
 
     try:
         with db() as conn:
+            saved_memories = conn.execute(
+                "SELECT content FROM memories WHERE user_id=? ORDER BY updated_at DESC LIMIT 30",
+                (user_id,),
+            ).fetchall()
             previous = conn.execute(
                 "SELECT role, content FROM messages "
                 "WHERE user_id=? AND conversation_id=? ORDER BY id DESC LIMIT ?",
                 (user_id, conversation_id, MAX_HISTORY),
             ).fetchall()
         previous.reverse()
+        memory_context = "\n".join(f"- {row[0]}" for row in saved_memories)
         history = "\n".join(f"{role}: {content}" for role, content in previous)
-        enriched_question = (
-            f"CONTEXTO DA CONVERSA ANTERIOR (use apenas se relevante):\n{history}\n\n"
-            f"NOVA MENSAGEM DO USUÁRIO:\n{message}"
-            if history else message
-        )
+        sections = []
+        if memory_context:
+            sections.append("MEMÓRIAS SALVAS PELO USUÁRIO (use somente se relevantes):\n" + memory_context)
+        if history:
+            sections.append("HISTÓRICO DESTA CONVERSA (use somente se relevante):\n" + history)
+        sections.append("NOVA MENSAGEM DO USUÁRIO:\n" + message)
+        enriched_question = "\n\n".join(sections)
         result = answer_question(enriched_question)
         answer = str(result.get("answer", "")).strip()
         if not answer:
@@ -373,6 +397,59 @@ def transcribe_audio(
                 os.unlink(temp_path)
             except OSError:
                 logging.warning("Temporary audio cleanup failed")
+
+
+@app.get("/memories")
+def list_memories(user_id: str = Depends(get_current_user)):
+    with db() as conn:
+        rows = conn.execute(
+            "SELECT id, content, created_at, updated_at FROM memories "
+            "WHERE user_id=? ORDER BY updated_at DESC LIMIT 50",
+            (user_id,),
+        ).fetchall()
+    return {
+        "memories": [
+            {"id": memory_id, "content": content, "created_at": created_at, "updated_at": updated_at}
+            for memory_id, content, created_at, updated_at in rows
+        ]
+    }
+
+
+@app.post("/memories")
+def save_memory(payload: MemoryRequest, user_id: str = Depends(get_current_user)):
+    content = payload.content.strip()
+    if not content:
+        raise HTTPException(status_code=422, detail="A memória não pode estar vazia.")
+    with db() as conn:
+        count = conn.execute(
+            "SELECT COUNT(*) FROM memories WHERE user_id=?",
+            (user_id,),
+        ).fetchone()[0]
+        if count >= 50:
+            raise HTTPException(status_code=409, detail="Você já tem 50 memórias salvas. Apague uma antes de adicionar outra.")
+        memory_id = str(uuid4())
+        conn.execute(
+            "INSERT INTO memories(id, user_id, content) VALUES (?, ?, ?)",
+            (memory_id, user_id, content),
+        )
+    return {"id": memory_id, "content": content}
+
+
+@app.delete("/memories/{memory_id}")
+def delete_memory(memory_id: str, user_id: str = Depends(get_current_user)):
+    try:
+        memory_id = str(UUID(memory_id))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="ID de memória inválido.")
+    with db() as conn:
+        result = conn.execute(
+            "DELETE FROM memories WHERE id=? AND user_id=?",
+            (memory_id, user_id),
+        )
+        deleted = result.rowcount
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Memória não encontrada.")
+    return {"deleted": True}
 
 
 @app.get("/conversations/{conversation_id}")
