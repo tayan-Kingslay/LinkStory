@@ -101,3 +101,34 @@ def test_transcription_rejects_unsupported_format(monkeypatch, tmp_path):
         assert response.status_code == 415
     finally:
         teardown(server)
+
+
+def test_speech_returns_wav_and_word_timings(monkeypatch, tmp_path):
+    import numpy as np
+
+    server, client = setup_client(monkeypatch, tmp_path)
+    class FakeSpeechModel:
+        def with_timestamps(self, text, voice):
+            assert text == "Olá!"
+            assert voice == "pf_dora"
+            return np.array([0.0, 0.2, -0.2], dtype=np.float32), [("Olá", 0.0, 0.5)]
+
+    monkeypatch.setattr(server, "speech_model", lambda voice: FakeSpeechModel())
+    try:
+        response = client.post("/speak", json={"text": "Olá!", "voice": "pf_dora"})
+        assert response.status_code == 200
+        assert response.headers["content-type"].startswith("audio/wav")
+        assert response.content[:4] == b"RIFF"
+        assert response.headers["x-linkstory-voice"] == "pf_dora"
+        assert response.headers["x-linkstory-word-timings"]
+    finally:
+        teardown(server)
+
+
+def test_speech_rejects_unknown_voice(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        response = client.post("/speak", json={"text": "Olá!", "voice": "unknown"})
+        assert response.status_code == 422
+    finally:
+        teardown(server)
