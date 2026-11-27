@@ -32,6 +32,9 @@ jobs:
       - name: Validate browser client syntax
         run: node --check ../linkstory-ai-client.js
         working-directory: linkstory-ai
+      - name: Validate Docker Compose YAML
+        run: python -c "import yaml; yaml.safe_load(open('docker-compose.yml', encoding='utf-8'))"
+        working-directory: linkstory-ai
       - name: Run API tests
         env:
           PYTHONPATH: .
