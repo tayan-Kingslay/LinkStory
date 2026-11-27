@@ -1,0 +1,88 @@
+(() => {
+  "use strict";
+
+  function apiBase() {
+    const value = window.LINKSTORY_AI_API_URL;
+    if (!value || typeof value !== "string") {
+      throw new Error("O serviço da LinkStory AI ainda não foi configurado.");
+    }
+    return value.replace(/\/+$/, "");
+  }
+
+  async function sessionToken() {
+    if (typeof getLinkStorySession !== "function") {
+      throw new Error("O módulo de autenticação do LinkStory não foi carregado.");
+    }
+    const { data, error } = await getLinkStorySession();
+    if (error) throw error;
+    const token = data?.session?.access_token;
+    if (!token) throw new Error("Entre na sua conta LinkStory para usar a IA.");
+    return token;
+  }
+
+  async function request(path, options = {}) {
+    const token = await sessionToken();
+    const headers = new Headers(options.headers || {});
+    headers.set("Authorization", "Bearer " + token);
+    const response = await fetch(apiBase() + path, { ...options, headers });
+    if (!response.ok) {
+      let message = "A LinkStory AI não conseguiu concluir a solicitação.";
+      try {
+        const body = await response.json();
+        if (body?.detail) message = body.detail;
+      } catch (_) {}
+      throw new Error(message);
+    }
+    return response;
+  }
+
+  function decodeTimings(value) {
+    if (!value) return [];
+    const normalized = value.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized + "=".repeat((4 - normalized.length % 4) % 4);
+    const bytes = Uint8Array.from(atob(padded), char => char.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  }
+
+  async function chat(message, conversationId = null) {
+    const response = await request("/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, conversation_id: conversationId })
+    });
+    return response.json();
+  }
+
+  async function history(conversationId) {
+    const response = await request("/conversations/" + encodeURIComponent(conversationId));
+    return response.json();
+  }
+
+  async function transcribe(blob, filename = "recording.webm") {
+    const form = new FormData();
+    form.append("file", blob, filename);
+    const response = await request("/transcribe", { method: "POST", body: form });
+    return response.json();
+  }
+
+  async function speak(text, voice = "pf_dora") {
+    const response = await request("/speak", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text, voice })
+    });
+    return {
+      audio: await response.blob(),
+      voice: response.headers.get("X-LinkStory-Voice") || voice,
+      wordTimings: decodeTimings(response.headers.get("X-LinkStory-Word-Timings"))
+    };
+  }
+
+  async function health() {
+    const response = await fetch(apiBase() + "/health", { cache: "no-store" });
+    if (!response.ok) throw new Error("Não foi possível verificar a LinkStory AI.");
+    return response.json();
+  }
+
+  window.LinkStoryAI = Object.freeze({ chat, history, transcribe, speak, health });
+})();
