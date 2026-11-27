@@ -22,8 +22,15 @@ SUPPORTED_EXTENSIONS = {
 }
 IGNORED_DIRS = {
     ".git", "node_modules", "venv", ".venv", "__pycache__",
-    "dist", "build", ".next", "vendor", "data",
+    "dist", "build", ".next", "vendor", "data", ".vercel",
+    ".source-inspect", "coverage",
 }
+IGNORED_FILES = {
+    ".env", ".env.local", ".env.production", ".env.development",
+    "secrets.json", "credentials.json", "service-account.json",
+    "id_rsa", "id_ed25519",
+}
+SENSITIVE_SUFFIXES = {".pem", ".key", ".p12", ".pfx"}
 MAX_FILE_BYTES = 1_500_000
 
 
@@ -49,6 +56,8 @@ def iter_source_files(source: Path):
         raise ValueError(f"Pasta de códigos não encontrada: {source}")
     for path in source.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in SUPPORTED_EXTENSIONS:
+            continue
+        if path.name.lower() in IGNORED_FILES or path.suffix.lower() in SENSITIVE_SUFFIXES:
             continue
         if any(part in IGNORED_DIRS for part in path.parts):
             continue
