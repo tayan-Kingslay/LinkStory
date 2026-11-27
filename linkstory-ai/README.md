@@ -61,3 +61,28 @@ A base vetorial é gravada em linkstory-ai/data/chroma por padrão.
 3. Separação entre memória técnica, regras editoriais e conhecimento de cada mangá.
 4. Modelos locais de visão e linguagem para análise de páginas e cenas.
 5. Áudio local e sincronização.
+
+## API HTTP autenticada (primeira integração)
+
+Instale as dependências e inicie o Ollama com os modelos configurados acima. Depois defina um token longo e aleatório e execute:
+
+    export LINKSTORY_API_TOKEN='gere-um-token-longo-e-aleatorio'
+    export LINKSTORY_ALLOWED_ORIGINS='https://linkstorysite.vercel.app'
+    uvicorn server:app --host 0.0.0.0 --port 8000
+
+Endpoints:
+
+- `GET /health`: estado do serviço e modelo selecionado.
+- `POST /chat`: recebe `{ "message": "...", "conversation_id": null }` e devolve resposta, ID da conversa e fontes recuperadas.
+- `GET /conversations/{conversation_id}`: recupera o histórico da conversa.
+
+Envie `Authorization: Bearer <LINKSTORY_API_TOKEN>` em todos os endpoints de conversa. O serviço recusa chamadas se o token não estiver configurado. Não exponha a porta do Ollama (11434) à internet; exponha somente a API por HTTPS, com firewall e proxy reverso. Configure o endereço do serviço no backend do LinkStory, nunca em JavaScript público do navegador.
+
+A API salva conversas em SQLite local. Esta primeira versão é uma base de integração e ainda não faz autenticação por usuário Supabase, isolamento multiusuário nem retenção/eliminação por conta. Não conecte usuários reais antes de implementar essas três proteções.
+
+### Limites verificados desta entrega
+
+- O endpoint usa o modelo local e a base vetorial já definidos em `core.py`.
+- A memória vetorial é uma base de conhecimento de código/documentação (RAG), não treinamento do modelo.
+- O histórico SQLite fornece contexto recente, mas ainda não é memória semântica de longo prazo.
+- A API ainda não foi implantada num servidor GPU nem conectada ao chat público do site.
