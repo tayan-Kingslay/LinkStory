@@ -46,6 +46,15 @@ WHISPER_MODEL_SIZE = os.getenv('LINKSTORY_WHISPER_MODEL', 'base')
 
 app = FastAPI(title="LinkStory AI", version="0.2.1")
 
+@app.middleware("http")
+async def prevent_private_response_caching(request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith(("/chat", "/conversations", "/memories", "/transcribe", "/speak")):
+        response.headers["Cache-Control"] = "no-store"
+        response.headers["Pragma"] = "no-cache"
+    return response
+
+
 allowed_origins = [
     origin.strip()
     for origin in os.getenv("LINKSTORY_ALLOWED_ORIGINS", "https://linkstorysite.vercel.app").split(",")
@@ -418,6 +427,7 @@ def list_memories(user_id: str = Depends(get_current_user)):
 
 @app.post("/memories")
 def save_memory(payload: MemoryRequest, user_id: str = Depends(get_current_user)):
+    enforce_rate_limit(user_id)
     content = payload.content.strip()
     if not content:
         raise HTTPException(status_code=422, detail="A memória não pode estar vazia.")
@@ -438,6 +448,7 @@ def save_memory(payload: MemoryRequest, user_id: str = Depends(get_current_user)
 
 @app.delete("/memories/{memory_id}")
 def delete_memory(memory_id: str, user_id: str = Depends(get_current_user)):
+    enforce_rate_limit(user_id)
     try:
         memory_id = str(UUID(memory_id))
     except ValueError:
