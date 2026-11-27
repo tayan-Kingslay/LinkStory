@@ -8,7 +8,7 @@ Este serviço é o núcleo de inferência próprio da Kairox Studio. Ele usa Oll
 
 - **Inferência:** Ollama + modelo configurável (padrão: `llama3.1:8b`).
 - **Embeddings e recuperação:** `nomic-embed-text` + Chroma persistente.
-- **Histórico:** SQLite em volume persistente, com isolamento por ID verificado do usuário.
+- **Memória:** SQLite persistente com histórico por conversa e até 50 notas de memória por usuário; somente o próprio usuário pode salvar, listar ou apagar suas notas.
 - **Identidade:** cada chamada de chat valida o access token no Supabase Auth (`/auth/v1/user`). Nenhum ID de usuário enviado pelo navegador é aceito como identidade.
 - **API:** FastAPI, CORS restrito, limite de 20 chamadas/minuto por usuário e mensagens com até 4.000 caracteres.
 - **Fala:** Paradee-8M pt-BR em ONNX local, com duas vozes selecionáveis e tempos por palavra para sincronização da boca.
@@ -36,10 +36,11 @@ Todas as rotas de conversa exigem `Authorization: Bearer <access_token_supabase>
 - `GET /health`: diagnóstico sem dados de usuário.
 - `POST /chat`: corpo `{ "message": "...", "conversation_id": null }`; devolve resposta, ID e fontes.
 - `GET /conversations/{conversation_id}`: histórico pertencente ao usuário autenticado.
+- `GET /memories`, `POST /memories` e `DELETE /memories/{memory_id}`: memórias persistentes controladas pelo próprio usuário. O chat recebe até 30 notas salvas como contexto; nenhuma memória é criada automaticamente.
 - `POST /transcribe`: recebe um arquivo de áudio multipart (`webm`, `mp4`, `mp3`, `wav` ou `ogg`) e devolve texto em pt-BR. Limite de 20 MB.
 - `POST /speak`: recebe `{ "text": "...", "voice": "pf_dora" }` ou `pm_alex` e devolve WAV mono 24 kHz. O cabeçalho `X-LinkStory-Word-Timings` contém os tempos das palavras em JSON codificado em Base64 URL-safe, para sincronizar a boca do personagem.
 
-A API valida o token consultando Supabase Auth. O proprietário da conversa é sempre o ID retornado por Auth. IDs de conversa de outra conta não retornam conteúdo. O histórico legado criado pela versão de token compartilhado não é associado automaticamente a nenhuma conta.
+A API valida o token consultando Supabase Auth. O proprietário da conversa e das memórias é sempre o ID retornado por Auth. IDs de conversa ou memória de outra conta não retornam conteúdo. As notas de memória são salvas apenas quando o usuário solicita explicitamente. O histórico legado criado pela versão de token compartilhado não é associado automaticamente a nenhuma conta.
 
 ## Testes
 
