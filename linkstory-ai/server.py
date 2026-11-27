@@ -1,7 +1,11 @@
 """Authenticated HTTP API for the self-hosted LinkStory AI core."""
 from __future__ import annotations
 
+import base64
+import io
+import json
 import logging
+import wave
 import tempfile
 from functools import lru_cache
 import os
@@ -14,6 +18,7 @@ from uuid import UUID, uuid4
 
 import httpx
 from fastapi import Depends, FastAPI, File, Header, HTTPException, UploadFile
+from fastapi.responses import Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -33,6 +38,8 @@ SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "")
 MAX_HISTORY = 20
 MAX_REQUESTS_PER_MINUTE = 20
 MAX_AUDIO_BYTES = 20 * 1024 * 1024
+TTS_MODEL_REPO = os.getenv('LINKSTORY_TTS_MODEL_REPO', 'eraldohug/Paradee-8M-PtBr')
+TTS_CACHE_DIR = Path(os.getenv('LINKSTORY_TTS_CACHE', ROOT / 'data' / 'models'))
 WHISPER_MODEL_SIZE = os.getenv('LINKSTORY_WHISPER_MODEL', 'base')
 
 app = FastAPI(title="LinkStory AI", version="0.2.1")
@@ -48,6 +55,7 @@ app.add_middleware(
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
+    expose_headers=["X-LinkStory-Word-Timings", "X-LinkStory-Voice"],
 )
 
 
@@ -240,6 +248,73 @@ def transcription_model():
         compute_type="int8",
         cpu_threads=max(1, int(os.getenv("LINKSTORY_WHISPER_THREADS", "4"))),
     )
+
+
+class SpeechRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=2500)
+    voice: str = Field(default="pf_dora", pattern="^(pf_dora|pm_alex)$")
+
+
+@lru_cache(maxsize=2)
+def speech_model(voice: str):
+    from huggingface_hub import hf_hub_download
+    from paradee import Paradee
+
+    TTS_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    model_name = "onnx/paradee_dora_int8.onnx" if voice == "pf_dora" else "onnx/paradee_alex_int8.onnx"
+    model_path = hf_hub_download(
+        repo_id=TTS_MODEL_REPO,
+        filename=model_name,
+        cache_dir=str(TTS_CACHE_DIR),
+    )
+    config_path = hf_hub_download(
+        repo_id=TTS_MODEL_REPO,
+        filename="config.json",
+        cache_dir=str(TTS_CACHE_DIR),
+    )
+    return Paradee(
+        model_path=model_path,
+        config_path=config_path,
+        lang="pt",
+        voices=[voice],
+        threads=max(1, int(os.getenv("LINKSTORY_TTS_THREADS", "2"))),
+    )
+
+
+@app.post("/speak")
+def speak(payload: SpeechRequest, user_id: str = Depends(get_current_user)):
+    enforce_rate_limit(user_id)
+    try:
+        import numpy as np
+
+        audio, words = speech_model(payload.voice).with_timestamps(
+            payload.text.strip(),
+            voice=payload.voice,
+        )
+        if audio is None or len(audio) == 0:
+            raise ValueError("O sintetizador não gerou áudio.")
+        pcm = (np.clip(audio, -1.0, 1.0) * 32767).astype("<i2").tobytes()
+        buffer = io.BytesIO()
+        with wave.open(buffer, "wb") as wav:
+            wav.setnchannels(1)
+            wav.setsampwidth(2)
+            wav.setframerate(24000)
+            wav.writeframes(pcm)
+        timings = base64.urlsafe_b64encode(
+            json.dumps(words, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+        ).decode("ascii")
+        return Response(
+            content=buffer.getvalue(),
+            media_type="audio/wav",
+            headers={
+                "X-LinkStory-Word-Timings": timings,
+                "X-LinkStory-Voice": payload.voice,
+                "Cache-Control": "no-store",
+            },
+        )
+    except Exception:
+        logging.exception("LinkStory AI speech synthesis failed")
+        raise HTTPException(status_code=503, detail="A voz da LinkStory AI está indisponível no momento.")
 
 
 @app.post("/transcribe")
