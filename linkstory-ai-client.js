@@ -65,7 +65,10 @@
     return response.json();
   }
 
-  async function speak(text, voice = "pf_dora") {
+  async function speak(text, voice) {
+    if (voice !== "pf_dora" && voice !== "pm_alex") {
+      throw new Error("Escolha uma voz antes de iniciar a fala.");
+    }
     const response = await request("/speak", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
