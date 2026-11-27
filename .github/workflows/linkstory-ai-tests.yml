@@ -1,0 +1,33 @@
+name: LinkStory AI tests
+
+on:
+  push:
+    branches:
+      - feature/linkstory-ai-autonomia
+    paths:
+      - "linkstory-ai/**"
+      - ".github/workflows/linkstory-ai-tests.yml"
+  pull_request:
+    paths:
+      - "linkstory-ai/**"
+      - ".github/workflows/linkstory-ai-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: linkstory-ai/requirements-dev.txt
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+        working-directory: linkstory-ai
+      - name: Run API tests
+        run: pytest -q tests
+        working-directory: linkstory-ai
