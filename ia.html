@@ -3,83 +3,179 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#f2f6fc">
-<title>Assistente LinkStory</title>
-<meta name="description" content="Converse com a assistente oficial do LinkStory e da Kairox Studio.">
+<meta name="theme-color" content="#000000">
+<title>LinkStory IA</title>
+<meta name="description" content="Converse com o personagem do LinkStory.">
 <link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
 <style>
-:root{color-scheme:light;--ink:#17263a;--muted:#73849a;--line:#dce6f2;--blue:#176fd0;--blue-deep:#0c4f9e;--glass:rgba(255,255,255,.72)}
+:root{color-scheme:light;--black:#050505;--white:#fff;--line:#111}
 *{box-sizing:border-box}
 html,body{width:100%;height:100%;margin:0;overflow:hidden}
-body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 12% 0%,#fff 0,transparent 38%),radial-gradient(ellipse at 90% 30%,#dceafa 0,transparent 40%),linear-gradient(145deg,#f6f8fc,#edf2f8);-webkit-font-smoothing:antialiased}
-button,textarea{font:inherit}
-.ai-shell{width:min(920px,100%);height:100dvh;margin:0 auto;padding:18px 22px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px}
-.ai-top{height:54px;flex:0 0 54px;display:flex;align-items:center;gap:13px}
-.ai-back{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(211,225,241,.9);border-radius:15px;background:rgba(255,255,255,.68);color:#34506f;text-decoration:none;backdrop-filter:blur(18px)}
-.ai-back svg{width:20px;height:20px}
-.ai-brand{display:flex;align-items:center;gap:11px;min-width:0}
-.ai-mark{width:42px;height:42px;flex:0 0 42px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#176fd0,#0c4f9e);box-shadow:0 7px 17px rgba(12,79,158,.2)}
-.ai-mark svg{width:32px;height:32px}
-.ai-brand strong{display:block;font-size:15px;letter-spacing:-.3px}
-.ai-brand small{display:block;margin-top:3px;font-size:11px;color:var(--muted)}
-.ai-status{margin-left:auto;display:flex;align-items:center;gap:7px;color:#68809b;font-size:11px;font-weight:700}
-.ai-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#38b77a;box-shadow:0 0 0 4px rgba(56,183,122,.12)}
-.ai-window{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(255,255,255,.92);border-radius:26px;background:rgba(255,255,255,.55);box-shadow:0 18px 55px rgba(31,58,89,.09),inset 0 1px 0 #fff;backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%)}
-.ai-conversation{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:clamp(20px,5vw,42px);display:flex;flex-direction:column;gap:18px;scroll-behavior:smooth}
-.ai-welcome{max-width:610px;margin:auto 0 12px}
-.ai-welcome .eyebrow{font-size:10px;letter-spacing:2px;font-weight:850;color:var(--blue)}
-.ai-welcome h1{font-size:clamp(25px,5vw,38px);letter-spacing:-1.3px;line-height:1.08;margin:10px 0 11px}
-.ai-welcome p{margin:0;color:#667b93;font-size:14px;line-height:1.65;max-width:510px}
-.ai-prompts{display:flex;flex-wrap:wrap;gap:9px;margin-top:23px}
-.ai-prompts button{padding:11px 14px;border:1px solid #d8e5f3;border-radius:15px;background:rgba(255,255,255,.72);color:#315a84;font-size:12px;font-weight:750;text-align:left;cursor:pointer;transition:background .16s,border-color .16s}
-.ai-prompts button:hover{background:#fff;border-color:#9fc5ef}
-.ai-msg{max-width:min(78%,650px);padding:14px 17px;border:1px solid rgba(216,228,241,.95);border-radius:19px;background:rgba(255,255,255,.86);color:#26384d;font-size:14px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:0 4px 13px rgba(25,53,82,.035)}
-.ai-msg.user{align-self:flex-end;background:linear-gradient(135deg,#176fd0,#145aa8);border-color:#176fd0;color:#fff;border-bottom-right-radius:7px}
-.ai-msg.assistant{align-self:flex-start;border-bottom-left-radius:7px}
-.ai-msg.pending{color:#71849a;font-style:italic}
-.ai-compose-wrap{padding:15px 18px 18px;border-top:1px solid rgba(215,227,241,.8);background:rgba(248,251,255,.68)}
-.ai-compose{display:flex;align-items:flex-end;gap:10px;padding:8px 8px 8px 16px;border:1px solid #d7e3f0;border-radius:19px;background:rgba(255,255,255,.94);box-shadow:0 5px 18px rgba(28,57,88,.06)}
-.ai-compose:focus-within{border-color:#8db9e8;box-shadow:0 0 0 3px rgba(23,111,208,.09)}
-#aiInput{width:100%;min-width:0;max-height:140px;min-height:42px;resize:none;border:0;outline:0;background:transparent;color:var(--ink);padding:10px 0;font-size:14px;line-height:1.5}
-#aiInput::placeholder{color:#91a1b4}
-#aiSend{width:43px;height:43px;flex:0 0 43px;border:0;border-radius:14px;background:linear-gradient(145deg,#176fd0,#0c4f9e);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 5px 12px rgba(12,79,158,.2)}
-#aiSend svg{width:19px;height:19px}
-#aiSend:disabled{opacity:.48;cursor:wait}
-.ai-footnote{text-align:center;color:#94a2b3;font-size:10px;margin:9px 0 0}
-@media(max-width:640px){.ai-shell{padding:10px 10px max(10px,env(safe-area-inset-bottom));gap:9px}.ai-top{height:50px;flex-basis:50px;gap:10px}.ai-back{width:39px;height:39px}.ai-mark{width:39px;height:39px;flex-basis:39px;border-radius:14px}.ai-mark svg{width:29px;height:29px}.ai-brand strong{font-size:14px}.ai-brand small{font-size:10px}.ai-status{font-size:10px}.ai-window{border-radius:21px}.ai-conversation{padding:22px 16px;gap:14px}.ai-welcome{margin:auto 0 8px}.ai-welcome h1{font-size:29px}.ai-welcome p{font-size:13px}.ai-prompts{gap:8px;margin-top:19px}.ai-prompts button{font-size:11px;padding:10px 12px}.ai-msg{max-width:90%;font-size:13px;padding:12px 14px}.ai-compose-wrap{padding:11px 10px 12px}.ai-compose{border-radius:17px;padding-left:13px}.ai-footnote{font-size:9px}}
-@media(prefers-reduced-motion:reduce){.ai-conversation{scroll-behavior:auto}*{transition:none!important}}
-html[data-ls-theme="dark"]{color-scheme:dark}
-html[data-ls-theme="dark"] body{background:radial-gradient(ellipse at 10% 0%,#1d3048,transparent 38%),linear-gradient(145deg,#0d1521,#101c2b);color:#f1f6fc}
-html[data-ls-theme="dark"] .ai-window{background:rgba(20,33,49,.78);border-color:#344a63}
-html[data-ls-theme="dark"] .ai-back,html[data-ls-theme="dark"] .ai-prompts button{background:rgba(29,46,66,.8);border-color:#3a526d;color:#c5ddf6}
-html[data-ls-theme="dark"] .ai-brand small,html[data-ls-theme="dark"] .ai-status,html[data-ls-theme="dark"] .ai-welcome p{color:#aabbd0}
-html[data-ls-theme="dark"] .ai-msg.assistant{background:#1b2b3e;border-color:#354b64;color:#eef4fc}
-html[data-ls-theme="dark"] .ai-compose-wrap{background:rgba(16,27,41,.82);border-color:#344a63}
-html[data-ls-theme="dark"] .ai-compose{background:#1b2b3e;border-color:#3a526d}
-html[data-ls-theme="dark"] #aiInput{color:#f1f6fc}
-html[data-ls-theme="dark"] #aiInput::placeholder{color:#91a5bc}
-html[data-ls-theme="dark"] .ai-footnote{color:#8093aa}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#fff;color:#050505;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit}
+.app{height:100dvh;min-height:100svh;display:flex;flex-direction:column;background:#fff}
+.top{height:88px;flex:0 0 88px;background:#050505;color:#fff;display:flex;align-items:center;padding:calc(env(safe-area-inset-top) + 9px) 20px 10px;gap:13px}
+.brand-mark{width:55px;height:55px;flex:0 0 55px;border-radius:50%;overflow:hidden;background:#fff;display:grid;place-items:center}
+.brand-mark img{width:100%;height:100%;object-fit:cover}
+.brand-copy{min-width:0;display:flex;flex-direction:column;gap:3px}
+.brand-copy strong{font-size:24px;line-height:1;font-weight:800;letter-spacing:-.8px}
+.brand-copy span{font-size:15px;font-weight:400;color:#e8e8e8}
+.status{margin-left:auto;display:flex;align-items:center;gap:6px;color:#ddd;font-size:11px;white-space:nowrap}
+.status:before{content:"";width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #ffffff25}
+.stage{position:relative;flex:1;min-height:0;overflow:hidden;background:#fff;display:flex;align-items:center;justify-content:center}
+.character-wrap{position:relative;width:min(56vw,310px);height:min(68%,520px);display:flex;align-items:center;justify-content:center;transition:transform .25s ease}
+.character{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;user-select:none;-webkit-user-drag:none}
+.mouth{position:absolute;width:10px;height:3px;left:69%;top:22%;border-radius:50%;background:#050505;opacity:0;transform:scaleX(.35);transform-origin:center;pointer-events:none}
+.character-wrap.is-speaking{animation:talkBob .72s ease-in-out infinite}
+.character-wrap.is-speaking .mouth{opacity:1;animation:mouthTalk .22s ease-in-out infinite alternate}
+.character-wrap.is-thinking{animation:thinkMove 1.6s ease-in-out infinite}
+@keyframes talkBob{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-3px) rotate(.6deg)}}
+@keyframes mouthTalk{from{transform:scaleX(.45) scaleY(.7)}to{transform:scaleX(1.35) scaleY(2.2)}}
+@keyframes thinkMove{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.user-live{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);width:min(88%,620px);padding:11px 17px;border:2px solid #050505;border-radius:24px;background:#fff;color:#050505;font-size:15px;line-height:1.35;text-align:center;box-shadow:0 4px 0 #00000008;max-height:86px;overflow:hidden;display:none}
+.user-live.visible{display:block;animation:popIn .18s ease-out}
+.stage-hint{position:absolute;top:17px;left:50%;transform:translateX(-50%);font-size:12px;color:#777;white-space:nowrap;opacity:0;transition:opacity .2s}
+.stage-hint.visible{opacity:1}
+@keyframes popIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
+.bottom{min-height:92px;flex:0 0 auto;background:#050505;color:#fff;padding:11px 14px calc(12px + env(safe-area-inset-bottom));display:flex;align-items:center;gap:9px}
+.circle-btn{width:54px;height:54px;flex:0 0 54px;border:0;border-radius:50%;background:#fff;color:#050505;display:grid;place-items:center;cursor:pointer}
+.circle-btn svg{width:26px;height:26px;display:block}
+.composer{height:54px;min-width:0;flex:1;display:flex;align-items:center;gap:6px;border:2px solid #fff;border-radius:30px;padding:0 9px 0 17px;background:#050505}
+#message{min-width:0;flex:1;height:42px;max-height:42px;resize:none;border:0;outline:0;background:transparent;color:#fff;font-size:15px;line-height:42px;padding:0;white-space:nowrap;overflow:hidden}
+#message::placeholder{color:#dedede;opacity:1}
+.mic{width:34px;height:38px;flex:0 0 34px;border:0;background:transparent;color:#fff;display:grid;place-items:center;cursor:pointer}
+.mic svg{width:24px;height:24px}
+.mic.active{color:#bdbdbd;animation:micPulse .8s infinite alternate}
+@keyframes micPulse{to{opacity:.4}}
+#send{width:54px;height:54px;flex:0 0 54px;border:0;border-radius:50%;background:#fff;color:#050505;display:grid;place-items:center;cursor:pointer}
+#send svg{width:27px;height:27px}
+#send:disabled{opacity:.45;cursor:wait}
+.history-panel{position:fixed;z-index:10;inset:0;background:#0008;display:none;align-items:flex-end;justify-content:center}
+.history-panel.open{display:flex}
+.history-sheet{width:100%;max-width:760px;height:min(76dvh,720px);background:#fff;color:#050505;border-radius:24px 24px 0 0;display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom);animation:sheetIn .2s ease-out}
+@keyframes sheetIn{from{transform:translateY(30px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.history-head{height:62px;flex:0 0 62px;display:flex;align-items:center;justify-content:space-between;padding:0 19px;border-bottom:1px solid #ddd}
+.history-head strong{font-size:17px}
+.close-history{width:36px;height:36px;border:1px solid #ddd;border-radius:50%;background:#fff;font-size:22px;line-height:1}
+.history-list{flex:1;overflow:auto;padding:17px;display:flex;flex-direction:column;gap:13px}
+.history-empty{margin:auto;text-align:center;color:#777;font-size:14px}
+.history-item{border:1px solid #ddd;border-radius:15px;padding:12px 13px;display:flex;flex-direction:column;gap:8px}
+.history-role{font-size:10px;font-weight:800;letter-spacing:1px;color:#666;text-transform:uppercase}
+.history-text{font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere}
+.copy-btn{align-self:flex-end;border:1px solid #bbb;border-radius:18px;background:#fff;padding:6px 11px;font-size:11px;color:#111}
+@media(max-width:520px){.top{height:88px;flex-basis:88px;padding-left:18px;padding-right:17px}.brand-mark{width:55px;height:55px;flex-basis:55px}.brand-copy strong{font-size:23px}.brand-copy span{font-size:15px}.status{font-size:10px}.character-wrap{width:min(67vw,300px);height:min(66%,470px)}.user-live{font-size:14px;bottom:13px}.bottom{gap:8px;padding-left:13px;padding-right:13px}.circle-btn,#send{width:53px;height:53px;flex-basis:53px}.composer{height:53px;padding-left:14px;padding-right:7px}#message{font-size:14px}.history-sheet{height:78dvh}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
-<script>
-(()=>{try{const t=localStorage.getItem('linkstory-theme');if(t==='dark'||t==='light')document.documentElement.dataset.lsTheme=t}catch(e){}})();
-</script>
 </head>
 <body>
-<div class="ai-shell">
-<header class="ai-top">
-<a class="ai-back" href="index.html" aria-label="Voltar para o LinkStory"><svg viewBox="0 0 24 24" fill="none"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-<div class="ai-brand"><span class="ai-mark" aria-hidden="true"><svg viewBox="65 75 245 420" aria-hidden="true"><image href="assets/linkstory-logo.svg" x="0" y="0" width="2030" height="554" preserveAspectRatio="none" style="filter:brightness(0) invert(1)"/><circle cx="270" cy="110" r="18" fill="#ffcf67"/></svg></span><span><strong>Assistente LinkStory</strong><small>Uma conversa com LinkStory + Kairox Studio</small></span></div>
-<span class="ai-status">Online</span>
+<div class="app">
+<header class="top">
+<div class="brand-mark"><img src="assets/linkstory-logo.svg" alt="Logo LinkStory"></div>
+<div class="brand-copy"><strong>Linkstory</strong><span>IA Online</span></div>
+<div class="status" id="status">Online</div>
 </header>
-<main class="ai-window">
-<div class="ai-conversation" id="aiMessages" aria-live="polite">
-<section class="ai-welcome" id="aiWelcome"><span class="eyebrow">ASSISTENTE OFICIAL</span><h1>O que vamos descobrir hoje?</h1><p>Posso ajudar com dúvidas sobre o LinkStory, leitura, publicação de mangás e os projetos da Kairox Studio.</p><div class="ai-prompts" id="aiPrompts"><button type="button">Como publico um mangá?</button><button type="button">O que é a Kairox Studio?</button><button type="button">Como funciona a biblioteca?</button></div></section>
+<main class="stage" id="stage">
+<div class="stage-hint" id="hint" aria-live="polite"></div>
+<div class="character-wrap" id="characterWrap">
+<img class="character" src="data:image/jpeg;base64,__MASCOT_B64__" alt="Personagem original do LinkStory">
+<span class="mouth" aria-hidden="true"></span>
 </div>
-<div class="ai-compose-wrap"><form class="ai-compose" id="aiForm"><textarea id="aiInput" rows="1" maxlength="1200" placeholder="Envie uma mensagem..." aria-label="Sua mensagem"></textarea><button id="aiSend" type="submit" aria-label="Enviar mensagem"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12 19 5l-5 14-2.5-6.5L5 12Z" fill="currentColor"/><path d="m11.5 12.5 7.5-7.5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg></button></form><p class="ai-footnote">A assistente pode cometer erros. Confira informações importantes nos canais oficiais.</p></div>
+<div class="user-live" id="liveMessage" aria-live="polite"></div>
 </main>
+<footer class="bottom">
+<button class="circle-btn" id="historyButton" type="button" aria-label="Abrir histórico" title="Histórico">
+<svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+</button>
+<form class="composer" id="chatForm">
+<textarea id="message" rows="1" maxlength="1200" placeholder="Escreva uma mensagem..." aria-label="Escreva uma mensagem"></textarea>
+<button class="mic" id="mic" type="button" aria-label="Falar mensagem" title="Ditado por voz">
+<svg viewBox="0 0 24 24" fill="none"><rect x="9" y="2.5" width="6" height="12" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3.5M9 21.5h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+</button>
+</form>
+<button id="send" type="submit" form="chatForm" aria-label="Enviar mensagem">
+<svg viewBox="0 0 24 24" fill="none"><path d="M12 19V5m-7 7 7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+</footer>
+</div>
+<div class="history-panel" id="historyPanel" role="dialog" aria-modal="true" aria-label="Histórico da conversa">
+<section class="history-sheet">
+<header class="history-head"><strong>Histórico da conversa</strong><button class="close-history" id="closeHistory" type="button" aria-label="Fechar">×</button></header>
+<div class="history-list" id="historyList"><p class="history-empty">Suas conversas aparecerão aqui.</p></div>
+</section>
 </div>
 <script>
-(()=>{const form=document.getElementById('aiForm'),input=document.getElementById('aiInput'),messages=document.getElementById('aiMessages'),send=document.getElementById('aiSend'),prompts=[...document.querySelectorAll('#aiPrompts button')];let history=[];const esc=(s)=>String(s||'');const add=(content,role)=>{const el=document.createElement('div');el.className='ai-msg '+role;el.textContent=content;messages.append(el);messages.scrollTop=messages.scrollHeight;return el};const ask=async(value)=>{const q=String(value||'').trim();if(!q||send.disabled)return;document.getElementById('aiWelcome')?.remove();add(q,'user');history.push({role:'user',content:q});input.value='';input.style.height='42px';send.disabled=true;const pending=add('Pensando…','assistant pending');try{const response=await fetch('/api/site-assistant',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,history:history.slice(-8,-1)})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Não consegui responder agora.');pending.classList.remove('pending');pending.textContent=data.answer;history.push({role:'assistant',content:data.answer});try{sessionStorage.setItem('ls-ai-history',JSON.stringify(history.slice(-30)))}catch(e){}}catch(error){pending.classList.remove('pending');pending.textContent=error.message||'Tente novamente em instantes.'}finally{send.disabled=false;messages.scrollTop=messages.scrollHeight;input.focus()}};form.addEventListener('submit',e=>{e.preventDefault();ask(input.value)});input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});input.addEventListener('input',()=>{input.style.height='42px';input.style.height=Math.min(input.scrollHeight,140)+'px'});prompts.forEach(b=>b.addEventListener('click',()=>ask(b.textContent)));try{const saved=JSON.parse(sessionStorage.getItem('ls-ai-history')||'[]');if(Array.isArray(saved)&&saved.length){history=saved.slice(-30);document.getElementById('aiWelcome')?.remove();history.forEach(m=>add(m.content,m.role==='assistant'?'assistant':'user'))}}catch(e){} })();
+(()=>{
+"use strict";
+const form=document.getElementById("chatForm"),input=document.getElementById("message"),send=document.getElementById("send"),mic=document.getElementById("mic");
+const live=document.getElementById("liveMessage"),wrap=document.getElementById("characterWrap"),hint=document.getElementById("hint"),status=document.getElementById("status");
+const historyPanel=document.getElementById("historyPanel"),historyList=document.getElementById("historyList");
+let history=[],busy=false,recognition=null;
+const STORE_KEY="linkstory-character-history-v1";
+function loadHistory(){try{const saved=JSON.parse(localStorage.getItem(STORE_KEY)||"[]");if(Array.isArray(saved))history=saved.slice(-100)}catch(e){history=[]}}
+function saveHistory(){try{localStorage.setItem(STORE_KEY,JSON.stringify(history.slice(-100)))}catch(e){setHint("Não foi possível guardar o histórico neste dispositivo.")}}
+function setHint(text){hint.textContent=text||"";hint.classList.toggle("visible",!!text)}
+function addHistory(role,content){history.push({role,content:String(content||""),time:Date.now()});saveHistory()}
+function showLive(text){live.textContent=text;live.classList.add("visible")}
+function hideLive(){live.classList.remove("visible");live.textContent=""}
+function speak(text){
+return new Promise(resolve=>{
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){resolve(false);return}
+ window.speechSynthesis.cancel();
+ const utterance=new SpeechSynthesisUtterance(text);utterance.lang="pt-BR";utterance.rate=1;utterance.pitch=1.05;
+ utterance.onstart=()=>{wrap.classList.add("is-speaking");setHint("Respondendo…")};
+ utterance.onend=()=>{wrap.classList.remove("is-speaking");setHint("");resolve(true)};
+ utterance.onerror=()=>{wrap.classList.remove("is-speaking");setHint("");resolve(false)};
+ window.speechSynthesis.speak(utterance);
+});
+}
+function renderHistory(){
+ historyList.replaceChildren();
+ if(!history.length){const empty=document.createElement("p");empty.className="history-empty";empty.textContent="Suas conversas aparecerão aqui.";historyList.append(empty);return}
+ history.forEach(item=>{
+  const card=document.createElement("article");card.className="history-item";
+  const role=document.createElement("span");role.className="history-role";role.textContent=item.role==="user"?"Você":"LinkStory IA";
+  const content=document.createElement("div");content.className="history-text";content.textContent=item.content;
+  const copy=document.createElement("button");copy.className="copy-btn";copy.type="button";copy.textContent="Copiar mensagem";
+  copy.addEventListener("click",async()=>{try{await navigator.clipboard.writeText(item.content);copy.textContent="Copiado!"}catch(e){copy.textContent="Não foi possível copiar"}});
+  card.append(role,content,copy);historyList.append(card);
+ });
+ historyList.scrollTop=historyList.scrollHeight;
+}
+async function ask(value){
+ const question=String(value||"").trim();if(!question||busy)return;
+ busy=true;send.disabled=true;mic.disabled=true;input.value="";showLive(question);setHint("Pensando…");wrap.classList.add("is-thinking");
+ try{
+  const response=await fetch("/api/site-assistant",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:question,history:history.slice(-12).map(item=>({role:item.role,content:item.content}))})});
+  const data=await response.json().catch(()=>({}));
+  if(!response.ok||!data.answer)throw new Error(data.error||"Não consegui responder agora. Tente novamente.");
+  const answer=String(data.answer).trim();
+  wrap.classList.remove("is-thinking");
+  await speak(answer);
+  addHistory("user",question);addHistory("assistant",answer);
+  hideLive();
+  if(!("speechSynthesis" in window))setHint("Resposta salva no histórico. Áudio não disponível neste navegador.");
+  else setHint("");
+ }catch(error){
+  wrap.classList.remove("is-thinking");hideLive();setHint(error.message||"Ocorreu um erro. Tente novamente.");
+  addHistory("user",question);
+ }finally{
+  busy=false;send.disabled=false;mic.disabled=false;input.focus();
+ }
+}
+form.addEventListener("submit",event=>{event.preventDefault();ask(input.value)});
+input.addEventListener("keydown",event=>{if(event.key==="Enter"&&!event.shiftKey){event.preventDefault();form.requestSubmit()}});
+document.getElementById("historyButton").addEventListener("click",()=>{renderHistory();historyPanel.classList.add("open")});
+document.getElementById("closeHistory").addEventListener("click",()=>historyPanel.classList.remove("open"));
+historyPanel.addEventListener("click",event=>{if(event.target===historyPanel)historyPanel.classList.remove("open")});
+if("webkitSpeechRecognition" in window||"SpeechRecognition" in window){
+ const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;recognition=new SpeechRecognition();recognition.lang="pt-BR";recognition.interimResults=false;
+ recognition.onstart=()=>mic.classList.add("active");recognition.onend=()=>mic.classList.remove("active");
+ recognition.onresult=event=>{input.value=event.results[0][0].transcript;input.focus()};
+ recognition.onerror=()=>setHint("Não consegui ouvir. Você pode digitar sua mensagem.");
+ mic.addEventListener("click",()=>{try{recognition.start()}catch(e){recognition.stop()}});
+}else{mic.addEventListener("click",()=>setHint("O ditado por voz não é compatível com este navegador."))}
+loadHistory();
+})();
 </script>
 </body>
 </html>
