@@ -40,6 +40,7 @@ MAX_REQUESTS_PER_MINUTE = 20
 MAX_AUDIO_BYTES = 20 * 1024 * 1024
 TTS_MODEL_REPO = os.getenv('LINKSTORY_TTS_MODEL_REPO', 'eraldohug/Paradee-8M-PtBr')
 TTS_CACHE_DIR = Path(os.getenv('LINKSTORY_TTS_CACHE', ROOT / 'data' / 'models'))
+MODELS_READY_FILE = Path(os.getenv('LINKSTORY_MODELS_READY_FILE', ROOT / 'data' / 'models' / '.ready'))
 WHISPER_MODEL_SIZE = os.getenv('LINKSTORY_WHISPER_MODEL', 'base')
 
 app = FastAPI(title="LinkStory AI", version="0.2.1")
@@ -174,7 +175,8 @@ def health():
             knowledge_base_ready = False
 
     auth_ready = bool(SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY)
-    ready = auth_ready and ollama_ok and chat_model_ready and embedding_model_ready and knowledge_base_ready
+    audio_models_ready = MODELS_READY_FILE.exists()
+    ready = auth_ready and ollama_ok and chat_model_ready and embedding_model_ready and knowledge_base_ready and audio_models_ready
     return {
         "status": "ready" if ready else "not_ready",
         "engine": "ollama",
@@ -183,6 +185,7 @@ def health():
         "chat_model_ready": chat_model_ready,
         "embedding_model_ready": embedding_model_ready,
         "knowledge_base_ready": knowledge_base_ready,
+        "audio_models_ready": audio_models_ready,
     }
 
 
