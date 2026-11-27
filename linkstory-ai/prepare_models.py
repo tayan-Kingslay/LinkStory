@@ -3,6 +3,7 @@ from server import MODELS_READY_FILE, speech_model, transcription_model
 
 
 def main():
+    MODELS_READY_FILE.unlink(missing_ok=True)
     print("Preparando reconhecimento de voz local...")
     transcription_model()
     print("Preparando voz sintética Dora (pt-BR)...")
