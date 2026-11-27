@@ -6,6 +6,7 @@ on:
       - feature/linkstory-ai-autonomia
     paths:
       - "linkstory-ai/**"
+      - "linkstory-ai-client.js"
       - ".github/workflows/linkstory-ai-tests.yml"
   pull_request:
     paths:
@@ -27,6 +28,9 @@ jobs:
           cache-dependency-path: linkstory-ai/requirements-dev.txt
       - name: Install dependencies
         run: pip install -r requirements-dev.txt
+        working-directory: linkstory-ai
+      - name: Validate browser client syntax
+        run: node --check ../linkstory-ai-client.js
         working-directory: linkstory-ai
       - name: Run API tests
         env:
