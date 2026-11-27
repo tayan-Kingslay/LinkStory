@@ -337,8 +337,9 @@ def speak(payload: SpeechRequest, user_id: str = Depends(get_current_user)):
             wav.setsampwidth(2)
             wav.setframerate(24000)
             wav.writeframes(pcm)
+        safe_words = [[str(word[0]), float(word[1]), float(word[2])] for word in words]
         timings = base64.urlsafe_b64encode(
-            json.dumps(words, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
+            json.dumps(safe_words, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
         ).decode("ascii")
         return Response(
             content=buffer.getvalue(),
