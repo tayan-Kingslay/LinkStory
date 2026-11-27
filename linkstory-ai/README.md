@@ -1,88 +1,51 @@
-# LinkStory AI — Memória técnica local (Fase 0)
+# LinkStory AI — motor independente
 
-Este módulo é o primeiro componente executável da futura IA da Kairox Studio.
-Ele indexa o código do LinkStory em um banco vetorial local e permite perguntas
-em linguagem natural usando um modelo executado pelo Ollama.
+Este serviço é o núcleo de inferência próprio da Kairox Studio. Ele usa Ollama para executar o modelo no servidor controlado pelo projeto e Chroma para recuperar conhecimento local (RAG). Não usa Gemini, OpenAI ou APIs comerciais de geração de texto.
 
-**Importante:** isto é RAG (busca + contexto), não treinamento de um modelo.
-Ollama executa o modelo localmente. Nenhuma chamada a Gemini, OpenAI ou ElevenLabs
-é feita por este módulo.
+> RAG não é treinamento do modelo. A base recupera trechos relevantes dos arquivos indexados e os fornece ao modelo durante a resposta.
 
-## Requisitos
+## Arquitetura
 
-- Python 3.10 ou superior.
-- Ollama instalado e em execução na máquina/servidor que hospedará a IA.
-- RAM suficiente para o modelo escolhido. O padrão é llama3.1:8b.
-- Para uso em produção, preferir um servidor Linux com GPU compatível e armazenamento persistente.
+- **Inferência:** Ollama + modelo configurável (padrão: `llama3.1:8b`).
+- **Embeddings e recuperação:** `nomic-embed-text` + Chroma persistente.
+- **Histórico:** SQLite em volume persistente, com isolamento por ID verificado do usuário.
+- **Identidade:** cada chamada de chat valida o access token no Supabase Auth (`/auth/v1/user`). Nenhum ID de usuário enviado pelo navegador é aceito como identidade.
+- **API:** FastAPI, CORS restrito, limite de 20 mensagens/minuto por usuário e mensagens com até 4.000 caracteres.
 
-## Preparar o motor local
+## Executar com Docker Compose
 
-No terminal do servidor, baixar os modelos llama3.1:8b e nomic-embed-text pelo Ollama.
-Depois, confirmar que aparecem na lista de modelos instalados.
+Requisitos: Docker Engine + Compose, armazenamento persistente e recursos de CPU/RAM compatíveis com o modelo escolhido. Para melhor desempenho, use uma máquina com GPU suportada pelo Ollama.
 
-## Instalar
+1. Copie `.env.example` para `.env` e preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` com os dados públicos do projeto Supabase. A chave publishable não substitui o token do usuário; ela nunca concede acesso por si só.
+2. Inicie os serviços: `docker compose up -d --build`.
+3. Baixe os modelos no serviço privado: `docker compose exec ollama ollama pull llama3.1:8b` e `docker compose exec ollama ollama pull nomic-embed-text`.
+4. Indexe uma cópia limpa do repositório (sem `.env`, tokens, dados privados ou pastas de dependências): `docker compose run --rm --no-deps -v /caminho/LinkStory:/source api python ingest.py /source`.
+5. Confira `GET /health`. O campo `status` só será `ready` quando a autenticação estiver configurada, Ollama estiver acessível e a pasta vetorial existir.
 
-Na pasta linkstory-ai, criar um ambiente virtual Python e instalar as dependências de requirements.txt.
-No Windows, a ativação do ambiente usa .venv\\Scripts\\activate.
+A API fica vinculada a `127.0.0.1:8000`; publique-a atrás de um proxy HTTPS. A porta 11434 do Ollama não é exposta. Não publique a porta da API diretamente sem TLS, firewall e controles de acesso.
 
-## Indexar o código do LinkStory
+## Configuração
 
-Aponte para uma cópia local do repositório:
+Veja `.env.example`. `LINKSTORY_CHAT_DB` e `LINKSTORY_CHROMA_DIR` precisam apontar para armazenamento persistente. Em uma implantação com várias réplicas, substitua SQLite por um banco compartilhado antes de aumentar a escala.
 
-    python ingest.py /caminho/para/LinkStory
+## API
 
-O indexador ignora dependências, pastas de build, arquivos binários e arquivos acima de 1,5 MB.
-A base vetorial é gravada em linkstory-ai/data/chroma por padrão.
+Todas as rotas de conversa exigem `Authorization: Bearer <access_token_supabase>`.
 
-## Fazer uma pergunta
+- `GET /health`: diagnóstico sem dados de usuário.
+- `POST /chat`: corpo `{ "message": "...", "conversation_id": null }`; devolve resposta, ID e fontes.
+- `GET /conversations/{conversation_id}`: histórico pertencente ao usuário autenticado.
 
-    python ask.py "Como funciona a geração da Melhor Experiência?"
+A API valida o token consultando Supabase Auth. O proprietário da conversa é sempre o ID retornado por Auth. IDs de conversa de outra conta não retornam conteúdo. O histórico legado criado pela versão de token compartilhado não é associado automaticamente a nenhuma conta.
 
-## Configuração opcional
+## Testes
 
-- OLLAMA_BASE_URL: endereço do Ollama (padrão http://127.0.0.1:11434).
-- LINKSTORY_CHAT_MODEL: modelo de conversa (padrão llama3.1:8b).
-- LINKSTORY_EMBED_MODEL: modelo de embeddings (padrão nomic-embed-text).
-- LINKSTORY_CHROMA_DIR: pasta persistente do Chroma.
+Instale `requirements-dev.txt` e execute `pytest -q`. Os testes não precisam de Ollama real; as chamadas de inferência e Auth são simuladas.
 
-## Limites desta fase
+## Limites conhecidos antes da publicação
 
-- A memória responde sobre o código indexado; não altera o sistema.
-- O índice precisa ser atualizado após mudanças relevantes no repositório.
-- O modelo local ainda precisa ser avaliado quanto à qualidade em português e programação.
-- Isto não substitui os modelos especializados de visão, áudio e movimento necessários para produzir capítulos de mangá.
-- O módulo ainda não está conectado à aplicação web nem implantado em produção.
-- Não indexe segredos, tokens, arquivos .env, dados pessoais ou material privado sem autorização.
-
-## Próximas fases
-
-1. Testes automatizados do indexador e recuperação.
-2. API interna autenticada para consultar esta memória.
-3. Separação entre memória técnica, regras editoriais e conhecimento de cada mangá.
-4. Modelos locais de visão e linguagem para análise de páginas e cenas.
-5. Áudio local e sincronização.
-
-## API HTTP autenticada (primeira integração)
-
-Instale as dependências e inicie o Ollama com os modelos configurados acima. Depois defina um token longo e aleatório e execute:
-
-    export LINKSTORY_API_TOKEN='gere-um-token-longo-e-aleatorio'
-    export LINKSTORY_ALLOWED_ORIGINS='https://linkstorysite.vercel.app'
-    uvicorn server:app --host 0.0.0.0 --port 8000
-
-Endpoints:
-
-- `GET /health`: estado do serviço e modelo selecionado.
-- `POST /chat`: recebe `{ "message": "...", "conversation_id": null }` e devolve resposta, ID da conversa e fontes recuperadas.
-- `GET /conversations/{conversation_id}`: recupera o histórico da conversa.
-
-Envie `Authorization: Bearer <LINKSTORY_API_TOKEN>` em todos os endpoints de conversa. O serviço recusa chamadas se o token não estiver configurado. Não exponha a porta do Ollama (11434) à internet; exponha somente a API por HTTPS, com firewall e proxy reverso. Configure o endereço do serviço no backend do LinkStory, nunca em JavaScript público do navegador.
-
-A API salva conversas em SQLite local. Esta primeira versão é uma base de integração e ainda não faz autenticação por usuário Supabase, isolamento multiusuário nem retenção/eliminação por conta. Não conecte usuários reais antes de implementar essas três proteções.
-
-### Limites verificados desta entrega
-
-- O endpoint usa o modelo local e a base vetorial já definidos em `core.py`.
-- A memória vetorial é uma base de conhecimento de código/documentação (RAG), não treinamento do modelo.
-- O histórico SQLite fornece contexto recente, mas ainda não é memória semântica de longo prazo.
-- A API ainda não foi implantada num servidor GPU nem conectada ao chat público do site.
+- O servidor de inferência precisa estar hospedado continuamente; Vercel hospeda o site, não o processo Ollama.
+- Configure os secrets no host do motor, nunca no JavaScript do navegador ou no Git.
+- Antes de abrir a IA aos usuários, teste com duas contas reais para confirmar isolamento, expiração de sessão, rate limit e persistência após reinicialização.
+- Avalie qualidade do modelo em português, latência, memória RAM/VRAM, custo de hospedagem e licenças do modelo escolhido.
+- Voz, transcrição, sincronização labial e animações do personagem são módulos separados; não estão incluídos nesta API de texto.
