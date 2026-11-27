@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f2f6fc">
+<title>Assistente LinkStory</title>
+<meta name="description" content="Converse com a assistente oficial do LinkStory e da Kairox Studio.">
+<link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
+<style>
+:root{color-scheme:light;--ink:#17263a;--muted:#73849a;--line:#dce6f2;--blue:#176fd0;--blue-deep:#0c4f9e;--glass:rgba(255,255,255,.72)}
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0;overflow:hidden}
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 12% 0%,#fff 0,transparent 38%),radial-gradient(ellipse at 90% 30%,#dceafa 0,transparent 40%),linear-gradient(145deg,#f6f8fc,#edf2f8);-webkit-font-smoothing:antialiased}
+button,textarea{font:inherit}
+.ai-shell{width:min(920px,100%);height:100dvh;margin:0 auto;padding:18px 22px max(18px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px}
+.ai-top{height:54px;flex:0 0 54px;display:flex;align-items:center;gap:13px}
+.ai-back{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(211,225,241,.9);border-radius:15px;background:rgba(255,255,255,.68);color:#34506f;text-decoration:none;backdrop-filter:blur(18px)}
+.ai-back svg{width:20px;height:20px}
+.ai-brand{display:flex;align-items:center;gap:11px;min-width:0}
+.ai-mark{width:42px;height:42px;flex:0 0 42px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(145deg,#176fd0,#0c4f9e);box-shadow:0 7px 17px rgba(12,79,158,.2)}
+.ai-mark svg{width:32px;height:32px}
+.ai-brand strong{display:block;font-size:15px;letter-spacing:-.3px}
+.ai-brand small{display:block;margin-top:3px;font-size:11px;color:var(--muted)}
+.ai-status{margin-left:auto;display:flex;align-items:center;gap:7px;color:#68809b;font-size:11px;font-weight:700}
+.ai-status:before{content:"";width:7px;height:7px;border-radius:50%;background:#38b77a;box-shadow:0 0 0 4px rgba(56,183,122,.12)}
+.ai-window{flex:1;min-height:0;display:flex;flex-direction:column;overflow:hidden;border:1px solid rgba(255,255,255,.92);border-radius:26px;background:rgba(255,255,255,.55);box-shadow:0 18px 55px rgba(31,58,89,.09),inset 0 1px 0 #fff;backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%)}
+.ai-conversation{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:clamp(20px,5vw,42px);display:flex;flex-direction:column;gap:18px;scroll-behavior:smooth}
+.ai-welcome{max-width:610px;margin:auto 0 12px}
+.ai-welcome .eyebrow{font-size:10px;letter-spacing:2px;font-weight:850;color:var(--blue)}
+.ai-welcome h1{font-size:clamp(25px,5vw,38px);letter-spacing:-1.3px;line-height:1.08;margin:10px 0 11px}
+.ai-welcome p{margin:0;color:#667b93;font-size:14px;line-height:1.65;max-width:510px}
+.ai-prompts{display:flex;flex-wrap:wrap;gap:9px;margin-top:23px}
+.ai-prompts button{padding:11px 14px;border:1px solid #d8e5f3;border-radius:15px;background:rgba(255,255,255,.72);color:#315a84;font-size:12px;font-weight:750;text-align:left;cursor:pointer;transition:background .16s,border-color .16s}
+.ai-prompts button:hover{background:#fff;border-color:#9fc5ef}
+.ai-msg{max-width:min(78%,650px);padding:14px 17px;border:1px solid rgba(216,228,241,.95);border-radius:19px;background:rgba(255,255,255,.86);color:#26384d;font-size:14px;line-height:1.65;white-space:pre-wrap;overflow-wrap:anywhere;box-shadow:0 4px 13px rgba(25,53,82,.035)}
+.ai-msg.user{align-self:flex-end;background:linear-gradient(135deg,#176fd0,#145aa8);border-color:#176fd0;color:#fff;border-bottom-right-radius:7px}
+.ai-msg.assistant{align-self:flex-start;border-bottom-left-radius:7px}
+.ai-msg.pending{color:#71849a;font-style:italic}
+.ai-compose-wrap{padding:15px 18px 18px;border-top:1px solid rgba(215,227,241,.8);background:rgba(248,251,255,.68)}
+.ai-compose{display:flex;align-items:flex-end;gap:10px;padding:8px 8px 8px 16px;border:1px solid #d7e3f0;border-radius:19px;background:rgba(255,255,255,.94);box-shadow:0 5px 18px rgba(28,57,88,.06)}
+.ai-compose:focus-within{border-color:#8db9e8;box-shadow:0 0 0 3px rgba(23,111,208,.09)}
+#aiInput{width:100%;min-width:0;max-height:140px;min-height:42px;resize:none;border:0;outline:0;background:transparent;color:var(--ink);padding:10px 0;font-size:14px;line-height:1.5}
+#aiInput::placeholder{color:#91a1b4}
+#aiSend{width:43px;height:43px;flex:0 0 43px;border:0;border-radius:14px;background:linear-gradient(145deg,#176fd0,#0c4f9e);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 5px 12px rgba(12,79,158,.2)}
+#aiSend svg{width:19px;height:19px}
+#aiSend:disabled{opacity:.48;cursor:wait}
+.ai-footnote{text-align:center;color:#94a2b3;font-size:10px;margin:9px 0 0}
+@media(max-width:640px){.ai-shell{padding:10px 10px max(10px,env(safe-area-inset-bottom));gap:9px}.ai-top{height:50px;flex-basis:50px;gap:10px}.ai-back{width:39px;height:39px}.ai-mark{width:39px;height:39px;flex-basis:39px;border-radius:14px}.ai-mark svg{width:29px;height:29px}.ai-brand strong{font-size:14px}.ai-brand small{font-size:10px}.ai-status{font-size:10px}.ai-window{border-radius:21px}.ai-conversation{padding:22px 16px;gap:14px}.ai-welcome{margin:auto 0 8px}.ai-welcome h1{font-size:29px}.ai-welcome p{font-size:13px}.ai-prompts{gap:8px;margin-top:19px}.ai-prompts button{font-size:11px;padding:10px 12px}.ai-msg{max-width:90%;font-size:13px;padding:12px 14px}.ai-compose-wrap{padding:11px 10px 12px}.ai-compose{border-radius:17px;padding-left:13px}.ai-footnote{font-size:9px}}
+@media(prefers-reduced-motion:reduce){.ai-conversation{scroll-behavior:auto}*{transition:none!important}}
+html[data-ls-theme="dark"]{color-scheme:dark}
+html[data-ls-theme="dark"] body{background:radial-gradient(ellipse at 10% 0%,#1d3048,transparent 38%),linear-gradient(145deg,#0d1521,#101c2b);color:#f1f6fc}
+html[data-ls-theme="dark"] .ai-window{background:rgba(20,33,49,.78);border-color:#344a63}
+html[data-ls-theme="dark"] .ai-back,html[data-ls-theme="dark"] .ai-prompts button{background:rgba(29,46,66,.8);border-color:#3a526d;color:#c5ddf6}
+html[data-ls-theme="dark"] .ai-brand small,html[data-ls-theme="dark"] .ai-status,html[data-ls-theme="dark"] .ai-welcome p{color:#aabbd0}
+html[data-ls-theme="dark"] .ai-msg.assistant{background:#1b2b3e;border-color:#354b64;color:#eef4fc}
+html[data-ls-theme="dark"] .ai-compose-wrap{background:rgba(16,27,41,.82);border-color:#344a63}
+html[data-ls-theme="dark"] .ai-compose{background:#1b2b3e;border-color:#3a526d}
+html[data-ls-theme="dark"] #aiInput{color:#f1f6fc}
+html[data-ls-theme="dark"] #aiInput::placeholder{color:#91a5bc}
+html[data-ls-theme="dark"] .ai-footnote{color:#8093aa}
+</style>
+<script>
+(()=>{try{const t=localStorage.getItem('linkstory-theme');if(t==='dark'||t==='light')document.documentElement.dataset.lsTheme=t}catch(e){}})();
+</script>
+</head>
+<body>
+<div class="ai-shell">
+<header class="ai-top">
+<a class="ai-back" href="index.html" aria-label="Voltar para o LinkStory"><svg viewBox="0 0 24 24" fill="none"><path d="m15 18-6-6 6-6M9 12h11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+<div class="ai-brand"><span class="ai-mark" aria-hidden="true"><svg viewBox="0 0 48 48" fill="none"><path d="M8 12.5 21 8l7 4v25l-7-4-13 4V12.5Z" stroke="#fff" stroke-width="2.6" stroke-linejoin="round"/><path d="m28 12 12-4v24l-12 5" stroke="#bfe0ff" stroke-width="2.6" stroke-linejoin="round"/><path d="m15 18 6-2m-6 8 6-2m12-3 4-1m-4 7 4-1" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="m29 5 2-3 2 3 3 2-3 2-2 3-2-3-3-2 3-2Z" fill="#ffcf67"/></svg></span><span><strong>Assistente LinkStory</strong><small>Uma conversa com LinkStory + Kairox Studio</small></span></div>
+<span class="ai-status">Online</span>
+</header>
+<main class="ai-window">
+<div class="ai-conversation" id="aiMessages" aria-live="polite">
+<section class="ai-welcome" id="aiWelcome"><span class="eyebrow">ASSISTENTE OFICIAL</span><h1>O que vamos descobrir hoje?</h1><p>Posso ajudar com dúvidas sobre o LinkStory, leitura, publicação de mangás e os projetos da Kairox Studio.</p><div class="ai-prompts" id="aiPrompts"><button type="button">Como publico um mangá?</button><button type="button">O que é a Kairox Studio?</button><button type="button">Como funciona a biblioteca?</button></div></section>
+</div>
+<div class="ai-compose-wrap"><form class="ai-compose" id="aiForm"><textarea id="aiInput" rows="1" maxlength="1200" placeholder="Envie uma mensagem..." aria-label="Sua mensagem"></textarea><button id="aiSend" type="submit" aria-label="Enviar mensagem"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12 19 5l-5 14-2.5-6.5L5 12Z" fill="currentColor"/><path d="m11.5 12.5 7.5-7.5" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/></svg></button></form><p class="ai-footnote">A assistente pode cometer erros. Confira informações importantes nos canais oficiais.</p></div>
+</main>
+</div>
+<script>
+(()=>{const form=document.getElementById('aiForm'),input=document.getElementById('aiInput'),messages=document.getElementById('aiMessages'),send=document.getElementById('aiSend'),prompts=[...document.querySelectorAll('#aiPrompts button')];let history=[];const esc=(s)=>String(s||'');const add=(content,role)=>{const el=document.createElement('div');el.className='ai-msg '+role;el.textContent=content;messages.append(el);messages.scrollTop=messages.scrollHeight;return el};const ask=async(value)=>{const q=String(value||'').trim();if(!q||send.disabled)return;document.getElementById('aiWelcome')?.remove();add(q,'user');history.push({role:'user',content:q});input.value='';input.style.height='42px';send.disabled=true;const pending=add('Pensando…','assistant pending');try{const response=await fetch('/api/site-assistant',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q,history:history.slice(-8,-1)})});const data=await response.json();if(!response.ok)throw new Error(data.error||'Não consegui responder agora.');pending.classList.remove('pending');pending.textContent=data.answer;history.push({role:'assistant',content:data.answer});try{sessionStorage.setItem('ls-ai-history',JSON.stringify(history.slice(-30)))}catch(e){}}catch(error){pending.classList.remove('pending');pending.textContent=error.message||'Tente novamente em instantes.'}finally{send.disabled=false;messages.scrollTop=messages.scrollHeight;input.focus()}};form.addEventListener('submit',e=>{e.preventDefault();ask(input.value)});input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});input.addEventListener('input',()=>{input.style.height='42px';input.style.height=Math.min(input.scrollHeight,140)+'px'});prompts.forEach(b=>b.addEventListener('click',()=>ask(b.textContent)));try{const saved=JSON.parse(sessionStorage.getItem('ls-ai-history')||'[]');if(Array.isArray(saved)&&saved.length){history=saved.slice(-30);document.getElementById('aiWelcome')?.remove();history.forEach(m=>add(m.content,m.role==='assistant'?'assistant':'user'))}}catch(e){} })();
+</script>
+</body>
+</html>
