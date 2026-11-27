@@ -1,14 +1,10 @@
-"""Authenticated HTTP API for the self-hosted LinkStory AI core.
-
-The browser sends the signed-in user's Supabase access token. This service
-validates it against Supabase Auth and scopes every conversation to that user.
-Ollama and Chroma must remain private to the inference host.
-"""
+"""Authenticated HTTP API for the self-hosted LinkStory AI core."""
 from __future__ import annotations
 
 import logging
 import os
 import sqlite3
+import time
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Iterator, Optional
@@ -19,7 +15,14 @@ from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from core import answer_question, vector_store, OLLAMA_BASE_URL, CHAT_MODEL, EMBED_MODEL, PERSIST_DIR
+from core import (
+    answer_question,
+    vector_store,
+    OLLAMA_BASE_URL,
+    CHAT_MODEL,
+    EMBED_MODEL,
+    PERSIST_DIR,
+)
 
 ROOT = Path(__file__).resolve().parent
 DB_PATH = Path(os.getenv("LINKSTORY_CHAT_DB", ROOT / "data" / "conversations.sqlite3"))
@@ -28,7 +31,7 @@ SUPABASE_PUBLISHABLE_KEY = os.getenv("SUPABASE_PUBLISHABLE_KEY", "")
 MAX_HISTORY = 20
 MAX_REQUESTS_PER_MINUTE = 20
 
-app = FastAPI(title="LinkStory AI", version="0.2.0")
+app = FastAPI(title="LinkStory AI", version="0.2.1")
 
 allowed_origins = [
     origin.strip()
@@ -94,6 +97,7 @@ def db() -> Iterator[sqlite3.Connection]:
     finally:
         conn.close()
 
+
 def get_current_user(authorization: Optional[str] = Header(default=None)) -> str:
     if not SUPABASE_URL or not SUPABASE_PUBLISHABLE_KEY:
         raise HTTPException(status_code=503, detail="Autenticação da LinkStory AI ainda não foi configurada.")
@@ -114,14 +118,12 @@ def get_current_user(authorization: Optional[str] = Header(default=None)) -> str
     if response.status_code != 200:
         raise HTTPException(status_code=401, detail="Sua sessão expirou. Entre novamente.")
     try:
-        user_id = str(UUID(response.json()["id"]))
+        return str(UUID(response.json()["id"]))
     except (ValueError, KeyError, TypeError):
         raise HTTPException(status_code=401, detail="Sessão LinkStory inválida.")
-    return user_id
 
 
 def enforce_rate_limit(user_id: str) -> None:
-    import time
     window = int(time.time()) // 60
     with db() as conn:
         conn.execute(
@@ -169,4 +171,80 @@ def health():
         "chat_model_ready": chat_model_ready,
         "embedding_model_ready": embedding_model_ready,
         "knowledge_base_ready": knowledge_base_ready,
+    }
+
+
+@app.post("/chat", response_model=ChatResponse)
+def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
+    message = payload.message.strip()
+    if not message:
+        raise HTTPException(status_code=422, detail="A mensagem não pode estar vazia.")
+    enforce_rate_limit(user_id)
+
+    if payload.conversation_id:
+        try:
+            conversation_id = str(UUID(payload.conversation_id))
+        except ValueError:
+            raise HTTPException(status_code=400, detail="conversation_id inválido.")
+    else:
+        conversation_id = str(uuid4())
+
+    try:
+        with db() as conn:
+            previous = conn.execute(
+                "SELECT role, content FROM messages "
+                "WHERE user_id=? AND conversation_id=? ORDER BY id DESC LIMIT ?",
+                (user_id, conversation_id, MAX_HISTORY),
+            ).fetchall()
+        previous.reverse()
+        history = "\n".join(f"{role}: {content}" for role, content in previous)
+        enriched_question = (
+            f"CONTEXTO DA CONVERSA ANTERIOR (use apenas se relevante):\n{history}\n\n"
+            f"NOVA MENSAGEM DO USUÁRIO:\n{message}"
+            if history else message
+        )
+        result = answer_question(enriched_question)
+        answer = str(result.get("answer", "")).strip()
+        if not answer:
+            raise RuntimeError("O modelo não retornou uma resposta.")
+        with db() as conn:
+            conn.executemany(
+                "INSERT INTO messages(conversation_id, user_id, role, content) VALUES (?, ?, ?, ?)",
+                [
+                    (conversation_id, user_id, "user", message),
+                    (conversation_id, user_id, "assistant", answer),
+                ],
+            )
+        return ChatResponse(
+            answer=answer,
+            conversation_id=conversation_id,
+            sources=result.get("sources", []),
+        )
+    except HTTPException:
+        raise
+    except Exception:
+        logging.exception("LinkStory AI inference failed")
+        raise HTTPException(status_code=503, detail="A inteligência está indisponível no momento.")
+
+
+@app.get("/conversations/{conversation_id}")
+def get_conversation(conversation_id: str, user_id: str = Depends(get_current_user)):
+    try:
+        conversation_id = str(UUID(conversation_id))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="conversation_id inválido.")
+    with db() as conn:
+        rows = conn.execute(
+            "SELECT role, content, created_at FROM messages "
+            "WHERE user_id=? AND conversation_id=? ORDER BY id",
+            (user_id, conversation_id),
+        ).fetchall()
+    if not rows:
+        raise HTTPException(status_code=404, detail="Conversa não encontrada.")
+    return {
+        "conversation_id": conversation_id,
+        "messages": [
+            {"role": role, "content": content, "created_at": created_at}
+            for role, content, created_at in rows
+        ],
     }
