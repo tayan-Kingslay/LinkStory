@@ -64,3 +64,40 @@ def test_empty_message_is_rejected(monkeypatch, tmp_path):
         assert response.status_code == 422
     finally:
         teardown(server)
+
+
+def test_transcription_uses_local_model_and_returns_text(monkeypatch, tmp_path):
+    from types import SimpleNamespace
+
+    server, client = setup_client(monkeypatch, tmp_path)
+    class FakeModel:
+        def transcribe(self, path, **kwargs):
+            assert kwargs["language"] == "pt"
+            return iter([SimpleNamespace(text=" Olá, LinkStory! ")]), SimpleNamespace(
+                language="pt",
+                language_probability=0.99,
+            )
+
+    monkeypatch.setattr(server, "transcription_model", lambda: FakeModel())
+    try:
+        response = client.post(
+            "/transcribe",
+            files={"file": ("sample.webm", b"fake-audio", "audio/webm")},
+        )
+        assert response.status_code == 200
+        assert response.json()["text"] == "Olá, LinkStory!"
+        assert response.json()["language"] == "pt"
+    finally:
+        teardown(server)
+
+
+def test_transcription_rejects_unsupported_format(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        response = client.post(
+            "/transcribe",
+            files={"file": ("sample.txt", b"not-audio", "text/plain")},
+        )
+        assert response.status_code == 415
+    finally:
+        teardown(server)
