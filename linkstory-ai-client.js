@@ -78,11 +78,34 @@
     };
   }
 
+  async function memories() {
+    const response = await request("/memories");
+    return response.json();
+  }
+
+  async function saveMemory(content) {
+    const response = await request("/memories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content })
+    });
+    return response.json();
+  }
+
+  async function deleteMemory(memoryId) {
+    const response = await request("/memories/" + encodeURIComponent(memoryId), {
+      method: "DELETE"
+    });
+    return response.json();
+  }
+
   async function health() {
     const response = await fetch(apiBase() + "/health", { cache: "no-store" });
     if (!response.ok) throw new Error("Não foi possível verificar a LinkStory AI.");
     return response.json();
   }
 
-  window.LinkStoryAI = Object.freeze({ chat, history, transcribe, speak, health });
+  window.LinkStoryAI = Object.freeze({
+    chat, history, transcribe, speak, memories, saveMemory, deleteMemory, health
+  });
 })();
