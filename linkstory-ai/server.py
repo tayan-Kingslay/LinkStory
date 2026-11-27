@@ -289,7 +289,7 @@ def transcription_model():
 
 class SpeechRequest(BaseModel):
     text: str = Field(min_length=1, max_length=2500)
-    voice: Literal["pf_dora", "pm_alex"] = "pf_dora"
+    voice: Literal["pf_dora", "pm_alex"]
 
 
 @lru_cache(maxsize=2)
