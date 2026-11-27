@@ -132,3 +132,37 @@ def test_speech_rejects_unknown_voice(monkeypatch, tmp_path):
         assert response.status_code == 422
     finally:
         teardown(server)
+
+
+def test_supabase_auth_resolves_identity_from_verified_token(monkeypatch):
+    import server
+
+    expected = str(uuid.UUID(int=7))
+    class FakeResponse:
+        status_code = 200
+        def json(self):
+            return {"id": expected}
+
+    monkeypatch.setattr(server, "SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setattr(server, "SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test")
+    monkeypatch.setattr(server.httpx, "get", lambda *args, **kwargs: FakeResponse())
+    assert server.get_current_user("Bearer valid-session-token") == expected
+
+
+def test_supabase_auth_rejects_invalid_session(monkeypatch):
+    import server
+    from fastapi import HTTPException
+
+    class FakeResponse:
+        status_code = 401
+        def json(self):
+            return {}
+
+    monkeypatch.setattr(server, "SUPABASE_URL", "https://example.supabase.co")
+    monkeypatch.setattr(server, "SUPABASE_PUBLISHABLE_KEY", "sb_publishable_test")
+    monkeypatch.setattr(server.httpx, "get", lambda *args, **kwargs: FakeResponse())
+    try:
+        server.get_current_user("Bearer expired-token")
+        assert False, "Expected invalid session to be rejected"
+    except HTTPException as exc:
+        assert exc.status_code == 401
