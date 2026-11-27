@@ -47,7 +47,7 @@ def vector_store() -> Chroma:
 
 
 def chat_model() -> ChatOllama:
-    return ChatOllama(model=CHAT_MODEL, base_url=OLLAMA_BASE_URL, temperature=float(os.getenv("LINKSTORY_TEMPERATURE", "0.4")) )
+    return ChatOllama(model=CHAT_MODEL, base_url=OLLAMA_BASE_URL, temperature=float(os.getenv("LINKSTORY_TEMPERATURE", "0.4")), num_ctx=int(os.getenv("LINKSTORY_CONTEXT_WINDOW", "8192")))
 
 
 def iter_source_files(source: Path):
