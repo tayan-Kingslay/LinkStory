@@ -9,3 +9,4 @@ uvicorn[standard]>=0.30,<1
 httpx>=0.27,<1
 faster-whisper==1.2.1
 python-multipart>=0.0.20,<1
+git+https://github.com/astrowar/paradee_pt.git@149b831c4bf908e00e2342b97440d775b5772da9#egg=paradee
