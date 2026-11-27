@@ -9,8 +9,9 @@ from __future__ import annotations
 import logging
 import os
 import sqlite3
+from contextlib import contextmanager
 from pathlib import Path
-from typing import Optional
+from typing import Iterator, Optional
 from uuid import UUID, uuid4
 
 import httpx
@@ -54,37 +55,44 @@ class ChatResponse(BaseModel):
     sources: list[dict]
 
 
-def db() -> sqlite3.Connection:
+@contextmanager
+def db() -> Iterator[sqlite3.Connection]:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH, timeout=15)
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            conversation_id TEXT NOT NULL,
-            user_id TEXT,
-            role TEXT NOT NULL CHECK(role IN ('user', 'assistant')),
-            content TEXT NOT NULL,
-            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+    try:
+        conn.execute("PRAGMA journal_mode=WAL")
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                conversation_id TEXT NOT NULL,
+                user_id TEXT,
+                role TEXT NOT NULL CHECK(role IN ('user', 'assistant')),
+                content TEXT NOT NULL,
+                created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        columns = {row[1] for row in conn.execute("PRAGMA table_info(messages)")}
+        if "user_id" not in columns:
+            conn.execute("ALTER TABLE messages ADD COLUMN user_id TEXT")
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_messages_owner_conversation "
+            "ON messages(user_id, conversation_id, id)"
         )
-    """)
-    columns = {row[1] for row in conn.execute("PRAGMA table_info(messages)")}
-    if "user_id" not in columns:
-        conn.execute("ALTER TABLE messages ADD COLUMN user_id TEXT")
-    conn.execute(
-        "CREATE INDEX IF NOT EXISTS idx_messages_owner_conversation "
-        "ON messages(user_id, conversation_id, id)"
-    )
-    conn.execute("""
-        CREATE TABLE IF NOT EXISTS request_limits (
-            user_id TEXT NOT NULL,
-            window_start INTEGER NOT NULL,
-            request_count INTEGER NOT NULL,
-            PRIMARY KEY(user_id, window_start)
-        )
-    """)
-    return conn
-
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS request_limits (
+                user_id TEXT NOT NULL,
+                window_start INTEGER NOT NULL,
+                request_count INTEGER NOT NULL,
+                PRIMARY KEY(user_id, window_start)
+            )
+        """)
+        yield conn
+        conn.commit()
+    except Exception:
+        conn.rollback()
+        raise
+    finally:
+        conn.close()
 
 def get_current_user(authorization: Optional[str] = Header(default=None)) -> str:
     if not SUPABASE_URL or not SUPABASE_PUBLISHABLE_KEY:
