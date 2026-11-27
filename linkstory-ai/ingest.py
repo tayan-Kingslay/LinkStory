@@ -30,6 +30,10 @@ def main():
     if not source_root.exists() or not source_root.is_dir():
         raise ValueError(f"Pasta de códigos não encontrada: {source_root}")
 
+    # Recreate the shared collection so chunks from any earlier broad indexing
+    # run cannot survive after the allowlist was introduced.
+    store = vector_store()
+    store.delete_collection()
     store = vector_store()
     total_files = 0
     total_chunks = 0
