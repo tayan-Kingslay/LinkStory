@@ -19,17 +19,15 @@ Este serviço é o núcleo de inferência próprio da Kairox Studio. Ele usa Oll
 Requisitos: Docker Engine + Compose, armazenamento persistente e recursos de CPU/RAM compatíveis com o modelo escolhido. Para melhor desempenho, use uma máquina com GPU suportada pelo Ollama. Antes de uso comercial, revise e aceite os termos da licença Meta Llama 3.1; o fato de o modelo rodar localmente não elimina obrigações de licença.
 
 1. Copie `.env.example` para `.env` e preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` com os dados públicos do projeto Supabase. A chave publishable não substitui o token do usuário; ela nunca concede acesso por si só.
-2. Inicie os serviços: `docker compose up -d --build`.
-3. Baixe os modelos no serviço privado: `docker compose exec ollama ollama pull llama3.1:8b` e `docker compose exec ollama ollama pull nomic-embed-text`.
-4. Indexe uma cópia limpa do repositório (sem `.env`, tokens, dados privados ou pastas de dependências): `docker compose run --rm --no-deps -v /caminho/LinkStory:/source api python ingest.py /source`.
-5. Confira `GET /health`. O campo `status` só será `ready` quando a autenticação estiver configurada, os dois modelos Ollama estiverem acessíveis e a base vetorial tiver conteúdo.
-6. Na primeira chamada a `/speak`, o serviço baixa os modelos ONNX de voz Dora e Alex do Hugging Face para o volume persistente `/data/models`. A primeira síntese pode demorar mais.
+2. Execute `docker compose up -d --build`. O Compose baixa o Llama 3.1 e o Nomic, prepara o Whisper e as duas vozes Paradee, indexa o código do repositório e só então inicia a API.
+3. A primeira inicialização pode levar vários minutos e baixar alguns gigabytes. Os modelos e o histórico ficam em volumes persistentes; não remova esses volumes ao atualizar o container.
+4. Confira `docker compose ps` e `GET /health`. O campo `status` só será `ready` quando autenticação, modelos de texto, base vetorial e modelos de áudio estiverem preparados.
 
 A API fica vinculada a `127.0.0.1:8000`; publique-a atrás de um proxy HTTPS. A porta 11434 do Ollama não é exposta. Não publique a porta da API diretamente sem TLS, firewall e controles de acesso.
 
 ## Configuração
 
-Veja `.env.example`. `LINKSTORY_CHAT_DB` e `LINKSTORY_CHROMA_DIR` precisam apontar para armazenamento persistente. Em uma implantação com várias réplicas, substitua SQLite por um banco compartilhado antes de aumentar a escala.
+Veja `.env.example`. `LINKSTORY_CHAT_DB`, `LINKSTORY_CHROMA_DIR`, `HF_HOME` e `LINKSTORY_TTS_CACHE` precisam apontar para armazenamento persistente. Em uma implantação com várias réplicas, substitua SQLite por um banco compartilhado antes de aumentar a escala.
 
 ## API
 
@@ -55,3 +53,4 @@ Instale `requirements-dev.txt` e execute `pytest -q`. Os testes não precisam de
 - Avalie qualidade do modelo em português, latência, memória RAM/VRAM, custo de hospedagem e licenças do modelo escolhido.
 - A API entrega áudio e tempos de palavras, mas a animação visual da boca/expressões ainda precisa ser conectada à interface do personagem.
 - A voz Dora (`pf_dora`) e Alex (`pm_alex`) são vozes sintéticas de demonstração; a escolha final da voz/personagem deve ser feita na interface.
+- As licenças dos componentes de áudio e inferência estão listadas em `THIRD_PARTY_NOTICES.md`.
