@@ -57,7 +57,8 @@ PR em rascunho: https://github.com/tayan-Kingslay/LinkStory/pull/14
 Componentes preparados na branch:
 - API FastAPI com validação de sessão Supabase.
 - Histórico e memórias em SQLite, separados por ID autenticado do usuário.
-- Lista privada de conversas, edição/apagamento de memórias e opção individual para desativar o uso da memória.
+- Lista privada de conversas, títulos personalizados por conversa, edição/apagamento de memórias e opção individual para desativar o uso da memória.
+- Preferências privadas por usuário para personalizar nome e avatar do assistente.
 - Motor planejado com Ollama, modelo Llama configurável e Chroma para RAG.
 - Transcrição local com faster-whisper e síntese de voz Paradee.
 - Cliente JavaScript com chat, histórico, memória, preferências, transcrição e síntese.
@@ -78,7 +79,7 @@ Bloqueios e itens pendentes:
 3. Não há orçamento aprovado para infraestrutura; não contratar nem provisionar serviços pagos sem autorização explícita.
 4. Não foi feita execução real do Ollama/Llama, teste de duas contas reais, validação de voz em iPhone nem teste ponta a ponta.
 5. A animação de boca/personagem não está integrada ao áudio.
-6. Personalização de nome/foto do assistente e edição manual de títulos de conversas ainda precisam ser concluídas.
+6. Personalização de nome/avatar e títulos de conversas já foram implementados no código, mas precisam de validação visual e testes reais de persistência entre contas.
 7. Não mesclar o PR nem publicar em produção sem autorização explícita.
 8. Vercel já retornou limite de implantação; isso não é prova de falha do código e não deve ser contornado com deploy de produção.
 9. Revisar licenças de modelos e dependências antes de uso comercial.
