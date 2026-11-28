@@ -5,10 +5,9 @@ This file records the principal licenses of the optional local audio stack and t
 ## Text inference
 
 - **Ollama:** Apache License 2.0. Upstream: https://github.com/ollama/ollama
-- **Qwen2.5 7B (default model):** Apache License 2.0 for the 7B variant. Model card and exact variant: https://ollama.com/library/qwen2.5:7b
-- **Qwen2.5 1.5B (optional lightweight model):** Apache License 2.0. Model family license notes: https://ollama.com/library/qwen2.5
+- **AI2 OLMo 2 7B (default model):** Apache License 2.0. Developed by the Allen Institute for AI (AI2), a nonprofit research institute. Model card: https://huggingface.co/allenai/OLMo-2-1124-7B; Ollama package: https://ollama.com/library/olmo2:7b.
 
-Model weights and the software that runs them can have separate licenses. Verify the exact model tag and license before changing the production default.
+The text model is downloaded and run locally by Ollama. No commercial model API is called. Model weights and the software that runs them can have separate licenses; verify the exact model tag before production.
 
 ## Brazilian Portuguese speech synthesis
 
