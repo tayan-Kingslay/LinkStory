@@ -306,3 +306,25 @@ def test_assistant_avatar_requires_https(monkeypatch, tmp_path):
     finally:
         teardown(server)
 
+def test_conversation_title_can_be_renamed_only_by_owner(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        created = client.post("/chat", json={"message": "Minha primeira ideia"})
+        conversation_id = created.json()["conversation_id"]
+        renamed = client.put(
+            f"/conversations/{conversation_id}/title",
+            json={"title": "A jornada começa"},
+        )
+        assert renamed.status_code == 200
+        listed = client.get("/conversations")
+        assert listed.json()["conversations"][0]["title"] == "A jornada começa"
+
+        server.app.dependency_overrides[server.get_current_user] = lambda: str(uuid.UUID(int=2))
+        denied = client.put(
+            f"/conversations/{conversation_id}/title",
+            json={"title": "Título de outra pessoa"},
+        )
+        assert denied.status_code == 404
+    finally:
+        teardown(server)
+
