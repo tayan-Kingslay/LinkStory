@@ -7,10 +7,23 @@ on:
     paths:
       - "linkstory-ai/**"
       - "linkstory-ai-client.js"
+      - "linkstory-ai-config.js"
+      - "nox.html"
+      - "nox.css"
+      - "nox-page.js"
+      - "global-nav.js"
+      - "panel-editor.html"
       - ".github/workflows/linkstory-ai-tests.yml"
   pull_request:
     paths:
       - "linkstory-ai/**"
+      - "linkstory-ai-client.js"
+      - "linkstory-ai-config.js"
+      - "nox.html"
+      - "nox.css"
+      - "nox-page.js"
+      - "global-nav.js"
+      - "panel-editor.html"
       - ".github/workflows/linkstory-ai-tests.yml"
 
 permissions:
