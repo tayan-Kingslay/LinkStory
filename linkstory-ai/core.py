@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent
 PERSIST_DIR = Path(os.getenv("LINKSTORY_CHROMA_DIR", ROOT / "data" / "chroma"))
 COLLECTION = os.getenv("LINKSTORY_COLLECTION", "linkstory_engineering")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
-CHAT_MODEL = os.getenv("LINKSTORY_CHAT_MODEL", "llama3.1:8b")
+CHAT_MODEL = os.getenv("LINKSTORY_CHAT_MODEL", "qwen2.5:7b")
 EMBED_MODEL = os.getenv("LINKSTORY_EMBED_MODEL", "nomic-embed-text")
 
 SUPPORTED_EXTENSIONS = {
