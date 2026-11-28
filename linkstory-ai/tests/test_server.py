@@ -274,3 +274,35 @@ def test_authorized_chapter_context_is_used_but_not_saved_as_chat_message(monkey
     finally:
         teardown(server)
 
+def test_assistant_identity_preferences_are_private_per_user(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        saved = client.put("/preferences", json={
+            "assistant_name": "Meu Nox",
+            "assistant_avatar_url": "https://example.com/avatar.png",
+        })
+        assert saved.status_code == 200
+        assert saved.json()["assistant_name"] == "Meu Nox"
+        assert saved.json()["assistant_avatar_url"] == "https://example.com/avatar.png"
+        assert client.get("/preferences").json()["assistant_name"] == "Meu Nox"
+
+        server.app.dependency_overrides[server.get_current_user] = lambda: str(uuid.UUID(int=2))
+        other = client.get("/preferences")
+        assert other.status_code == 200
+        assert other.json()["assistant_name"] == "Nox"
+        assert other.json()["assistant_avatar_url"] is None
+    finally:
+        teardown(server)
+
+
+def test_assistant_avatar_requires_https(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        response = client.put("/preferences", json={
+            "assistant_name": "Nox",
+            "assistant_avatar_url": "javascript:alert(1)",
+        })
+        assert response.status_code == 422
+    finally:
+        teardown(server)
+
