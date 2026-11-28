@@ -92,6 +92,10 @@ class MemoryPreferencesRequest(BaseModel):
     assistant_avatar_url: Optional[str] = Field(default=None, max_length=2048)
 
 
+class ConversationTitleRequest(BaseModel):
+    title: str = Field(min_length=1, max_length=80)
+
+
 @contextmanager
 def db() -> Iterator[sqlite3.Connection]:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -128,6 +132,15 @@ def db() -> Iterator[sqlite3.Connection]:
             "CREATE INDEX IF NOT EXISTS idx_memories_owner_updated "
             "ON memories(user_id, updated_at DESC)"
         )
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS conversation_titles (
+                user_id TEXT NOT NULL,
+                conversation_id TEXT NOT NULL,
+                title TEXT NOT NULL,
+                updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY(user_id, conversation_id)
+            )
+        """)
         conn.execute("""
             CREATE TABLE IF NOT EXISTS user_preferences (
                 user_id TEXT PRIMARY KEY,
@@ -575,11 +588,16 @@ def list_conversations(user_id: str = Depends(get_current_user)):
             SELECT m.conversation_id,
                    MIN(m.created_at) AS created_at,
                    MAX(m.id) AS last_id,
-                   (SELECT first_message.content FROM messages AS first_message
-                    WHERE first_message.user_id=m.user_id
-                      AND first_message.conversation_id=m.conversation_id
-                      AND first_message.role='user'
-                    ORDER BY first_message.id LIMIT 1) AS title,
+                   COALESCE(
+                     (SELECT custom_title.title FROM conversation_titles AS custom_title
+                      WHERE custom_title.user_id=m.user_id
+                        AND custom_title.conversation_id=m.conversation_id),
+                     (SELECT first_message.content FROM messages AS first_message
+                      WHERE first_message.user_id=m.user_id
+                        AND first_message.conversation_id=m.conversation_id
+                        AND first_message.role='user'
+                      ORDER BY first_message.id LIMIT 1)
+                   ) AS title,
                    (SELECT last_message.content FROM messages AS last_message
                     WHERE last_message.user_id=m.user_id
                       AND last_message.conversation_id=m.conversation_id
@@ -603,6 +621,36 @@ def list_conversations(user_id: str = Depends(get_current_user)):
             for conversation_id, created_at, _last_id, title, preview in rows
         ]
     }
+
+
+@app.put("/conversations/{conversation_id}/title")
+def update_conversation_title(
+    conversation_id: str,
+    payload: ConversationTitleRequest,
+    user_id: str = Depends(get_current_user),
+):
+    enforce_rate_limit(user_id)
+    try:
+        conversation_id = str(UUID(conversation_id))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="conversation_id inválido.")
+    title = payload.title.strip()
+    if not title:
+        raise HTTPException(status_code=422, detail="O título não pode ficar vazio.")
+    with db() as conn:
+        exists = conn.execute(
+            "SELECT 1 FROM messages WHERE user_id=? AND conversation_id=? LIMIT 1",
+            (user_id, conversation_id),
+        ).fetchone()
+        if not exists:
+            raise HTTPException(status_code=404, detail="Conversa não encontrada.")
+        conn.execute(
+            "INSERT INTO conversation_titles(user_id, conversation_id, title) VALUES (?, ?, ?) "
+            "ON CONFLICT(user_id, conversation_id) DO UPDATE SET "
+            "title=excluded.title, updated_at=CURRENT_TIMESTAMP",
+            (user_id, conversation_id, title),
+        )
+    return {"conversation_id": conversation_id, "title": title}
 
 
 @app.get("/conversations/{conversation_id}")
