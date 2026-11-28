@@ -58,7 +58,7 @@ services:
       - linkstory_ai_data:/data
       - ../:/source:ro
     depends_on:
-      prepare-audio:
+      ollama-init:
         condition: service_completed_successfully
     command: ["python", "ingest.py", "/source"]
 
