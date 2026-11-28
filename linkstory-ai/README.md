@@ -1,62 +1,71 @@
 # LinkStory AI — motor independente
 
-Este serviço é o núcleo de inferência próprio da Kairox Studio. Ele usa Ollama para executar o modelo no servidor controlado pelo projeto e Chroma para recuperar conhecimento local (RAG). Não usa Gemini, OpenAI ou APIs comerciais de geração de texto.
+Este serviço é o núcleo de inferência que a Kairox pode hospedar e administrar. O código da aplicação, as regras do Nox, a base de conhecimento e os dados dos usuários ficam sob controle do projeto. O modelo de linguagem é um modelo de pesos abertos de terceiros executado localmente pelo Ollama — isso não significa que a Kairox treinou o modelo do zero nem que é dona dos pesos.
 
-> RAG não é treinamento do modelo. A base recupera trechos relevantes dos arquivos indexados e os fornece ao modelo durante a resposta.
+> RAG não é treinamento do modelo. A base recupera trechos de documentos aprovados e os fornece ao modelo durante a resposta.
 
 ## Arquitetura
 
-- **Inferência:** Ollama + modelo configurável (padrão: `llama3.1:8b`).
+- **Inferência:** Ollama + Qwen2.5 7B por padrão; o modelo pode ser trocado por configuração.
 - **Embeddings e recuperação:** `nomic-embed-text` + Chroma persistente.
-- **Memória:** SQLite persistente com histórico por conversa e até 50 notas de memória por usuário; até 10 notas de até 1.000 caracteres entram no contexto de cada resposta quando a memória está habilitada. Somente o próprio usuário pode salvar, listar, editar ou apagar suas notas.
-- **Identidade:** cada chamada de chat valida o access token no Supabase Auth (`/auth/v1/user`). Nenhum ID de usuário enviado pelo navegador é aceito como identidade.
-- **API:** FastAPI, CORS restrito, limite de 20 chamadas/minuto por usuário e mensagens com até 4.000 caracteres.
-- **Fala:** Paradee-8M pt-BR em ONNX local, com duas vozes selecionáveis e tempos por palavra para sincronização da boca.
-- **Audição:** faster-whisper local, com transcrição em português e upload limitado a 20 MB.
+- **Memória:** SQLite persistente com histórico por conversa e até 50 notas por usuário; até 10 notas entram no contexto quando a memória está habilitada. O usuário controla suas notas.
+- **Identidade:** cada chamada valida o token no Supabase Auth. O ID do usuário nunca é aceito do navegador como prova de identidade.
+- **API:** FastAPI, CORS restrito, limite de 20 chamadas/minuto por usuário e mensagens de até 4.000 caracteres.
+- **Voz opcional:** Paradee-8M pt-BR para síntese e faster-whisper para transcrição, ambos executados localmente. Não são necessários para o chat de texto.
 
-## Executar com Docker Compose
+## Recursos e escolha do modelo
 
-Requisitos: Docker Engine + Compose, armazenamento persistente e recursos de CPU/RAM compatíveis com o modelo escolhido. Para melhor desempenho, use uma máquina com GPU suportada pelo Ollama. Antes de uso comercial, revise e aceite os termos da licença Meta Llama 3.1; o fato de o modelo rodar localmente não elimina obrigações de licença.
+O modelo padrão `qwen2.5:7b` ocupa aproximadamente 4,7 GB para os pesos quantizados publicados no Ollama. Isso não é a memória total necessária: o processo também precisa de RAM para contexto, sistema operacional, embeddings e demais serviços. Uma máquina com 16 GB de RAM é um ponto de partida mais confortável para testar o conjunto completo; GPU compatível melhora a velocidade, mas não é obrigatória. Em CPU, as respostas podem demorar bastante.
 
-1. Copie `.env.example` para `.env` e preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` com os dados públicos do projeto Supabase. A chave publishable não substitui o token do usuário; ela nunca concede acesso por si só.
-2. Execute `docker compose up -d --build`. O Compose baixa o Llama 3.1 e o Nomic e indexa somente os documentos públicos explicitamente aprovados em `knowledge/PUBLIC_KNOWLEDGE.md`. A API de texto inicia após a indexação; o serviço opcional `prepare-audio` prepara o Whisper e as duas vozes Paradee em paralelo, sem bloquear o chat de texto.
-3. A primeira inicialização pode levar vários minutos e baixar alguns gigabytes. Os modelos e o histórico ficam em volumes persistentes; não remova esses volumes ao atualizar o container.
-4. Confira `docker compose ps` e `GET /health`. O campo `status` será `ready` quando autenticação, modelos de texto e base vetorial estiverem preparados. Confira `audio_models_ready` separadamente; a ausência de voz não bloqueia o chat de texto.
+Para máquinas mais limitadas, configure `LINKSTORY_CHAT_MODEL=qwen2.5:1.5b` no `.env`. Esse modelo é menor, mas também tende a ser menos capaz em análise longa, continuidade narrativa e instruções complexas. Faça testes reais em português antes de escolher o modelo para usuários.
 
-A API fica vinculada a `127.0.0.1:8000`; publique-a atrás de um proxy HTTPS. A porta 11434 do Ollama não é exposta. Não publique a porta da API diretamente sem TLS, firewall e controles de acesso.
+O computador precisa permanecer ligado e conectado à internet para atender usuários. Um protótipo local não equivale a um serviço 24 horas. Não existe promessa de hospedagem gratuita, ilimitada e permanente neste projeto.
+
+## Executar o motor localmente
+
+Requisitos: Docker Engine + Docker Compose, armazenamento persistente e máquina compatível com o modelo escolhido.
+
+1. Entre nesta pasta (`linkstory-ai`) e copie `.env.example` para `.env`.
+2. Preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` com os dados públicos do projeto Supabase. A chave publishable não substitui o token do usuário e nunca concede acesso por si só.
+3. Execute `docker compose up -d --build`. O Compose baixa o modelo de texto e o modelo de embeddings, indexa somente `knowledge/PUBLIC_KNOWLEDGE.md` e inicia a API. O primeiro download pode ocupar vários gigabytes.
+4. Confira `docker compose ps` e `GET /health`. O campo `status` será `ready` quando autenticação, modelo de texto, embeddings e base vetorial estiverem preparados.
+5. Para preparar voz, execute separadamente `docker compose --profile audio run --rm prepare-audio`. Isso baixa modelos adicionais e pode consumir bastante armazenamento; o chat de texto não depende desse passo.
+
+A API fica vinculada a `127.0.0.1:8000`. Para acesso público, ela precisa de um host permanente, proxy HTTPS, firewall e monitoramento. A porta 11434 do Ollama não é exposta. Nunca publique a API sem TLS e controles de acesso.
 
 ## Configuração
 
-Depois de hospedar a API, defina a URL pública HTTPS do serviço em `linkstory-ai-config.js`, na raiz do site, atribuindo-a a `window.LINKSTORY_AI_API_URL`. Esse arquivo contém somente a URL pública, nunca chaves secretas.
+O modelo padrão e o modelo de embeddings são definidos em `.env` por `LINKSTORY_CHAT_MODEL` e `LINKSTORY_EMBED_MODEL`. Para trocar o modelo, atualize a variável e execute novamente `docker compose up -d`; confirme o nome em `GET /health` antes de testar o chat.
 
-Veja `.env.example`. `LINKSTORY_CHAT_DB`, `LINKSTORY_CHROMA_DIR`, `HF_HOME` e `LINKSTORY_TTS_CACHE` precisam apontar para armazenamento persistente. Em uma implantação com várias réplicas, substitua SQLite por um banco compartilhado antes de aumentar a escala.
+Depois de hospedar a API, defina a URL pública HTTPS em `linkstory-ai-config.js`, na raiz do site, atribuindo-a a `window.LINKSTORY_AI_API_URL`. Esse arquivo contém somente a URL pública, nunca chaves secretas.
+
+`LINKSTORY_CHAT_DB`, `LINKSTORY_CHROMA_DIR`, `HF_HOME` e `LINKSTORY_TTS_CACHE` precisam apontar para armazenamento persistente. Em uma implantação com várias réplicas, substitua SQLite por um banco compartilhado antes de escalar.
 
 ## API
 
 Todas as rotas de conversa exigem `Authorization: Bearer <access_token_supabase>`.
 
-- `GET /health`: diagnóstico sem dados de usuário. O estado `ready` confirma o chat de texto; `audio_models_ready` informa separadamente se reconhecimento e síntese de voz estão preparados.
-- `POST /chat`: corpo `{ "message": "...", "conversation_id": null, "context": null }`; devolve resposta, ID e fontes. O campo opcional `context` aceita até 12.000 caracteres de texto/metadados de uma obra que o autor autorizou explicitamente naquela solicitação. Esse contexto não é salvo como mensagem nem indexado na base compartilhada.
-- `GET /conversations`: lista somente as conversas do usuário autenticado, com título personalizado ou derivado da primeira mensagem.
+- `GET /health`: diagnóstico sem dados de usuário. `status=ready` confirma o chat de texto; `audio_models_ready` informa separadamente se voz está preparada.
+- `POST /chat`: recebe mensagem, ID opcional de conversa e contexto opcional. O contexto aceita até 12.000 caracteres de texto/metadados de uma obra autorizada pelo autor naquela solicitação; não é salvo como mensagem nem indexado na base compartilhada.
+- `GET /conversations`: lista somente as conversas do usuário autenticado.
 - `PUT /conversations/{conversation_id}/title`: renomeia somente uma conversa pertencente ao usuário autenticado.
 - `GET /conversations/{conversation_id}`: histórico pertencente ao usuário autenticado.
-- `GET /preferences` e `PUT /preferences`: consulta e altera a opção individual de uso da memória e a identidade do assistente (nome e URL HTTPS de avatar), isoladas por conta.
-- `GET /memories`, `POST /memories`, `PUT /memories/{memory_id}` e `DELETE /memories/{memory_id}`: memórias persistentes controladas pelo próprio usuário. O chat recebe até 10 notas salvas como contexto somente quando a memória está habilitada; nenhuma memória é criada automaticamente.
-- `POST /transcribe`: recebe um arquivo de áudio multipart (`webm`, `mp4`, `mp3`, `wav` ou `ogg`) e devolve texto em pt-BR. Limite de 20 MB.
-- `POST /speak`: recebe `{ "text": "...", "voice": "pf_dora" }` ou `pm_alex` e devolve WAV mono 24 kHz. O cabeçalho `X-LinkStory-Word-Timings` contém os tempos das palavras em JSON codificado em Base64 URL-safe, para sincronizar a boca do personagem.
+- `GET /preferences` e `PUT /preferences`: controla memória e identidade do assistente por conta.
+- `GET /memories`, `POST /memories`, `PUT /memories/{memory_id}` e `DELETE /memories/{memory_id}`: notas persistentes controladas pelo usuário; nenhuma memória é criada automaticamente.
+- `POST /transcribe`: transcrição pt-BR local, até 20 MB, quando o perfil de áudio estiver preparado.
+- `POST /speak`: síntese de voz local quando o perfil de áudio estiver preparado.
 
-A API valida o token consultando Supabase Auth. O proprietário da conversa e das memórias é sempre o ID retornado por Auth. IDs de conversa ou memória de outra conta não retornam conteúdo. As notas de memória são salvas apenas quando o usuário solicita explicitamente. O histórico legado criado pela versão de token compartilhado não é associado automaticamente a nenhuma conta.
+A identidade da conversa e das memórias vem sempre do usuário validado pelo Supabase Auth. IDs de outra conta não retornam conteúdo. O histórico legado criado por uma versão de token compartilhado não é associado automaticamente a nenhuma conta.
 
 ## Testes
 
-Instale `requirements-dev.txt` e execute `pytest -q`. Os testes não precisam de Ollama real; as chamadas de inferência e Auth são simuladas.
+Instale `requirements-dev.txt` e execute `pytest -q`. Os testes simulam inferência e autenticação; eles não comprovam que o modelo real está instalado, que o host aguenta carga ou que o áudio funciona em um iPhone. Antes de abrir a IA aos usuários, teste com duas contas reais, expiração de sessão, limite de uso e persistência após reinicialização.
 
-## Limites conhecidos antes da publicação
+## Limites antes da publicação
 
-- O servidor de inferência precisa estar hospedado continuamente; Vercel hospeda o site, não o processo Ollama.
-- Configure os secrets no host do motor, nunca no JavaScript do navegador ou no Git.
-- Antes de abrir a IA aos usuários, teste com duas contas reais para confirmar isolamento, expiração de sessão, rate limit e persistência após reinicialização.
-- Avalie qualidade do modelo em português, latência, memória RAM/VRAM, custo de hospedagem e licenças do modelo escolhido.
-- A API entrega áudio e tempos de palavras, mas a animação visual da boca/expressões ainda precisa ser conectada à interface do personagem.
-- A voz Dora (`pf_dora`) e Alex (`pm_alex`) são vozes sintéticas de demonstração; a escolha final da voz/personagem deve ser feita na interface.
-- As licenças dos componentes de áudio e inferência estão listadas em `THIRD_PARTY_NOTICES.md`.
+- O motor ainda precisa de uma máquina ligada continuamente. Vercel hospeda o site, não o processo Ollama.
+- Nenhuma URL de API pública está configurada em `linkstory-ai-config.js`; por isso, o chat online permanece desativado.
+- Não há garantia de 24/7, escalabilidade ou custo zero até existir infraestrutura permanente e testada.
+- A interface de voz ainda precisa de teste real no iPhone; os modelos de áudio são opcionais.
+- O contexto de capítulo atual inclui somente texto e metadados estruturados; não analisa imagens de páginas.
+- Revise as licenças dos componentes e do modelo exato antes de uso comercial. Consulte `THIRD_PARTY_NOTICES.md`.
