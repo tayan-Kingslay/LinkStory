@@ -230,6 +230,8 @@
         $("memoryOpen").disabled = false;
         await refreshConversations();
       } else {
+        $("memoryOpen").disabled = !health.authentication_configured;
+        if (health.authentication_configured) await refreshConversations();
         const missing = [];
         if (!health.authentication_configured) missing.push("autenticação");
         if (!health.ollama_reachable) missing.push("servidor do modelo");
