@@ -30,7 +30,10 @@ jobs:
         run: pip install -r requirements-dev.txt
         working-directory: linkstory-ai
       - name: Validate browser client syntax
-        run: node --check ../linkstory-ai-client.js
+        run: |
+          node --check ../linkstory-ai-client.js
+          node --check ../nox-page.js
+          node --check ../linkstory-ai-config.js
         working-directory: linkstory-ai
       - name: Validate Docker Compose YAML
         run: python -c "import yaml; yaml.safe_load(open('docker-compose.yml', encoding='utf-8'))"
