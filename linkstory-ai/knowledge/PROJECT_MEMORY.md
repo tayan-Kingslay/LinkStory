@@ -57,19 +57,33 @@ PR em rascunho: https://github.com/tayan-Kingslay/LinkStory/pull/14
 Componentes preparados na branch:
 - API FastAPI com validação de sessão Supabase.
 - Histórico e memórias em SQLite, separados por ID autenticado do usuário.
+- Lista privada de conversas, edição/apagamento de memórias e opção individual para desativar o uso da memória.
 - Motor planejado com Ollama, modelo Llama configurável e Chroma para RAG.
 - Transcrição local com faster-whisper e síntese de voz Paradee.
-- Cliente JavaScript para conversar com a API e usar áudio.
-- Docker Compose e testes automatizados.
+- Cliente JavaScript com chat, histórico, memória, preferências, transcrição e síntese.
+- Página própria `nox.html`, estilos responsivos e entrada no menu global.
+- Ação explícita no editor de capítulos para enviar ao Nox somente os textos/metadados estruturados de uma obra do próprio autor. O frontend verifica a sessão, propriedade da obra e vínculo do capítulo usando as permissões do Supabase; o autor confirma antes do envio. Imagens não são enviadas nem analisadas por esse fluxo.
+- O contexto do capítulo é enviado somente na solicitação autorizada e não é salvo como mensagem nem indexado na base compartilhada.
+- Docker Compose, ingestão pública por allowlist e testes automatizados.
 
-Limitações:
+Validação:
+- GitHub Actions executou com sucesso os testes de API e a verificação de sintaxe dos scripts do navegador em commits recentes; confirmar o resultado do workflow mais recente antes de declarar a branch toda validada.
+- Os testes de API simulam o modelo e a autenticação; não comprovam inferência real, áudio real ou implantação ponta a ponta.
+- A integração com capítulos cobre texto/metadados de quadros estruturados. O Nox ainda não interpreta imagens de páginas, PDFs ou páginas tradicionais sem texto estruturado.
+- A interface de chat, histórico e memória foi criada, mas ainda precisa de teste visual e funcional no site.
+
+Bloqueios e itens pendentes:
 1. Não há servidor permanente de inferência provisionado.
-2. Não há orçamento aprovado para infraestrutura.
-3. A interface do Nox ainda precisa ser integrada e validada.
-4. Testes automatizados simulados não comprovam inferência real nem implantação de produção.
-5. Não afirmar que Nox está online, pronto para produção ou testado de ponta a ponta.
-6. Revisar licenças de modelos e dependências antes de uso comercial.
+2. `linkstory-ai-config.js` ainda não tem URL pública do servidor; portanto, o chat do site não consegue conversar com o modelo real.
+3. Não há orçamento aprovado para infraestrutura; não contratar nem provisionar serviços pagos sem autorização explícita.
+4. Não foi feita execução real do Ollama/Llama, teste de duas contas reais, validação de voz em iPhone nem teste ponta a ponta.
+5. A animação de boca/personagem não está integrada ao áudio.
+6. Personalização de nome/foto do assistente e edição manual de títulos de conversas ainda precisam ser concluídas.
+7. Não mesclar o PR nem publicar em produção sem autorização explícita.
+8. Vercel já retornou limite de implantação; isso não é prova de falha do código e não deve ser contornado com deploy de produção.
+9. Revisar licenças de modelos e dependências antes de uso comercial.
 
+Nunca afirmar que Nox está online, pronto para produção ou testado de ponta a ponta até que servidor, URL, interface, autenticação, isolamento, chat e voz sejam verificados de verdade.
 ## 7. Regras de trabalho
 
 - Nunca publicar, mesclar, apagar, contratar ou gerar custos sem autorização explícita.
