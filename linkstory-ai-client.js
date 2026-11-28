@@ -44,11 +44,11 @@
     return JSON.parse(new TextDecoder().decode(bytes));
   }
 
-  async function chat(message, conversationId = null) {
+  async function chat(message, conversationId = null, context = null) {
     const response = await request("/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message, conversation_id: conversationId })
+      body: JSON.stringify({ message, conversation_id: conversationId, context })
     });
     return response.json();
   }
