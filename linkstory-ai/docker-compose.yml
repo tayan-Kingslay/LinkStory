@@ -21,7 +21,7 @@ services:
       ollama:
         condition: service_healthy
     entrypoint: ["/bin/sh", "-c"]
-    command: "ollama pull ${LINKSTORY_CHAT_MODEL:-qwen2.5:7b} && ollama pull ${LINKSTORY_EMBED_MODEL:-nomic-embed-text}"
+    command: "ollama pull ${LINKSTORY_CHAT_MODEL:-olmo2:7b} && ollama pull ${LINKSTORY_EMBED_MODEL:-nomic-embed-text}"
 
   prepare-audio:
     profiles: ["audio"]
