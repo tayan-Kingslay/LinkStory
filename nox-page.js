@@ -70,20 +70,38 @@
     }
     const session = await LinkStoryManga.session();
     if (!session?.user?.id) throw new Error("Entre na sua conta para compartilhar um capítulo com o Nox.");
-    const manga = await LinkStoryManga.mangaById(mangaId);
+    const { data: manga, error: mangaError } = await linkstorySupabase
+      .from("mangas")
+      .select("id, creator_id, title, description, genres")
+      .eq("id", mangaId)
+      .maybeSingle();
+    if (mangaError) throw mangaError;
     if (!manga || manga.creator_id !== session.user.id) {
       throw new Error("Por segurança, o Nox só pode receber uma obra sua.");
     }
-    const chapter = await LinkStoryManga.chapterWithPages(chapterId, { privatePreviews: false });
+    const { data: chapter, error: chapterError } = await linkstorySupabase
+      .from("manga_chapters")
+      .select("id, manga_id, chapter_number, title")
+      .eq("id", chapterId)
+      .maybeSingle();
+    if (chapterError) throw chapterError;
     if (!chapter || chapter.manga_id !== manga.id) {
       throw new Error("Este capítulo não pertence à obra selecionada.");
     }
+    const { data: pages, error: pagesError } = await linkstorySupabase
+      .from("manga_pages")
+      .select("page_number, panels")
+      .eq("chapter_id", chapterId)
+      .order("page_number", { ascending: true });
+    if (pagesError) throw pagesError;
+    chapter.pages = pages || [];
 
     const sections = [
       "OBRA: " + (manga.title || "Sem título"),
       "DESCRIÇÃO DA OBRA: " + (manga.description || "Não informada"),
+      "GÊNEROS: " + (manga.genres || "Não informados"),
       "CAPÍTULO: " + (chapter.title || ("Capítulo " + chapter.chapter_number)),
-      "PÁGINAS: " + ((chapter.pages || []).length)
+      "PÁGINAS: " + chapter.pages.length
     ];
     let textCount = 0;
     (chapter.pages || []).forEach((page, pageIndex) => {
