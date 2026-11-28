@@ -198,3 +198,58 @@ def test_saved_memory_is_added_to_chat_context(monkeypatch, tmp_path):
         assert "Meu projeto se chama LinkStory." in captured[0]
     finally:
         teardown(server)
+
+def test_user_can_edit_only_their_own_memory(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        saved = client.post("/memories", json={"content": "Nome antigo."})
+        memory_id = saved.json()["id"]
+        edited = client.put(f"/memories/{memory_id}", json={"content": "Nome atualizado."})
+        assert edited.status_code == 200
+        assert edited.json()["content"] == "Nome atualizado."
+
+        server.app.dependency_overrides[server.get_current_user] = lambda: str(uuid.UUID(int=2))
+        forbidden = client.put(f"/memories/{memory_id}", json={"content": "Tentativa."})
+        assert forbidden.status_code == 404
+    finally:
+        teardown(server)
+
+
+def test_memory_can_be_disabled_and_is_not_added_to_chat(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    captured = []
+    monkeypatch.setattr(server, "answer_question", lambda prompt: (
+        captured.append(prompt) or {"answer": "Resposta.", "sources": []}
+    ))
+    try:
+        saved = client.post("/memories", json={"content": "Este dado é privado."})
+        assert saved.status_code == 200
+        changed = client.put("/preferences", json={"memory_enabled": False})
+        assert changed.status_code == 200
+        assert changed.json()["memory_enabled"] is False
+        assert client.get("/preferences").json()["memory_enabled"] is False
+
+        response = client.post("/chat", json={"message": "Oi"})
+        assert response.status_code == 200
+        assert "Este dado é privado." not in captured[0]
+    finally:
+        teardown(server)
+
+
+def test_conversation_list_is_private_to_authenticated_owner(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    try:
+        created = client.post("/chat", json={"message": "Minha história"})
+        conversation_id = created.json()["conversation_id"]
+        listed = client.get("/conversations")
+        assert listed.status_code == 200
+        assert listed.json()["conversations"][0]["conversation_id"] == conversation_id
+        assert listed.json()["conversations"][0]["title"] == "Minha história"
+
+        server.app.dependency_overrides[server.get_current_user] = lambda: str(uuid.UUID(int=2))
+        other = client.get("/conversations")
+        assert other.status_code == 200
+        assert other.json()["conversations"] == []
+    finally:
+        teardown(server)
+
