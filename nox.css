@@ -8,6 +8,8 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
 .nox-quiet,.nox-new{height:42px;border-radius:12px;padding:0 14px;font-size:12px;font-weight:800;cursor:pointer}
 .nox-quiet{border:1px solid var(--nox-line);background:#fff;color:var(--nox-ink)}
 .nox-new{border:0;background:var(--nox-blue);color:#fff;box-shadow:0 6px 16px #1678e82b}
+.nox-menu{width:38px;height:38px;flex:0 0 38px;border:1px solid var(--nox-line);border-radius:11px;background:#fff;color:var(--nox-ink);font-size:0;display:grid;place-items:center;cursor:pointer}
+.nox-menu:before{content:"";width:18px;height:14px;background:linear-gradient(var(--nox-ink) 0 2px,transparent 2px 6px,var(--nox-ink) 6px 8px,transparent 8px 12px,var(--nox-ink) 12px 14px);display:block}
 .nox-shell{height:calc(100dvh - 68px);min-height:540px;display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1440px;margin:auto}
 .nox-sidebar{display:flex;flex-direction:column;min-height:0;padding:22px 14px 14px 18px;border-right:1px solid var(--nox-line);background:rgba(255,255,255,.5)}
 .nox-sidebar-head{display:flex;justify-content:space-between;align-items:center;padding:0 7px 14px;color:#8a9aae;font-size:10px;font-weight:900;letter-spacing:1.8px}
@@ -103,7 +105,8 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
 }
 html[data-ls-theme="dark"] body.nox-page{background:#101720;color:#edf3fa}
 html[data-ls-theme="dark"] .nox-topbar,html[data-ls-theme="dark"] .nox-sidebar{background:#151f2b;border-color:#344255}
-html[data-ls-theme="dark"] .nox-back,html[data-ls-theme="dark"] .nox-quiet,html[data-ls-theme="dark"] .nox-composer,html[data-ls-theme="dark"] .nox-dialog,html[data-ls-theme="dark"] .nox-memory-form textarea,html[data-ls-theme="dark"] .nox-memory-item button{background:#1b2938;color:#edf3fa;border-color:#344255}
+html[data-ls-theme="dark"] .nox-back,html[data-ls-theme="dark"] .nox-quiet,html[data-ls-theme="dark"] .nox-menu,html[data-ls-theme="dark"] .nox-composer,html[data-ls-theme="dark"] .nox-dialog,html[data-ls-theme="dark"] .nox-memory-form textarea,html[data-ls-theme="dark"] .nox-memory-item button{background:#1b2938;color:#edf3fa;border-color:#344255}
+html[data-ls-theme="dark"] .nox-menu:before{background:linear-gradient(#c4ced9 0 2px,transparent 2px 6px,#c4ced9 6px 8px,transparent 8px 12px,#c4ced9 12px 14px)}
 html[data-ls-theme="dark"] .nox-status-row{border-color:#344255}
 html[data-ls-theme="dark"] .nox-chapter-context{background:#1b2d41;border-color:#365371;color:#bdd9f4}
 html[data-ls-theme="dark"] .nox-conversation-edit{color:#aab9c9}
