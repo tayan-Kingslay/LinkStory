@@ -77,6 +77,15 @@
     return response.json();
   }
 
+  async function updateAssistantProfile(name, avatarUrl) {
+    const response = await request("/preferences", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ assistant_name: name, assistant_avatar_url: avatarUrl })
+    });
+    return response.json();
+  }
+
   async function updateMemory(memoryId, content) {
     const response = await request("/memories/" + encodeURIComponent(memoryId), {
       method: "PUT",
@@ -137,7 +146,7 @@
   }
 
   window.LinkStoryAI = Object.freeze({
-    chat, history, conversations, preferences, updatePreferences,
+    chat, history, conversations, preferences, updatePreferences, updateAssistantProfile,
     transcribe, speak, memories, saveMemory, updateMemory, deleteMemory, health
   });
 })();
