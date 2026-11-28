@@ -68,6 +68,14 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
 .nox-dialog-head h2{margin:6px 0 0;font-size:24px;letter-spacing:-1px}
 .nox-dialog-head button{width:36px;height:36px;border:1px solid var(--nox-line);border-radius:10px;background:#fff;font-size:24px;cursor:pointer}
 .nox-dialog-copy{font-size:12px;line-height:1.6;color:var(--nox-muted)}
+.nox-profile-form{display:grid;gap:7px;padding:14px;border:1px solid var(--nox-line);border-radius:13px;margin:16px 0}
+.nox-profile-form h3{font-size:12px;margin:0 0 3px}
+.nox-profile-form label{font-size:10px;font-weight:800;color:var(--nox-muted)}
+.nox-profile-form input{width:100%;height:39px;padding:0 10px;border:1px solid var(--nox-line);border-radius:9px;background:#fff;color:var(--nox-ink);font-size:11px}
+.nox-profile-form button{height:38px;border:0;border-radius:9px;background:var(--nox-blue);color:#fff;font-size:11px;font-weight:850;cursor:pointer;margin-top:3px}
+.nox-avatar-small img{width:100%;height:100%;border-radius:inherit;object-fit:cover}
+.nox-orb img{width:100%;height:100%;border-radius:inherit;object-fit:cover;transform:rotate(5deg)}
+.nox-message-avatar img{width:100%;height:100%;border-radius:inherit;object-fit:cover}
 .nox-memory-switch{display:flex;gap:12px;align-items:center;padding:14px;border:1px solid var(--nox-line);border-radius:13px;margin:17px 0}
 .nox-memory-switch input{width:18px;height:18px;accent-color:var(--nox-blue)}
 .nox-memory-switch strong,.nox-memory-switch small{display:block}.nox-memory-switch strong{font-size:12px}.nox-memory-switch small{font-size:10px;color:var(--nox-muted);margin-top:4px}
@@ -101,5 +109,7 @@ html[data-ls-theme="dark"] .nox-prompts button{background:#1b2938;color:#dce8f5;
 html[data-ls-theme="dark"] .nox-composer-wrap{background:linear-gradient(180deg,transparent,#101720 20%)}
 html[data-ls-theme="dark"] .nox-composer textarea{color:#edf3fa}
 html[data-ls-theme="dark"] .nox-service-notice{background:#332b1d;border-color:#65502d;color:#f1d59b}
-html[data-ls-theme="dark"] .nox-memory-switch{border-color:#344255}
+html[data-ls-theme="dark"] .nox-memory-switch,html[data-ls-theme="dark"] .nox-profile-form{border-color:#344255}
+html[data-ls-theme="dark"] .nox-profile-form input{background:#1b2938;color:#edf3fa;border-color:#344255}
+
 @media(prefers-reduced-motion:reduce){.nox-messages{scroll-behavior:auto}}
