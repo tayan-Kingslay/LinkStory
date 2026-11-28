@@ -184,6 +184,8 @@
         return;
       }
       result.conversations.forEach((conversation) => {
+        const row = document.createElement("div");
+        row.className = "nox-conversation-row";
         const button = document.createElement("button");
         button.type = "button";
         button.className = "nox-conversation" + (conversation.conversation_id === conversationId ? " active" : "");
@@ -193,7 +195,24 @@
         preview.textContent = conversation.preview || "";
         button.append(title, preview);
         button.addEventListener("click", () => openConversation(conversation.conversation_id));
-        box.append(button);
+        const rename = document.createElement("button");
+        rename.type = "button";
+        rename.className = "nox-conversation-edit";
+        rename.textContent = "✎";
+        rename.title = "Renomear conversa";
+        rename.setAttribute("aria-label", "Renomear conversa");
+        rename.addEventListener("click", async () => {
+          const nextTitle = window.prompt("Nome desta conversa:", conversation.title || "");
+          if (nextTitle === null || !nextTitle.trim()) return;
+          try {
+            await LinkStoryAI.updateConversationTitle(conversation.conversation_id, nextTitle.trim());
+            await refreshConversations();
+          } catch (error) {
+            showError(error);
+          }
+        });
+        row.append(button, rename);
+        box.append(row);
       });
     } catch (error) {
       box.replaceChildren();
