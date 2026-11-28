@@ -1,6 +1,14 @@
 # Third-party notices — LinkStory AI
 
-This file records the principal licenses of the optional local audio stack. Keep upstream notices and licenses when redistributing source or container images. This is a technical inventory, not legal advice.
+This file records the principal licenses of the optional local audio stack and the default text model. Keep upstream notices and licenses when redistributing source or container images. This is a technical inventory, not legal advice.
+
+## Text inference
+
+- **Ollama:** Apache License 2.0. Upstream: https://github.com/ollama/ollama
+- **Qwen2.5 7B (default model):** Apache License 2.0 for the 7B variant. Model card and exact variant: https://ollama.com/library/qwen2.5:7b
+- **Qwen2.5 1.5B (optional lightweight model):** Apache License 2.0. Model family license notes: https://ollama.com/library/qwen2.5
+
+Model weights and the software that runs them can have separate licenses. Verify the exact model tag and license before changing the production default.
 
 ## Brazilian Portuguese speech synthesis
 
@@ -14,10 +22,3 @@ The two synthetic voice options are model-provided voices (pf_dora and pm_alex),
 
 - **faster-whisper:** MIT License. Upstream: https://github.com/SYSTRAN/faster-whisper
 - **Whisper model weights:** MIT License. Upstream: https://github.com/openai/whisper
-
-## Core inference
-
-- **Ollama:** Apache License 2.0. Upstream: https://github.com/ollama/ollama
-- **Meta Llama 3.1 8B:** Meta Llama 3.1 Community License. Review the current model terms before commercial deployment: https://www.llama.com/llama3_1/license/
-
-Model weights and the software that runs them can have separate licenses. Re-check upstream licenses and exact model revisions before each production release.
