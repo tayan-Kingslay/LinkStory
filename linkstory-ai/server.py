@@ -87,7 +87,9 @@ class MemoryRequest(BaseModel):
 
 
 class MemoryPreferencesRequest(BaseModel):
-    memory_enabled: bool
+    memory_enabled: Optional[bool] = None
+    assistant_name: Optional[str] = Field(default=None, max_length=32)
+    assistant_avatar_url: Optional[str] = Field(default=None, max_length=2048)
 
 
 @contextmanager
@@ -129,9 +131,16 @@ def db() -> Iterator[sqlite3.Connection]:
         conn.execute("""
             CREATE TABLE IF NOT EXISTS user_preferences (
                 user_id TEXT PRIMARY KEY,
-                memory_enabled INTEGER NOT NULL DEFAULT 1
+                memory_enabled INTEGER NOT NULL DEFAULT 1,
+                assistant_name TEXT NOT NULL DEFAULT 'Nox',
+                assistant_avatar_url TEXT
             )
         """)
+        preference_columns = {row[1] for row in conn.execute("PRAGMA table_info(user_preferences)")}
+        if "assistant_name" not in preference_columns:
+            conn.execute("ALTER TABLE user_preferences ADD COLUMN assistant_name TEXT NOT NULL DEFAULT 'Nox'")
+        if "assistant_avatar_url" not in preference_columns:
+            conn.execute("ALTER TABLE user_preferences ADD COLUMN assistant_avatar_url TEXT")
         conn.execute("""
             CREATE TABLE IF NOT EXISTS request_limits (
                 user_id TEXT NOT NULL,
@@ -492,22 +501,49 @@ def delete_memory(memory_id: str, user_id: str = Depends(get_current_user)):
 def get_preferences(user_id: str = Depends(get_current_user)):
     with db() as conn:
         row = conn.execute(
-            "SELECT memory_enabled FROM user_preferences WHERE user_id=?",
+            "SELECT memory_enabled, assistant_name, assistant_avatar_url "
+            "FROM user_preferences WHERE user_id=?",
             (user_id,),
         ).fetchone()
-    return {"memory_enabled": True if row is None else bool(row[0])}
+    return {
+        "memory_enabled": True if row is None else bool(row[0]),
+        "assistant_name": "Nox" if row is None else row[1],
+        "assistant_avatar_url": None if row is None else row[2],
+    }
 
 
 @app.put("/preferences")
 def update_preferences(payload: MemoryPreferencesRequest, user_id: str = Depends(get_current_user)):
     enforce_rate_limit(user_id)
+    if payload.memory_enabled is None and payload.assistant_name is None and payload.assistant_avatar_url is None:
+        raise HTTPException(status_code=422, detail="Informe ao menos uma preferência para atualizar.")
+    if payload.assistant_name is not None and not payload.assistant_name.strip():
+        raise HTTPException(status_code=422, detail="O nome do assistente não pode ficar vazio.")
+    assistant_name = payload.assistant_name.strip() if payload.assistant_name is not None else None
+    avatar_url = payload.assistant_avatar_url.strip() if payload.assistant_avatar_url is not None else None
+    if avatar_url and not avatar_url.startswith("https://"):
+        raise HTTPException(status_code=422, detail="A foto precisa usar um endereço HTTPS.")
     with db() as conn:
+        current = conn.execute(
+            "SELECT memory_enabled, assistant_name, assistant_avatar_url "
+            "FROM user_preferences WHERE user_id=?",
+            (user_id,),
+        ).fetchone()
+        memory_enabled = int(payload.memory_enabled) if payload.memory_enabled is not None else (1 if current is None else current[0])
+        final_name = assistant_name if assistant_name is not None else ("Nox" if current is None else current[1])
+        final_avatar = avatar_url if payload.assistant_avatar_url is not None else (None if current is None else current[2])
         conn.execute(
-            "INSERT INTO user_preferences(user_id, memory_enabled) VALUES (?, ?) "
-            "ON CONFLICT(user_id) DO UPDATE SET memory_enabled=excluded.memory_enabled",
-            (user_id, int(payload.memory_enabled)),
+            "INSERT INTO user_preferences(user_id, memory_enabled, assistant_name, assistant_avatar_url) "
+            "VALUES (?, ?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET "
+            "memory_enabled=excluded.memory_enabled, assistant_name=excluded.assistant_name, "
+            "assistant_avatar_url=excluded.assistant_avatar_url",
+            (user_id, memory_enabled, final_name, final_avatar),
         )
-    return {"memory_enabled": payload.memory_enabled}
+    return {
+        "memory_enabled": bool(memory_enabled),
+        "assistant_name": final_name,
+        "assistant_avatar_url": final_avatar,
+    }
 
 
 @app.put("/memories/{memory_id}")
