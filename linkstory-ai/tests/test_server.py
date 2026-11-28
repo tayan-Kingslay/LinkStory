@@ -253,3 +253,24 @@ def test_conversation_list_is_private_to_authenticated_owner(monkeypatch, tmp_pa
     finally:
         teardown(server)
 
+def test_authorized_chapter_context_is_used_but_not_saved_as_chat_message(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    captured = []
+    monkeypatch.setattr(server, "answer_question", lambda prompt: (
+        captured.append(prompt) or {"answer": "Análise concluída.", "sources": []}
+    ))
+    try:
+        response = client.post("/chat", json={
+            "message": "Analise a continuidade deste capítulo.",
+            "context": "Obra: Exemplo. Cena 1: a personagem encontra uma chave.",
+        })
+        assert response.status_code == 200
+        assert "Cena 1: a personagem encontra uma chave." in captured[0]
+        conversation_id = response.json()["conversation_id"]
+        history = client.get(f"/conversations/{conversation_id}")
+        assert history.status_code == 200
+        assert history.json()["messages"][0]["content"] == "Analise a continuidade deste capítulo."
+        assert "Cena 1:" not in history.text
+    finally:
+        teardown(server)
+
