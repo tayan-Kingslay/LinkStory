@@ -35,7 +35,8 @@ Todas as rotas de conversa exigem `Authorization: Bearer <access_token_supabase>
 
 - `GET /health`: diagnóstico sem dados de usuário. O estado `ready` confirma o chat de texto; `audio_models_ready` informa separadamente se reconhecimento e síntese de voz estão preparados.
 - `POST /chat`: corpo `{ "message": "...", "conversation_id": null, "context": null }`; devolve resposta, ID e fontes. O campo opcional `context` aceita até 12.000 caracteres de texto/metadados de uma obra que o autor autorizou explicitamente naquela solicitação. Esse contexto não é salvo como mensagem nem indexado na base compartilhada.
-- `GET /conversations`: lista somente as conversas do usuário autenticado, com título derivado da primeira mensagem.
+- `GET /conversations`: lista somente as conversas do usuário autenticado, com título personalizado ou derivado da primeira mensagem.
+- `PUT /conversations/{conversation_id}/title`: renomeia somente uma conversa pertencente ao usuário autenticado.
 - `GET /conversations/{conversation_id}`: histórico pertencente ao usuário autenticado.
 - `GET /preferences` e `PUT /preferences`: consulta e altera a opção individual de uso da memória e a identidade do assistente (nome e URL HTTPS de avatar), isoladas por conta.
 - `GET /memories`, `POST /memories`, `PUT /memories/{memory_id}` e `DELETE /memories/{memory_id}`: memórias persistentes controladas pelo próprio usuário. O chat recebe até 10 notas salvas como contexto somente quando a memória está habilitada; nenhuma memória é criada automaticamente.
