@@ -19,7 +19,7 @@ Este serviço é o núcleo de inferência próprio da Kairox Studio. Ele usa Oll
 Requisitos: Docker Engine + Compose, armazenamento persistente e recursos de CPU/RAM compatíveis com o modelo escolhido. Para melhor desempenho, use uma máquina com GPU suportada pelo Ollama. Antes de uso comercial, revise e aceite os termos da licença Meta Llama 3.1; o fato de o modelo rodar localmente não elimina obrigações de licença.
 
 1. Copie `.env.example` para `.env` e preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` com os dados públicos do projeto Supabase. A chave publishable não substitui o token do usuário; ela nunca concede acesso por si só.
-2. Execute `docker compose up -d --build`. O Compose baixa o Llama 3.1 e o Nomic, prepara o Whisper e as duas vozes Paradee, indexa somente os documentos públicos explicitamente aprovados em `knowledge/PUBLIC_KNOWLEDGE.md` e só então inicia a API.
+2. Execute `docker compose up -d --build`. O Compose baixa o Llama 3.1 e o Nomic e indexa somente os documentos públicos explicitamente aprovados em `knowledge/PUBLIC_KNOWLEDGE.md`. A API de texto inicia após a indexação; o serviço opcional `prepare-audio` prepara o Whisper e as duas vozes Paradee em paralelo, sem bloquear o chat de texto.
 3. A primeira inicialização pode levar vários minutos e baixar alguns gigabytes. Os modelos e o histórico ficam em volumes persistentes; não remova esses volumes ao atualizar o container.
 4. Confira `docker compose ps` e `GET /health`. O campo `status` só será `ready` quando autenticação, modelos de texto, base vetorial e modelos de áudio estiverem preparados.
 
@@ -33,7 +33,7 @@ Veja `.env.example`. `LINKSTORY_CHAT_DB`, `LINKSTORY_CHROMA_DIR`, `HF_HOME` e `L
 
 Todas as rotas de conversa exigem `Authorization: Bearer <access_token_supabase>`.
 
-- `GET /health`: diagnóstico sem dados de usuário.
+- `GET /health`: diagnóstico sem dados de usuário. O estado `ready` confirma o chat de texto; `audio_models_ready` informa separadamente se reconhecimento e síntese de voz estão preparados.
 - `POST /chat`: corpo `{ "message": "...", "conversation_id": null }`; devolve resposta, ID e fontes.
 - `GET /conversations`: lista somente as conversas do usuário autenticado, com título derivado da primeira mensagem.
 - `GET /conversations/{conversation_id}`: histórico pertencente ao usuário autenticado.
