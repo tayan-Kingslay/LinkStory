@@ -328,3 +328,18 @@ def test_conversation_title_can_be_renamed_only_by_owner(monkeypatch, tmp_path):
     finally:
         teardown(server)
 
+def test_custom_assistant_name_is_used_in_private_chat_context(monkeypatch, tmp_path):
+    server, client = setup_client(monkeypatch, tmp_path)
+    captured = []
+    monkeypatch.setattr(server, "answer_question", lambda prompt: (
+        captured.append(prompt) or {"answer": "Olá!", "sources": []}
+    ))
+    try:
+        saved = client.put("/preferences", json={"assistant_name": "Lumi"})
+        assert saved.status_code == 200
+        response = client.post("/chat", json={"message": "Como você se chama?"})
+        assert response.status_code == 200
+        assert "NOME DE EXIBIÇÃO DESTA CONTA: Lumi" in captured[0]
+    finally:
+        teardown(server)
+
