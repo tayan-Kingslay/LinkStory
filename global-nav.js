@@ -282,7 +282,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   {
     const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
     const isHomePage=page==='index.html';
-    const header=document.querySelector('.topbar,.top,.header');
+    const header=document.querySelector('.topbar,.top,.header,.nox-topbar');
     const actions=header?.querySelector('.header-actions,.top-actions,.actions')||header;
     const searchSelector='#openSearch,#lsHeaderSearchShortcut,.search,[aria-label="Buscar"],[title="Buscar"]';
     if(!isHomePage){
@@ -296,7 +296,7 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
     }
   }
 
-  let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');const header=document.querySelector('.topbar,.top,.header,body>header:not(.chat-header)');let opener=document.getElementById('openMenu')||(header&&header.querySelector('.menu-btn,.menu,.menu-button,.ls-global-menu-btn'));
+  let menu=document.getElementById('menuDialog')||document.getElementById('lsMenu');const header=document.querySelector('.topbar,.top,.header,.nox-topbar,body>header:not(.chat-header)');let opener=document.getElementById('openMenu')||(header&&header.querySelector('.menu-btn,.menu,.menu-button,.ls-global-menu-btn'));
   const menuMarkup=`<div class="ls-menu-wrap">
     <div class="ls-menu-head"><div class="ls-menu-brand"><img src="assets/linkstory-logo.svg" alt="LinkStory"></div><button class="ls-menu-close" aria-label="Fechar menu">×</button></div>
     <div class="ls-menu-intro"><strong>O que vamos explorar?</strong><p>Encontre histórias, acompanhe suas leituras e cuide do seu espaço.</p></div>
