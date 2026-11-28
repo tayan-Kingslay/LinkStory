@@ -66,7 +66,15 @@
 </main>
 <dialog id="memoryDialog" class="nox-dialog">
   <div class="nox-dialog-head"><div><span class="nox-eyebrow">CONTROLE DO USUÁRIO</span><h2>Memória do Nox</h2></div><button id="memoryClose" type="button" aria-label="Fechar">×</button></div>
-  <p class="nox-dialog-copy">Você decide o que o Nox pode guardar para lembrar nas próximas conversas. Nada é salvo automaticamente.</p>
+  <p class="nox-dialog-copy">Você decide como o assistente aparece e o que ele pode guardar. Essas preferências são privadas da sua conta.</p>
+  <section class="nox-profile-form">
+    <h3>Identidade do assistente</h3>
+    <label for="assistantName">Nome</label>
+    <input id="assistantName" type="text" maxlength="32" value="Nox" autocomplete="off">
+    <label for="assistantAvatarUrl">Foto por URL HTTPS (opcional)</label>
+    <input id="assistantAvatarUrl" type="url" maxlength="2048" placeholder="https://…">
+    <button id="saveAssistantProfile" type="button">Salvar identidade</button>
+  </section>
   <label class="nox-memory-switch"><input id="memoryEnabled" type="checkbox"><span><strong>Usar minha memória</strong><small>Quando desligada, suas notas não entram nas respostas.</small></span></label>
   <form id="memoryForm" class="nox-memory-form"><label for="memoryContent">Adicionar uma memória</label><textarea id="memoryContent" maxlength="1000" rows="2" placeholder="Ex.: Estou criando um mangá de aventura…"></textarea><button type="submit">Salvar memória</button></form>
   <div id="memoryList" class="nox-memory-list"></div>
