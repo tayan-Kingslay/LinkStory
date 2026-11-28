@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f5f8fc">
+<title>Nox — LinkStory</title>
+<meta name="description" content="Converse com Nox, o assistente criativo do LinkStory.">
+<link rel="icon" type="image/svg+xml" href="assets/linkstory-logo.svg">
+<link rel="stylesheet" href="mobile.css?v=5">
+<link rel="stylesheet" href="visual-system.css?v=4">
+<link rel="stylesheet" href="at3-global.css?v=2">
+<link rel="stylesheet" href="nox.css?v=1">
+</head>
+<body class="nox-page">
+<header class="nox-topbar">
+  <a class="nox-back" href="index.html" aria-label="Voltar ao LinkStory">‹</a>
+  <a class="nox-brand" href="index.html"><img src="assets/linkstory-logo.svg" alt="LinkStory"></a>
+  <div class="nox-top-actions">
+    <button id="memoryOpen" class="nox-quiet" type="button">Memória</button>
+    <button id="newConversation" class="nox-new" type="button">＋ Nova conversa</button>
+  </div>
+</header>
+<main class="nox-shell">
+  <aside class="nox-sidebar" aria-label="Conversas do Nox">
+    <div class="nox-sidebar-head"><span>SEU ESPAÇO</span><button id="sidebarNew" type="button" aria-label="Nova conversa">＋</button></div>
+    <div id="conversationList" class="nox-conversation-list"><p class="nox-muted">Carregando conversas…</p></div>
+    <div class="nox-sidebar-foot"><span class="nox-avatar-small">N</span><div><strong>Nox</strong><small>Seu parceiro criativo</small></div><a href="settings.html" aria-label="Configurações">⚙</a></div>
+  </aside>
+  <section class="nox-main">
+    <div class="nox-status-row">
+      <div class="nox-presence"><span id="statusDot" class="nox-dot"></span><span id="statusText">Verificando conexão…</span></div>
+      <span class="nox-private">🔒 Conversas privadas</span>
+    </div>
+    <div id="messages" class="nox-messages" aria-live="polite">
+      <div id="welcome" class="nox-welcome">
+        <div class="nox-orb"><span>N</span></div>
+        <p class="nox-eyebrow">LINKSTORY AI</p>
+        <h1>Oi! Eu sou o Nox.</h1>
+        <p class="nox-welcome-copy">Posso ajudar a transformar suas ideias em histórias, personagens e capítulos. A criação continua sendo sua.</p>
+        <div class="nox-prompts">
+          <button type="button" data-prompt="Me ajude a criar um personagem marcante para meu mangá.">Criar um personagem</button>
+          <button type="button" data-prompt="Quero desenvolver uma ideia para o primeiro capítulo de um mangá.">Desenvolver um capítulo</button>
+          <button type="button" data-prompt="Me ensine a organizar um arco narrativo do zero.">Aprender a criar um arco</button>
+          <button type="button" data-prompt="Como posso melhorar os diálogos dos meus personagens?">Melhorar diálogos</button>
+        </div>
+      </div>
+    </div>
+    <div class="nox-composer-wrap">
+      <div id="serviceNotice" class="nox-service-notice" role="status">O motor de IA ainda não está conectado. A interface está preparada, mas as mensagens só serão enviadas quando o servidor estiver ativo.</div>
+      <form id="composer" class="nox-composer">
+        <textarea id="messageInput" rows="1" maxlength="4000" placeholder="Converse com o Nox…" aria-label="Sua mensagem" disabled></textarea>
+        <div class="nox-composer-tools">
+          <div class="nox-tools-left">
+            <button id="micButton" class="nox-tool" type="button" title="Gravar mensagem de voz" aria-label="Gravar mensagem de voz" disabled>🎙</button>
+            <label class="nox-voice-toggle"><input id="voiceReplies" type="checkbox" disabled> Respostas em voz</label>
+            <select id="voiceChoice" aria-label="Voz do Nox" disabled><option value="pf_dora">Dora</option><option value="pm_alex">Alex</option></select>
+          </div>
+          <button id="sendButton" class="nox-send" type="submit" disabled>Enviar <span>↑</span></button>
+        </div>
+      </form>
+      <p class="nox-disclaimer">Nox pode cometer erros. Revise sugestões antes de usar. Ele nunca publica ou altera suas obras sozinho.</p>
+    </div>
+  </section>
+</main>
+<dialog id="memoryDialog" class="nox-dialog">
+  <div class="nox-dialog-head"><div><span class="nox-eyebrow">CONTROLE DO USUÁRIO</span><h2>Memória do Nox</h2></div><button id="memoryClose" type="button" aria-label="Fechar">×</button></div>
+  <p class="nox-dialog-copy">Você decide o que o Nox pode guardar para lembrar nas próximas conversas. Nada é salvo automaticamente.</p>
+  <label class="nox-memory-switch"><input id="memoryEnabled" type="checkbox"><span><strong>Usar minha memória</strong><small>Quando desligada, suas notas não entram nas respostas.</small></span></label>
+  <form id="memoryForm" class="nox-memory-form"><label for="memoryContent">Adicionar uma memória</label><textarea id="memoryContent" maxlength="1000" rows="2" placeholder="Ex.: Estou criando um mangá de aventura…"></textarea><button type="submit">Salvar memória</button></form>
+  <div id="memoryList" class="nox-memory-list"></div>
+  <p id="memoryStatus" class="nox-muted" role="status"></p>
+</dialog>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
+<script src="linkstory-ai-config.js?v=1"></script>
+<script src="linkstory-ai-client.js?v=2"></script>
+<script src="nox-page.js?v=1"></script>
+</body>
+</html>
