@@ -268,10 +268,11 @@ def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
     try:
         with db() as conn:
             preference = conn.execute(
-                "SELECT memory_enabled FROM user_preferences WHERE user_id=?",
+                "SELECT memory_enabled, assistant_name FROM user_preferences WHERE user_id=?",
                 (user_id,),
             ).fetchone()
             memory_enabled = preference is None or bool(preference[0])
+            assistant_name = "Nox" if preference is None else (preference[1] or "Nox")
             saved_memories = conn.execute(
                 "SELECT content FROM memories WHERE user_id=? ORDER BY updated_at DESC LIMIT ?",
                 (user_id, MAX_MEMORY_CONTEXT),
@@ -284,7 +285,10 @@ def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
         previous.reverse()
         memory_context = "\n".join(f"- {row[0]}" for row in saved_memories)
         history = "\n".join(f"{role}: {content}" for role, content in previous)
-        sections = []
+        sections = [
+            "NOME DE EXIBIÇÃO DESTA CONTA: " + assistant_name
+            + ". Respeite esse nome ao se apresentar; sua identidade base continua sendo o assistente oficial do LinkStory."
+        ]
         if memory_context:
             sections.append("MEMÓRIAS SALVAS PELO USUÁRIO (use somente se relevantes):\n" + memory_context)
         if history:
