@@ -58,6 +58,15 @@
     return response.json();
   }
 
+  async function updateConversationTitle(conversationId, title) {
+    const response = await request("/conversations/" + encodeURIComponent(conversationId) + "/title", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title })
+    });
+    return response.json();
+  }
+
   async function conversations() {
     const response = await request("/conversations");
     return response.json();
@@ -146,7 +155,7 @@
   }
 
   window.LinkStoryAI = Object.freeze({
-    chat, history, conversations, preferences, updatePreferences, updateAssistantProfile,
+    chat, history, conversations, updateConversationTitle, preferences, updatePreferences, updateAssistantProfile,
     transcribe, speak, memories, saveMemory, updateMemory, deleteMemory, health
   });
 })();
