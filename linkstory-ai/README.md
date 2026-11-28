@@ -6,7 +6,7 @@ Este serviço é o núcleo de inferência que a Kairox pode hospedar e administr
 
 ## Arquitetura
 
-- **Inferência:** Ollama + Qwen2.5 7B por padrão; o modelo pode ser trocado por configuração.
+- **Inferência:** Ollama + AI2 OLMo 2 7B por padrão; o modelo pode ser trocado por configuração.
 - **Embeddings e recuperação:** `nomic-embed-text` + Chroma persistente.
 - **Memória:** SQLite persistente com histórico por conversa e até 50 notas por usuário; até 10 notas entram no contexto quando a memória está habilitada. O usuário controla suas notas.
 - **Identidade:** cada chamada valida o token no Supabase Auth. O ID do usuário nunca é aceito do navegador como prova de identidade.
@@ -15,9 +15,9 @@ Este serviço é o núcleo de inferência que a Kairox pode hospedar e administr
 
 ## Recursos e escolha do modelo
 
-O modelo padrão `qwen2.5:7b` ocupa aproximadamente 4,7 GB para os pesos quantizados publicados no Ollama. Isso não é a memória total necessária: o processo também precisa de RAM para contexto, sistema operacional, embeddings e demais serviços. Uma máquina com 16 GB de RAM é um ponto de partida mais confortável para testar o conjunto completo; GPU compatível melhora a velocidade, mas não é obrigatória. Em CPU, as respostas podem demorar bastante.
+O modelo padrão `olmo2:7b` ocupa aproximadamente 4,5 GB para os pesos quantizados publicados no Ollama e usa contexto de 4K tokens nesta configuração. O OLMo 2 é desenvolvido pelo Allen Institute for AI (AI2), instituto de pesquisa sem fins lucrativos; seus pesos, código e materiais de treinamento são publicados de forma aberta, e a variante 7B usa licença Apache 2.0. O modelo roda localmente: o Nox não envia prompts a uma API comercial de IA.
 
-Para máquinas mais limitadas, configure `LINKSTORY_CHAT_MODEL=qwen2.5:1.5b` no `.env`. Esse modelo é menor, mas também tende a ser menos capaz em análise longa, continuidade narrativa e instruções complexas. Faça testes reais em português antes de escolher o modelo para usuários.
+Isso não prova que a qualidade em português brasileiro será suficiente. OLMo 2 foi avaliado principalmente em benchmarks em inglês; antes de abrir o Nox a usuários, compare respostas reais em PT-BR para criação de personagens, diálogos, continuidade e instruções. Não prometa desempenho equivalente a modelos comerciais sem esses testes. Uma máquina com 16 GB de RAM é um ponto de partida mais confortável; GPU compatível melhora a velocidade, mas não é obrigatória. Em CPU, as respostas podem demorar bastante.
 
 O computador precisa permanecer ligado e conectado à internet para atender usuários. Um protótipo local não equivale a um serviço 24 horas. Não existe promessa de hospedagem gratuita, ilimitada e permanente neste projeto.
 
@@ -66,6 +66,6 @@ Instale `requirements-dev.txt` e execute `pytest -q`. Os testes simulam inferên
 - O motor ainda precisa de uma máquina ligada continuamente. Vercel hospeda o site, não o processo Ollama.
 - Nenhuma URL de API pública está configurada em `linkstory-ai-config.js`; por isso, o chat online permanece desativado.
 - Não há garantia de 24/7, escalabilidade ou custo zero até existir infraestrutura permanente e testada.
-- A interface de voz ainda precisa de teste real no iPhone; os modelos de áudio são opcionais.
+- A interface de voz ainda precisa de teste real no iPhone; os modelos de áudio são opcionais. A transcrição atualmente usa pesos Whisper originalmente publicados pela OpenAI, executados localmente (não usa API); se a regra do projeto também proibir modelos criados por grandes empresas, substitua esse componente antes de ativar voz.
 - O contexto de capítulo atual inclui somente texto e metadados estruturados; não analisa imagens de páginas.
 - Revise as licenças dos componentes e do modelo exato antes de uso comercial. Consulte `THIRD_PARTY_NOTICES.md`.
