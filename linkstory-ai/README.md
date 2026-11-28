@@ -8,7 +8,7 @@ Este serviço é o núcleo de inferência próprio da Kairox Studio. Ele usa Oll
 
 - **Inferência:** Ollama + modelo configurável (padrão: `llama3.1:8b`).
 - **Embeddings e recuperação:** `nomic-embed-text` + Chroma persistente.
-- **Memória:** SQLite persistente com histórico por conversa e até 50 notas de memória por usuário; até 10 notas de até 1.000 caracteres entram no contexto de cada resposta. Somente o próprio usuário pode salvar, listar ou apagar suas notas.
+- **Memória:** SQLite persistente com histórico por conversa e até 50 notas de memória por usuário; até 10 notas de até 1.000 caracteres entram no contexto de cada resposta quando a memória está habilitada. Somente o próprio usuário pode salvar, listar, editar ou apagar suas notas.
 - **Identidade:** cada chamada de chat valida o access token no Supabase Auth (`/auth/v1/user`). Nenhum ID de usuário enviado pelo navegador é aceito como identidade.
 - **API:** FastAPI, CORS restrito, limite de 20 chamadas/minuto por usuário e mensagens com até 4.000 caracteres.
 - **Fala:** Paradee-8M pt-BR em ONNX local, com duas vozes selecionáveis e tempos por palavra para sincronização da boca.
@@ -21,11 +21,13 @@ Requisitos: Docker Engine + Compose, armazenamento persistente e recursos de CPU
 1. Copie `.env.example` para `.env` e preencha `SUPABASE_URL` e `SUPABASE_PUBLISHABLE_KEY` com os dados públicos do projeto Supabase. A chave publishable não substitui o token do usuário; ela nunca concede acesso por si só.
 2. Execute `docker compose up -d --build`. O Compose baixa o Llama 3.1 e o Nomic e indexa somente os documentos públicos explicitamente aprovados em `knowledge/PUBLIC_KNOWLEDGE.md`. A API de texto inicia após a indexação; o serviço opcional `prepare-audio` prepara o Whisper e as duas vozes Paradee em paralelo, sem bloquear o chat de texto.
 3. A primeira inicialização pode levar vários minutos e baixar alguns gigabytes. Os modelos e o histórico ficam em volumes persistentes; não remova esses volumes ao atualizar o container.
-4. Confira `docker compose ps` e `GET /health`. O campo `status` só será `ready` quando autenticação, modelos de texto, base vetorial e modelos de áudio estiverem preparados.
+4. Confira `docker compose ps` e `GET /health`. O campo `status` será `ready` quando autenticação, modelos de texto e base vetorial estiverem preparados. Confira `audio_models_ready` separadamente; a ausência de voz não bloqueia o chat de texto.
 
 A API fica vinculada a `127.0.0.1:8000`; publique-a atrás de um proxy HTTPS. A porta 11434 do Ollama não é exposta. Não publique a porta da API diretamente sem TLS, firewall e controles de acesso.
 
 ## Configuração
+
+Depois de hospedar a API, defina a URL pública HTTPS do serviço em `linkstory-ai-config.js`, na raiz do site, atribuindo-a a `window.LINKSTORY_AI_API_URL`. Esse arquivo contém somente a URL pública, nunca chaves secretas.
 
 Veja `.env.example`. `LINKSTORY_CHAT_DB`, `LINKSTORY_CHROMA_DIR`, `HF_HOME` e `LINKSTORY_TTS_CACHE` precisam apontar para armazenamento persistente. Em uma implantação com várias réplicas, substitua SQLite por um banco compartilhado antes de aumentar a escala.
 
