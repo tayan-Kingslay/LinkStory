@@ -52,7 +52,7 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
 .nox-service-notice{max-width:850px;margin:0 auto 9px;padding:9px 12px;border:1px solid #f1dfbb;border-radius:10px;background:#fffaf0;color:#8b6523;font-size:10px;line-height:1.5}
 .nox-service-notice.ready{display:none}
 .nox-composer{max-width:850px;margin:auto;padding:11px 12px 9px;border:1px solid #dce5ef;border-radius:18px;background:rgba(255,255,255,.94);box-shadow:0 10px 30px #203c5c0d}
-.nox-composer textarea{width:100%;max-height:150px;min-height:34px;resize:vertical;border:0;outline:0;background:transparent;color:var(--nox-ink);font:13px/1.6 inherit;padding:4px 4px 9px}
+.nox-composer textarea{width:100%;max-height:150px;min-height:34px;resize:vertical;border:0;outline:0;background:transparent;color:var(--nox-ink);font:inherit;font-size:13px;line-height:1.6;padding:4px 4px 9px}
 .nox-composer textarea::placeholder{color:#9aa8b8}
 .nox-composer-tools{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .nox-tools-left{display:flex;align-items:center;gap:11px}
@@ -83,7 +83,7 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
 .nox-memory-switch input{width:18px;height:18px;accent-color:var(--nox-blue)}
 .nox-memory-switch strong,.nox-memory-switch small{display:block}.nox-memory-switch strong{font-size:12px}.nox-memory-switch small{font-size:10px;color:var(--nox-muted);margin-top:4px}
 .nox-memory-form{display:grid;gap:8px}.nox-memory-form label{font-size:11px;font-weight:800}
-.nox-memory-form textarea{width:100%;padding:10px;border:1px solid var(--nox-line);border-radius:10px;resize:vertical;font:12px/1.5 inherit}
+.nox-memory-form textarea{width:100%;padding:10px;border:1px solid var(--nox-line);border-radius:10px;resize:vertical;font:inherit;font-size:12px;line-height:1.5}
 .nox-memory-form button{height:39px;border:0;border-radius:10px;background:var(--nox-blue);color:#fff;font-size:11px;font-weight:850;cursor:pointer}
 .nox-memory-item{display:flex;gap:8px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--nox-line)}
 .nox-memory-item p{flex:1;margin:0;font-size:11px;line-height:1.55;overflow-wrap:anywhere}
