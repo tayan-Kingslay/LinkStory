@@ -20,4 +20,4 @@ The two synthetic voice options are model-provided voices (pf_dora and pm_alex),
 ## Speech recognition
 
 - **faster-whisper:** MIT License. Upstream: https://github.com/SYSTRAN/faster-whisper
-- **Whisper model weights:** MIT License. Upstream: https://github.com/openai/whisper
+- **Whisper model weights:** MIT License; originally published by OpenAI and executed locally through faster-whisper (no OpenAI API is called). Upstream: https://github.com/openai/whisper. This optional speech-recognition component does not satisfy a stricter rule that forbids models originating from large technology companies; replace it before enabling voice input if that is the founder's intended rule.
