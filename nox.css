@@ -13,7 +13,10 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
 .nox-sidebar-head{display:flex;justify-content:space-between;align-items:center;padding:0 7px 14px;color:#8a9aae;font-size:10px;font-weight:900;letter-spacing:1.8px}
 .nox-sidebar-head button{border:0;background:#eaf3ff;color:var(--nox-blue);width:31px;height:31px;border-radius:10px;font-size:20px;cursor:pointer}
 .nox-conversation-list{overflow:auto;flex:1}
-.nox-conversation{width:100%;display:block;text-align:left;border:1px solid transparent;background:transparent;padding:11px 10px;border-radius:12px;margin-bottom:4px;cursor:pointer;color:var(--nox-ink)}
+.nox-conversation-row{display:flex;align-items:stretch;gap:3px;margin-bottom:4px}
+.nox-conversation{width:100%;min-width:0;display:block;text-align:left;border:1px solid transparent;background:transparent;padding:11px 10px;border-radius:12px;cursor:pointer;color:var(--nox-ink)}
+.nox-conversation-edit{flex:0 0 30px;align-self:center;width:30px;height:30px;border:1px solid transparent;border-radius:9px;background:transparent;color:#8292a6;font-size:16px;cursor:pointer}
+.nox-conversation-edit:hover{background:#eaf3ff;color:var(--nox-blue);border-color:#d7e9ff}
 .nox-conversation.active{background:#eaf3ff;border-color:#d7e9ff}
 .nox-conversation strong,.nox-conversation small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nox-conversation strong{font-size:12px;font-weight:800}
@@ -103,6 +106,8 @@ html[data-ls-theme="dark"] .nox-topbar,html[data-ls-theme="dark"] .nox-sidebar{b
 html[data-ls-theme="dark"] .nox-back,html[data-ls-theme="dark"] .nox-quiet,html[data-ls-theme="dark"] .nox-composer,html[data-ls-theme="dark"] .nox-dialog,html[data-ls-theme="dark"] .nox-memory-form textarea,html[data-ls-theme="dark"] .nox-memory-item button{background:#1b2938;color:#edf3fa;border-color:#344255}
 html[data-ls-theme="dark"] .nox-status-row{border-color:#344255}
 html[data-ls-theme="dark"] .nox-chapter-context{background:#1b2d41;border-color:#365371;color:#bdd9f4}
+html[data-ls-theme="dark"] .nox-conversation-edit{color:#aab9c9}
+html[data-ls-theme="dark"] .nox-conversation-edit:hover{background:#203b58;color:#a9d1ff;border-color:#355879}
 html[data-ls-theme="dark"] .nox-message-content{background:#1b2938;color:#edf3fa;border-color:#344255}
 html[data-ls-theme="dark"] .nox-message.user .nox-message-content,html[data-ls-theme="dark"] .nox-conversation.active{background:#203b58;border-color:#355879}
 html[data-ls-theme="dark"] .nox-prompts button{background:#1b2938;color:#dce8f5;border-color:#344255}
