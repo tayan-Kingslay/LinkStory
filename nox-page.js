@@ -65,11 +65,14 @@
     if (params.get("share_chapter") !== "1") return;
     const mangaId = params.get("manga_id");
     const chapterId = params.get("chapter_id");
-    if (!mangaId || !chapterId || !window.LinkStoryManga) {
+    if (!mangaId || !chapterId || typeof linkstorySupabase === "undefined") {
       throw new Error("Não foi possível identificar o capítulo autorizado.");
     }
-    const session = await LinkStoryManga.session();
-    if (!session?.user?.id) throw new Error("Entre na sua conta para compartilhar um capítulo com o Nox.");
+    const sessionResult = await getLinkStorySession();
+    const session = sessionResult?.data?.session;
+    if (sessionResult?.error || !session?.user?.id) {
+      throw new Error("Entre na sua conta para compartilhar um capítulo com o Nox.");
+    }
     const { data: manga, error: mangaError } = await linkstorySupabase
       .from("mangas")
       .select("id, creator_id, title, description, genres")
