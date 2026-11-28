@@ -58,6 +58,34 @@
     return response.json();
   }
 
+  async function conversations() {
+    const response = await request("/conversations");
+    return response.json();
+  }
+
+  async function preferences() {
+    const response = await request("/preferences");
+    return response.json();
+  }
+
+  async function updatePreferences(memoryEnabled) {
+    const response = await request("/preferences", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ memory_enabled: Boolean(memoryEnabled) })
+    });
+    return response.json();
+  }
+
+  async function updateMemory(memoryId, content) {
+    const response = await request("/memories/" + encodeURIComponent(memoryId), {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content })
+    });
+    return response.json();
+  }
+
   async function transcribe(blob, filename = "recording.webm") {
     const form = new FormData();
     form.append("file", blob, filename);
@@ -109,6 +137,7 @@
   }
 
   window.LinkStoryAI = Object.freeze({
-    chat, history, transcribe, speak, memories, saveMemory, deleteMemory, health
+    chat, history, conversations, preferences, updatePreferences,
+    transcribe, speak, memories, saveMemory, updateMemory, deleteMemory, health
   });
 })();
