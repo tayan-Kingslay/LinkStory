@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent
 PERSIST_DIR = Path(os.getenv("LINKSTORY_CHROMA_DIR", ROOT / "data" / "chroma"))
 COLLECTION = os.getenv("LINKSTORY_COLLECTION", "linkstory_engineering")
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434")
-CHAT_MODEL = os.getenv("LINKSTORY_CHAT_MODEL", "qwen2.5:7b")
+CHAT_MODEL = os.getenv("LINKSTORY_CHAT_MODEL", "olmo2:7b")
 EMBED_MODEL = os.getenv("LINKSTORY_EMBED_MODEL", "nomic-embed-text")
 
 SUPPORTED_EXTENSIONS = {
@@ -47,7 +47,7 @@ def vector_store() -> Chroma:
 
 
 def chat_model() -> ChatOllama:
-    return ChatOllama(model=CHAT_MODEL, base_url=OLLAMA_BASE_URL, temperature=float(os.getenv("LINKSTORY_TEMPERATURE", "0.4")), num_ctx=int(os.getenv("LINKSTORY_CONTEXT_WINDOW", "8192")))
+    return ChatOllama(model=CHAT_MODEL, base_url=OLLAMA_BASE_URL, temperature=float(os.getenv("LINKSTORY_TEMPERATURE", "0.4")), num_ctx=int(os.getenv("LINKSTORY_CONTEXT_WINDOW", "4096")))
 
 
 def iter_source_files(source: Path):
