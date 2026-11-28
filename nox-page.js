@@ -143,9 +143,14 @@
       const health = await LinkStoryAI.health();
       if (health.status === "ready") {
         serviceReady = true;
+        const voiceReady = Boolean(health.audio_models_ready);
         setStatus("Nox conectado", true);
-        $("serviceNotice").classList.add("ready");
-        ["messageInput", "sendButton", "micButton", "voiceReplies", "voiceChoice"].forEach((id) => $(id).disabled = false);
+        $("serviceNotice").classList.toggle("ready", voiceReady);
+        if (!voiceReady) {
+          $("serviceNotice").textContent = "Nox já está pronto para conversar por texto. Os recursos de voz ainda estão sendo preparados.";
+        }
+        ["messageInput", "sendButton"].forEach((id) => $(id).disabled = false);
+        ["micButton", "voiceReplies", "voiceChoice"].forEach((id) => $(id).disabled = !voiceReady);
         $("memoryOpen").disabled = false;
         await refreshConversations();
       } else {
