@@ -7,10 +7,83 @@
   let recordingChunks = [];
   let serviceReady = false;
   let busy = false;
+  let authorizedChapterContext = null;
+  let contextConversationId = null;
 
   function setStatus(text, ready = false) {
     $("statusText").textContent = text;
     $("statusDot").classList.toggle("ready", ready);
+  }
+
+  function clearChapterContext() {
+    authorizedChapterContext = null;
+    contextConversationId = null;
+    $("chapterContextNotice").hidden = true;
+    $("chapterContextNotice").textContent = "";
+  }
+
+  async function loadAuthorizedChapterContext() {
+    const params = new URLSearchParams(location.search);
+    if (params.get("share_chapter") !== "1") return;
+    const mangaId = params.get("manga_id");
+    const chapterId = params.get("chapter_id");
+    if (!mangaId || !chapterId || !window.LinkStoryManga) {
+      throw new Error("Não foi possível identificar o capítulo autorizado.");
+    }
+    const session = await LinkStoryManga.session();
+    if (!session?.user?.id) throw new Error("Entre na sua conta para compartilhar um capítulo com o Nox.");
+    const manga = await LinkStoryManga.mangaById(mangaId);
+    if (!manga || manga.creator_id !== session.user.id) {
+      throw new Error("Por segurança, o Nox só pode receber uma obra sua.");
+    }
+    const chapter = await LinkStoryManga.chapterWithPages(chapterId, { privatePreviews: false });
+    if (!chapter || chapter.manga_id !== manga.id) {
+      throw new Error("Este capítulo não pertence à obra selecionada.");
+    }
+
+    const sections = [
+      "OBRA: " + (manga.title || "Sem título"),
+      "DESCRIÇÃO DA OBRA: " + (manga.description || "Não informada"),
+      "CAPÍTULO: " + (chapter.title || ("Capítulo " + chapter.chapter_number)),
+      "PÁGINAS: " + ((chapter.pages || []).length)
+    ];
+    let textCount = 0;
+    (chapter.pages || []).forEach((page, pageIndex) => {
+      const panels = Array.isArray(page.panels) ? page.panels.slice().sort((a, b) => (a.order || 0) - (b.order || 0)) : [];
+      panels.forEach((panel, panelIndex) => {
+        const lines = [];
+        const add = (label, value) => {
+          if (typeof value === "string" && value.trim()) lines.push(label + ": " + value.trim());
+        };
+        add("Descrição", panel.description);
+        add("Ação", panel.action);
+        add("Câmera", panel.camera);
+        add("Narração", panel.narration);
+        if (Array.isArray(panel.dialogue)) {
+          panel.dialogue.forEach((line) => {
+            if (typeof line === "string" && line.trim()) lines.push("Diálogo: " + line.trim());
+            else if (line && typeof line === "object") {
+              const speaker = line.character || line.speaker || line.name || "Personagem";
+              const spoken = line.text || line.line || line.dialogue || "";
+              if (spoken) lines.push("Diálogo — " + speaker + ": " + spoken);
+            }
+          });
+        } else {
+          add("Diálogo", panel.dialogue);
+        }
+        if (lines.length) {
+          sections.push("PÁGINA " + (page.page_number || pageIndex + 1) + " · QUADRO " + (panel.order || panelIndex + 1) + "\n" + lines.join("\n"));
+          textCount += lines.join(" ").length;
+        }
+      });
+    });
+    if (!textCount) {
+      sections.push("OBSERVAÇÃO: não há texto estruturado nos quadros deste capítulo. As imagens das páginas não foram enviadas e não serão interpretadas nesta análise.");
+    }
+    authorizedChapterContext = sections.join("\n\n").slice(0, 12000);
+    $("chapterContextNotice").textContent = "Capítulo autorizado: " + manga.title + " · " + (chapter.title || ("Capítulo " + chapter.chapter_number)) + ". O Nox receberá somente os textos e metadados disponíveis quando você enviar uma pergunta. As imagens não são enviadas.";
+    $("chapterContextNotice").hidden = false;
+    addMessage("assistant", "Recebi o contexto autorizado do seu capítulo. Quando você enviar sua pergunta, vou usar os dados textuais disponíveis para ajudar na análise. Não recebi as imagens das páginas.");
   }
 
   function scrollMessages() {
@@ -85,6 +158,7 @@
 
   async function openConversation(id) {
     if (!serviceReady || busy) return;
+    if (id !== contextConversationId) clearChapterContext();
     try {
       const result = await LinkStoryAI.history(id);
       conversationId = result.conversation_id;
@@ -99,6 +173,7 @@
   function newConversation() {
     if (busy) return;
     conversationId = null;
+    clearChapterContext();
     showWelcome();
     refreshConversations();
     $("messageInput").focus();
@@ -125,8 +200,9 @@
     $("messageInput").value = "";
     setBusy(true);
     try {
-      const result = await LinkStoryAI.chat(message, conversationId);
+      const result = await LinkStoryAI.chat(message, conversationId, authorizedChapterContext);
       conversationId = result.conversation_id;
+      if (authorizedChapterContext) contextConversationId = conversationId;
       addMessage("assistant", result.answer);
       await refreshConversations();
       await speakAnswer(result.answer);
@@ -336,6 +412,12 @@
       return;
     }
     $("memoryOpen").disabled = true;
+    try {
+      await loadAuthorizedChapterContext();
+    } catch (error) {
+      $("chapterContextNotice").textContent = error.message;
+      $("chapterContextNotice").hidden = false;
+    }
     await checkService();
   })();
 })();
