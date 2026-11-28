@@ -282,6 +282,33 @@ html[data-ls-theme="dark"] #lsBottomNav a.active:before{background:#69b2ff}
   {
     const page=location.pathname.split('/').filter(Boolean).pop()||'index.html';
     const isHomePage=page==='index.html';
+    document.documentElement.classList.toggle('ls-home-page',isHomePage);
+    document.documentElement.classList.toggle('ls-compact-header',!isHomePage);
+    if(!document.getElementById('lsCompactHeaderStyle')){
+      const compactStyle=document.createElement('style');
+      compactStyle.id='lsCompactHeaderStyle';
+      compactStyle.textContent=`
+        html.ls-compact-header :where(.topbar,.top,.header,body>header:not(.chat-header)){
+          display:flex!important;align-items:center!important;justify-content:flex-end!important;
+          min-height:54px!important;height:54px!important;padding:5px 14px!important;
+          gap:0!important;border-radius:0 0 16px 16px!important;
+        }
+        html.ls-compact-header :where(.topbar,.top,.header,body>header:not(.chat-header))>.logo,
+        html.ls-compact-header :where(.topbar,.top,.header,body>header:not(.chat-header))>.brand{display:none!important}
+        html.ls-compact-header :where(.topbar,.top,.header,body>header:not(.chat-header)) :where(.header-actions,.top-actions,.actions){
+          display:flex!important;align-items:center!important;justify-content:flex-end!important;
+          width:auto!important;margin-left:auto!important;gap:0!important;
+        }
+        html.ls-compact-header :where(.topbar,.top,.header,body>header:not(.chat-header)) :where(.header-actions,.top-actions,.actions)>:not(:is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn,button#lsGlobalMenuButton)):not(:has(:is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn,button#lsGlobalMenuButton))){display:none!important}
+        html.ls-compact-header :where(.topbar,.top,.header,body>header:not(.chat-header))>:not(:is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn,button#lsGlobalMenuButton,.header-actions,.top-actions,.actions)):not(:has(:is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn,button#lsGlobalMenuButton))){display:none!important}
+        html.ls-compact-header :where(.topbar,.top,.header,body>header:not(.chat-header)) :is(button#openMenu,button.menu-btn,button.menu,button.menu-button,button.ls-global-menu-btn,button#lsGlobalMenuButton){
+          display:inline-flex!important;align-items:center!important;justify-content:center!important;
+          width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;
+          margin:0!important;flex:0 0 40px!important;
+        }
+      `;
+      document.head.appendChild(compactStyle);
+    }
     const header=document.querySelector('.topbar,.top,.header');
     const actions=header?.querySelector('.header-actions,.top-actions,.actions')||header;
     const searchSelector='#openSearch,#lsHeaderSearchShortcut,.search,[aria-label="Buscar"],[title="Buscar"]';
