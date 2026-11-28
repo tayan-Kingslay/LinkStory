@@ -26,6 +26,8 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
 .nox-status-row{height:48px;flex:0 0 48px;display:flex;align-items:center;justify-content:space-between;padding:0 26px;border-bottom:1px solid rgba(225,232,240,.8);font-size:11px;color:var(--nox-muted)}
 .nox-presence{display:flex;align-items:center;gap:8px}.nox-dot{width:8px;height:8px;border-radius:50%;background:#e3a23d}.nox-dot.ready{background:#22a06b}
 .nox-private{font-size:10px}
+.nox-chapter-context{margin:12px 24px 0;padding:10px 13px;border:1px solid #cfe2f8;border-radius:11px;background:#edf6ff;color:#35658f;font-size:11px;line-height:1.5}
+.nox-chapter-context[hidden]{display:none}
 .nox-messages{flex:1;overflow:auto;padding:28px clamp(18px,6vw,90px) 24px;scroll-behavior:smooth}
 .nox-welcome{max-width:700px;margin:7vh auto 30px;text-align:center}
 .nox-orb{width:76px;height:76px;margin:0 auto 22px;border-radius:26px;display:grid;place-items:center;background:radial-gradient(circle at 30% 20%,#55b5ff,#0b67d1 65%,#06489e);box-shadow:0 15px 40px #1678e83b,inset 0 1px 1px #ffffff8c;transform:rotate(-5deg)}
@@ -80,6 +82,7 @@ body.nox-page{margin:0;background:radial-gradient(ellipse at 14% 0,rgba(255,255,
  .nox-shell{height:calc(100dvh - 60px);min-height:500px;display:flex;flex-direction:column}
  .nox-sidebar{display:none}
  .nox-status-row{height:40px;flex-basis:40px;padding:0 15px}
+ .nox-chapter-context{margin:9px 10px 0;font-size:10px}
  .nox-messages{padding:19px 13px 15px}
  .nox-welcome{margin:6vh auto 20px}.nox-orb{width:65px;height:65px;border-radius:22px}.nox-prompts{grid-template-columns:1fr;margin-top:21px}
  .nox-message{gap:8px;margin-bottom:16px}.nox-message-content{max-width:88%;font-size:12px;padding:11px 12px}
@@ -91,6 +94,7 @@ html[data-ls-theme="dark"] body.nox-page{background:#101720;color:#edf3fa}
 html[data-ls-theme="dark"] .nox-topbar,html[data-ls-theme="dark"] .nox-sidebar{background:#151f2b;border-color:#344255}
 html[data-ls-theme="dark"] .nox-back,html[data-ls-theme="dark"] .nox-quiet,html[data-ls-theme="dark"] .nox-composer,html[data-ls-theme="dark"] .nox-dialog,html[data-ls-theme="dark"] .nox-memory-form textarea,html[data-ls-theme="dark"] .nox-memory-item button{background:#1b2938;color:#edf3fa;border-color:#344255}
 html[data-ls-theme="dark"] .nox-status-row{border-color:#344255}
+html[data-ls-theme="dark"] .nox-chapter-context{background:#1b2d41;border-color:#365371;color:#bdd9f4}
 html[data-ls-theme="dark"] .nox-message-content{background:#1b2938;color:#edf3fa;border-color:#344255}
 html[data-ls-theme="dark"] .nox-message.user .nox-message-content,html[data-ls-theme="dark"] .nox-conversation.active{background:#203b58;border-color:#355879}
 html[data-ls-theme="dark"] .nox-prompts button{background:#1b2938;color:#dce8f5;border-color:#344255}
