@@ -64,7 +64,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=allowed_origins,
     allow_credentials=False,
-    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
     expose_headers=["X-LinkStory-Word-Timings", "X-LinkStory-Voice"],
 )
@@ -83,6 +83,10 @@ class ChatResponse(BaseModel):
 
 class MemoryRequest(BaseModel):
     content: str = Field(min_length=1, max_length=1000)
+
+
+class MemoryPreferencesRequest(BaseModel):
+    memory_enabled: bool
 
 
 @contextmanager
@@ -121,6 +125,12 @@ def db() -> Iterator[sqlite3.Connection]:
             "CREATE INDEX IF NOT EXISTS idx_memories_owner_updated "
             "ON memories(user_id, updated_at DESC)"
         )
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS user_preferences (
+                user_id TEXT PRIMARY KEY,
+                memory_enabled INTEGER NOT NULL DEFAULT 1
+            )
+        """)
         conn.execute("""
             CREATE TABLE IF NOT EXISTS request_limits (
                 user_id TEXT NOT NULL,
@@ -233,10 +243,15 @@ def chat(payload: ChatRequest, user_id: str = Depends(get_current_user)):
 
     try:
         with db() as conn:
+            preference = conn.execute(
+                "SELECT memory_enabled FROM user_preferences WHERE user_id=?",
+                (user_id,),
+            ).fetchone()
+            memory_enabled = preference is None or bool(preference[0])
             saved_memories = conn.execute(
                 "SELECT content FROM memories WHERE user_id=? ORDER BY updated_at DESC LIMIT ?",
                 (user_id, MAX_MEMORY_CONTEXT),
-            ).fetchall()
+            ).fetchall() if memory_enabled else []
             previous = conn.execute(
                 "SELECT role, content FROM messages "
                 "WHERE user_id=? AND conversation_id=? ORDER BY id DESC LIMIT ?",
@@ -463,6 +478,87 @@ def delete_memory(memory_id: str, user_id: str = Depends(get_current_user)):
     if not deleted:
         raise HTTPException(status_code=404, detail="Memória não encontrada.")
     return {"deleted": True}
+
+
+@app.get("/preferences")
+def get_preferences(user_id: str = Depends(get_current_user)):
+    with db() as conn:
+        row = conn.execute(
+            "SELECT memory_enabled FROM user_preferences WHERE user_id=?",
+            (user_id,),
+        ).fetchone()
+    return {"memory_enabled": True if row is None else bool(row[0])}
+
+
+@app.put("/preferences")
+def update_preferences(payload: MemoryPreferencesRequest, user_id: str = Depends(get_current_user)):
+    enforce_rate_limit(user_id)
+    with db() as conn:
+        conn.execute(
+            "INSERT INTO user_preferences(user_id, memory_enabled) VALUES (?, ?) "
+            "ON CONFLICT(user_id) DO UPDATE SET memory_enabled=excluded.memory_enabled",
+            (user_id, int(payload.memory_enabled)),
+        )
+    return {"memory_enabled": payload.memory_enabled}
+
+
+@app.put("/memories/{memory_id}")
+def update_memory(memory_id: str, payload: MemoryRequest, user_id: str = Depends(get_current_user)):
+    enforce_rate_limit(user_id)
+    try:
+        memory_id = str(UUID(memory_id))
+    except ValueError:
+        raise HTTPException(status_code=400, detail="ID de memória inválido.")
+    content = payload.content.strip()
+    if not content:
+        raise HTTPException(status_code=422, detail="A memória não pode estar vazia.")
+    with db() as conn:
+        result = conn.execute(
+            "UPDATE memories SET content=?, updated_at=CURRENT_TIMESTAMP WHERE id=? AND user_id=?",
+            (content, memory_id, user_id),
+        )
+        updated = result.rowcount
+    if not updated:
+        raise HTTPException(status_code=404, detail="Memória não encontrada.")
+    return {"id": memory_id, "content": content}
+
+
+@app.get("/conversations")
+def list_conversations(user_id: str = Depends(get_current_user)):
+    with db() as conn:
+        rows = conn.execute(
+            """
+            SELECT m.conversation_id,
+                   MIN(m.created_at) AS created_at,
+                   MAX(m.id) AS last_id,
+                   (SELECT first_message.content FROM messages AS first_message
+                    WHERE first_message.user_id=m.user_id
+                      AND first_message.conversation_id=m.conversation_id
+                      AND first_message.role='user'
+                    ORDER BY first_message.id LIMIT 1) AS title,
+                   (SELECT last_message.content FROM messages AS last_message
+                    WHERE last_message.user_id=m.user_id
+                      AND last_message.conversation_id=m.conversation_id
+                    ORDER BY last_message.id DESC LIMIT 1) AS preview
+            FROM messages AS m
+            WHERE m.user_id=?
+            GROUP BY m.conversation_id
+            ORDER BY last_id DESC
+            LIMIT 100
+            """,
+            (user_id,),
+        ).fetchall()
+    return {
+        "conversations": [
+            {
+                "conversation_id": conversation_id,
+                "created_at": created_at,
+                "title": (title or "Nova conversa")[:72],
+                "preview": (preview or "")[:120],
+            }
+            for conversation_id, created_at, _last_id, title, preview in rows
+        ]
+    }
 
 
 @app.get("/conversations/{conversation_id}")
