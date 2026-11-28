@@ -9,10 +9,48 @@
   let busy = false;
   let authorizedChapterContext = null;
   let contextConversationId = null;
+  let assistantName = "Nox";
+  let assistantAvatarUrl = "";
 
   function setStatus(text, ready = false) {
     $("statusText").textContent = text;
     $("statusDot").classList.toggle("ready", ready);
+  }
+
+  function applyAssistantProfile(preferences) {
+    assistantName = preferences.assistant_name || "Nox";
+    assistantAvatarUrl = preferences.assistant_avatar_url || "";
+    const initial = assistantName.trim().charAt(0).toUpperCase() || "N";
+    const nameLabel = document.querySelector(".nox-sidebar-foot strong");
+    if (nameLabel) nameLabel.textContent = assistantName;
+    const welcomeTitle = document.querySelector(".nox-welcome h1");
+    if (welcomeTitle) welcomeTitle.textContent = "Oi! Eu sou " + assistantName + ".";
+    const orb = document.querySelector(".nox-orb");
+    if (orb) {
+      orb.replaceChildren();
+      if (assistantAvatarUrl) {
+        const img = document.createElement("img");
+        img.src = assistantAvatarUrl;
+        img.alt = "";
+        img.onerror = () => { orb.replaceChildren(Object.assign(document.createElement("span"), { textContent: initial })); };
+        orb.append(img);
+      } else {
+        const letter = document.createElement("span");
+        letter.textContent = initial;
+        orb.append(letter);
+      }
+    }
+    const sidebarAvatar = document.querySelector(".nox-avatar-small");
+    if (sidebarAvatar) {
+      sidebarAvatar.replaceChildren();
+      if (assistantAvatarUrl) {
+        const img = document.createElement("img");
+        img.src = assistantAvatarUrl;
+        img.alt = "";
+        img.onerror = () => { sidebarAvatar.textContent = initial; };
+        sidebarAvatar.append(img);
+      } else sidebarAvatar.textContent = initial;
+    }
   }
 
   function clearChapterContext() {
@@ -101,7 +139,17 @@
     item.className = "nox-message " + (role === "user" ? "user" : "assistant");
     const avatar = document.createElement("span");
     avatar.className = "nox-message-avatar";
-    avatar.textContent = role === "user" ? "Você" : "N";
+    if (role === "user") {
+      avatar.textContent = "Você";
+    } else if (assistantAvatarUrl) {
+      const image = document.createElement("img");
+      image.src = assistantAvatarUrl;
+      image.alt = "";
+      image.onerror = () => { avatar.textContent = assistantName.trim().charAt(0).toUpperCase() || "N"; };
+      avatar.append(image);
+    } else {
+      avatar.textContent = assistantName.trim().charAt(0).toUpperCase() || "N";
+    }
     const bubble = document.createElement("div");
     bubble.className = "nox-message-content";
     bubble.textContent = content;
@@ -217,6 +265,9 @@
   async function checkService() {
     try {
       const health = await LinkStoryAI.health();
+      if (health.authentication_configured) {
+        try { applyAssistantProfile(await LinkStoryAI.preferences()); } catch (_) {}
+      }
       if (health.status === "ready") {
         serviceReady = true;
         const voiceReady = Boolean(health.audio_models_ready);
@@ -254,6 +305,9 @@
     try {
       const [prefs, result] = await Promise.all([LinkStoryAI.preferences(), LinkStoryAI.memories()]);
       $("memoryEnabled").checked = Boolean(prefs.memory_enabled);
+      $("assistantName").value = prefs.assistant_name || "Nox";
+      $("assistantAvatarUrl").value = prefs.assistant_avatar_url || "";
+      applyAssistantProfile(prefs);
       renderMemories(result.memories || []);
       $("memoryStatus").textContent = "";
     } catch (error) {
@@ -370,6 +424,21 @@
   $("memoryOpen").addEventListener("click", openMemory);
   $("memoryClose").addEventListener("click", () => $("memoryDialog").close());
   $("memoryEnabled").addEventListener("change", toggleMemory);
+  $("saveAssistantProfile").addEventListener("click", async () => {
+    const name = $("assistantName").value.trim();
+    const avatarUrl = $("assistantAvatarUrl").value.trim();
+    if (!name) {
+      $("memoryStatus").textContent = "Escolha um nome para o assistente.";
+      return;
+    }
+    try {
+      const preferences = await LinkStoryAI.updateAssistantProfile(name, avatarUrl);
+      applyAssistantProfile(preferences);
+      $("memoryStatus").textContent = "Identidade salva somente na sua conta.";
+    } catch (error) {
+      $("memoryStatus").textContent = error.message;
+    }
+  });
   $("memoryForm").addEventListener("submit", async (event) => {
     event.preventDefault();
     const content = $("memoryContent").value.trim();
