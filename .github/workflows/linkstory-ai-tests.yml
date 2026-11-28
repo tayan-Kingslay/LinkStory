@@ -47,7 +47,14 @@ jobs:
           node --check ../linkstory-ai-client.js
           node --check ../nox-page.js
           node --check ../linkstory-ai-config.js
+          node --check ../global-nav.js
         working-directory: linkstory-ai
+      - name: Build LinkStory website
+        run: |
+          node build.js
+          test -f dist/nox.html
+          test -f dist/nox.css
+          test -f dist/nox-page.js
       - name: Validate Docker Compose YAML
         run: python -c "import yaml; yaml.safe_load(open('docker-compose.yml', encoding='utf-8'))"
         working-directory: linkstory-ai
