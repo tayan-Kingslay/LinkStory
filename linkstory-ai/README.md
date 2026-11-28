@@ -34,7 +34,7 @@ Veja `.env.example`. `LINKSTORY_CHAT_DB`, `LINKSTORY_CHROMA_DIR`, `HF_HOME` e `L
 Todas as rotas de conversa exigem `Authorization: Bearer <access_token_supabase>`.
 
 - `GET /health`: diagnóstico sem dados de usuário. O estado `ready` confirma o chat de texto; `audio_models_ready` informa separadamente se reconhecimento e síntese de voz estão preparados.
-- `POST /chat`: corpo `{ "message": "...", "conversation_id": null }`; devolve resposta, ID e fontes.
+- `POST /chat`: corpo `{ "message": "...", "conversation_id": null, "context": null }`; devolve resposta, ID e fontes. O campo opcional `context` aceita até 12.000 caracteres de texto/metadados de uma obra que o autor autorizou explicitamente naquela solicitação. Esse contexto não é salvo como mensagem nem indexado na base compartilhada.
 - `GET /conversations`: lista somente as conversas do usuário autenticado, com título derivado da primeira mensagem.
 - `GET /conversations/{conversation_id}`: histórico pertencente ao usuário autenticado.
 - `GET /preferences` e `PUT /preferences`: consulta e altera a opção individual de uso da memória.
