@@ -166,7 +166,7 @@
 
   async function openMemory() {
     if (!serviceReady) return;
-    $("memoryDialog").showModal();
+    if (!$("memoryDialog").open) $("memoryDialog").showModal();
     $("memoryStatus").textContent = "Carregando suas memórias…";
     try {
       const [prefs, result] = await Promise.all([LinkStoryAI.preferences(), LinkStoryAI.memories()]);
