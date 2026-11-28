@@ -213,9 +213,10 @@ def health():
 
     auth_ready = bool(SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY)
     audio_models_ready = MODELS_READY_FILE.exists()
-    ready = auth_ready and ollama_ok and chat_model_ready and embedding_model_ready and knowledge_base_ready and audio_models_ready
+    text_chat_ready = auth_ready and ollama_ok and chat_model_ready and embedding_model_ready and knowledge_base_ready
     return {
-        "status": "ready" if ready else "not_ready",
+        "status": "ready" if text_chat_ready else "not_ready",
+        "text_chat_ready": text_chat_ready,
         "engine": "ollama",
         "authentication_configured": auth_ready,
         "ollama_reachable": ollama_ok,
