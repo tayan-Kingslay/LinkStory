@@ -35,8 +35,10 @@ Todas as rotas de conversa exigem `Authorization: Bearer <access_token_supabase>
 
 - `GET /health`: diagnóstico sem dados de usuário.
 - `POST /chat`: corpo `{ "message": "...", "conversation_id": null }`; devolve resposta, ID e fontes.
+- `GET /conversations`: lista somente as conversas do usuário autenticado, com título derivado da primeira mensagem.
 - `GET /conversations/{conversation_id}`: histórico pertencente ao usuário autenticado.
-- `GET /memories`, `POST /memories` e `DELETE /memories/{memory_id}`: memórias persistentes controladas pelo próprio usuário. O chat recebe até 10 notas salvas como contexto; nenhuma memória é criada automaticamente.
+- `GET /preferences` e `PUT /preferences`: consulta e altera a opção individual de uso da memória.
+- `GET /memories`, `POST /memories`, `PUT /memories/{memory_id}` e `DELETE /memories/{memory_id}`: memórias persistentes controladas pelo próprio usuário. O chat recebe até 10 notas salvas como contexto somente quando a memória está habilitada; nenhuma memória é criada automaticamente.
 - `POST /transcribe`: recebe um arquivo de áudio multipart (`webm`, `mp4`, `mp3`, `wav` ou `ogg`) e devolve texto em pt-BR. Limite de 20 MB.
 - `POST /speak`: recebe `{ "text": "...", "voice": "pf_dora" }` ou `pm_alex` e devolve WAV mono 24 kHz. O cabeçalho `X-LinkStory-Word-Timings` contém os tempos das palavras em JSON codificado em Base64 URL-safe, para sincronizar a boca do personagem.
 
